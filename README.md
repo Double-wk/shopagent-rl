@@ -237,7 +237,7 @@ conda config --show-sources
 | python | 3.12.13 |
 | torch / torchvision / torchaudio | 2.9.1+rocm7.2.1 / 0.24.0+rocm7.2.1 / 2.9.0+rocm7.2.1（本地 whl，在 `/` 根目录） |
 | triton | 3.5.1+rocm7.2.1.gita272dfa8 |
-| vllm | 0.16.0，源码编译，commit `89a77b108`（源码 `/overlay/vllm-rocm-src`，脚本 `build_vllm_rocm.sh`） |
+| vllm | 0.16.0，源码编译，commit `89a77b108`（源码 `/overlay/vllm-rocm-src`，脚本 `scripts/build_vllm_rocm.sh`） |
 | verl | **0.8.0**，源码 `shopsimulator/shopagent-rl/verl`，以 `shop-a-verl` editable 安装提供 |
 | transformers / huggingface_hub | 4.57.6 / 0.36.2 |
 | peft / numpy / datasets / accelerate | 0.20.0 / 2.5.1 / 5.0.1 / 1.14.0 |
@@ -288,7 +288,7 @@ git -C /overlay/vllm-rocm-src checkout 89a77b108
 git clone --branch v3.5.0 --depth 1 \
   https://gh-proxy.com/https://github.com/triton-lang/triton.git /overlay/triton-kernels-src
 env TRITON_KERNELS_SRC_DIR=/overlay/triton-kernels-src/python/triton_kernels/triton_kernels \
-    bash build_vllm_rocm.sh rocm-base
+    bash scripts/build_vllm_rocm.sh rocm-base
 $BASE_PY -c "import vllm; print(vllm.__version__)"   # → 0.16.0
 
 # 3. 完整依赖
