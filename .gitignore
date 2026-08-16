@@ -62,3 +62,7 @@ shopsimulator/ShopSimulator/shop_env/shop_env/shop_agent.log
 # mid-training checkpoints exceed GitHub 100MB limit; export final adapters instead
 shopsimulator/shopagent-rl/outputs/sft/v2_paired/model/training_output/checkpoint-*/
 .git-amd/
+
+# regenerable caches deleted 2026-08-16 (npm downloads on demand; jupyter re-creates)
+cc-switch/.npm/
+/.ipynb_checkpoints/
