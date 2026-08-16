@@ -1,0 +1,62 @@
+{
+  "tag": "SFT_V2_PAIRED",
+  "model": "Qwen/Qwen3-1.7B-Base",
+  "adapter": "outputs/sft/v2_paired/model/training_output/lora_adapter",
+  "pairs": "/workspace/shopsimulator/shopagent-rl/data/counterfactual/final200_atomic_pairs_v1.jsonl",
+  "n_pairs": 212,
+  "original_action_accuracy": 0.9387,
+  "counterfactual_action_accuracy": 0.2358,
+  "counterfactual_action_accuracy_lenient": 0.2358,
+  "paired_robust_accuracy": 0.2311,
+  "causal_success_certification_rate": 0.2462,
+  "shortcut_success_rate": 0.7538,
+  "commit_persistence_error": 0.6745,
+  "by_intervention_type": {
+    "option_swap": {
+      "n_pairs": 67,
+      "original_action_accuracy": 0.9552,
+      "counterfactual_action_accuracy": 0.7463,
+      "counterfactual_action_accuracy_lenient": 0.7463,
+      "paired_robust_accuracy": 0.7313,
+      "commit_persistence_error": 0.1194,
+      "orig_action_types": {
+        "click": 67
+      },
+      "cf_action_types": {
+        "click": 67
+      },
+      "same_action_both_sides": 0.1194,
+      "causal_success_certification_rate": 0.7656,
+      "shortcut_success_rate": 0.2344
+    },
+    "price_above_budget": {
+      "n_pairs": 145,
+      "original_action_accuracy": 0.931,
+      "counterfactual_action_accuracy": 0.0,
+      "counterfactual_action_accuracy_lenient": 0.0,
+      "paired_robust_accuracy": 0.0,
+      "commit_persistence_error": 0.931,
+      "orig_action_types": {
+        "click": 145
+      },
+      "cf_action_types": {
+        "click": 145
+      },
+      "same_action_both_sides": 1.0,
+      "causal_success_certification_rate": 0.0,
+      "shortcut_success_rate": 1.0
+    }
+  },
+  "by_price_upper_source": {
+    "canonical_from_target_price": {
+      "n_pairs": 139,
+      "counterfactual_action_accuracy": 0.2374,
+      "commit_persistence_error": 0.6763
+    },
+    "observed_eval_goal": {
+      "n_pairs": 73,
+      "counterfactual_action_accuracy": 0.2329,
+      "commit_persistence_error": 0.6712
+    }
+  }
+}
