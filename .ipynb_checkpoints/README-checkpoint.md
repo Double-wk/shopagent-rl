@@ -1,0 +1,523 @@
+# AMD 开发环境初始化指南
+
+本文说明如何在 AMD 云开发环境中配置 SSH、网络代理、`cc-switch`、Claude Code 和 Codex CLI。按阶段执行即可；每一段命令都标明了用途、完成标志和注意事项。
+
+## 目录说明
+
+| 路径 | 用途 |
+| --- | --- |
+| `mihomo/` | mihomo 二进制、配置和运行日志 |
+| `cc-switch/` | cc-switch CLI、包装脚本及项目独立配置 |
+| `miniconda3/` | 项目内安装的 Miniconda 与 Conda base 环境 |
+| `notebooks/` | Jupyter Notebook 工作文件 |
+
+开始前请进入仓库根目录：
+
+```bash
+cd /workspace
+```
+
+> 安全提示：`mihomo/config/config.yaml` 和 `cc-switch/.cc-switch/` 可能含有代理凭据、订阅或 API Key。请只保存在本地，不要提交到 Git 或粘贴到公开文档。
+
+### GitHub 上传认证（PAT）
+
+后续可以使用 GitHub Personal Access Token（PAT）通过 Git 或 GitHub API 上传本项目。PAT 只应保存在当前 shell 的环境变量中，**不要写入 README、脚本、Git remote URL、命令历史或提交内容**。
+
+创建 fine-grained PAT 时，仅授予目标仓库的 `Contents: Read and write` 权限；只有需要操作 Pull Request 时才额外授予 Pull requests 权限。建议设置较短的过期时间，并在任务完成后撤销或轮换 token。
+
+```bash
+export GITHUB_TOKEN='github_pat_<your-PAT-here>'   # 仅在当前 shell 设置；切勿写入本文件或提交
+
+# GitHub API 示例
+curl -fsS \
+  -H "Authorization: Bearer $GITHUB_TOKEN" \
+  -H 'Accept: application/vnd.github+json' \
+  https://api.github.com/repos/Double-wk/amd
+
+# Git 上传时不要把 token 写进 URL；使用 Git credential helper 或交互式认证。
+git push origin main
+```
+
+本对话中曾粘贴过一个 PAT，该 token 已视为泄露，不能继续使用；请先在 GitHub 设置中撤销它并重新生成。
+
+## 阶段 0：AMD 入口与配置来源
+
+在执行任何命令前，先使用以下两个入口：
+
+| 入口 | 用途 |
+| --- | --- |
+| [AMD 配置文件（飞书）](https://my.feishu.cn/wiki/WZjewQhHBi5qvwk0U1Sca8Qenfg?from=from_copylink) | 获取本环境的 AMD 配置说明、镜像或实例相关信息。访问可能需要飞书权限。 |
+| [AMD 连接控制台](https://radeon-global.anruicloud.com/) | 登录云平台、进入或启动对应的开发环境，并取得终端、Jupyter 或 SSH 连接信息。 |
+
+建议顺序：先在控制台确认实例已启动并进入终端，再参照飞书配置文件确认镜像和环境要求，最后继续本文的 SSH、代理和 CLI 配置。
+
+## 阶段 1：启用 SSH 远程连接
+
+**目的：** 某些基础镜像没有启动 SSH 服务。以下命令安装并在当前会话启动它，使终端可通过 SSH 连接。
+
+```bash
+sudo apt update
+sudo apt install -y openssh-server
+sudo service ssh start
+```
+
+| 命令 | 作用 |
+| --- | --- |
+| `apt update` | 刷新可安装软件包的索引。 |
+| `apt install` | 安装 SSH 服务端。 |
+| `service ssh start` | 在当前容器中启动 SSH 服务。 |
+
+验证服务状态：
+
+```bash
+sudo service ssh status
+```
+
+若仍无法连接，还需检查云平台是否暴露了 SSH 端口，以及安全组规则是否允许访问。
+
+## 阶段 2：安装并启动 mihomo 代理
+
+**目的：** mihomo 在本机提供 HTTP 代理。本项目配置默认使用 `127.0.0.1:7890`，用于安装依赖和访问外部服务。
+
+### 2.1 安装 mihomo
+
+```bash
+mkdir -p mihomo
+wget --no-check-certificate -c --tries=20 --timeout=30 --waitretry=3 \
+  -O mihomo-linux-amd64-v1.19.28.gz \
+  https://gh-proxy.com/https://github.com/MetaCubeX/mihomo/releases/download/v1.19.28/mihomo-linux-amd64-v1.19.28.gz
+gzip -d mihomo/mihomo-linux-amd64-v1.19.28.gz
+mv mihomo/mihomo-linux-amd64-v1.19.28 mihomo/mihomo
+chmod +x mihomo/mihomo
+```
+
+- `curl -L` 会跟随下载跳转；`-k` 会跳过 TLS 证书校验，只应在确有必要时使用。
+- `gzip -d` 解压下载的发布包。
+- `chmod +x` 赋予二进制执行权限。
+
+### 2.2 准备配置并启动
+
+将个人代理配置保存为 `mihomo/config/config.yaml`，然后执行：
+
+```bash
+cd mihomo
+nohup ./mihomo -d ./config > mihomo.log 2>&1 &
+```
+
+`-d ./config` 指定配置目录；`nohup ... &` 使进程在终端关闭后继续运行；日志会写入 `mihomo.log`。
+
+验证控制接口：
+
+```bash
+curl --noproxy '*' http://127.0.0.1:9090/version
+```
+
+`--noproxy '*'` 确保请求直接发送到本地控制端口，不会被代理环境变量再次转发。
+
+### 2.3 为命令行程序设置代理
+
+```bash
+cat >> ~/.bashrc <<'EOF_BASHRC'
+export http_proxy=http://127.0.0.1:7890
+export https_proxy=http://127.0.0.1:7890
+export HTTP_PROXY=http://127.0.0.1:7890
+export HTTPS_PROXY=http://127.0.0.1:7890
+EOF_BASHRC
+source ~/.bashrc
+```
+
+小写和大写变量分别兼容不同命令行工具与运行时。`source ~/.bashrc` 让配置立即在当前终端生效；之后打开的新终端会自动加载。
+
+### 2.4 切换代理节点（可选）
+
+将 `<代理组>` 和 `<节点名>` 替换为 `config.yaml` 中的真实名称：
+
+```bash
+curl --noproxy '*' -sS -X PUT \
+  'http://127.0.0.1:9090/proxies/%E8%8A%82%E7%82%B9%E9%80%89%E6%8B%A9' \
+  -H 'Content-Type: application/json' \
+  --data-raw '{"name":"新加坡SG-HY2"}'
+```
+
+这会通过 mihomo 控制接口，将指定策略组切换到对应节点。
+
+## 阶段 3：安装 Miniconda（项目内）
+
+**目的：** 在仓库内创建独立的 Conda Python 环境，避免依赖系统 Python 或其他项目的环境。当前安装路径为 `/opt/miniconda3`（移动自 `/workspace/miniconda3` 以节省空间）。
+
+```bash
+# 如果 Miniconda 已在 /workspace/miniconda3，移动到 /opt
+mv /workspace/miniconda3 /opt/miniconda3
+
+# 或者直接安装到 /opt
+wget --no-check-certificate \
+  https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda3
+rm -f Miniconda3-latest-Linux-x86_64.sh
+```
+
+- `-b` 表示非交互式安装；`-p` 指定安装目录。
+- `--no-check-certificate` 会跳过 TLS 证书校验，只应在当前代理/证书环境确有需要时使用。
+
+加载 Conda：
+
+```bash
+source /opt/miniconda3/etc/profile.d/conda.sh
+conda --version
+```
+
+初始化 Bash 并在当前 shell 生效：
+
+```bash
+/opt/miniconda3/bin/conda init bash
+source ~/.bashrc
+conda --version
+```
+
+`conda init bash` 会修改 `~/.bashrc`，后续新开的 Bash 会自动加载 Conda。成功标志是终端提示符出现 `(base)`，且 `conda --version` 能输出版本号。
+
+## 阶段 3.5：AMD GPU 训练环境（硬链接配置）
+
+**目的：** 配置 AMD ROCm GPU 训练环境，通过硬链接共享大型依赖包（torch、triton 等），节省磁盘空间。
+
+### 环境布局
+
+| 路径 | 大小 | 说明 |
+| --- | --- | --- |
+| `/opt/rocm-base` | 15G | GPU 包源（torch 2.4.1+rocm6.0 + triton + 全部依赖） |
+| `/opt/miniconda3/envs/opd-rocm` | 314M | 项目环境（硬链接到 GPU 包） |
+
+### 配置步骤
+
+1. **创建 GPU 基础环境**（只需一次）
+   ```bash
+   conda create -n rocm-base python=3.12 -y
+   conda activate rocm-base
+   # 安装 PyTorch ROCm、triton、transformers、datasets、peft、verl 等
+   ```
+
+2. **创建项目环境**（小环境，硬链接到 GPU 包）
+   ```bash
+   conda create -n opd-rocm python=3.12 -y
+   conda activate opd-rocm
+   pip install -e /workspace/opd/ctv-opd
+   
+   # 硬链接 GPU 包
+   for pkg in /opt/rocm-base/lib/python3.12/site-packages/*; do
+     ln -sf "$pkg" /opt/miniconda3/envs/opd-rocm/lib/python3.12/site-packages/
+   done
+   ```
+
+3. **验证 GPU 支持**
+   ```bash
+   conda activate opd-rocm
+   python -c "import torch; print(torch.__version__)"  # 2.4.1+rocm6.0
+   python -c "print('CUDA available:', torch.cuda.is_available())"  # True
+   ```
+
+### 优势
+
+- **空间节省**：项目环境只有 314M，GPU 包共享 15G 基础环境
+- **易于管理**：升级 GPU 包时只需更新 `rocm-base`
+- **隔离性**：项目依赖独立，互不影响
+
+### 可用的 GPU 包
+
+```bash
+conda activate opd-rocm
+import torch          # PyTorch 2.4.1+rocm6.0
+import transformers   # Hugging Face transformers
+import datasets        # Hugging Face datasets
+import peft            # Parameter-Efficient Fine-Tuning
+import verl            # Verl (强化学习)
+import accelerate      # Hugging Face accelerate
+```
+
+### vLLM（可选）
+
+vLLM 源码在 `/opt/vllm-rocm-src`，需要时编译：
+
+```bash
+PYTORCH_ROCM_ARCH=gfx1100 pip install -e /opt/vllm-rocm-src
+```
+
+## 阶段 4：安装 cc-switch
+
+**目的：** `cc-switch` 统一保存 Claude、Codex 等命令行客户端的服务商配置，并负责在服务商之间切换。
+
+```bash
+cd /workspace
+mkdir -p cc-switch/bin
+curl -k -L -o cc-switch/cc-switch-cli-linux-x64-musl.tar.gz \
+  https://gh-proxy.com/https://github.com/saladday/cc-switch-cli/releases/latest/download/cc-switch-cli-linux-x64-musl.tar.gz
+tar -xzf cc-switch/cc-switch-cli-linux-x64-musl.tar.gz -C cc-switch/bin
+chmod +x cc-switch/bin/cc-switch
+rm -f cc-switch/cc-switch-cli-linux-x64-musl.tar.gz
+```
+
+| 命令 | 作用 |
+| --- | --- |
+| `mkdir -p cc-switch/bin` | 建立固定安装目录。 |
+| `tar -xzf ... -C` | 解压二进制到 `cc-switch/bin/`。 |
+| `chmod +x` | 允许直接运行 cc-switch。 |
+| `rm -f` | 删除不再需要的临时压缩包。 |
+
+验证：
+
+```bash
+./cc-switch/bin/cc-switch --version
+```
+
+## 阶段 5：通过包装脚本初始化 cc-switch
+
+### cc-switch 日常命令速查
+
+在 `cc-switch/` 目录中执行以下常用命令：
+
+| 想干嘛 | 命令 |
+| --- | --- |
+| 启动终端界面 | `./init-cc-switch.sh ui` |
+| 开机恢复 Claude 和 Codex 的上次配置 | `./init-cc-switch.sh restore` |
+| 查看有哪些 Provider | `./bin/cc-switch -a claude provider list`（Codex 将 `-a claude` 改为 `-a codex`） |
+| 切换 Claude 的 Provider | `./init-cc-switch.sh use <id>` |
+| 切换 Codex 的 Provider | `./init-cc-switch.sh -a codex use <id>` |
+| 查看当前使用的 Provider | `./bin/cc-switch -a claude provider current`（Codex 将 `-a claude` 改为 `-a codex`） |
+| 修改 Provider（名称、Token、模型） | `./bin/cc-switch -a claude provider edit <id>`（Codex 将 `-a claude` 改为 `-a codex`） |
+
+切换或恢复后，请重启对应的 Claude Code 或 Codex 客户端，使新配置生效。
+
+**目的：** 始终将 cc-switch 数据保存在项目内的 `cc-switch/.cc-switch/`，避免依赖或污染 `/root/.cc-switch`；并在切换服务商前准备 Claude/Codex 所需的最小配置文件。
+
+仓库中的 [`cc-switch/init-cc-switch.sh`](cc-switch/init-cc-switch.sh) 已实现以下流程：
+
+1. 根据脚本位置计算根目录，将 `CC_SWITCH_CONFIG_DIR` 指向 `cc-switch/.cc-switch/`。
+2. 若项目配置尚不存在，则复制 `/root/.cc-switch/` 中的已有配置，便于从旧环境迁移。
+3. 确认 `cc-switch/bin/cc-switch` 存在且可执行；否则立即报错。
+4. 在 `use`、`start` 和 `provider switch` 操作前，创建 `~/.claude/settings.json` 与 `~/.codex/config.toml`（若尚不存在），并将配置目录权限设为仅当前用户可读写。
+5. 最后将参数原样转发给真正的 cc-switch 二进制。
+
+赋予脚本执行权限并查看服务商：
+
+```bash
+chmod +x cc-switch/init-cc-switch.sh
+./cc-switch/init-cc-switch.sh provider list -a claude
+./cc-switch/init-cc-switch.sh provider list -a codex
+```
+
+### 切换与检查服务商
+
+先列出服务商，确认实际 ID；再按 ID 切换：
+
+```bash
+./cc-switch/init-cc-switch.sh provider switch -a claude anyrouter
+./cc-switch/init-cc-switch.sh provider switch -a codex hhhl
+```
+
+`anyrouter` 和 `hhhl` 是当前环境的示例 ID。服务商显示名称与 ID 不一定相同，切换命令必须使用列表第一列的 **ID**。
+
+验证当前选择：
+
+```bash
+./cc-switch/init-cc-switch.sh provider current -a claude
+./cc-switch/init-cc-switch.sh provider current -a codex
+```
+
+## 阶段 6：安装 Claude Code 和 Codex CLI
+
+**目的：** 安装实际执行 AI 编程任务的命令行客户端；cc-switch 只负责管理它们的服务商配置。
+
+```bash
+npm install -g @anthropic-ai/claude-code@latest
+npm install -g @openai/codex@latest
+```
+
+验证安装结果：
+
+```bash
+claude --version
+codex --version
+```
+
+若 npm 下载失败，优先确认阶段 2 的代理服务和环境变量是否正常：
+
+```bash
+curl -I https://registry.npmjs.org/
+```
+
+### Codex 启动方式
+
+明确限制 Codex 只能写入当前工作区：
+
+```bash
+codex --sandbox workspace-write
+```
+
+放开沙箱访问范围，使 Codex 可以按当前系统用户的权限访问更多目录，但执行敏感命令前仍需人工确认。适用于项目需要访问多个目录、同时希望保留审批确认的场景：
+
+```bash
+codex --sandbox danger-full-access
+```
+
+同时跳过人工审批并禁用沙箱。仅适用于可以随意破坏、且与重要数据和系统隔离的环境：
+
+```bash
+codex --dangerously-bypass-approvals-and-sandbox
+```
+
+## 阶段 7：配置 GitHub 账号级 SSH Key 并提交项目
+
+**目的：** 让这台 AMD 服务器使用 GitHub 账号级 Authentication Key，通过 SSH 访问该账号有权限的多个仓库，不需要在终端保存或粘贴 Personal Access Token（PAT）。这与只授权单个仓库的 Deploy Key 不同。
+
+### 7.1 在服务器生成账号级 SSH 密钥
+
+建议不要复用仓库专用密钥，单独生成一把账号级 Ed25519 密钥。私钥只保留在服务器，公钥才需要添加到 GitHub。
+
+```bash
+mkdir -p -m 700 ~/.ssh
+ssh-keygen -t ed25519 \
+  -f ~/.ssh/github_all \
+  -C "amd-server-github-account"
+cat ~/.ssh/github_all.pub
+```
+
+生成时如果提示 `Enter passphrase`：无人值守任务可以按安全规范留空；需要更高安全性时设置 passphrase，并在使用前通过 `ssh-agent` 解锁：
+
+```bash
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/github_all
+```
+
+只复制 `.pub` 文件的完整内容（以 `ssh-ed25519` 开头），不要复制或上传 `~/.ssh/github_all` 私钥。
+
+### 7.2 将公钥添加到 GitHub 账号
+
+登录目标 GitHub 账号，打开 [Settings → SSH and GPG keys](https://github.com/settings/keys)，点击 **New SSH key**：
+
+| 字段 | 值 |
+| --- | --- |
+| Title | `amd-server-account` |
+| Key type | `Authentication Key` |
+| Key | 粘贴 `~/.ssh/github_all.pub` 的完整内容 |
+
+这里必须使用个人账号的 `Settings → SSH and GPG keys`，不要使用仓库的 `Settings → Deploy keys`。账号级 Key 可访问该账号有权限的多个仓库；如果仓库属于启用了 SSO 的组织，还需要按组织要求授权该 Key。
+
+### 7.3 配置服务器使用这把密钥
+
+以下配置同时覆盖 `github.com` 和显式使用 `ssh.github.com` 的地址，并通过 SSH-over-443 避开可能受限的 22 端口。如果 `~/.ssh/config` 已存在，请先合并这个 Host 区块，不要覆盖其他主机配置。
+
+```bash
+mkdir -p -m 700 ~/.ssh
+cat >> ~/.ssh/config <<'EOF_SSH_CONFIG'
+
+Host github.com ssh.github.com
+    HostName ssh.github.com
+    Port 443
+    User git
+    IdentityFile ~/.ssh/github_all
+    IdentitiesOnly yes
+    StrictHostKeyChecking accept-new
+EOF_SSH_CONFIG
+
+chmod 600 ~/.ssh/config
+chmod 600 ~/.ssh/github_all
+chmod 644 ~/.ssh/github_all.pub
+```
+
+### 7.4 验证 GitHub 账号身份
+
+```bash
+ssh -T git@github.com
+```
+
+成功时会看到类似下面的提示：
+
+```text
+Hi Double-wk! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
+其中的账号名必须是添加这把 Key 的 GitHub 账号。若显示了其他账号，检查 SSH 实际采用的配置和密钥：
+
+```bash
+ssh -G github.com | grep -E 'hostname|port|user|identityfile|identitiesonly'
+```
+
+### 7.5 配置项目远程地址并测试权限
+
+进入要提交的项目目录，先查看现有远程地址：
+
+```bash
+cd /workspace/mihomo
+git remote -v
+```
+
+将 `Double-wk/amd` 替换为目标 GitHub 账号和仓库：
+
+```bash
+git remote set-url origin git@github.com:Double-wk/amd.git
+git remote -v
+git ls-remote --heads origin
+```
+
+`git ls-remote` 能列出远程分支和提交哈希，表示网络、账号身份和仓库读取权限都正常。若必须使用完整的 SSH-over-443 URL，也可以使用：
+
+```bash
+git remote set-url origin ssh://git@ssh.github.com:443/Double-wk/amd.git
+```
+
+### 7.6 提交并推送项目
+
+提交前先检查变更，避免把运行日志、代理配置或密钥纳入版本控制：
+
+```bash
+git status --short
+git add <要提交的文件或目录>
+git commit -m "简明说明本次改动"
+git branch --show-current
+git push -u origin main
+```
+
+如果当前分支不是 `main`，将最后一条命令中的 `main` 换成 `git branch --show-current` 输出的分支名。遇到非快进（non-fast-forward）错误时，先执行 `git fetch origin` 检查远端变更；不要直接使用强制推送覆盖他人的提交。
+
+### Deploy Key 与账号级 Authentication Key
+
+| 类型 | 添加位置 | 权限范围 |
+| --- | --- | --- |
+| Deploy Key | 单个仓库的 `Settings → Deploy keys` | 通常只访问一个仓库 |
+| Authentication Key | 个人账号的 `Settings → SSH and GPG keys` | 访问该账号有权限的多个仓库 |
+
+本阶段使用的是账号级 `Authentication Key`，不是仓库级 `Deploy Key`。
+
+## 日常使用顺序
+
+1. 启动 mihomo，并确认 `http://127.0.0.1:9090/version` 可访问。
+2. 打开新终端，确认代理环境变量已加载。
+3. 使用 `provider list` 和 `provider current` 检查 cc-switch 配置。
+4. 根据需要切换 Claude 或 Codex 的服务商。
+5. 启动 `claude` 或 `codex`。
+
+## 常见问题
+
+### SSH 无法连接
+
+执行 `sudo service ssh status`。如果服务未启动，执行 `sudo service ssh start`；同时检查端口映射与安全组规则。
+
+### mihomo 已启动但无法联网
+
+先查看日志：
+
+```bash
+tail -n 100 /workspace/mihomo/mihomo.log
+```
+
+然后确认代理变量指向 `127.0.0.1:7890`，并检查配置中的节点是否仍可用。
+
+### cc-switch 找不到服务商或切换不生效
+
+始终通过 `./cc-switch/init-cc-switch.sh` 调用，避免混用全局配置目录。然后执行：
+
+```bash
+./cc-switch/init-cc-switch.sh provider list -a claude
+./cc-switch/init-cc-switch.sh provider current -a claude
+```
+
+若列表正常但客户端仍使用旧配置，重新执行对应的 `provider switch`，再重启 Claude Code 或 Codex。

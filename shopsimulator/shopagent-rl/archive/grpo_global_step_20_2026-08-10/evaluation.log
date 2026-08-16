@@ -1,0 +1,79 @@
+shop-A vLLM env ready: PY=/overlay/miniconda3/envs/shop-A/bin/python  PYTHONPATH=/tmp/amdsmi_link:/tmp/functorch_shim:
+  remember: guard your LLM() call in  if __name__ == '__main__':
+[GRPO] 200 tasks | model=Qwen/Qwen3-1.7B-Base adapter=artifacts/grpo_global_step_20/adapter | wave=32
+INFO 08-10 17:18:50 [arg_utils.py:620] HF_HUB_OFFLINE is True, replace model_id [Qwen/Qwen3-1.7B-Base] to model_path [/root/.cache/huggingface/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1]
+INFO 08-10 17:18:50 [utils.py:223] non-default args: {'trust_remote_code': True, 'dtype': 'bfloat16', 'max_model_len': 81920, 'gpu_memory_utilization': 0.8, 'disable_log_stats': True, 'enforce_eager': True, 'enable_lora': True, 'max_lora_rank': 64, 'max_cpu_loras': 4, 'model': '/root/.cache/huggingface/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1'}
+The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+The explicitly set RoPE scaling factor (config.rope_scaling['factor'] = 2.5) does not match the ratio implicitly set by other parameters (implicit factor = post-yarn context length / pre-yarn context length = config.max_position_embeddings / config.rope_scaling['original_max_position_embeddings'] = 1.0). Using the explicit factor (2.5) in YaRN. This may cause unexpected behaviour in model usage, please correct the 'max_position_embeddings' fields in the model config.
+INFO 08-10 17:18:50 [model.py:529] Resolved architecture: Qwen3ForCausalLM
+INFO 08-10 17:18:50 [model.py:1549] Using max model len 81920
+INFO 08-10 17:18:50 [scheduler.py:224] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 08-10 17:18:50 [vllm.py:689] Asynchronous scheduling is enabled.
+WARNING 08-10 17:18:50 [vllm.py:727] Enforce eager set, overriding optimization level to -O0
+INFO 08-10 17:18:50 [vllm.py:845] Cudagraph is disabled under eager mode
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:02 [core.py:97] Initializing a V1 LLM engine (v0.16.1.dev0+g89a77b108.d20260317) with config: model='/root/.cache/huggingface/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1', speculative_config=None, tokenizer='/root/.cache/huggingface/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=81920, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=True, quantization=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=/root/.cache/huggingface/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'level': None, 'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all', '+sparse_attn_indexer'], 'splitting_ops': [], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_split_points': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'eliminate_noops': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': True, 'static_all_moe_layers': []}
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:05 [parallel_state.py:1234] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.232.3.246:52099 backend=nccl
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:05 [parallel_state.py:1445] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:06 [gpu_model_runner.py:4124] Starting to load model /root/.cache/huggingface/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1...
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:07 [rocm.py:377] Using Triton Attention backend.
+(EngineCore_DP0 pid=4191612) WARNING 08-10 17:19:07 [compilation.py:1096] Op 'sparse_attn_indexer' not present in model, enabling with '+sparse_attn_indexer' has no effect
+(EngineCore_DP0 pid=4191612) Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+(EngineCore_DP0 pid=4191612) Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:03<00:00,  3.83s/it]
+(EngineCore_DP0 pid=4191612) Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:03<00:00,  3.84s/it]
+(EngineCore_DP0 pid=4191612) 
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:11 [default_loader.py:293] Loading weights took 4.28 seconds
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:11 [punica_selector.py:20] Using PunicaWrapperGPU.
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:12 [gpu_model_runner.py:4221] Model loading took 3.53 GiB memory and 4.869736 seconds
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:20 [gpu_worker.py:373] Available KV cache memory: 33.13 GiB
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:20 [kv_cache_utils.py:1307] GPU KV cache size: 310,144 tokens
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:20 [kv_cache_utils.py:1312] Maximum concurrency for 81,920 tokens per request: 3.79x
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:20 [kernel_warmup.py:44] Skipping FlashInfer autotune because it is disabled.
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:24 [core.py:278] init engine (profile, create kv cache, warmup model) took 11.56 seconds
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:26 [vllm.py:689] Asynchronous scheduling is enabled.
+(EngineCore_DP0 pid=4191612) WARNING 08-10 17:19:26 [vllm.py:734] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+(EngineCore_DP0 pid=4191612) INFO 08-10 17:19:26 [vllm.py:845] Cudagraph is disabled under eager mode
+INFO 08-10 17:19:26 [llm.py:355] Supported tasks: ['generate']
+[LocalVLLM] loaded Qwen/Qwen3-1.7B-Base + LoRA artifacts/grpo_global_step_20/adapter  stop_token_ids=[151645, 151643]
+  wave 1: tasks 16..727 (32)
+INFO 08-10 17:19:27 [hf.py:318] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
+WARNING 08-10 17:19:27 [input_processor.py:327] vLLM has deprecated support for supporting different tokenizers for different LoRAs. By default, vLLM uses base model's tokenizer. If you are using a LoRA with its own tokenizer, consider specifying `--tokenizer [lora_path]` to use the LoRA tokenizer.
+(EngineCore_DP0 pid=4191612) WARNING 08-10 17:19:41 [utils.py:268] Using default LoRA kernel configs
+[rank0]:[W810 18:25:22.452119903 ProcessGroupNCCL.cpp:1525] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+    wave done: 4/32 strict | total 32/200 (598s)
+  wave 2: tasks 741..870 (32)
+    wave done: 8/32 strict | total 64/200 (1198s)
+  wave 3: tasks 871..1010 (32)
+    wave done: 5/32 strict | total 96/200 (1814s)
+  wave 4: tasks 1029..1198 (32)
+    wave done: 4/32 strict | total 128/200 (2387s)
+  wave 5: tasks 1203..1318 (32)
+    wave done: 6/32 strict | total 160/200 (2978s)
+  wave 6: tasks 1321..1438 (32)
+    wave done: 7/32 strict | total 192/200 (3629s)
+  wave 7: tasks 1442..1458 (8)
+    wave done: 2/8 strict | total 200/200 (3956s)
+
+[GRPO] n=200 strict_success=0.180 (r_type=0.34 r_att=0.28 r_option=0.20 r_price=0.32) avg_steps=8.2
+
+[official ShopSimulator get_score.py]
+
+==================================================
+Evaluation Results Statistics
+==================================================
+Total Samples: 200
+Completion Rate: 0.335
+Average Score--r_loose: 0.2695
+Average Score--r_hard: 0.197
+Average Score--r_success: 0.18
+Average Score--r_types: 0.335
+Average Score--r_attribute: 0.2818
+Average Score--r_option: 0.2
+Average Score--r_price: 0.32
+Correct Product Rate: 0.24
+==================================================
+
+full self-contained report -> outputs/eval_grpo_s20_f200_t10x512_0810_1612_full_report.json
+
+results -> outputs/eval_grpo_s20_f200_t10x512_0810_1612.jsonl
+official-schema per-task -> outputs/eval_grpo_s20_f200_t10x512_0810_1612_tasks

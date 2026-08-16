@@ -1,0 +1,30 @@
+{
+  "n_tasks": 200,
+  "aggregate_metrics": {
+    "n": 200,
+    "strict_success_rate": 0.18,
+    "n_success": 36,
+    "r_type": 0.68,
+    "r_att": 0.47707142857142854,
+    "r_option": 0.22416666666666668,
+    "r_price": 0.55,
+    "avg_steps": 6.0,
+    "avg_illegal_steps": 1.375
+  },
+  "official_metrics": {
+    "样本总量": 200,
+    "完成率": 0.68,
+    "平均分_r_loose": 0.4355,
+    "平均分_r_hard": 0.2149,
+    "平均分_r_success": 0.18,
+    "平均分_r_types": 0.68,
+    "平均分_r_attribute": 0.4771,
+    "平均分_r_option": 0.2242,
+    "平均分_r_price": 0.55,
+    "选对商品率": 0.275
+  },
+  "inputs": [
+    "outputs/grpo/v2/evaluation/eval_grpo_v2b_s200_f200_t10x512_0814.jsonl",
+    "outputs/grpo/v2/evaluation/eval_grpo_v2b_s200_f200_t10x512_0814_remaining72.jsonl"
+  ]
+}

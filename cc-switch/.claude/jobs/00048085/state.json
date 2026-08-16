@@ -1,0 +1,30 @@
+{
+  "state": "working",
+  "detail": "API Error: The model has reached its context window limit.",
+  "tempo": "blocked",
+  "needs": "send a prompt to start",
+  "output": null,
+  "children": null,
+  "linkScanOffset": 0,
+  "template": "bg",
+  "respawnFlags": [
+    "--settings",
+    "/tmp/cc-switch-claude-glm-101336-1786084142596410113.json",
+    "--permission-mode",
+    "auto"
+  ],
+  "bgIsolation": "none",
+  "providerEnv": {},
+  "interactiveLineage": true,
+  "intent": "继续",
+  "name": "检查项目状态和待办事项",
+  "nameSource": "auto",
+  "sessionId": "00048085-1dfe-4cbd-853b-6d628fbabd5f",
+  "resumeSessionId": "00048085-1dfe-4cbd-853b-6d628fbabd5f",
+  "daemonShort": "00048085",
+  "cwd": "/workspace",
+  "createdAt": "2026-08-07T08:34:23.956Z",
+  "updatedAt": "2026-08-07T08:34:23.956Z",
+  "firstTerminalAt": null,
+  "backend": "daemon"
+}

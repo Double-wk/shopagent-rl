@@ -1,0 +1,52 @@
+{
+  "experiment_type": "real_math_experiment_comparison",
+  "date": "2026-08-07",
+  "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+  "device": "cuda (AMD Radeon Graphics, 48GB VRAM)",
+  "data": "dapo-math-17k.parquet",
+  "n_examples": 32,
+  "calibration_n": 8,
+  "test_n": 8,
+  "budget_fraction": 0.3,
+  "max_new_tokens": 64,
+  "note": "Student and teacher are the same model. Tests routing mechanism on real math problems.",
+  "results": {
+    "ctv": {
+      "distillation_loss": 0.27532196789979935,
+      "selected": 4,
+      "budget": 4.8,
+      "selected_indices": [18, 3, 17, 12]
+    },
+    "confidence": {
+      "distillation_loss": 0.27672722935676575,
+      "selected": 4,
+      "budget": 4.8,
+      "selected_indices": [19, 7, 8, 18]
+    },
+    "placebo": {
+      "distillation_loss": 0.3362295627593994,
+      "selected": 4,
+      "budget": 4.8,
+      "selected_indices": [23, 3, 24, 12]
+    },
+    "entropy": {
+      "distillation_loss": 0.34666775166988373,
+      "selected": 4,
+      "budget": 4.8,
+      "selected_indices": [23, 6, 3, 24]
+    },
+    "random": {
+      "distillation_loss": 0.4441307261586189,
+      "selected": 4,
+      "budget": 4.8,
+      "selected_indices": [23, 15, 0, 18]
+    }
+  },
+  "summary": {
+    "best_strategy": "CTV",
+    "worst_strategy": "Random",
+    "ctv_advantage": "CTV is 38% better than Random (0.275 vs 0.444)",
+    "entropy_performance": "Entropy is 26% worse than CTV, confirming synthetic experiment findings",
+    "confidence_close": "Confidence performs nearly as well as CTV on this task"
+  }
+}

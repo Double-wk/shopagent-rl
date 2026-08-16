@@ -1,0 +1,16 @@
+{
+  "tag": "BaseFinal10",
+  "metrics": {
+    "样本总量": 200,
+    "完成率": 0.0,
+    "平均分_r_loose": 0.0,
+    "平均分_r_hard": 0.0,
+    "平均分_r_success": 0.0,
+    "平均分_r_types": 0.0,
+    "平均分_r_attribute": 0.0,
+    "平均分_r_option": 0.0,
+    "平均分_r_price": 0.0,
+    "选对商品率": 0.0
+  },
+  "n_tasks": 200
+}

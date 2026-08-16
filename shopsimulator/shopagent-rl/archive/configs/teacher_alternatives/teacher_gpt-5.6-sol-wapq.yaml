@@ -1,0 +1,50 @@
+# Alternative Teacher: GPT-5.6-SOL via wapq (OpenAI-compatible API)
+teacher:
+  client_type: openai
+  model: gpt-5.6-sol
+  base_url: https://api.wapq.cn
+  api_key: sk-CFloriHVTTlBFQV6B5b37T3SCtCboGN98hh4qhSFL0BCdmjO
+  max_tokens: 512
+  temperature: 0.0
+  timeout: 120
+  max_retries: 5
+  max_turns: 30
+
+collection:
+  total_trajectories: 10000
+  keep_after_validation: 6800
+  sft_data: 5000
+  grpo_prompts: 2000
+  ablation_data: 3000
+  train_task_range: [1459, 23421]  # ✅ 官方 train 数据（21,962 个）
+  num_workers: 8
+  quality_threshold: 1.0
+  output_format: jsonl
+  save_mode: incremental
+
+grpo:
+  prompt_tasks: 2000
+  samples_per_prompt: 4
+  total_samples: 8000
+  comparison_method: "reference"
+  reference_answers: "sft_data"
+  reward_function: segmented
+  reward_weights:
+    r_type: 0.20
+    r_att: 0.30
+    r_option: 0.30
+    r_price: 0.20
+
+evaluation:
+  final_200: [0, 1459]          # ✅ 官方 eval 数据（1,459 个）
+  ablation_tasks: [1459, 1959]  # 消融任务（train 开头 500 个）
+
+system_prompt: |
+  你是一个中文购物助手 Agent。你的目标是帮助用户在购物环境中完成购买任务。
+  你可以通过环境动作与页面交互。每一步,先简短思考,然后在回答的【最后一行】输出且仅输出一个动作:
+    - 检索商品:`Action: search['查询关键词']`
+    - 点击商品或选项:`Action: click['可点击项名称']`
+  规则:
+    1. 只能点击当前 observation 中"可点击的按钮"列表里真实存在的项,禁止编造按钮名。
+    2. 回答最后一行必须是 `Action: ...`,前面可有思考,但不要出现多余的 Action 行。
+    3. 逐步检索、对比商品详情(规格/价格/属性),选定目标后点击进入并完成规格/数量选择,再点击购买相关按钮结束任务。

@@ -1,0 +1,64 @@
+{
+  "tag": "Base",
+  "model": "Qwen/Qwen3-1.7B-Base",
+  "adapter": null,
+  "pairs": "/workspace/shopsimulator/shopagent-rl/data/counterfactual/final200_atomic_pairs_v1.jsonl",
+  "n_pairs": 212,
+  "original_action_accuracy": 0.0,
+  "counterfactual_action_accuracy": 0.0,
+  "counterfactual_action_accuracy_lenient": 0.6274,
+  "paired_robust_accuracy": 0.0,
+  "commit_persistence_error": 0.0,
+  "by_intervention_type": {
+    "option_swap": {
+      "n_pairs": 67,
+      "original_action_accuracy": 0.0,
+      "counterfactual_action_accuracy": 0.0,
+      "counterfactual_action_accuracy_lenient": 0.0,
+      "paired_robust_accuracy": 0.0,
+      "commit_persistence_error": 0.0,
+      "orig_action_types": {
+        "click": 4,
+        "search": 62,
+        "unparseable": 1
+      },
+      "cf_action_types": {
+        "click": 4,
+        "search": 62,
+        "unparseable": 1
+      },
+      "same_action_both_sides": 0.3881
+    },
+    "price_above_budget": {
+      "n_pairs": 145,
+      "original_action_accuracy": 0.0,
+      "counterfactual_action_accuracy": 0.0,
+      "counterfactual_action_accuracy_lenient": 0.9172,
+      "paired_robust_accuracy": 0.0,
+      "commit_persistence_error": 0.0,
+      "orig_action_types": {
+        "click": 10,
+        "search": 131,
+        "unparseable": 4
+      },
+      "cf_action_types": {
+        "click": 7,
+        "search": 133,
+        "unparseable": 5
+      },
+      "same_action_both_sides": 0.5103
+    }
+  },
+  "by_price_upper_source": {
+    "canonical_from_target_price": {
+      "n_pairs": 139,
+      "counterfactual_action_accuracy": 0.0,
+      "commit_persistence_error": 0.0
+    },
+    "observed_eval_goal": {
+      "n_pairs": 73,
+      "counterfactual_action_accuracy": 0.0,
+      "commit_persistence_error": 0.0
+    }
+  }
+}

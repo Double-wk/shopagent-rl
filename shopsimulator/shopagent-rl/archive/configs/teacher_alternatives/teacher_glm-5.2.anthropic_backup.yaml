@@ -1,0 +1,30 @@
+# 备份：GLM-5.2 旧版配置（2026-08-07 重写前的内容）。
+# 当时用智谱 anthropic 兼容端点 + 自定义 system_prompt（非官方 PROMPT_TEMPLATE_zh）。
+# 因与 gpt/deepseek 不同条件(不同 prompt/客户端)、且不记 token，对比不公平，故重写为
+# openai 客户端 + Coding Plan + 官方 prompt（见 teacher_glm-5.2.yaml）。保留此文件以备回退。
+teacher:
+  client_type: anthropic       # 使用 Anthropic 兼容客户端
+  model: glm-5.2
+  base_url: https://open.bigmodel.cn/api/anthropic
+  api_key: 546b387222144da2a6b65751c75ecaf9.uCtKSgXFtAXoZuGh
+  max_tokens: 512            # 与 ShopSimulator 对齐
+  temperature: 0.0            # 确定性输出，提高轨迹质量一致性
+  timeout: 120               # API 请求超时（秒）
+  max_retries: 5             # 失败重试次数
+  max_turns: 30             # max env interactions per task (env hard-caps at 42)
+
+collection:
+  target_trajectories: 628
+  keep_after_validation: 428
+  train_task_range: [1459, 23421]   # 官方 train 数据（21,962 个任务）
+  num_workers: 4                # glm-5.2 API concurrency
+
+system_prompt: |
+  你是一个中文购物助手 Agent。你的目标是帮助用户在购物环境中完成购买任务。
+  你可以通过环境动作与页面交互。每一步,先简短思考,然后在回答的【最后一行】输出且仅输出一个动作:
+    - 检索商品:`Action: search['查询关键词']`
+    - 点击商品或选项:`Action: click['可点击项名称']`
+  规则:
+    1. 只能点击当前 observation 中"可点击的按钮"列表里真实存在的项,禁止编造按钮名。
+    2. 回答最后一行必须是 `Action: ...`,前面可有思考,但不要出现多余的 Action 行。
+    3. 逐步检索、对比商品详情(规格/价格/属性),选定目标后点击进入并完成规格/数量选择,再点击购买相关按钮结束任务。

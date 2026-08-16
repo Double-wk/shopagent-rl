@@ -1,0 +1,2 @@
+/opt/rocm-base
+/opt/miniconda3/envs/opd-rocm

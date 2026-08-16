@@ -1,0 +1,316 @@
+# OPD 单卡研究计划
+
+更新时间：2026-08-06（进展小节）；正文研究计划维持 2026-08-04 版本。
+
+## -1. 当前进展与决策（2026-08-06）
+
+本节记录截至 2026-08-06 的实测结果与路线修正，覆盖环境、模型对、工程修复和
+方法闸门。正文 §0–8 的研究边界与判据不变，仍为权威计划。
+
+### 环境（已锁定）
+
+所有运行统一使用 conda 环境 `opd-rocm`
+（`/overlay/miniconda3/envs/opd-rocm/bin/python`）。**不要**用
+`base` 解释器或 `/opt/venv`（第三方环境，与项目无关）。
+
+- Python 3.12.13，torch 2.9.1+rocm7.2.1，vLLM 0.16.1.dev0+rocm721，verl 0.7.0.dev0，
+  transformers 4.57.6。
+- 单卡 gfx1100（Navi31/RDNA3），48 GB VRAM，ROCm 7.2.1。vLLM 在此卡可用
+  （Triton Attention backend，非默认支持的 gfx90a/gfx942，靠实测确认）。
+- **该卡非共享**：早期误判“另一进程占 41 GB”，实际是自己 vLLM `EngineCore`
+  子进程未被 `free_engine` 回收。见下方工程修复。
+
+### 项目结构
+
+`/workspace/opd/` 下两个独立项目：
+- `ctv-opd/` —— **本项目**，CTV 路由方法原型，正在构建（非 git 仓库）。
+- `OPD/` —— 上游 Rethinking-OPD 的 ROCm 复现（git 仓库，origin/main）+ 文献。
+PLAN.md 与研究方向位于本目录，代码位于 `ctv-opd/`。
+
+### 模型对（已纠正）
+
+**使用 Qwen3-1.7B-Base（学生）+ Qwen3-4B（教师），non-thinking 模式。** 这与
+上游论文主结果一致（OPD/README: Qwen3-4B rollout → Qwen3-1.7B-Base SFT）。
+
+原 §3 列的 DeepSeek-R1-Distill-Qwen-1.5B + hbx/JustRL-DeepSeek-1.5B **已废弃用于 CTV**：
+该对是上游论文的 *reverse-distillation 对照*（README line 38：“same-family 1.5B
+teachers 与学生分布不可区分”）。实测 2026-08-06：教师 8.3% < 学生 11.5% <
+placebo 13.0%，**tau 恒负**。且 DeepSeek chat template 无 `enable_thinking` 开关
+（Qwen3 有），两模型在 thinking 模式下撞 token 上限不收敛。`opd.sh` 默认这对仅因
+它复现 reverse-distillation 实验，不代表它适合 CTV 路由研究。
+
+上游生成配置参考：`max_response_length=7168`、`enable_thinking=False`、
+`gpu_memory_utilization=0.9`、rejection-sampling rollout。CTV 闸门可用 2048 tok
+提速（Qwen3-4B non-thinking 在此长度内收敛）。
+
+### 工程修复（已落地，测试通过）
+
+`ctv-opd` 已完成 vLLM 接入，三处生成点（cold_start / real_experiment /
+real_math_experiment）均支持 `--backend {vllm,hf}`，实测 vLLM 4.4x 提速
+（595 vs 135 tok/s @batch 24），全套件 33 测试通过。
+
+关键修复：
+1. **`vllm_engine.free_engine` 必须杀 EngineCore 子进程**（`engine.llm_engine.
+   engine_core.resources.engine_manager.processes` 上 `terminate()`+`join`+
+   `SIGKILL`），仅调 `LLM.shutdown()` 在 ROCm 0.11 上不可靠，会泄漏 VRAM 导致
+   下一个引擎 OOM。这是 Gate A 首次崩溃的真因。
+2. 驱动 vLLM 的脚本必须把 `make_engine` 放在 `if __name__=="__main__":` 后——
+   vLLM spawn EngineCore 子进程会 re-import 主模块，否则递归。
+3. `generate_*` 拒绝 `temperature<=0`；要 greedy 用 0.01，勿为此放宽接口。
+
+### 方法闸门（先证伪，再展开）
+
+CTV 方法侧成立的前提：tau(x)=r_teacher−r_placebo 健康，且能被 entropy 之外的
+廉价特征预测。两道闸门决定是否展开多步训练循环。
+
+**Gate A（tau 是否退化）—— 已通过 ✅**（Qwen3 对，n=48，k=8，max_new=2048）：
+teacher 36.7%、placebo 2.9%、tau mean **+0.339**、distinct=10、56.2% 非平凡。
+对比 DeepSeek 对 tau 恒负，证明模型对选择是根因。n=64 重测 teacher 升至 43.0%、
+tau +0.383。
+
+**Gate B（tau 是否超越 entropy）—— 进行中**（n=200，k=4）。n=64 首跑因统计问题
+失败（21 参数 quadratic ridge 在 64 样本上过拟合，所有模型 out-of-fold R² 为负），
+n=200 重测同时报告 quadratic/linear ridge + partial correlation 以区分“没信号”
+与“过拟合”。判定：M_student 的 out-of-fold Spearman 须比 M_entropy 高 ≥0.10。
+
+### 已识别的核心风险
+
+1. **entropy=0.861 相关**（sparse_teacher_probe_8x256.json）：若 prompt 级 tau 也
+   被 entropy 主导，CTV 是“花钱测 entropy 免费给的东西”。Gate B 即此的证伪测试。
+2. **单步非实验**：`real_math_experiment` 只做一次 `_distill_step`，accuracy 不可测
+   变化（这是 before/after 全 0 的另一原因）。论文需多步训练循环让路由决策累积，
+   该循环 `training_loop.py` 尚未实现。
+3. **SFT OOM**：vocab=151936、batch=4、seqlen=1792 的 loss 反向需 ~31GB，单卡紧张。
+   训练循环须用 vocab 维分块 KL（精确非近似）+ gradient checkpointing。
+
+### 路线（按依赖顺序）
+
+1. Gate B 通过 → 落地 `gates.py`（Gate A 已完成，Gate B 纯逻辑已验证）。
+2. 写 `training_loop.py`：on-policy KL，每轮学生 rollout→廉价特征→token 预算路由
+   →仅选中行教师前向→vocab 分块 distill→JSONL 持久化。学生全程 HF（权重每轮更新，
+   建引擎会 stale），vLLM 只用于离线 oracle-tau + 训练后 pass@k eval。
+3. routing.py 已加 oracle/all_query 基线（已完成）。
+4. 预算匹配：教师前向 token 跨策略固定，`frac_teacher_forward_skipped` 是效率头条数。
+5. **方法实验必做**（用户 2026-08-06 明确要求）：无论 Gate B 显示什么，都按方法路线
+   构建多步训练实验和完整基线对照。Gate B 不是退出条件，而是诊断信号结构、决定
+   CTV 路由器如何构造才能胜过 entropy：
+   - 若 tau 强超 entropy → 标准 ridge 预测 tau 路由。
+   - 若 tau 被 entropy 主导 → 这正是方法创新点：naive tau 排序赢不了 entropy，
+     因此 CTV 路由须设计为在 tau 之上叠加 entropy 无法捕获的信息（如 tau 与教师
+     置信度的交互、预算感知的边际价值而非平均价值），或以“为何 naive CTV 输给
+     entropy”为动机提出改进变体。Gate B 的结果只决定方法构造，不改变“做方法实验”。
+
+## 0. 决策摘要
+
+本项目不再以“复现 8 卡、7B、长序列 OPD”为目标。当前机器只有一张约 48 GiB 的 AMD GPU，适合做 `0.5B--1.5B` 的受控机制实验。
+
+主线确定为：
+
+> 在固定训练数据、学生 rollout、教师计算和总生成预算下，OPD 是否扩大未见技能组合/OOD 任务的可达解空间，还是只重新加权学生原本已经能采样到的正确轨迹？
+
+教师查询路由作为第二阶段的效率实验，不预先声称它是新方法。只有在 oracle 预算分配显著优于现有路由和随机基线时，才升级为方法论文方向。
+
+## 1. 与已有工作的边界
+
+下列内容不作为本项目的新贡献：
+
+- 用 entropy 或 token importance 选择 token；已有 TIP、选择性蒸馏和相关工作覆盖。
+- 泛化的多教师路由或模型 cascade；已有 PerSyn、MOPD、RouteNLP、DiverseDistill 等工作覆盖。
+- reward gate、trust region、teacher reliability gate；已有 RG-OPD、Trust-Region OPD 等工作覆盖。
+- 只 mask token loss 就声称减少教师前向；这不会自动减少 Transformer 计算。
+- 只做同分布 `pass@1` 提升，或只做 loss 下降。
+- 量化权重直接接入当前全参数 OPD；INT4/INT8 只作为未来固定推理模型实验，不进入本计划主线。
+
+允许的研究主张必须同时满足：
+
+1. 测试集包含训练中没有出现的显式技能组合或形式变化；
+2. 比较时固定总 rollout token、教师 forward token、训练数据和总 wall-clock；
+3. 同时报告 `pass@1` 与固定生成预算下的 `pass@k`；
+4. 区分“正确答案概率变大”和“新的正确解变得可达”；
+5. 所有正面结论都经过至少两个随机种子或 bootstrap 置信区间检验。
+
+## 2. 研究问题与判据
+
+### RQ1：OPD 是否改变组合/OOD 可达性？
+
+比较 base、off-policy KD/SFT 和 standard OPD：
+
+- 若 ID `pass@1` 上升，但 ID/OOD 高 `pass@k` 包络不变：支持“概率重加权”解释；
+- 若组合/OOD 高 `pass@k` 在相同预算下稳定上升：说明 OPD 可能扩大测试分布上的可达解空间，但不能直接称为创造能力；
+- 若只有强教师条件上升：增益可能来自教师能力转移，而非 OPD 动力学；
+- 若所有条件都没有差异：形成可复现的负结果，不再扩展为新 loss。
+
+### RQ2：预算匹配是否改变结论？
+
+所有方法同时固定：
+
+- 训练 prompt 数和训练步数；
+- 学生 rollout token 数；
+- 教师前向 token 数/FLOPs；
+- 总生成 token 数；
+- wall-clock 和峰值显存。
+
+禁止只固定 optimizer step，因为长序列和多 response 会造成不公平比较。
+
+### RQ3：是否存在真正节省教师计算的查询策略？
+
+仅在 RQ1 有稳定信号后执行。第一版只比较 `query / skip`，不实现四动作路由、RL 路由或复杂学习控制器。
+
+候选策略：全查询、随机查询、学生特征规则查询、oracle 查询。路由必须在教师调用前决定，且实际跳过教师 forward；仅 mask loss 不算节省。
+
+## 3. 实验对象和资源约束
+
+### 模型
+
+- 主学生：`DeepSeek-R1-Distill-Qwen-1.5B`；
+- 低成本调试学生：`Qwen2.5-0.5B-Instruct`；
+- 主教师：`JustRL-DeepSeek-1.5B`；
+- 小教师只在存在同任务、可比较权重时加入，不强行把异构模型当作公平教师。
+
+### 精度和运行方式
+
+- 参数/优化器保持 FP32；前向和反向使用 BF16 autocast；
+- 初始 `max_new_tokens=128`，再扩展到 256/512；
+- `N_RESPONSES=1`，单卡 batch 以显存实测为准；
+- 关闭 `CUDA_LAUNCH_BLOCKING=1`；
+- 不直接运行集群版 `on_policy_distillation.sh`，不启动 8-GPU Ray 配置；
+- 每次实验记录 GPU、ROCm、torch/vLLM 版本，避免把运行时差异误当方法差异。
+
+现有结果可作为 sanity check，但不能作为论文结果：7168 token 单步约 11 分钟，32 步/64 token 约 83 秒，峰值显存约 19.6 GiB；稀疏教师探针的 entropy 相关性只能作为候选特征证据。
+
+## 4. 实现分层
+
+代码位于 `OPD/`，文献和研究方向位于本目录。新增代码应与集群训练脚本解耦。
+
+### 4.1 统一实验配置
+
+新增 `OPD/configs/low_resource_audit.yaml`，至少包含：
+
+- model paths、dataset paths、seed；
+- prompt 数、max prompt/response length；
+- rollout token budget、teacher token budget、`k` 值；
+- dtype、batch、learning rate；
+- method name 和 output path。
+
+所有脚本从同一配置读取，禁止在脚本中重复硬编码预算。
+
+### 4.2 训练与 rollout harness
+
+新增 `OPD/scripts/run_audit_experiment.py`：
+
+1. 固定 seed，读取 prompt；
+2. 用学生生成 rollout，并保存 prompt、response、token 数；
+3. 按方法执行 base/SFT-KD/OPD；
+4. 记录学生和教师 forward token、loss、entropy、KL、梯度范数、wall-clock、峰值显存；
+5. 每个 step 写出可恢复 JSONL，不依赖 SwanLab 或 Ray。
+
+现有 `reproduce_figure6_rocm.py` 可复用其模型加载和 chunked logits 逻辑，但不能直接当作最终实验入口。
+
+### 4.3 组合/OOD 数据生成
+
+新增 `OPD/scripts/build_compositional_split.py`：
+
+1. 定义原子技能 A、B，例如算术规则、变量替换、格式约束或两步推理操作；
+2. 训练集只出现 A、B，各自的参数和表面形式与测试不同；
+3. 测试集包含未见组合 `A∘B` 和形式变化 OOD；
+4. 用确定性 verifier 检查答案，保留生成模板、技能标签和泄漏检查结果；
+5. 初始规模控制在每个 split 100--300 个样本，先验证协议，再扩大数据。
+
+不能把随机改写的同一题直接称为组合 OOD；每个测试 split 必须有明确的技能图和训练中不存在的边。
+
+### 4.4 `pass@k` 评测
+
+新增 `OPD/scripts/eval_passk.py`：
+
+- 对每个测试问题固定总生成 token 预算；
+- 评估 `k={1,8,32,128}`，资源不足时先使用 `{1,8,32}`；
+- 使用相同温度、停止条件和 verifier；
+- 统计 pass@k、平均长度、重复率、熵和无效轨迹比例；
+- 用 bootstrap 给出问题级置信区间。
+
+## 5. 分阶段执行
+
+### Phase 0：新颖性闸门
+
+阅读并登记最接近的实际方法部分，而不是只看标题：Demystifying OPD、Rethinking OPD、TIP、ShortOPD、TurnOPD、RG-OPD、AsyncOPD、MOPD/PerSyn。
+
+为每篇记录：状态来源、决策粒度、是否实际省教师 forward、预算目标、主要指标、基线。若已有工作与本计划的任务切分和预算判据完全相同，立即改成复现/审计，不声称原创方法。
+
+### Phase 1：协议和单步 sanity check
+
+目标：证明同一 prompt、同一预算、同一模型加载下三种方法都能运行。
+
+- 0.5B 模型：32/64/128 token；
+- 1.5B 模型：32/64 token；
+- 每个配置至少跑 4 步；
+- 验证 loss、梯度、logits 和 verifier 输出有限；
+- 记录 tokens/s、峰值显存和教师 forward 成本。
+
+停止条件：如果同一配置的运行结果不稳定或成本统计不可靠，不进入效果实验。
+
+### Phase 2：RQ1 小规模审计
+
+固定 100--300 个训练 prompt，执行 base、off-policy KD/SFT、OPD 三组；在 ID、组合和 OOD 三个 split 上测试。
+
+最低要求：
+
+- 两个随机种子；
+- 固定 rollout token 和教师 forward token；
+- `pass@1/8/32`；
+- 至少一个同族学生/教师设置；
+- 保存全部 rollout，支持离线复核。
+
+停止条件：若组合/OOD 高 `pass@k` 没有可辨差异，不再投入大规模训练，整理为机制审计结果。
+
+### Phase 3：RQ3 查询预算扩展
+
+仅当 Phase 2 有稳定差异时执行。
+
+比较查询预算 `10%/20%/50%/100%`：全查询、随机、学生 entropy 规则、oracle。路由单位先用整条 rollout 或固定 prefix block，避免 token 级假节省。
+
+实现要求：
+
+- 路由特征只来自学生和已有廉价 verifier；
+- 教师前向发生在路由决策之后；
+- 真实测量选中/跳过样本的 forward token 和 wall-clock；
+- 如果后端为了得到选中位置仍重算完整序列，报告真实成本，不使用理论 FLOPs 替代。
+
+升级为方法方向的必要条件：oracle 在固定质量下明显降低教师成本，且可实现规则/学习路由接近 oracle；否则只保留为分析实验。
+
+## 6. 统一结果表
+
+每个实验至少输出：
+
+| 类别 | 指标 |
+|---|---|
+| 质量 | ID/OOD `pass@1/8/32/128`、verifier accuracy、置信区间 |
+| 预算 | student rollout tokens、teacher forward tokens/FLOPs、总生成 tokens |
+| 系统 | wall-clock、tokens/s、峰值显存、失败/重试次数 |
+| 行为 | response length、entropy、重复率、KL、梯度范数 |
+| 路由 | query ratio、oracle gap、各动作/策略占比 |
+
+主图固定为：
+
+1. ID 与组合/OOD 的 `pass@k` 曲线；
+2. 质量--教师计算预算 Pareto 曲线；
+3. OPD 前后“原本不可采样/训练后可采样”的正确解比例。
+
+## 7. 停止和转向规则
+
+- Phase 0 发现完全相同的方法：不做新方法，改为严格复现或放弃；
+- oracle 没有 Pareto 优势：不做路由学习器；
+- entropy 只相关但不能带来真实 forward 节省：不把它包装成效率方法；
+- OOD 结果无差异：保留负结果，不盲目扩大模型；
+- ROCm/vLLM 运行时导致不可重复：转为纯 Transformers 离线审计，不混入系统工程结论；
+- 任何单次 seed 的正结果都不能作为结论。
+
+## 8. 预期交付物
+
+1. `OPD/configs/low_resource_audit.yaml`；
+2. 统一实验和评测脚本；
+3. 每个配置的 JSONL 原始结果和汇总 JSON；
+4. ID/OOD、质量--成本 Pareto 图；
+5. “与已有工作差异”对照表；
+6. 一份只包含已验证结论的技术报告。
+
+第一阶段只实现 Phase 1 和 Phase 2。没有通过停止条件前，不实现四动作路由、RL 联训、量化训练或 7B 扩展。

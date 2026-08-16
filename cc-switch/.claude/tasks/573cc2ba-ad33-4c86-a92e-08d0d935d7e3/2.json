@@ -1,0 +1,12 @@
+{
+  "id": "2",
+  "subject": "4-strategy baseline实验",
+  "description": "CTV 完成。Entropy OOM 失败（并发尝试）。Random 运行中 (2/20)。All_query 等待。",
+  "status": "in_progress",
+  "blocks": [],
+  "blockedBy": [],
+  "metadata": {
+    "env_ready": "true",
+    "conda_env": "opd-rocm"
+  }
+}

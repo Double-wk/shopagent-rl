@@ -1,0 +1,8 @@
+{
+  "id": "3",
+  "subject": "Pareto预算扫描实验",
+  "description": "运行pareto_loop.py，在不同teacher预算比例下测试CTV vs其他策略的质量-成本Pareto曲线。",
+  "status": "pending",
+  "blocks": [],
+  "blockedBy": []
+}

@@ -1,0 +1,7 @@
+[2026-08-07T08:34:24.630Z] [supervisor] ─── daemon start ─── version=2.1.224 pid=313714 origin=transient
+[2026-08-07T08:34:24.649Z] [supervisor] auth: no token found, will re-check keychain every 30s
+[2026-08-07T08:34:24.652Z] [supervisor] workers=0
+[2026-08-07T08:34:24.666Z] [bg] bg: control socket bound at /tmp/cc-daemon-0/ef0c2c85/control.sock
+[2026-08-07T08:34:24.730Z] [bg] bg spare spawned host pid=313812
+[2026-08-07T08:34:39.771Z] [bg] bg claimed-spare 00048085 (slash)
+[2026-08-07T08:34:39.779Z] [bg] bg spare spawned host pid=314143

@@ -1,0 +1,4 @@
+[http]
+	sslVerify = false
+	postBuffer = 524288000
+	sslCAinfo = /etc/ssl/certs/ca-certificates.crt

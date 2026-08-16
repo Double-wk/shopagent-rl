@@ -1,0 +1,89 @@
+#!/bin/bash
+# Concurrent run for entropy + random + all_query (after CTV completes)
+cd /workspace/opd/ctv-opd
+source /overlay/miniconda3/bin/activate opd-rocm
+
+LR=1e-5 ITERS=20 BUDGET=0.2 TEST_N=16 SAMPLES=8 STRAT=entropy SEED=7 python -c "
+import sys
+sys.path.insert(0, 'src')
+from ctv_opd.training_loop import TrainingLoopConfig, train_loop
+cfg = TrainingLoopConfig(
+    student_model='Qwen/Qwen3-1.7B-Base',
+    teacher_model='Qwen/Qwen3-4B',
+    data_path='/workspace/opd/OPD/datasets/dapo-math-17k.parquet',
+    output_dir='runs/baseline4/entropy_seed7',
+    seed=7, train_n=64, calibrate_n=48, test_n=16,
+    iterations=20, prompts_per_iter=8,
+    max_prompt_tokens=512, max_new_tokens=1536,
+    teacher_budget_fraction=0.2, learning_rate=1e-5,
+    student_dtype='bfloat16', gradient_checkpointing=True,
+    vocab_chunk_size=16384, generation_batch_size=4,
+    passk_samples=8, passk_k_values=(1,), bootstrap_resamples=1000,
+    strategy='entropy', min_free_vram_gib=8.0, resume=False,
+    checkpoint_every=1000,
+)
+train_loop(cfg)
+" &
+PID_ENTROPY=$!
+
+LR=1e-5 ITERS=20 BUDGET=0.2 TEST_N=16 SAMPLES=8 STRAT=random SEED=7 python -c "
+import sys
+sys.path.insert(0, 'src')
+from ctv_opd.training_loop import TrainingLoopConfig, train_loop
+cfg = TrainingLoopConfig(
+    student_model='Qwen/Qwen3-1.7B-Base',
+    teacher_model='Qwen/Qwen3-4B',
+    data_path='/workspace/opd/OPD/datasets/dapo-math-17k.parquet',
+    output_dir='runs/baseline4/random_seed7',
+    seed=7, train_n=64, calibrate_n=48, test_n=16,
+    iterations=20, prompts_per_iter=8,
+    max_prompt_tokens=512, max_new_tokens=1536,
+    teacher_budget_fraction=0.2, learning_rate=1e-5,
+    student_dtype='bfloat16', gradient_checkpointing=True,
+    vocab_chunk_size=16384, generation_batch_size=4,
+    passk_samples=8, passk_k_values=(1,), bootstrap_resamples=1000,
+    strategy='random', min_free_vram_gib=8.0, resume=False,
+    checkpoint_every=1000,
+)
+train_loop(cfg)
+" &
+PID_RANDOM=$!
+
+LR=1e-5 ITERS=20 BUDGET=1.0 TEST_N=16 SAMPLES=8 STRAT=all_query SEED=7 python -c "
+import sys
+sys.path.insert(0, 'src')
+from ctv_opd.training_loop import TrainingLoopConfig, train_loop
+cfg = TrainingLoopConfig(
+    student_model='Qwen/Qwen3-1.7B-Base',
+    teacher_model='Qwen/Qwen3-4B',
+    data_path='/workspace/opd/OPD/datasets/dapo-math-17k.parquet',
+    output_dir='runs/baseline4/all_query_seed7',
+    seed=7, train_n=64, calibrate_n=48, test_n=16,
+    iterations=20, prompts_per_iter=8,
+    max_prompt_tokens=512, max_new_tokens=1536,
+    teacher_budget_fraction=1.0, learning_rate=1e-5,
+    student_dtype='bfloat16', gradient_checkpointing=True,
+    vocab_chunk_size=16384, generation_batch_size=4,
+    passk_samples=8, passk_k_values=(1,), bootstrap_resamples=1000,
+    strategy='all_query', min_free_vram_gib=8.0, resume=False,
+    checkpoint_every=1000,
+)
+train_loop(cfg)
+" &
+PID_ALLQUERY=$!
+
+echo "Started 3 concurrent processes:"
+echo "  Entropy: PID $PID_ENTROPY"
+echo "  Random:  PID $PID_RANDOM"
+echo "  All_query: PID $PID_ALLQUERY"
+
+wait $PID_ENTROPY
+echo "Entropy completed at $(date)"
+
+wait $PID_RANDOM
+echo "Random completed at $(date)"
+
+wait $PID_ALLQUERY
+echo "All_query completed at $(date)"
+
+echo "All strategies finished!"

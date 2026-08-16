@@ -1,0 +1,10 @@
+shop-A vLLM env ready: PY=/overlay/miniconda3/envs/shop-A/bin/python  PYTHONPATH=/tmp/amdsmi_link:/tmp/functorch_shim:
+  remember: guard your LLM() call in  if __name__ == '__main__':
+=== ShopSim GRPO (veRL vLLM async) ===
+  model      : Qwen/Qwen3-1.7B-Base
+  sft adapter: /workspace/shopsimulator/shop_A/experiment/outputs/sft_new3793/lora_adapter  (exists=yes)
+  data       : /workspace/shopsimulator/shop_A/experiment/data/grpo_train.parquet  (exists=yes)
+  steps=2  train_batch=8  rollout.n=4  (=32 rollouts/step)  lr=1e-5  n_gpus=1
+  micro_batch: ppo(带grad)=1  logprob=1  | vLLM gpu_mem_util=0.25 max_model_len=16384 response_len=4096
+  vLLM load_format: auto
+  env        : http://127.0.0.1:5000

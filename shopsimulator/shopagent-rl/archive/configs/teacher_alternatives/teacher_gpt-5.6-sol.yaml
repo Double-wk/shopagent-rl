@@ -1,0 +1,90 @@
+# 正式全量采集配置：GPT-5.6-SOL via mcgrox，4 个 key。
+# 用户 2026-08-07 选定走质量优先：真实 5.6-sol 探针 strict 87% / reward 0.971，
+# 优于 gpt-5.5 的 70% / 0.889，且每条成功轨迹 token 更省。已要求把 mcgrox 后台
+# 4 个 key 全部切到真实 gpt-5.6-sol（此前默认把 model=gpt-5.6-sol 路由到 gpt-5.5）。
+# ⚠️ 启动前需确认后台切换完成；未切的 key 会产出 5.5 质量数据（strict 过滤后仍可用，但非纯 5.6-sol）。
+# 单 key 纯 5.6-sol 测试见 teacher_gpt-5.6-sol-c7d5.yaml；5.5 基线见 teacher_gpt-5.5.yaml。
+teacher:
+  client_type: openai          # 使用 OpenAI 兼容客户端
+  model: gpt-5.6-sol
+  base_url: https://www.mcgrox.top
+  api_keys:                         # ✅ 号池 round-robin。2026-08-08：旧 key(sk-26d6/sk-6184)402 死，换用 4 个已充值 key（同 teacher_gpt-5.6-terra.yaml）
+    - sk-d5b1e2e913dd6383d22773e0e02435a02f56267b0d9e61784ed736c2db5ae7ff  # 账号 2068588618@qq.com
+    - sk-77314e53d5b8e516f7ffc6ee90c57fe8c589bfc56dadcab1227ba544381d1199  # 账号 1577948378@qq.com
+    - sk-6af08971ee5e653153c749836717d3ca323049b43b9eee403f9787a148538145  # 账号 杨敬雷
+    - sk-c7d57ec9ae632e13b9796bce1d6fce6a95b36d5016a98fef1f71f37214ecf462  # 账号 3315439213@qq.com
+  max_tokens: 512
+  temperature: 0.0
+  timeout: 120
+  max_retries: 5
+  max_turns: 30
+
+collection:
+  # Teacher 完整采集计划
+  total_trajectories: 10000      # Teacher 总采集目标
+  keep_after_validation: 6800    # 预期保留 ~6,800 条高质量数据
+
+  # 数据分配
+  sft_data: 5000                # SFT 训练数据（标准答案）
+  grpo_prompts: 2000            # GRPO "问题"数据（用于多次采样）
+  ablation_data: 3000           # 消融实验数据
+
+  train_task_range: [1459, 23421]  # ✅ 纠正：使用官方 train 数据（21,962 个任务）
+  num_workers: 8                 # 🚀 提升到 8 个 worker 加速采集
+  quality_threshold: 1.0         # strict_success 只保留满分轨迹
+
+  # 数据格式
+  output_format: jsonl          # ✅ 使用 JSONL 格式（每行一个 JSON 对象）
+  save_mode: incremental        # ✅ 边生成边保存，实时写入
+
+# GRPO 训练配置
+grpo:
+  # GRPO 不重新采集数据，而是对已有问题进行多次采样
+  prompt_tasks: 2000            # 使用 2,000 个"问题"作为 GRPO prompts
+  samples_per_prompt: 4          # 每个问题采样 4 次
+  total_samples: 8000           # 总共生成 8,000 个回答
+
+  # 对比学习
+  comparison_method: "reference" # 用真实答案作为标准进行打分
+  reference_answers: "sft_data"  # 用 SFT 数据作为真实答案
+
+  # 奖励函数
+  reward_function: segmented    # 分段 reward
+  reward_weights:                # 权重分配
+    r_type: 0.20
+    r_att: 0.30
+    r_option: 0.30
+    r_price: 0.20
+
+# 评测数据（使用官方 eval 数据，与训练零重叠）
+evaluation:
+  final_200: [0, 1459]          # ✅ 纠正：使用官方 eval 数据（1,459 个，随机采样 200）
+  ablation_tasks: [1459, 1959]  # 消融实验任务（从 train 开头取 500，与 SFT 训练数据分开）
+
+# ✅ 对齐官方 ShopSimulator PROMPT_TEMPLATE_zh（web_agent_text_env.py:25-47，逐字照搬）。
+# env / reward / multi_eval 评测均按此 prompt 设计。关键修正：action 格式去掉内层引号——
+# env.parse_action 用 (.+)\[(.+)\] 解析，click['值'] 的 arg 会带引号 → 与可点击项不等 → 静默
+# no-op（wrapper.py 曾加 strip 补丁兜底，但会污染 SFT 数据：student 学会带引号，官方评测必崩）。
+system_prompt: |-
+  你正在进行一次网上购物模拟，目标是从商品库中选购最符合需求的商品。请注意，商品库中存在大量同类商品，你必须通过合理操作，最终购买到最符合要求的目标商品。
+  购物流程采用多轮对话形式，每一轮我会提供当前页面的观察结果，以及你可执行的操作列表。你需要根据当前状态和可选操作，选择并执行最合适的一步。
+
+  操作分为两类：
+  1. 搜索操作
+      格式：search[关键词]
+      你可以根据当前需求，自主决定搜索关键词。
+      只有在搜索功能可用时，才能使用该操作。
+  2. 点击操作
+      格式：click[值]
+      你只能点击当前可用操作列表中的按钮或选项，值必须严格对应操作列表中的内容。
+
+  规则说明：
+  1. 在点击【购买】前，必须至少选择一个商品规格（如颜色、尺码等）。
+  2. 你的目标是综合所有已知信息，通过搜索、筛选和选择，最终购买到“最符合需求的”商品，而非随意购买任意商品。
+  3. 如果你给出的操作在当前环境中不可执行，则页面不会有任何变化。
+  4. 提示：当你点击某一个商品规格时，页面其他信息不会发生变化，但该规格会被选中。请据此判断后续操作。
+
+  输出格式
+  在每一步，你必须按照下面格式输出：
+  Thought: 简要说明你在当前状态下的思考过程和操作依据。
+  Action: 用规定格式输出你选择的操作。

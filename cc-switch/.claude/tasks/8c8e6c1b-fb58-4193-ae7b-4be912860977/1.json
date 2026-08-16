@@ -1,0 +1,8 @@
+{
+  "id": "1",
+  "subject": "Build vLLM for ROCm",
+  "description": "Build vLLM from source for ROCm",
+  "status": "in_progress",
+  "blocks": [],
+  "blockedBy": []
+}

@@ -1,0 +1,64 @@
+# === Private full backup. Most of the workspace IS committed, including:
+#     cc-switch/.cc-switch (API keys), cc-switch/bin, mihomo (proxy + creds + logs),
+#     opd/paper (746M PDFs), opd/OPD (third-party tree), and .env files.
+#     Only the items below are excluded. ===
+
+# Multi-GB conda install — fully rebuildable on the new server; too large for git.
+miniconda3/
+
+# vLLM ROCm source — rebuilt per machine (not present in this tree; lives under /overlay).
+vllm-rocm-src/
+
+# Experiment CHECKPOINTS only: 3 x final.pt = 22.7G, and GitHub hard-rejects any
+# single file over 100MB (LFS free quota is 1G, so that is no help either).
+# Move these off-box with rsync/scp, not git. Everything else under runs/
+# (loop scripts, gate_b.json, iteration JSONL, logs — ~150KB) IS committed.
+opd/ctv-opd/runs/**/*.pt
+
+# shop_A SFT/GRPO checkpoint WEIGHTS under experiment/ — archive_20260809/checkpoint-*
+# has optimizer.pt (267MB) + adapter_model.safetensors (134MB); future GRPO ckpts likewise.
+# >100MB → GitHub hard-rejects; move weights off-box via rsync/scp, not git (same policy as
+# the opd .pt rule above). Small provenance files (adapter_config.json, trainer_state.json,
+# training_args.bin, README.md, chat_template.jinja, tokenizer.json) stay tracked.
+#
+# EXCEPTION — reproduction-critical weights ARE committed, in compressed form:
+#   outputs/sft_new3793/lora_adapter/  (SFT LoRA, gz + 48MB split parts)
+#   artifacts/grpo_global_step_20/     (GRPO LoRA, gz)
+# Restore both with `bash scripts/restore_large_artifacts.sh` (sha256-verified).
+# Intermediate checkpoint-NNN/ weights stay excluded — they are not needed to reproduce.
+shopsimulator/shop_A/experiment/**/*.pt
+shopsimulator/shop_A/experiment/**/*.safetensors
+
+# Trainer optimizer states are large, regenerable checkpoint artifacts.
+**/optimizer.pt
+
+# GitHub hard-rejects this 134 MiB generated evaluation dataset.
+# Committed as items_eval_train.json.gz (19 MiB); restored by scripts/restore_large_artifacts.sh.
+shopsimulator/ShopSimulator/shop_env/data/items_eval_train.json
+
+# 155 MiB deepseek teacher trajectory — too big for a single git blob (>100MB).
+# Backed up as trajectories_raw.jsonl.gz (15 MiB, tracked). Raw kept local only;
+# regenerable via `python -m teacher.collect`.
+shopsimulator/shop_A/data/trajectories_raw/deepseek-v4-flash-0731/trajectories_raw.jsonl
+
+# Same deepseek raw, historical archive copy under trajectories_raw_old/ (163 MiB).
+# Backed up as trajectories_raw.jsonl.gz (16 MiB, tracked). Raw excluded (>100MB).
+shopsimulator/shop_A/data/trajectories_raw_old/deepseek-v4-flash-0731/trajectories_raw.jsonl
+
+# Regenerable Python caches.
+opd/ctv-opd/.pytest_cache/
+**/__pycache__/
+*.pyc
+
+# Jupyter-generated checkpoints.
+notebooks/.ipynb_checkpoints/
+
+# ShopSimulator env runtime log (shop_agent.log) — the env appends a line every
+# agent step, so it grows unbounded while eval/collect run. Already 56 MB and
+# rising; would cross GitHub's 100 MB hard limit and reject future pushes.
+# Regenerable (recreated on next env run); untracked, kept local only.
+shopsimulator/ShopSimulator/shop_env/shop_env/shop_agent.log
+
+# mid-training checkpoints exceed GitHub 100MB limit; export final adapters instead
+shopsimulator/shopagent-rl/outputs/sft/v2_paired/model/training_output/checkpoint-*/
+.git-amd/

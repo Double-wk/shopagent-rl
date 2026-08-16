@@ -1,0 +1,159 @@
+tasks: pool=21962 already_done=900 sampling=10000 workers=8
+collect:   0%|          | 0/10000 [00:00<?, ?it/s]api_key ...0dad36 标记不可用(403 {"code":"USAGE_LIMIT_EXCEEDED","message":"当日订阅额度已耗尽，请重置或购买新订阅。"})。剩余可用 key: 3/4
+api_key ...ca499c 标记不可用(403 {"code":"INSUFFICIENT_BALANCE","message":"账户余额不足，请充值后继续使用。"})。剩余可用 key: 2/4
+collect:   0%|          | 1/10000 [00:11<31:22:03, 11.29s/it]collect:   0%|          | 2/10000 [00:28<41:31:14, 14.95s/it]collect:   0%|          | 3/10000 [00:57<59:09:07, 21.30s/it]collect:   0%|          | 4/10000 [01:13<53:21:02, 19.21s/it]collect:   0%|          | 5/10000 [01:55<75:29:28, 27.19s/it]collect:   0%|          | 6/10000 [02:13<67:08:28, 24.19s/it]collect:   0%|          | 7/10000 [02:15<47:29:09, 17.11s/it]collect:   0%|          | 14/10000 [02:24<13:50:13,  4.99s/it]collect:   0%|          | 15/10000 [02:42<18:39:18,  6.73s/it]collect:   0%|          | 16/10000 [03:04<25:28:24,  9.19s/it]collect:   0%|          | 17/10000 [03:26<31:59:17, 11.54s/it]collect:   0%|          | 18/10000 [03:37<31:54:19, 11.51s/it]collect:   0%|          | 19/10000 [03:53<34:39:03, 12.50s/it]collect:   0%|          | 20/10000 [04:25<47:50:36, 17.26s/it]collect:   0%|          | 21/10000 [04:31<40:13:59, 14.51s/it]collect:   0%|          | 28/10000 [04:52<16:57:24,  6.12s/it]collect:   0%|          | 29/10000 [05:05<19:33:19,  7.06s/it]collect:   0%|          | 30/10000 [05:19<22:28:37,  8.12s/it]collect:   0%|          | 31/10000 [06:05<41:35:51, 15.02s/it]collect:   0%|          | 32/10000 [06:20<41:16:57, 14.91s/it]collect:   0%|          | 33/10000 [06:41<45:16:27, 16.35s/it]collect:   0%|          | 34/10000 [06:47<38:32:08, 13.92s/it]collect:   0%|          | 41/10000 [06:57<13:55:39,  5.03s/it]collect:   0%|          | 42/10000 [09:03<56:20:41, 20.37s/it]collect:   0%|          | 49/10000 [09:12<26:49:49,  9.71s/it]collect:   0%|          | 50/10000 [09:28<28:36:21, 10.35s/it]collect:   1%|          | 51/10000 [09:40<29:01:37, 10.50s/it]collect:   1%|          | 52/10000 [10:07<36:06:19, 13.07s/it]collect:   1%|          | 53/10000 [10:23<37:16:58, 13.49s/it]collect:   1%|          | 54/10000 [10:35<36:25:35, 13.18s/it]collect:   1%|          | 55/10000 [11:03<45:52:13, 16.60s/it]collect:   1%|          | 56/10000 [11:16<43:28:25, 15.74s/it]collect:   1%|          | 57/10000 [11:20<34:47:40, 12.60s/it]collect:   1%|          | 64/10000 [11:39<15:08:41,  5.49s/it]collect:   1%|          | 65/10000 [13:33<53:39:44, 19.44s/it]collect:   1%|          | 66/10000 [13:36<46:26:55, 16.83s/it]collect:   1%|          | 73/10000 [13:57<23:14:36,  8.43s/it]collect:   1%|          | 74/10000 [14:10<24:37:06,  8.93s/it]collect:   1%|          | 75/10000 [14:24<26:43:10,  9.69s/it]collect:   1%|          | 76/10000 [14:41<29:50:07, 10.82s/it]collect:   1%|          | 77/10000 [14:54<31:17:26, 11.35s/it]collect:   1%|          | 78/10000 [15:17<37:52:24, 13.74s/it]collect:   1%|          | 79/10000 [15:29<37:05:25, 13.46s/it]collect:   1%|          | 80/10000 [15:45<38:31:07, 13.98s/it]collect:   1%|          | 81/10000 [15:52<33:08:54, 12.03s/it]collect:   1%|          | 88/10000 [15:56<10:29:57,  3.81s/it]collect:   1%|          | 89/10000 [16:08<13:24:54,  4.87s/it]collect:   1%|          | 90/10000 [16:22<17:09:13,  6.23s/it]collect:   1%|          | 91/10000 [16:35<20:19:18,  7.38s/it]collect:   1%|          | 92/10000 [16:45<21:54:26,  7.96s/it]collect:   1%|          | 93/10000 [17:03<28:09:37, 10.23s/it]collect:   1%|          | 94/10000 [17:41<46:52:05, 17.03s/it]collect:   1%|          | 95/10000 [17:54<44:08:57, 16.05s/it]collect:   1%|          | 96/10000 [18:05<40:43:38, 14.80s/it]collect:   1%|          | 97/10000 [18:08<31:04:35, 11.30s/it]collect:   1%|          | 104/10000 [18:19<11:29:14,  4.18s/it]collect:   1%|          | 105/10000 [18:32<14:38:54,  5.33s/it]collect:   1%|          | 106/10000 [18:45<17:57:47,  6.54s/it]collect:   1%|          | 107/10000 [18:56<20:16:06,  7.38s/it]collect:   1%|          | 108/10000 [19:07<22:16:52,  8.11s/it]collect:   1%|          | 109/10000 [19:19<24:34:30,  8.94s/it]collect:   1%|          | 110/10000 [19:30<25:50:54,  9.41s/it]collect:   1%|          | 111/10000 [19:41<27:12:29,  9.90s/it]collect:   1%|          | 112/10000 [19:54<29:43:12, 10.82s/it]collect:   1%|          | 113/10000 [20:06<30:27:03, 11.09s/it]collect:   1%|          | 114/10000 [20:20<32:23:19, 11.79s/it]collect:   1%|          | 115/10000 [20:24<26:16:45,  9.57s/it][task 2857] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 10319] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 15302] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 14627] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 18927] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 18065] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 11834] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 6263] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 11101] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 19650] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 22009] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 22580] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 4718] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 10037] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 13558] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 4919] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 16296] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 22318] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 8470] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 23340] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 12270] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 1938] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 20199] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 4662] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 22815] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 15093] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 22354] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 1500] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 9808] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 12854] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 12583] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 3623] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 20835] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 8018] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 9053] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 18177] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 5204] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 11767] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 20157] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 5753] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 11419] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 20284] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 8427] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 22053] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 20149] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 11297] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 21526] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 4607] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 16663] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 7871] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 22385] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 2582] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 10358] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 17748] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 3831] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 4547] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 8837] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 21599] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')collect:   1%|          | 122/10000 [20:55<15:54:14,  5.80s/it]collect:   1%|          | 123/10000 [21:13<20:08:53,  7.34s/it]collect:   1%|          | 124/10000 [21:26<22:37:15,  8.25s/it]collect:   1%|▏         | 125/10000 [21:41<26:21:05,  9.61s/it]collect:   1%|▏         | 126/10000 [22:34<51:01:03, 18.60s/it]collect:   1%|▏         | 127/10000 [22:40<42:51:33, 15.63s/it]collect:   1%|▏         | 134/10000 [22:50<15:49:56,  5.78s/it]collect:   1%|▏         | 135/10000 [23:45<32:43:21, 11.94s/it]collect:   1%|▏         | 136/10000 [23:57<32:36:00, 11.90s/it]collect:   1%|▏         | 137/10000 [24:08<32:21:08, 11.81s/it]collect:   1%|▏         | 138/10000 [24:21<32:38:01, 11.91s/it]collect:   1%|▏         | 139/10000 [24:37<35:00:37, 12.78s/it]collect:   1%|▏         | 140/10000 [24:53<37:10:11, 13.57s/it]collect:   1%|▏         | 141/10000 [24:56<29:48:38, 10.89s/it]collect:   1%|▏         | 148/10000 [25:06<11:07:37,  4.07s/it]collect:   1%|▏         | 149/10000 [25:20<14:50:35,  5.42s/it]collect:   2%|▏         | 150/10000 [25:32<17:26:11,  6.37s/it]collect:   2%|▏         | 151/10000 [25:48<22:14:12,  8.13s/it]collect:   2%|▏         | 152/10000 [27:12<64:47:08, 23.68s/it]collect:   2%|▏         | 159/10000 [27:22<23:48:06,  8.71s/it]collect:   2%|▏         | 160/10000 [27:34<25:03:47,  9.17s/it]collect:   2%|▏         | 161/10000 [27:54<29:25:00, 10.76s/it]collect:   2%|▏         | 162/10000 [28:07<30:16:25, 11.08s/it]collect:   2%|▏         | 163/10000 [28:29<36:24:37, 13.32s/it]collect:   2%|▏         | 164/10000 [28:44<37:27:23, 13.71s/it]collect:   2%|▏         | 165/10000 [29:00<38:56:59, 14.26s/it]collect:   2%|▏         | 166/10000 [29:15<39:25:38, 14.43s/it]collect:   2%|▏         | 167/10000 [29:28<37:54:38, 13.88s/it]collect:   2%|▏         | 168/10000 [29:28<27:36:41, 10.11s/it]collect:   2%|▏         | 175/10000 [29:39<10:26:27,  3.83s/it]collect:   2%|▏         | 176/10000 [29:59<16:19:56,  5.99s/it]collect:   2%|▏         | 177/10000 [30:29<26:37:04,  9.76s/it]collect:   2%|▏         | 184/10000 [30:35<11:46:47,  4.32s/it]collect:   2%|▏         | 185/10000 [31:05<19:32:25,  7.17s/it]collect:   2%|▏         | 192/10000 [31:11<10:29:19,  3.85s/it]collect:   2%|▏         | 193/10000 [31:41<17:23:29,  6.38s/it]
+[task 15795] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 9521] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 21247] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 10869] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 16852] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 9777] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 5487] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 10730] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 9013] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 7316] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 14176] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 2013] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 21048] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 3022] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 8955] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 23130] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 3997] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 22017] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 19704] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 14832] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 14110] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 4604] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 5451] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 2702] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 2196] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 22131] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 3558] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 20046] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 2235] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 8679] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 16004] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 22654] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 4945] 未持久化(下次重试): RuntimeError('shop env error: Unable to get available environment resource, please try again later')
+[task 10361] crashed: ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by NewConnectionError("HTTPConnection(host=\'127.0.0.1\', port=5000): Failed to establish a new connection: [Errno 111] Connection refused"))'))
+[task 2817] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 17420] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 18668] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 4926] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 8300] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 21825] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 23316] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 13719] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 17528] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 7280] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 20909] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 3450] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 7028] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 6901] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 8434] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 13165] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 19547] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 21835] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by collect:   2%|▏         | 200/10000 [31:47<9:58:30,  3.66s/it] collect:   2%|▏         | 201/10000 [32:17<16:31:06,  6.07s/it]collect:   2%|▏         | 208/10000 [32:23<9:44:32,  3.58s/it] collect:   2%|▏         | 209/10000 [32:53<16:07:07,  5.93s/it]collect:   2%|▏         | 216/10000 [32:59<9:37:45,  3.54s/it] collect:   2%|▏         | 217/10000 [33:29<15:55:27,  5.86s/it]collect:   2%|▏         | 224/10000 [33:35<9:34:15,  3.52s/it] collect:   2%|▏         | 225/10000 [34:05<15:49:27,  5.83s/it]collect:   2%|▏         | 232/10000 [34:11<9:32:19,  3.52s/it] collect:   2%|▏         | 233/10000 [34:41<15:46:08,  5.81s/it]
+[task 5489] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 10043] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 1908] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 16573] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 7462] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 17576] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 15476] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 18837] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 13673] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 14744] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 12110] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 20887] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 10053] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 6738] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 20596] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 1882] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 3037] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 17108] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 4176] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 12946] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 20049] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 11067] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 6098] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 9680] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 11306] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 13740] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 17926] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 22292] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 13504] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 21615] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 23114] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 22671] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 6012] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 12070] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 4235] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 14721] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 15626] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 1514] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 21758] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 8059] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 12895] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 9655] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 6966] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 16771] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 9100] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by 
+[task 14403] 未持久化(下次重试): ConnectionError(MaxRetryError('HTTPConnectionPool(host=\'127.0.0.1\', port=5000): Max retries exceeded with url: /api/shop_agent (Caused by collect:   2%|▏         | 240/10000 [34:47<9:31:09,  3.51s/it] collect:   2%|▏         | 241/10000 [35:17<15:44:07,  5.80s/it]collect:   2%|▏         | 248/10000 [35:23<9:30:20,  3.51s/it] collect:   2%|▏         | 249/10000 [35:53<15:42:49,  5.80s/it]collect:   3%|▎         | 256/10000 [35:59<9:29:40,  3.51s/it] collect:   3%|▎         | 257/10000 [36:29<15:41:45,  5.80s/it]collect:   3%|▎         | 264/10000 [36:35<9:29:07,  3.51s/it] collect:   3%|▎         | 265/10000 [37:05<15:40:50,  5.80s/it]collect:   3%|▎         | 272/10000 [37:11<9:28:36,  3.51s/it] 

@@ -1,0 +1,31 @@
+# Paired-constraint SFT（方法 3）：3793 条教师轨迹 + 自然反向对/ nuisance 对的
+# 定向恢复目标。与 configs/sft.yaml 仅 data.train_file 与 output_dir 不同，
+# 其余超参逐字对齐（matched 协议要求：基座/LoRA/epoch/lr/batch 全同）。
+# Run:  python -m experiment.sft.train --config configs/sft_paired.yaml
+output_dir: /workspace/shopsimulator/shopagent-rl/outputs/sft/v2_paired/model/training_output
+
+data:
+  # 构建方式（train 自然对生成完成后执行）：
+  #   python scripts/build_paired_sft_data.py \
+  #     --natural data/counterfactual/train_natural_option_swap_v1.jsonl \
+  #     --v2 data/counterfactual/train_constraint_causal_v2.jsonl \
+  #     --exclude-verbatim --out data/sft_paired_train.jsonl
+  #   cat data/sft_train.jsonl data/sft_paired_train.jsonl > data/sft_train_paired_mix.jsonl
+  train_file: /workspace/shopsimulator/shopagent-rl/data/sft_train_paired_mix.jsonl
+
+model:
+  base_model: Qwen/Qwen3-1.7B-Base
+  lora_r: 32
+  lora_alpha: 64
+  lora_dropout: 0.05
+  lora_target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+
+train:
+  max_seq_length: 8192
+  batch_size: 1
+  grad_accum: 8
+  epochs: 3
+  lr: 1.0e-4
+  warmup_ratio: 0.03
+  logging_steps: 10
+  save_strategy: epoch

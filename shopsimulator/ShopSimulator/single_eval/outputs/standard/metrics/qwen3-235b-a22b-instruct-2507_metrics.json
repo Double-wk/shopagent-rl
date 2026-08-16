@@ -1,0 +1,16 @@
+{
+  "model": "qwen3-235b-a22b-instruct-2507",
+  "eval_type": "standard",
+  "metrics": {
+    "样本总量": 2,
+    "完成率": 1.0,
+    "平均分_r_loose": 1.0,
+    "平均分_r_hard": 1.0,
+    "平均分_r_success": 1.0,
+    "平均分_r_types": 1.0,
+    "平均分_r_attribute": 1.0,
+    "平均分_r_option": 1.0,
+    "平均分_r_price": 1.0,
+    "选对商品率": 1.0
+  }
+}

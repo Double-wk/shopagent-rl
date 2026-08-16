@@ -1,0 +1,8 @@
+{
+  "id": "1",
+  "subject": "De-risk run: 验证多步循环pass@1提升",
+  "description": "运行derisk_loop.py，验证all_query策略在20次迭代后pass@1是否有明显提升。需要先运行0次迭代的baseline，然后运行20次迭代的训练。",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

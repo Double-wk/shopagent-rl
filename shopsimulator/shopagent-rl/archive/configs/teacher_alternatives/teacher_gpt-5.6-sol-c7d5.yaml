@@ -1,0 +1,68 @@
+# 真实 gpt-5.6-sol 测试配置：仅用 sk-c7d5 单 key。
+# 背景：mcgrox 后台把 sk-c7d5 专门切到真实 gpt-5.6-sol（其余 3 个 key 走 gpt-5.5）。
+# 用户 2026-08-07 要求单独用它跑 gpt-5.6-sol，看真实效果是否值更贵的价格。
+# 与 teacher_gpt-5.5.yaml 仅 model + api_keys 不同（prompt/参数全同），保证对照唯一变量=模型。
+teacher:
+  client_type: openai
+  model: gpt-5.6-sol
+  base_url: https://www.mcgrox.top
+  api_keys:
+    - sk-c7d57ec9ae632e13b9796bce1d6fce6a95b36d5016a98fef1f71f37214ecf462
+  max_tokens: 512
+  temperature: 0.0
+  timeout: 120
+  max_retries: 5
+  max_turns: 30
+
+collection:
+  total_trajectories: 10000
+  keep_after_validation: 6800
+  sft_data: 5000
+  grpo_prompts: 2000
+  ablation_data: 3000
+  train_task_range: [1459, 23421]
+  num_workers: 8
+  quality_threshold: 1.0
+  output_format: jsonl
+  save_mode: incremental
+
+grpo:
+  prompt_tasks: 2000
+  samples_per_prompt: 4
+  total_samples: 8000
+  comparison_method: "reference"
+  reference_answers: "sft_data"
+  reward_function: segmented
+  reward_weights:
+    r_type: 0.20
+    r_att: 0.30
+    r_option: 0.30
+    r_price: 0.20
+
+evaluation:
+  final_200: [0, 1459]
+  ablation_tasks: [1459, 1959]
+
+system_prompt: |-
+  你正在进行一次网上购物模拟，目标是从商品库中选购最符合需求的商品。请注意，商品库中存在大量同类商品，你必须通过合理操作，最终购买到最符合要求的目标商品。
+  购物流程采用多轮对话形式，每一轮我会提供当前页面的观察结果，以及你可执行的操作列表。你需要根据当前状态和可选操作，选择并执行最合适的一步。
+
+  操作分为两类：
+  1. 搜索操作
+      格式：search[关键词]
+      你可以根据当前需求，自主决定搜索关键词。
+      只有在搜索功能可用时，才能使用该操作。
+  2. 点击操作
+      格式：click[值]
+      你只能点击当前可用操作列表中的按钮或选项，值必须严格对应操作列表中的内容。
+
+  规则说明：
+  1. 在点击【购买】前，必须至少选择一个商品规格（如颜色、尺码等）。
+  2. 你的目标是综合所有已知信息，通过搜索、筛选和选择，最终购买到“最符合需求的”商品，而非随意购买任意商品。
+  3. 如果你给出的操作在当前环境中不可执行，则页面不会有任何变化。
+  4. 提示：当你点击某一个商品规格时，页面其他信息不会发生变化，但该规格会被选中。请据此判断后续操作。
+
+  输出格式
+  在每一步，你必须按照下面格式输出：
+  Thought: 简要说明你在当前状态下的思考过程和操作依据。
+  Action: 用规定格式输出你选择的操作。

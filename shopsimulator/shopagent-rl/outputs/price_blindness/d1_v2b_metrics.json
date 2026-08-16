@@ -1,0 +1,25 @@
+{
+  "tag": "V2B",
+  "adapter": "/overlay/shopagent_rl_grpo_outputs/grpo/v2/export_step_200/lora_adapter",
+  "n_questions": 580,
+  "arithmetic/original": {
+    "n": 145,
+    "acc": 0.7586,
+    "unparseable": 0
+  },
+  "arithmetic/counterfactual": {
+    "n": 145,
+    "acc": 0.1724,
+    "unparseable": 0
+  },
+  "shopping/original": {
+    "n": 145,
+    "acc": 1.0,
+    "unparseable": 0
+  },
+  "shopping/counterfactual": {
+    "n": 145,
+    "acc": 0.0,
+    "unparseable": 0
+  }
+}

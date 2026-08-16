@@ -1,0 +1,57 @@
+# GLM-5.2 teacher 配置：智谱「国内 Coding Plan」，openai 兼容客户端。
+# 2026-08-07：为与 gpt/deepseek 同条件对比而重写——官方 PROMPT_TEMPLATE_zh + openai 客户端
+# （走 _log_usage，能记 token，与 gpt 同口径）。旧版(anthropic+自定义prompt)已备份到
+# teacher_glm-5.2.anthropic_backup.yaml。
+#
+# ⚠️ 接入须知（用户 2026-08-07 强调，配错会清 Key）：
+#   - 厂商选「国内智谱 Coding Plan」，勿选 ZAI（国外版）。
+#   - 严禁通用接口 https://open.bigmodel.cn/api/paas/v4；只能用下方 Coding Plan 专属接口。
+#   - 可用模型：GLM-5.2 / GLM-5-Turbo / GLM-4.7（GLM-5.1/GLM-5 会自动切到 GLM-5.2）。其余不要配。
+#
+# 路径说明：智谱 coding 端点的 chat 路径是 /chat/completions（无 /v1）。OpenAITeacherClient
+# 默认拼 /v1/chat/completions（适配 tokenrhythm/mcgrox），故这里显式覆盖 chat_completions_path。
+# 实测（2026-08-07）：
+#   POST …/api/coding/paas/v4/chat/completions        → 200, model 回显 glm-5.2, usage 含 reasoning_tokens
+#   POST …/api/coding/paas/v4/v1/chat/completions     → 404（故必须覆盖路径）
+teacher:
+  client_type: openai
+  model: glm-5.2
+  base_url: https://open.bigmodel.cn/api/coding/paas/v4   # ✅ Coding Plan 专属（严禁通用 /api/paas/v4）
+  chat_completions_path: /chat/completions                # 智谱路径无 /v1
+  api_key: 546b387222144da2a6b65751c75ecaf9.uCtKSgXFtAXoZuGh
+  max_tokens: 512
+  temperature: 0.0
+  timeout: 120
+  max_retries: 5
+  max_turns: 30
+
+collection:
+  target_trajectories: 628
+  keep_after_validation: 428
+  train_task_range: [1459, 23421]   # 官方 train 数据（21,962 个任务）
+  num_workers: 4                # glm-5.2 API concurrency
+
+# ✅ 对齐官方 ShopSimulator PROMPT_TEMPLATE_zh，与 deepseek/gpt 配置逐字一致（同条件对比前提）。
+system_prompt: |-
+  你正在进行一次网上购物模拟，目标是从商品库中选购最符合需求的商品。请注意，商品库中存在大量同类商品，你必须通过合理操作，最终购买到最符合要求的目标商品。
+  购物流程采用多轮对话形式，每一轮我会提供当前页面的观察结果，以及你可执行的操作列表。你需要根据当前状态和可选操作，选择并执行最合适的一步。
+
+  操作分为两类：
+  1. 搜索操作
+      格式：search[关键词]
+      你可以根据当前需求，自主决定搜索关键词。
+      只有在搜索功能可用时，才能使用该操作。
+  2. 点击操作
+      格式：click[值]
+      你只能点击当前可用操作列表中的按钮或选项，值必须严格对应操作列表中的内容。
+
+  规则说明：
+  1. 在点击【购买】前，必须至少选择一个商品规格（如颜色、尺码等）。
+  2. 你的目标是综合所有已知信息，通过搜索、筛选和选择，最终购买到“最符合需求的”商品，而非随意购买任意商品。
+  3. 如果你给出的操作在当前环境中不可执行，则页面不会有任何变化。
+  4. 提示：当你点击某一个商品规格时，页面其他信息不会发生变化，但该规格会被选中。请据此判断后续操作。
+
+  输出格式
+  在每一步，你必须按照下面格式输出：
+  Thought: 简要说明你在当前状态下的思考过程和操作依据。
+  Action: 用规定格式输出你选择的操作。

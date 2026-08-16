@@ -1,0 +1,48 @@
+https://developer.amd.com.cn/points/redeem
+
+git@github.com:Double-wk/amd.git
+
+Host server-303
+  HostName 36.150.116.220
+  User root
+  Port 30406
+
+Host server-331
+  HostName 36.150.116.220
+  User root
+  Port 30346
+
+
+
+
+
+cat >> /root/.bashrc <<'EOF'
+
+ccclaude() {
+    local provider="${1:-glm}"
+    shift 2>/dev/null || true
+
+    HOME=/workspace/cc-switch \
+    XDG_CONFIG_HOME=/workspace/cc-switch \
+    XDG_DATA_HOME=/workspace/cc-switch \
+    /workspace/cc-switch/bin/cc-switch start claude "$provider" -- "$@"
+}
+
+cccodex() {
+    local provider="${1:-yingtian}"
+    shift 2>/dev/null || true
+
+    mkdir -p /workspace/cc-switch/.codex
+
+    HOME=/workspace/cc-switch \
+    CODEX_HOME=/workspace/cc-switch/.codex \
+    /workspace/cc-switch/bin/cc-switch -a codex use "$provider" || return 1
+
+    HOME=/workspace/cc-switch \
+    CODEX_HOME=/workspace/cc-switch/.codex \
+    codex "$@"
+}
+
+EOF
+
+source /root/.bashrc

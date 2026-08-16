@@ -1,0 +1,2573 @@
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[1/1046] 1510:option_goal_swap_structured accepted
+[2/1046] 1494:option_goal_swap_structured accepted
+[3/1046] 1500:option_goal_swap_structured rejected
+[4/1046] 1544:option_goal_swap_structured rejected
+[5/1046] 1552:option_goal_swap_structured accepted
+[6/1046] 1603:option_goal_swap_structured accepted
+[7/1046] 1558:option_goal_swap_structured accepted
+[8/1046] 1634:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[9/1046] 1685:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[10/1046] 1683:option_goal_swap_structured accepted
+[11/1046] 1719:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[12/1046] 1674:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[13/1046] 1724:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+[14/1046] 1738:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[15/1046] 1727:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[16/1046] 1768:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[17/1046] 1728:option_goal_swap_structured accepted
+[18/1046] 1767:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[19/1046] 1770:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[20/1046] 1838:option_goal_swap_structured accepted
+[21/1046] 1923:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[22/1046] 1866:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[23/1046] 1950:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[24/1046] 1928:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[25/1046] 2010:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+[26/1046] 1953:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[27/1046] 2050:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+[28/1046] 2065:option_goal_swap_structured rejected
+[29/1046] 2078:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[30/1046] 2103:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[32/1046] 2094:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[33/1046] 2181:option_goal_swap_structured accepted
+[34/1046] 2243:option_goal_swap_structured accepted
+[35/1046] 2278:option_goal_swap_structured accepted
+[36/1046] 2130:option_goal_swap_structured accepted
+[37/1046] 2297:option_goal_swap_structured accepted
+[38/1046] 2281:option_goal_swap_structured accepted
+[39/1046] 2400:option_goal_swap_structured accepted
+[40/1046] 2358:option_goal_swap_structured accepted
+[41/1046] 2432:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[42/1046] 2437:option_goal_swap_structured accepted
+[43/1046] 2489:option_goal_swap_structured accepted
+[44/1046] 2530:option_goal_swap_structured accepted
+[45/1046] 2539:option_goal_swap_structured accepted
+[46/1046] 2544:option_goal_swap_structured accepted
+[47/1046] 2487:option_goal_swap_structured accepted
+[48/1046] 2567:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[49/1046] 2573:option_goal_swap_structured rejected
+[50/1046] 2649:option_goal_swap_structured accepted
+[51/1046] 2653:option_goal_swap_structured accepted
+[52/1046] 2675:option_goal_swap_structured accepted
+[53/1046] 2686:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(ReadTimeout(ReadTimeoutError("HTTPSConnectionPool(host='api.)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): HTTPSConnectionPool(host='api.gptgod.online', port=443): Read timed out. (read timeout=120); retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[54/1046] 2556:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[55/1046] 2700:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[56/1046] 2728:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[57/1046] 2743:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[58/1046] 2793:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[59/1046] 2805:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[60/1046] 2710:option_goal_swap_structured accepted
+[61/1046] 2843:option_goal_swap_structured accepted
+[62/1046] 2861:option_goal_swap_structured accepted
+[63/1046] 2895:option_goal_swap_structured accepted
+[64/1046] 2976:option_goal_swap_structured accepted
+[65/1046] 2990:option_goal_swap_structured accepted
+[66/1046] 2967:option_goal_swap_structured accepted
+[67/1046] 2824:option_goal_swap_structured accepted
+[68/1046] 2910:option_goal_swap_structured accepted
+[69/1046] 3042:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[70/1046] 3065:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[71/1046] 3068:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[72/1046] 3053:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[73/1046] 3118:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[74/1046] 3143:option_goal_swap_structured accepted
+[75/1046] 3134:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[76/1046] 3200:option_goal_swap_structured rejected
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[77/1046] 3197:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[78/1046] 3140:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+[79/1046] 3232:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+[80/1046] 3241:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[82/1046] 3266:option_goal_swap_structured accepted
+[83/1046] 3295:option_goal_swap_structured accepted
+[84/1046] 3264:option_goal_swap_structured rejected
+[85/1046] 3358:option_goal_swap_structured rejected
+[86/1046] 3333:option_goal_swap_structured rejected
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+[87/1046] 3367:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+[89/1046] 3430:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[90/1046] 3453:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[91/1046] 3421:option_goal_swap_structured rejected
+[92/1046] 3446:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[93/1046] 3478:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[94/1046] 3400:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[95/1046] 3477:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[96/1046] 3437:option_goal_swap_structured accepted
+[97/1046] 3473:option_goal_swap_structured accepted
+[98/1046] 3461:option_goal_swap_structured accepted
+[99/1046] 3562:option_goal_swap_structured accepted
+[100/1046] 3539:option_goal_swap_structured accepted
+[101/1046] 3573:option_goal_swap_structured accepted
+[102/1046] 3580:option_goal_swap_structured rejected
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[103/1046] 3635:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[105/1046] 3640:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[106/1046] 3690:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[107/1046] 3742:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[108/1046] 3741:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+[109/1046] 3750:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[110/1046] 3757:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 20s
+[111/1046] 3846:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[113/1046] 3874:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[114/1046] 3879:option_goal_swap_structured accepted
+[115/1046] 3815:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[116/1046] 3891:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+[118/1046] 3935:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[119/1046] 3952:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[120/1046] 3974:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[121/1046] 3986:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[122/1046] 3899:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[123/1046] 4009:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[124/1046] 4012:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[125/1046] 4036:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[126/1046] 4061:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+[127/1046] 4064:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[128/1046] 4055:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[129/1046] 4098:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+[130/1046] 4107:option_goal_swap_structured accepted
+[131/1046] 4113:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[132/1046] 4124:option_goal_swap_structured accepted
+[133/1046] 4068:option_goal_swap_structured rejected
+[134/1046] 4132:option_goal_swap_structured accepted
+[135/1046] 4131:option_goal_swap_structured accepted
+[136/1046] 4168:option_goal_swap_structured rejected
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[137/1046] 4192:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 20s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[140/1046] 4246:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[141/1046] 4262:option_goal_swap_structured accepted
+[142/1046] 4232:option_goal_swap_structured rejected
+[143/1046] 4295:option_goal_swap_structured accepted
+[144/1046] 4327:option_goal_swap_structured accepted
+[145/1046] 4284:option_goal_swap_structured accepted
+[146/1046] 4348:option_goal_swap_structured accepted
+[147/1046] 4395:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[148/1046] 4422:option_goal_swap_structured accepted
+[149/1046] 4362:option_goal_swap_structured rejected
+[150/1046] 4443:option_goal_swap_structured accepted
+[151/1046] 4496:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[152/1046] 4446:option_goal_swap_structured accepted
+[153/1046] 4543:option_goal_swap_structured accepted
+[154/1046] 4540:option_goal_swap_structured accepted
+[155/1046] 4551:option_goal_swap_structured accepted
+[156/1046] 4478:option_goal_swap_structured accepted
+[157/1046] 4632:option_goal_swap_structured accepted
+[158/1046] 4602:option_goal_swap_structured accepted
+[159/1046] 4621:option_goal_swap_structured accepted
+[160/1046] 4654:option_goal_swap_structured accepted
+[161/1046] 4586:option_goal_swap_structured accepted
+[162/1046] 4688:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+[163/1046] 4691:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[164/1046] 4739:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[165/1046] 4745:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[167/1046] 4752:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[168/1046] 4771:option_goal_swap_structured accepted
+[169/1046] 4782:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[170/1046] 4768:option_goal_swap_structured accepted
+[171/1046] 2528:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[172/1046] 4829:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[173/1046] 3056:option_goal_swap_structured accepted
+[174/1046] 4799:option_goal_swap_structured rejected
+[175/1046] 4892:option_goal_swap_structured accepted
+[176/1046] 3703:option_goal_swap_structured accepted
+[177/1046] 4846:option_goal_swap_structured accepted
+[178/1046] 4899:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[179/1046] 4961:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 20s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+[181/1046] 5009:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[183/1046] 5125:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[184/1046] 5051:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[185/1046] 5186:option_goal_swap_structured accepted
+[186/1046] 5079:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[187/1046] 5085:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[188/1046] 5111:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[189/1046] 5214:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+[190/1046] 5246:option_goal_swap_structured accepted
+[191/1046] 5142:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[193/1046] 5076:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[194/1046] 5287:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+[195/1046] 5262:option_goal_swap_structured accepted
+[196/1046] 5255:option_goal_swap_structured accepted
+[197/1046] 5144:option_goal_swap_structured accepted
+[198/1046] 5308:option_goal_swap_structured accepted
+[199/1046] 5323:option_goal_swap_structured accepted
+[200/1046] 5313:option_goal_swap_structured accepted
+[201/1046] 5380:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[202/1046] 5273:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[203/1046] 5320:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[204/1046] 5394:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[205/1046] 5497:option_goal_swap_structured accepted
+[206/1046] 5505:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[207/1046] 5564:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[208/1046] 5315:option_goal_swap_structured rejected
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[209/1046] 5666:option_goal_swap_structured rejected
+[210/1046] 5615:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[211/1046] 5590:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[212/1046] 5679:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[213/1046] 5667:option_goal_swap_structured accepted
+[214/1046] 5532:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+[215/1046] 5691:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[216/1046] 5685:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[218/1046] 5655:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[219/1046] 5773:option_goal_swap_structured accepted
+[220/1046] 5827:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+[221/1046] 5810:option_goal_swap_structured accepted
+[222/1046] 5867:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[223/1046] 5816:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[225/1046] 5836:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[226/1046] 5866:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+[227/1046] 5886:option_goal_swap_structured accepted
+[228/1046] 5936:option_goal_swap_structured rejected
+[229/1046] 5875:option_goal_swap_structured accepted
+[230/1046] 5718:option_goal_swap_structured accepted
+[231/1046] 5954:option_goal_swap_structured accepted
+[232/1046] 6051:option_goal_swap_structured accepted
+[233/1046] 6088:option_goal_swap_structured accepted
+[234/1046] 6060:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[235/1046] 6080:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 20s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+[238/1046] 6192:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[239/1046] 6083:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[240/1046] 6256:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[241/1046] 6255:option_goal_swap_structured accepted
+[242/1046] 6226:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+[243/1046] 6308:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+[244/1046] 6294:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[245/1046] 6359:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[246/1046] 6361:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[248/1046] 6460:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[249/1046] 6061:option_goal_swap_structured accepted
+[250/1046] 6423:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[251/1046] 6409:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[252/1046] 6229:option_goal_swap_structured accepted
+[253/1046] 6470:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+[254/1046] 6546:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[255/1046] 6590:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 5/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 20s
+[256/1046] 6581:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[258/1046] 6643:option_goal_swap_structured rejected
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[259/1046] 6660:option_goal_swap_structured accepted
+[260/1046] 6194:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+[261/1046] 6644:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[262/1046] 6653:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[263/1046] 6662:option_goal_swap_structured accepted
+[264/1046] 6667:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[265/1046] 6679:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[266/1046] 6752:option_goal_swap_structured accepted
+[267/1046] 6755:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[268/1046] 6706:option_goal_swap_structured rejected
+[269/1046] 6787:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+[270/1046] 6815:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[271/1046] 6821:option_goal_swap_structured accepted
+[272/1046] 4854:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 4s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 8s
+[273/1046] 6875:option_goal_swap_structured accepted
+[274/1046] 3724:option_goal_swap_structured accepted
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 16s
+端点 https://nova.vcrauo.com/v1/chat/completions key ...A8icLz 冷却 60s(HTTPError('502 <!DOCTYPE html>\n<!--[if lt IE 7]> <html clas)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 502 <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-; retry in 2s
+[275/1046] 4326:option_goal_swap_structured accepted
+[276/1046] 2527:option_goal_swap_structured accepted
+[277/1046] 6754:option_goal_swap_structured accepted
+[278/1046] 7001:option_goal_swap_structured accepted
+[279/1046] 5903:option_goal_swap_structured accepted
+[280/1046] 6992:option_goal_swap_structured rejected
+[281/1046] 6983:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[282/1046] 6882:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 2 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+[283/1046] 6912:option_goal_swap_structured rejected
+[284/1046] 6773:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[285/1046] 6886:option_goal_swap_structured accepted
+[286/1046] 6829:option_goal_swap_structured accepted
+[287/1046] 3686:option_goal_swap_structured accepted
+[288/1046] 6905:option_goal_swap_structured accepted
+[289/1046] 7091:option_goal_swap_structured accepted
+[290/1046] 7107:option_goal_swap_structured accepted
+[291/1046] 7155:option_goal_swap_structured accepted
+[292/1046] 7116:option_goal_swap_structured accepted
+[293/1046] 7234:option_goal_swap_structured accepted
+[294/1046] 7299:option_goal_swap_structured accepted
+[295/1046] 7227:option_goal_swap_structured accepted
+[296/1046] 7188:option_goal_swap_structured rejected
+[297/1046] 6807:option_goal_swap_structured accepted
+[298/1046] 7297:option_goal_swap_structured accepted
+[299/1046] 7375:option_goal_swap_structured accepted
+[300/1046] 7329:option_goal_swap_structured accepted
+[301/1046] 7205:option_goal_swap_structured accepted
+[302/1046] 7401:option_goal_swap_structured accepted
+[303/1046] 7393:option_goal_swap_structured accepted
+[304/1046] 7421:option_goal_swap_structured accepted
+[305/1046] 7366:option_goal_swap_structured accepted
+[306/1046] 7450:option_goal_swap_structured accepted
+[307/1046] 7380:option_goal_swap_structured rejected
+[308/1046] 7537:option_goal_swap_structured accepted
+[309/1046] 7533:option_goal_swap_structured accepted
+[310/1046] 7781:option_goal_swap_structured accepted
+[311/1046] 7595:option_goal_swap_structured accepted
+[312/1046] 7803:option_goal_swap_structured accepted
+[313/1046] 7849:option_goal_swap_structured accepted
+[314/1046] 7817:option_goal_swap_structured rejected
+[315/1046] 7786:option_goal_swap_structured accepted
+[316/1046] 7909:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[317/1046] 7902:option_goal_swap_structured accepted
+[318/1046] 7876:option_goal_swap_structured accepted
+[319/1046] 7882:option_goal_swap_structured accepted
+[320/1046] 7948:option_goal_swap_structured accepted
+[321/1046] 7969:option_goal_swap_structured accepted
+[322/1046] 7975:option_goal_swap_structured accepted
+[323/1046] 8036:option_goal_swap_structured rejected
+[324/1046] 8131:option_goal_swap_structured accepted
+[325/1046] 8178:option_goal_swap_structured accepted
+[326/1046] 8215:option_goal_swap_structured accepted
+[327/1046] 8192:option_goal_swap_structured rejected
+[328/1046] 7779:option_goal_swap_structured accepted
+[329/1046] 8204:option_goal_swap_structured rejected
+[330/1046] 8209:option_goal_swap_structured accepted
+[331/1046] 8257:option_goal_swap_structured accepted
+[332/1046] 8189:option_goal_swap_structured accepted
+[333/1046] 8216:option_goal_swap_structured accepted
+[334/1046] 8261:option_goal_swap_structured accepted
+[335/1046] 8331:option_goal_swap_structured accepted
+[336/1046] 8187:option_goal_swap_structured accepted
+[337/1046] 8414:option_goal_swap_structured accepted
+[338/1046] 8354:option_goal_swap_structured accepted
+[339/1046] 8453:option_goal_swap_structured accepted
+[340/1046] 8476:option_goal_swap_structured accepted
+[341/1046] 8465:option_goal_swap_structured accepted
+[342/1046] 8418:option_goal_swap_structured accepted
+[343/1046] 8487:option_goal_swap_structured accepted
+[344/1046] 8529:option_goal_swap_structured accepted
+[345/1046] 8584:option_goal_swap_structured accepted
+[346/1046] 8364:option_goal_swap_structured accepted
+[347/1046] 8555:option_goal_swap_structured accepted
+[348/1046] 8563:option_goal_swap_structured accepted
+[349/1046] 8458:option_goal_swap_structured rejected
+[350/1046] 8547:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[351/1046] 8551:option_goal_swap_structured accepted
+[352/1046] 8626:option_goal_swap_structured accepted
+[353/1046] 8632:option_goal_swap_structured rejected
+[354/1046] 8730:option_goal_swap_structured accepted
+[355/1046] 8831:option_goal_swap_structured accepted
+[356/1046] 8811:option_goal_swap_structured accepted
+[357/1046] 8769:option_goal_swap_structured rejected
+[358/1046] 8675:option_goal_swap_structured accepted
+[359/1046] 8748:option_goal_swap_structured accepted
+[360/1046] 8859:option_goal_swap_structured accepted
+[361/1046] 8914:option_goal_swap_structured accepted
+[362/1046] 8892:option_goal_swap_structured accepted
+[363/1046] 8727:option_goal_swap_structured accepted
+[364/1046] 9017:option_goal_swap_structured accepted
+[365/1046] 8883:option_goal_swap_structured accepted
+[366/1046] 9021:option_goal_swap_structured accepted
+[367/1046] 9062:option_goal_swap_structured accepted
+[368/1046] 9219:option_goal_swap_structured accepted
+[369/1046] 9170:option_goal_swap_structured rejected
+[370/1046] 9255:option_goal_swap_structured accepted
+[371/1046] 8693:option_goal_swap_structured accepted
+[372/1046] 9234:option_goal_swap_structured accepted
+[373/1046] 9250:option_goal_swap_structured rejected
+[374/1046] 9182:option_goal_swap_structured accepted
+[375/1046] 9223:option_goal_swap_structured accepted
+[376/1046] 9016:option_goal_swap_structured accepted
+[377/1046] 9344:option_goal_swap_structured accepted
+[378/1046] 9334:option_goal_swap_structured accepted
+[379/1046] 9355:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[380/1046] 8759:option_goal_swap_structured accepted
+[381/1046] 9251:option_goal_swap_structured accepted
+[382/1046] 9220:option_goal_swap_structured accepted
+[383/1046] 9449:option_goal_swap_structured accepted
+[384/1046] 9350:option_goal_swap_structured accepted
+[385/1046] 9427:option_goal_swap_structured rejected
+[386/1046] 9357:option_goal_swap_structured accepted
+[387/1046] 9454:option_goal_swap_structured rejected
+[388/1046] 9478:option_goal_swap_structured accepted
+[389/1046] 9521:option_goal_swap_structured accepted
+[390/1046] 9566:option_goal_swap_structured accepted
+[391/1046] 9554:option_goal_swap_structured rejected
+[392/1046] 9579:option_goal_swap_structured accepted
+[393/1046] 9618:option_goal_swap_structured accepted
+[394/1046] 9661:option_goal_swap_structured accepted
+[395/1046] 9668:option_goal_swap_structured accepted
+[396/1046] 9672:option_goal_swap_structured rejected
+[397/1046] 9685:option_goal_swap_structured rejected
+[398/1046] 9730:option_goal_swap_structured accepted
+[399/1046] 9710:option_goal_swap_structured accepted
+[400/1046] 9712:option_goal_swap_structured accepted
+[401/1046] 9698:option_goal_swap_structured accepted
+[402/1046] 9764:option_goal_swap_structured accepted
+[403/1046] 9735:option_goal_swap_structured accepted
+[404/1046] 9752:option_goal_swap_structured accepted
+[405/1046] 8952:option_goal_swap_structured accepted
+[406/1046] 9641:option_goal_swap_structured accepted
+[407/1046] 9742:option_goal_swap_structured accepted
+[408/1046] 9787:option_goal_swap_structured accepted
+[409/1046] 9755:option_goal_swap_structured accepted
+[410/1046] 9695:option_goal_swap_structured rejected
+[411/1046] 9848:option_goal_swap_structured accepted
+[412/1046] 9875:option_goal_swap_structured accepted
+[413/1046] 9854:option_goal_swap_structured accepted
+[414/1046] 9912:option_goal_swap_structured accepted
+[415/1046] 9868:option_goal_swap_structured accepted
+[416/1046] 9931:option_goal_swap_structured accepted
+[417/1046] 9904:option_goal_swap_structured accepted
+[418/1046] 9934:option_goal_swap_structured accepted
+[419/1046] 9996:option_goal_swap_structured accepted
+[420/1046] 9894:option_goal_swap_structured rejected
+[421/1046] 10115:option_goal_swap_structured accepted
+[422/1046] 10108:option_goal_swap_structured accepted
+[423/1046] 10020:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[424/1046] 10221:option_goal_swap_structured accepted
+[425/1046] 10202:option_goal_swap_structured accepted
+[426/1046] 10272:option_goal_swap_structured rejected
+[427/1046] 10310:option_goal_swap_structured rejected
+[428/1046] 9819:option_goal_swap_structured accepted
+[429/1046] 10269:option_goal_swap_structured accepted
+[430/1046] 10303:option_goal_swap_structured accepted
+[431/1046] 10346:option_goal_swap_structured accepted
+[432/1046] 10325:option_goal_swap_structured accepted
+[433/1046] 10340:option_goal_swap_structured accepted
+[434/1046] 10397:option_goal_swap_structured accepted
+[435/1046] 10464:option_goal_swap_structured accepted
+[436/1046] 10436:option_goal_swap_structured rejected
+[437/1046] 10439:option_goal_swap_structured accepted
+[438/1046] 10441:option_goal_swap_structured accepted
+[439/1046] 10534:option_goal_swap_structured rejected
+[440/1046] 10474:option_goal_swap_structured accepted
+[441/1046] 10554:option_goal_swap_structured rejected
+[442/1046] 10459:option_goal_swap_structured rejected
+[443/1046] 10457:option_goal_swap_structured accepted
+[444/1046] 10599:option_goal_swap_structured accepted
+[445/1046] 10578:option_goal_swap_structured accepted
+[446/1046] 10621:option_goal_swap_structured accepted
+[447/1046] 10660:option_goal_swap_structured accepted
+[448/1046] 10586:option_goal_swap_structured rejected
+[449/1046] 10507:option_goal_swap_structured accepted
+[450/1046] 10671:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[451/1046] 10721:option_goal_swap_structured rejected
+[452/1046] 10610:option_goal_swap_structured accepted
+[453/1046] 10739:option_goal_swap_structured rejected
+[454/1046] 10750:option_goal_swap_structured accepted
+[455/1046] 10694:option_goal_swap_structured accepted
+[456/1046] 10703:option_goal_swap_structured accepted
+[457/1046] 10745:option_goal_swap_structured accepted
+[458/1046] 10691:option_goal_swap_structured accepted
+[459/1046] 10746:option_goal_swap_structured accepted
+[460/1046] 10792:option_goal_swap_structured accepted
+[461/1046] 10786:option_goal_swap_structured accepted
+[462/1046] 10788:option_goal_swap_structured accepted
+[463/1046] 10798:option_goal_swap_structured accepted
+[464/1046] 10908:option_goal_swap_structured accepted
+[465/1046] 10784:option_goal_swap_structured rejected
+[466/1046] 10996:option_goal_swap_structured accepted
+[467/1046] 10989:option_goal_swap_structured accepted
+[468/1046] 10818:option_goal_swap_structured rejected
+[469/1046] 11030:option_goal_swap_structured accepted
+[470/1046] 11031:option_goal_swap_structured rejected
+[471/1046] 10916:option_goal_swap_structured accepted
+[472/1046] 10726:option_goal_swap_structured accepted
+[473/1046] 10920:option_goal_swap_structured rejected
+[474/1046] 11115:option_goal_swap_structured accepted
+[475/1046] 11042:option_goal_swap_structured accepted
+[476/1046] 10953:option_goal_swap_structured accepted
+[477/1046] 11084:option_goal_swap_structured accepted
+[478/1046] 11128:option_goal_swap_structured accepted
+[479/1046] 11168:option_goal_swap_structured accepted
+[480/1046] 11144:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[481/1046] 11284:option_goal_swap_structured accepted
+[482/1046] 11152:option_goal_swap_structured rejected
+[483/1046] 11295:option_goal_swap_structured accepted
+[484/1046] 11312:option_goal_swap_structured accepted
+[485/1046] 11360:option_goal_swap_structured accepted
+[486/1046] 11300:option_goal_swap_structured accepted
+[487/1046] 11376:option_goal_swap_structured accepted
+[488/1046] 11391:option_goal_swap_structured accepted
+[489/1046] 11381:option_goal_swap_structured accepted
+[490/1046] 11361:option_goal_swap_structured accepted
+[491/1046] 11440:option_goal_swap_structured accepted
+[492/1046] 11442:option_goal_swap_structured rejected
+[493/1046] 11438:option_goal_swap_structured accepted
+[494/1046] 11496:option_goal_swap_structured accepted
+[495/1046] 11491:option_goal_swap_structured accepted
+[496/1046] 11581:option_goal_swap_structured accepted
+[497/1046] 11512:option_goal_swap_structured accepted
+[498/1046] 11475:option_goal_swap_structured rejected
+[499/1046] 11502:option_goal_swap_structured accepted
+[500/1046] 11487:option_goal_swap_structured accepted
+[501/1046] 11673:option_goal_swap_structured accepted
+[502/1046] 11662:option_goal_swap_structured accepted
+[503/1046] 11606:option_goal_swap_structured rejected
+[504/1046] 11710:option_goal_swap_structured accepted
+[505/1046] 11701:option_goal_swap_structured accepted
+[506/1046] 11696:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[507/1046] 11731:option_goal_swap_structured rejected
+[508/1046] 11763:option_goal_swap_structured accepted
+[509/1046] 11703:option_goal_swap_structured accepted
+[510/1046] 11615:option_goal_swap_structured accepted
+[511/1046] 11511:option_goal_swap_structured accepted
+[512/1046] 11930:option_goal_swap_structured accepted
+[513/1046] 11902:option_goal_swap_structured accepted
+[514/1046] 11955:option_goal_swap_structured accepted
+[515/1046] 12009:option_goal_swap_structured accepted
+[516/1046] 11994:option_goal_swap_structured accepted
+[517/1046] 11981:option_goal_swap_structured accepted
+[518/1046] 12054:option_goal_swap_structured accepted
+[519/1046] 12027:option_goal_swap_structured accepted
+[520/1046] 12084:option_goal_swap_structured accepted
+[521/1046] 12107:option_goal_swap_structured rejected
+[522/1046] 12102:option_goal_swap_structured accepted
+[523/1046] 12014:option_goal_swap_structured accepted
+[524/1046] 11974:option_goal_swap_structured rejected
+[525/1046] 12086:option_goal_swap_structured accepted
+[526/1046] 12106:option_goal_swap_structured accepted
+[527/1046] 12129:option_goal_swap_structured accepted
+[528/1046] 12164:option_goal_swap_structured accepted
+[529/1046] 12180:option_goal_swap_structured accepted
+[530/1046] 12218:option_goal_swap_structured accepted
+[531/1046] 12234:option_goal_swap_structured accepted
+[532/1046] 12209:option_goal_swap_structured accepted
+[533/1046] 12246:option_goal_swap_structured accepted
+[534/1046] 12230:option_goal_swap_structured accepted
+[535/1046] 12208:option_goal_swap_structured accepted
+[536/1046] 11978:option_goal_swap_structured accepted
+[537/1046] 12331:option_goal_swap_structured accepted
+[538/1046] 12274:option_goal_swap_structured rejected
+[539/1046] 12346:option_goal_swap_structured accepted
+[540/1046] 12445:option_goal_swap_structured accepted
+[541/1046] 12494:option_goal_swap_structured accepted
+[542/1046] 12542:option_goal_swap_structured accepted
+[543/1046] 12504:option_goal_swap_structured accepted
+[544/1046] 12654:option_goal_swap_structured accepted
+[545/1046] 12518:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[546/1046] 12721:option_goal_swap_structured rejected
+[547/1046] 12702:option_goal_swap_structured accepted
+[548/1046] 12613:option_goal_swap_structured accepted
+[549/1046] 12540:option_goal_swap_structured rejected
+[550/1046] 12769:option_goal_swap_structured accepted
+[551/1046] 12775:option_goal_swap_structured accepted
+[552/1046] 12716:option_goal_swap_structured accepted
+[553/1046] 12714:option_goal_swap_structured accepted
+[554/1046] 12798:option_goal_swap_structured accepted
+[555/1046] 12783:option_goal_swap_structured accepted
+[556/1046] 12896:option_goal_swap_structured accepted
+[557/1046] 12916:option_goal_swap_structured accepted
+[558/1046] 12972:option_goal_swap_structured accepted
+[559/1046] 12963:option_goal_swap_structured accepted
+[560/1046] 12981:option_goal_swap_structured accepted
+[561/1046] 13032:option_goal_swap_structured accepted
+[562/1046] 13046:option_goal_swap_structured accepted
+[563/1046] 13030:option_goal_swap_structured accepted
+[564/1046] 13052:option_goal_swap_structured accepted
+[565/1046] 13069:option_goal_swap_structured accepted
+[566/1046] 13076:option_goal_swap_structured accepted
+[567/1046] 13172:option_goal_swap_structured accepted
+[568/1046] 13130:option_goal_swap_structured accepted
+[569/1046] 13158:option_goal_swap_structured accepted
+[570/1046] 13200:option_goal_swap_structured accepted
+[571/1046] 13189:option_goal_swap_structured accepted
+[572/1046] 13208:option_goal_swap_structured accepted
+[573/1046] 13195:option_goal_swap_structured accepted
+[574/1046] 13214:option_goal_swap_structured accepted
+[575/1046] 13249:option_goal_swap_structured rejected
+[576/1046] 13268:option_goal_swap_structured accepted
+[577/1046] 12976:option_goal_swap_structured accepted
+[578/1046] 13272:option_goal_swap_structured rejected
+[579/1046] 13228:option_goal_swap_structured accepted
+[580/1046] 13317:option_goal_swap_structured accepted
+[581/1046] 13393:option_goal_swap_structured accepted
+[582/1046] 13394:option_goal_swap_structured accepted
+[583/1046] 13349:option_goal_swap_structured rejected
+[584/1046] 13401:option_goal_swap_structured accepted
+[585/1046] 13419:option_goal_swap_structured rejected
+[586/1046] 13468:option_goal_swap_structured accepted
+[587/1046] 13443:option_goal_swap_structured accepted
+[588/1046] 13433:option_goal_swap_structured accepted
+[589/1046] 13454:option_goal_swap_structured rejected
+[590/1046] 13237:option_goal_swap_structured accepted
+[591/1046] 13569:option_goal_swap_structured accepted
+[592/1046] 13615:option_goal_swap_structured accepted
+[593/1046] 13712:option_goal_swap_structured accepted
+[594/1046] 13660:option_goal_swap_structured rejected
+[595/1046] 13675:option_goal_swap_structured accepted
+[596/1046] 13784:option_goal_swap_structured rejected
+[597/1046] 13850:option_goal_swap_structured accepted
+[598/1046] 13592:option_goal_swap_structured accepted
+[599/1046] 13820:option_goal_swap_structured accepted
+[600/1046] 13822:option_goal_swap_structured accepted
+[601/1046] 13797:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[602/1046] 13832:option_goal_swap_structured accepted
+[603/1046] 13835:option_goal_swap_structured accepted
+[604/1046] 13907:option_goal_swap_structured accepted
+[605/1046] 13715:option_goal_swap_structured accepted
+[606/1046] 13811:option_goal_swap_structured accepted
+[607/1046] 13967:option_goal_swap_structured accepted
+[608/1046] 14022:option_goal_swap_structured accepted
+[609/1046] 13922:option_goal_swap_structured accepted
+[610/1046] 13998:option_goal_swap_structured accepted
+[611/1046] 13980:option_goal_swap_structured accepted
+[612/1046] 14069:option_goal_swap_structured accepted
+[613/1046] 14014:option_goal_swap_structured accepted
+[614/1046] 14090:option_goal_swap_structured rejected
+[615/1046] 14074:option_goal_swap_structured accepted
+[616/1046] 14033:option_goal_swap_structured accepted
+[617/1046] 13870:option_goal_swap_structured accepted
+[618/1046] 14143:option_goal_swap_structured accepted
+[619/1046] 14198:option_goal_swap_structured accepted
+[620/1046] 14172:option_goal_swap_structured accepted
+[621/1046] 14213:option_goal_swap_structured accepted
+[622/1046] 14214:option_goal_swap_structured accepted
+[623/1046] 14217:option_goal_swap_structured accepted
+[624/1046] 14243:option_goal_swap_structured accepted
+[625/1046] 14322:option_goal_swap_structured accepted
+[626/1046] 14280:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[627/1046] 14367:option_goal_swap_structured accepted
+[628/1046] 14294:option_goal_swap_structured rejected
+[629/1046] 14450:option_goal_swap_structured accepted
+[630/1046] 14404:option_goal_swap_structured accepted
+[631/1046] 14455:option_goal_swap_structured accepted
+[632/1046] 14115:option_goal_swap_structured accepted
+[633/1046] 14131:option_goal_swap_structured accepted
+[634/1046] 14495:option_goal_swap_structured accepted
+[635/1046] 14492:option_goal_swap_structured rejected
+[636/1046] 13960:option_goal_swap_structured rejected
+[637/1046] 14505:option_goal_swap_structured accepted
+[638/1046] 14542:option_goal_swap_structured accepted
+[639/1046] 14510:option_goal_swap_structured rejected
+[640/1046] 14607:option_goal_swap_structured accepted
+[641/1046] 14619:option_goal_swap_structured accepted
+[642/1046] 14575:option_goal_swap_structured accepted
+[643/1046] 14633:option_goal_swap_structured accepted
+[644/1046] 14671:option_goal_swap_structured accepted
+[645/1046] 14678:option_goal_swap_structured rejected
+[646/1046] 14658:option_goal_swap_structured accepted
+[647/1046] 14690:option_goal_swap_structured accepted
+[648/1046] 14695:option_goal_swap_structured rejected
+[649/1046] 14641:option_goal_swap_structured accepted
+[650/1046] 14738:option_goal_swap_structured accepted
+[651/1046] 14650:option_goal_swap_structured accepted
+[652/1046] 14752:option_goal_swap_structured accepted
+[653/1046] 14751:option_goal_swap_structured rejected
+[654/1046] 14798:option_goal_swap_structured accepted
+[655/1046] 14781:option_goal_swap_structured accepted
+[656/1046] 14899:option_goal_swap_structured accepted
+[657/1046] 14813:option_goal_swap_structured rejected
+[658/1046] 14959:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[659/1046] 14928:option_goal_swap_structured accepted
+[660/1046] 14966:option_goal_swap_structured accepted
+[661/1046] 14502:option_goal_swap_structured accepted
+[662/1046] 14998:option_goal_swap_structured accepted
+[663/1046] 15044:option_goal_swap_structured accepted
+[664/1046] 14978:option_goal_swap_structured rejected
+[665/1046] 15174:option_goal_swap_structured accepted
+[666/1046] 14487:option_goal_swap_structured accepted
+[667/1046] 15111:option_goal_swap_structured accepted
+[668/1046] 15193:option_goal_swap_structured accepted
+[669/1046] 15265:option_goal_swap_structured accepted
+[670/1046] 15291:option_goal_swap_structured accepted
+[671/1046] 15227:option_goal_swap_structured rejected
+[672/1046] 15299:option_goal_swap_structured accepted
+[673/1046] 15330:option_goal_swap_structured rejected
+[674/1046] 15334:option_goal_swap_structured accepted
+[675/1046] 15360:option_goal_swap_structured accepted
+[676/1046] 14823:option_goal_swap_structured accepted
+[677/1046] 15429:option_goal_swap_structured accepted
+[678/1046] 15239:option_goal_swap_structured rejected
+[679/1046] 15422:option_goal_swap_structured accepted
+[680/1046] 15434:option_goal_swap_structured accepted
+[681/1046] 15432:option_goal_swap_structured accepted
+[682/1046] 15465:option_goal_swap_structured accepted
+[683/1046] 15300:option_goal_swap_structured accepted
+[684/1046] 15517:option_goal_swap_structured accepted
+[685/1046] 15549:option_goal_swap_structured accepted
+[686/1046] 15480:option_goal_swap_structured accepted
+[687/1046] 15545:option_goal_swap_structured accepted
+[688/1046] 15548:option_goal_swap_structured accepted
+[689/1046] 15579:option_goal_swap_structured accepted
+[690/1046] 15611:option_goal_swap_structured accepted
+[691/1046] 15125:option_goal_swap_structured accepted
+[692/1046] 15677:option_goal_swap_structured accepted
+[693/1046] 15676:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[694/1046] 15768:option_goal_swap_structured accepted
+[695/1046] 15695:option_goal_swap_structured accepted
+[696/1046] 15591:option_goal_swap_structured rejected
+[697/1046] 15795:option_goal_swap_structured accepted
+[698/1046] 15750:option_goal_swap_structured accepted
+[699/1046] 15812:option_goal_swap_structured accepted
+[700/1046] 15823:option_goal_swap_structured accepted
+[701/1046] 15779:option_goal_swap_structured rejected
+[702/1046] 15865:option_goal_swap_structured accepted
+[703/1046] 15887:option_goal_swap_structured accepted
+[704/1046] 15694:option_goal_swap_structured accepted
+[705/1046] 15879:option_goal_swap_structured rejected
+[706/1046] 15938:option_goal_swap_structured accepted
+[707/1046] 15821:option_goal_swap_structured accepted
+[708/1046] 15930:option_goal_swap_structured rejected
+[709/1046] 15956:option_goal_swap_structured accepted
+[710/1046] 15934:option_goal_swap_structured accepted
+[711/1046] 15960:option_goal_swap_structured accepted
+[712/1046] 16087:option_goal_swap_structured accepted
+[713/1046] 16035:option_goal_swap_structured accepted
+[714/1046] 16056:option_goal_swap_structured accepted
+[715/1046] 16060:option_goal_swap_structured accepted
+[716/1046] 16074:option_goal_swap_structured accepted
+[717/1046] 16137:option_goal_swap_structured accepted
+[718/1046] 16134:option_goal_swap_structured accepted
+[719/1046] 16153:option_goal_swap_structured accepted
+[720/1046] 16214:option_goal_swap_structured accepted
+[721/1046] 16233:option_goal_swap_structured accepted
+[722/1046] 16346:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[723/1046] 16310:option_goal_swap_structured accepted
+[724/1046] 16271:option_goal_swap_structured accepted
+[725/1046] 16401:option_goal_swap_structured accepted
+[726/1046] 16337:option_goal_swap_structured accepted
+[727/1046] 16422:option_goal_swap_structured accepted
+[728/1046] 16374:option_goal_swap_structured rejected
+[729/1046] 16442:option_goal_swap_structured rejected
+[730/1046] 16502:option_goal_swap_structured rejected
+[731/1046] 16522:option_goal_swap_structured accepted
+[732/1046] 16453:option_goal_swap_structured accepted
+[733/1046] 16559:option_goal_swap_structured accepted
+[734/1046] 16601:option_goal_swap_structured accepted
+[735/1046] 16536:option_goal_swap_structured accepted
+[736/1046] 16586:option_goal_swap_structured accepted
+[737/1046] 16729:option_goal_swap_structured accepted
+[738/1046] 16648:option_goal_swap_structured accepted
+[739/1046] 16727:option_goal_swap_structured accepted
+[740/1046] 16713:option_goal_swap_structured accepted
+[741/1046] 16723:option_goal_swap_structured accepted
+[742/1046] 16745:option_goal_swap_structured accepted
+[743/1046] 16823:option_goal_swap_structured accepted
+[744/1046] 16734:option_goal_swap_structured accepted
+[745/1046] 16755:option_goal_swap_structured accepted
+[746/1046] 16872:option_goal_swap_structured accepted
+[747/1046] 16881:option_goal_swap_structured accepted
+[748/1046] 16906:option_goal_swap_structured accepted
+[749/1046] 16967:option_goal_swap_structured accepted
+[750/1046] 16969:option_goal_swap_structured accepted
+[751/1046] 17019:option_goal_swap_structured accepted
+[752/1046] 17052:option_goal_swap_structured accepted
+[753/1046] 17082:option_goal_swap_structured accepted
+[754/1046] 17070:option_goal_swap_structured accepted
+[755/1046] 17012:option_goal_swap_structured accepted
+[756/1046] 17074:option_goal_swap_structured accepted
+[757/1046] 17100:option_goal_swap_structured accepted
+[758/1046] 17139:option_goal_swap_structured accepted
+[759/1046] 17167:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[760/1046] 17119:option_goal_swap_structured accepted
+[761/1046] 17097:option_goal_swap_structured accepted
+[762/1046] 17134:option_goal_swap_structured accepted
+[763/1046] 17185:option_goal_swap_structured accepted
+[764/1046] 17253:option_goal_swap_structured rejected
+[765/1046] 17197:option_goal_swap_structured accepted
+[766/1046] 17234:option_goal_swap_structured accepted
+[767/1046] 17257:option_goal_swap_structured accepted
+[768/1046] 17220:option_goal_swap_structured accepted
+[769/1046] 17344:option_goal_swap_structured accepted
+[770/1046] 17455:option_goal_swap_structured accepted
+[771/1046] 17399:option_goal_swap_structured accepted
+[772/1046] 17429:option_goal_swap_structured rejected
+[773/1046] 17421:option_goal_swap_structured accepted
+[774/1046] 17556:option_goal_swap_structured accepted
+[775/1046] 17506:option_goal_swap_structured accepted
+[776/1046] 17572:option_goal_swap_structured accepted
+[777/1046] 17526:option_goal_swap_structured accepted
+[778/1046] 17562:option_goal_swap_structured accepted
+[779/1046] 17384:option_goal_swap_structured accepted
+[780/1046] 17635:option_goal_swap_structured accepted
+[781/1046] 17712:option_goal_swap_structured rejected
+[782/1046] 17674:option_goal_swap_structured rejected
+[783/1046] 17687:option_goal_swap_structured rejected
+[784/1046] 17682:option_goal_swap_structured accepted
+[785/1046] 17848:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[786/1046] 17777:option_goal_swap_structured accepted
+[787/1046] 17798:option_goal_swap_structured accepted
+[788/1046] 17831:option_goal_swap_structured accepted
+[789/1046] 17758:option_goal_swap_structured accepted
+[790/1046] 17914:option_goal_swap_structured accepted
+[791/1046] 17722:option_goal_swap_structured accepted
+[792/1046] 17903:option_goal_swap_structured accepted
+[793/1046] 17870:option_goal_swap_structured accepted
+[794/1046] 17949:option_goal_swap_structured rejected
+[795/1046] 17857:option_goal_swap_structured accepted
+[796/1046] 18045:option_goal_swap_structured accepted
+[797/1046] 17654:option_goal_swap_structured accepted
+[798/1046] 18092:option_goal_swap_structured accepted
+[799/1046] 18197:option_goal_swap_structured accepted
+[800/1046] 18017:option_goal_swap_structured accepted
+[801/1046] 18223:option_goal_swap_structured accepted
+[802/1046] 18179:option_goal_swap_structured accepted
+[803/1046] 18219:option_goal_swap_structured accepted
+[804/1046] 18172:option_goal_swap_structured accepted
+[805/1046] 18167:option_goal_swap_structured rejected
+[806/1046] 18277:option_goal_swap_structured accepted
+[807/1046] 18293:option_goal_swap_structured accepted
+[808/1046] 18265:option_goal_swap_structured accepted
+[809/1046] 18271:option_goal_swap_structured accepted
+[810/1046] 18588:option_goal_swap_structured accepted
+[811/1046] 18296:option_goal_swap_structured rejected
+[812/1046] 18556:option_goal_swap_structured accepted
+[813/1046] 18551:option_goal_swap_structured accepted
+[814/1046] 18675:option_goal_swap_structured accepted
+[815/1046] 18664:option_goal_swap_structured accepted
+[816/1046] 18348:option_goal_swap_structured rejected
+[817/1046] 18674:option_goal_swap_structured accepted
+[818/1046] 18746:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[819/1046] 18732:option_goal_swap_structured rejected
+[820/1046] 18792:option_goal_swap_structured accepted
+[821/1046] 18607:option_goal_swap_structured accepted
+[822/1046] 18686:option_goal_swap_structured accepted
+[823/1046] 18820:option_goal_swap_structured accepted
+[824/1046] 18545:option_goal_swap_structured accepted
+[825/1046] 19087:option_goal_swap_structured accepted
+[826/1046] 19025:option_goal_swap_structured accepted
+[827/1046] 19069:option_goal_swap_structured accepted
+[828/1046] 19091:option_goal_swap_structured accepted
+[829/1046] 19083:option_goal_swap_structured accepted
+[830/1046] 19186:option_goal_swap_structured accepted
+[831/1046] 18947:option_goal_swap_structured accepted
+[832/1046] 19165:option_goal_swap_structured accepted
+[833/1046] 19239:option_goal_swap_structured accepted
+[834/1046] 19139:option_goal_swap_structured accepted
+[835/1046] 19245:option_goal_swap_structured accepted
+[836/1046] 19276:option_goal_swap_structured accepted
+[837/1046] 19120:option_goal_swap_structured accepted
+[838/1046] 19353:option_goal_swap_structured accepted
+[839/1046] 19228:option_goal_swap_structured accepted
+[840/1046] 19305:option_goal_swap_structured accepted
+[841/1046] 19496:option_goal_swap_structured accepted
+[842/1046] 19402:option_goal_swap_structured rejected
+[843/1046] 19444:option_goal_swap_structured accepted
+[844/1046] 19524:option_goal_swap_structured accepted
+[845/1046] 19436:option_goal_swap_structured accepted
+[846/1046] 19483:option_goal_swap_structured accepted
+[847/1046] 19593:option_goal_swap_structured accepted
+[848/1046] 19542:option_goal_swap_structured accepted
+[849/1046] 19665:option_goal_swap_structured rejected
+[850/1046] 19612:option_goal_swap_structured accepted
+[851/1046] 19714:option_goal_swap_structured accepted
+[852/1046] 19653:option_goal_swap_structured accepted
+[853/1046] 19506:option_goal_swap_structured accepted
+[854/1046] 19807:option_goal_swap_structured accepted
+[855/1046] 19759:option_goal_swap_structured accepted
+[856/1046] 19726:option_goal_swap_structured accepted
+[857/1046] 19766:option_goal_swap_structured accepted
+[858/1046] 19831:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[859/1046] 19846:option_goal_swap_structured rejected
+[860/1046] 19823:option_goal_swap_structured accepted
+[861/1046] 19882:option_goal_swap_structured accepted
+[862/1046] 19858:option_goal_swap_structured accepted
+[863/1046] 19868:option_goal_swap_structured accepted
+[864/1046] 19903:option_goal_swap_structured accepted
+[865/1046] 19503:option_goal_swap_structured accepted
+[866/1046] 19891:option_goal_swap_structured accepted
+[867/1046] 19924:option_goal_swap_structured accepted
+[868/1046] 19984:option_goal_swap_structured accepted
+[869/1046] 19995:option_goal_swap_structured accepted
+[870/1046] 20011:option_goal_swap_structured accepted
+[871/1046] 19909:option_goal_swap_structured accepted
+[872/1046] 19966:option_goal_swap_structured accepted
+[873/1046] 20170:option_goal_swap_structured accepted
+[874/1046] 20083:option_goal_swap_structured accepted
+[875/1046] 20197:option_goal_swap_structured accepted
+[876/1046] 20195:option_goal_swap_structured accepted
+[877/1046] 20273:option_goal_swap_structured accepted
+[878/1046] 20260:option_goal_swap_structured accepted
+[879/1046] 20270:option_goal_swap_structured accepted
+[880/1046] 20312:option_goal_swap_structured accepted
+[881/1046] 20326:option_goal_swap_structured accepted
+[882/1046] 20463:option_goal_swap_structured accepted
+[883/1046] 20132:option_goal_swap_structured rejected
+[884/1046] 20274:option_goal_swap_structured accepted
+[885/1046] 20558:option_goal_swap_structured accepted
+[886/1046] 20573:option_goal_swap_structured accepted
+[887/1046] 20604:option_goal_swap_structured accepted
+[888/1046] 20459:option_goal_swap_structured accepted
+[889/1046] 20668:option_goal_swap_structured accepted
+[890/1046] 20629:option_goal_swap_structured accepted
+[891/1046] 20578:option_goal_swap_structured accepted
+[892/1046] 20707:option_goal_swap_structured accepted
+[893/1046] 20680:option_goal_swap_structured accepted
+[894/1046] 20714:option_goal_swap_structured accepted
+[895/1046] 20715:option_goal_swap_structured accepted
+[896/1046] 20797:option_goal_swap_structured accepted
+[897/1046] 20815:option_goal_swap_structured accepted
+[898/1046] 20766:option_goal_swap_structured accepted
+[899/1046] 20867:option_goal_swap_structured accepted
+[900/1046] 20881:option_goal_swap_structured accepted
+[901/1046] 20892:option_goal_swap_structured accepted
+[902/1046] 20898:option_goal_swap_structured accepted
+[903/1046] 20958:option_goal_swap_structured rejected
+[904/1046] 20930:option_goal_swap_structured rejected
+[905/1046] 20997:option_goal_swap_structured accepted
+[906/1046] 21013:option_goal_swap_structured accepted
+[907/1046] 20994:option_goal_swap_structured accepted
+[908/1046] 20919:option_goal_swap_structured accepted
+[909/1046] 21061:option_goal_swap_structured accepted
+[910/1046] 20935:option_goal_swap_structured accepted
+[911/1046] 21067:option_goal_swap_structured accepted
+[912/1046] 21071:option_goal_swap_structured accepted
+[913/1046] 21058:option_goal_swap_structured accepted
+[914/1046] 21098:option_goal_swap_structured accepted
+[915/1046] 21075:option_goal_swap_structured accepted
+[916/1046] 21177:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[917/1046] 21146:option_goal_swap_structured rejected
+[918/1046] 21046:option_goal_swap_structured accepted
+[919/1046] 21243:option_goal_swap_structured accepted
+[920/1046] 21214:option_goal_swap_structured accepted
+[921/1046] 21265:option_goal_swap_structured accepted
+[922/1046] 21255:option_goal_swap_structured rejected
+[923/1046] 21238:option_goal_swap_structured accepted
+[924/1046] 21274:option_goal_swap_structured accepted
+[925/1046] 21316:option_goal_swap_structured accepted
+[926/1046] 21278:option_goal_swap_structured accepted
+[927/1046] 21363:option_goal_swap_structured accepted
+[928/1046] 21369:option_goal_swap_structured accepted
+[929/1046] 21183:option_goal_swap_structured rejected
+[930/1046] 21434:option_goal_swap_structured accepted
+[931/1046] 21307:option_goal_swap_structured accepted
+[932/1046] 21410:option_goal_swap_structured accepted
+[933/1046] 21446:option_goal_swap_structured rejected
+[934/1046] 21467:option_goal_swap_structured accepted
+[935/1046] 21471:option_goal_swap_structured accepted
+[936/1046] 21466:option_goal_swap_structured accepted
+[937/1046] 21470:option_goal_swap_structured accepted
+[938/1046] 21099:option_goal_swap_structured accepted
+[939/1046] 21584:option_goal_swap_structured accepted
+[940/1046] 21484:option_goal_swap_structured rejected
+[941/1046] 21581:option_goal_swap_structured accepted
+[942/1046] 21422:option_goal_swap_structured accepted
+[943/1046] 21202:option_goal_swap_structured accepted
+[944/1046] 21342:option_goal_swap_structured accepted
+[945/1046] 21648:option_goal_swap_structured accepted
+[946/1046] 21718:option_goal_swap_structured accepted
+[947/1046] 21678:option_goal_swap_structured accepted
+[948/1046] 21696:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[949/1046] 21689:option_goal_swap_structured accepted
+[950/1046] 21743:option_goal_swap_structured accepted
+[951/1046] 21826:option_goal_swap_structured accepted
+[952/1046] 21781:option_goal_swap_structured rejected
+[953/1046] 21831:option_goal_swap_structured accepted
+[954/1046] 21771:option_goal_swap_structured accepted
+[955/1046] 21907:option_goal_swap_structured rejected
+[956/1046] 21911:option_goal_swap_structured accepted
+[957/1046] 21922:option_goal_swap_structured accepted
+[958/1046] 21908:option_goal_swap_structured rejected
+[959/1046] 21923:option_goal_swap_structured accepted
+[960/1046] 21918:option_goal_swap_structured accepted
+[961/1046] 21931:option_goal_swap_structured accepted
+[962/1046] 22020:option_goal_swap_structured accepted
+[963/1046] 21899:option_goal_swap_structured rejected
+[964/1046] 21969:option_goal_swap_structured accepted
+[965/1046] 22024:option_goal_swap_structured accepted
+[966/1046] 21943:option_goal_swap_structured accepted
+[967/1046] 22137:option_goal_swap_structured accepted
+[968/1046] 21938:option_goal_swap_structured accepted
+[969/1046] 22047:option_goal_swap_structured accepted
+[970/1046] 21974:option_goal_swap_structured accepted
+[971/1046] 22167:option_goal_swap_structured accepted
+[972/1046] 21947:option_goal_swap_structured rejected
+[973/1046] 22244:option_goal_swap_structured accepted
+[974/1046] 22224:option_goal_swap_structured accepted
+[975/1046] 21830:option_goal_swap_structured accepted
+[976/1046] 22041:option_goal_swap_structured accepted
+[977/1046] 22236:option_goal_swap_structured accepted
+[978/1046] 22221:option_goal_swap_structured accepted
+[979/1046] 22267:option_goal_swap_structured accepted
+[980/1046] 22311:option_goal_swap_structured accepted
+[981/1046] 22437:option_goal_swap_structured accepted
+[982/1046] 22403:option_goal_swap_structured accepted
+[983/1046] 22440:option_goal_swap_structured accepted
+[984/1046] 22530:option_goal_swap_structured accepted
+[985/1046] 22158:option_goal_swap_structured accepted
+[986/1046] 22486:option_goal_swap_structured accepted
+[987/1046] 22474:option_goal_swap_structured rejected
+[988/1046] 22396:option_goal_swap_structured accepted
+[989/1046] 22584:option_goal_swap_structured accepted
+[990/1046] 22452:option_goal_swap_structured rejected
+[991/1046] 22460:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[992/1046] 22646:option_goal_swap_structured accepted
+[993/1046] 22527:option_goal_swap_structured rejected
+[994/1046] 22669:option_goal_swap_structured accepted
+[995/1046] 22604:option_goal_swap_structured accepted
+[996/1046] 22633:option_goal_swap_structured rejected
+[997/1046] 22578:option_goal_swap_structured accepted
+[998/1046] 22682:option_goal_swap_structured rejected
+[999/1046] 22080:option_goal_swap_structured accepted
+[1000/1046] 22917:option_goal_swap_structured accepted
+[1001/1046] 22846:option_goal_swap_structured accepted
+[1002/1046] 22685:option_goal_swap_structured rejected
+[1003/1046] 22916:option_goal_swap_structured accepted
+[1004/1046] 22961:option_goal_swap_structured accepted
+[1005/1046] 22830:option_goal_swap_structured accepted
+[1006/1046] 22929:option_goal_swap_structured accepted
+[1007/1046] 22985:option_goal_swap_structured accepted
+[1008/1046] 22969:option_goal_swap_structured accepted
+[1009/1046] 22978:option_goal_swap_structured accepted
+[1010/1046] 22950:option_goal_swap_structured accepted
+[1011/1046] 23119:option_goal_swap_structured accepted
+[1012/1046] 23094:option_goal_swap_structured accepted
+[1013/1046] 23075:option_goal_swap_structured rejected
+[1014/1046] 23213:option_goal_swap_structured accepted
+[1015/1046] 23232:option_goal_swap_structured rejected
+[1016/1046] 23230:option_goal_swap_structured accepted
+[1017/1046] 23226:option_goal_swap_structured accepted
+[1018/1046] 23142:option_goal_swap_structured rejected
+[1019/1046] 23287:option_goal_swap_structured accepted
+[1020/1046] 23249:option_goal_swap_structured accepted
+[1021/1046] 23347:option_goal_swap_structured accepted
+[1022/1046] 23240:option_goal_swap_structured accepted
+[1023/1046] 23348:option_goal_swap_structured accepted
+[1024/1046] 23418:option_goal_swap_structured accepted
+[1025/1046] 23413:option_goal_swap_structured accepted
+[1026/1046] 23270:option_goal_swap_structured accepted
+[1027/1046] 11145:option_goal_swap_structured accepted
+[1028/1046] 13517:option_goal_swap_structured accepted
+[1029/1046] 13682:option_goal_swap_structured accepted
+[1030/1046] 8701:option_goal_swap_structured rejected
+[1031/1046] 13726:option_goal_swap_structured accepted
+[1032/1046] 13746:option_goal_swap_structured accepted
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+[1033/1046] 16190:option_goal_swap_structured accepted
+[1034/1046] 16176:option_goal_swap_structured accepted
+[1035/1046] 18263:option_goal_swap_structured accepted
+[1036/1046] 18303:option_goal_swap_structured accepted
+[1037/1046] 18346:option_goal_swap_structured accepted
+[1038/1046] 18364:option_goal_swap_structured accepted
+[1039/1046] 16191:option_goal_swap_structured accepted
+[1040/1046] 15394:option_goal_swap_structured accepted
+[1041/1046] 20617:option_goal_swap_structured accepted
+[1042/1046] 18411:option_goal_swap_structured rejected
+[1043/1046] 22717:option_goal_swap_structured accepted
+[1044/1046] 22988:option_goal_swap_structured accepted
+[1045/1046] 20594:option_goal_swap_structured rejected
+[1046/1046] 18123:option_goal_swap_structured rejected
+{"candidates": 1046, "accepted": 884, "rejected": 162, "accept_rate": 0.845, "out": "data/counterfactual/train_natural_option_swap_v1.jsonl"}

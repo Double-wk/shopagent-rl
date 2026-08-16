@@ -1,0 +1,4 @@
+端点 https://seekai.cc/v1/chat/completions key ...ixfzYS 冷却 60s(HTTPError('500 {"error":{"message":"upstream error: do reque)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 500 {"error":{"message":"upstream error: do request failed (request id: 202608151336314421493408268d9d6I4cAMNT1)","type":"new_api_error","param":"","code":"do_request_failed"}}; retry in 2s
+端点 https://seekai.cc/v1/chat/completions key ...ixfzYS 冷却 60s(HTTPError('500 {"error":{"message":"upstream error: do reque)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 500 {"error":{"message":"upstream error: do request failed (request id: 202608151336171196326018268d9d6tyYggXlB)","type":"new_api_error","param":"","code":"do_request_failed"}}; retry in 2s

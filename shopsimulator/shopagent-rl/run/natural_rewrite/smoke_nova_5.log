@@ -1,0 +1,6 @@
+[1/5] 19:option_goal_swap_structured accepted
+[2/5] 16:option_goal_swap_structured accepted
+[3/5] 22:option_goal_swap_structured accepted
+[4/5] 131:option_goal_swap_structured accepted
+[5/5] 123:option_goal_swap_structured accepted
+{"candidates": 5, "accepted": 5, "rejected": 0, "accept_rate": 1.0, "out": "run/natural_rewrite/smoke_nova_5.jsonl"}

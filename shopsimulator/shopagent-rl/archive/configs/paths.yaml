@@ -1,0 +1,19 @@
+# Absolute paths for this single 48GB gfx1100 box.
+upstream:
+  repo_dir: /workspace/shopsimulator/ShopSimulator
+  env_dir: /workspace/shopsimulator/ShopSimulator/shop_env
+  pack_api: /workspace/shopsimulator/ShopSimulator/shop_env/shop_env/pack_api.py
+
+shop_A:
+  root: /workspace/shopsimulator/shop_A
+  data_dir: /workspace/shopsimulator/shop_A/data
+  trajectories_raw: /workspace/shopsimulator/shop_A/data/trajectories_raw   # 按模型分子目录: <model>/ (如 gpt-5.6-sol/、deepseek-v4-flash-0731/)
+  trajectories_sft: /workspace/shopsimulator/shop_A/data/trajectories_sft
+  final_eval: /workspace/shopsimulator/shop_A/data/final_200.jsonl
+  ckpt_dir: /workspace/shopsimulator/shop_A/checkpoints
+
+# ShopSimulator task pool (官方 tag 划分).
+# eval:   task_id ∈ [0, 1459)      → 1,459 个，用于 Final-200 评测
+# train:  task_id ∈ [1459, 23421)  → 21,962 个，用于 SFT/GRPO 训练
+eval_pool_size: 1459        # 官方 eval 数据量
+train_pool_size: 21962      # 官方 train 数据量

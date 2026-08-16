@@ -1,0 +1,11 @@
+task=3875 ok=True strict=True reward=1.0 steps=4
+task=2785 ok=True strict=True reward=1.0 steps=4
+task=4566 ok=True strict=False reward=0.7777777777777778 steps=4
+task=4695 ok=True strict=True reward=1.0 steps=4
+task=4758 ok=True strict=True reward=1.0 steps=6
+task=6038 ok=True strict=False reward=0.5 steps=4
+task=6022 ok=True strict=True reward=1.0 steps=4
+task=6274 ok=True strict=False reward=0.8888888888888888 steps=4
+task=9667 ok=True strict=True reward=1.0 steps=4
+task=8616 ok=True strict=False reward=0.875 steps=19
+{"endpoint": "https://nova.vcrauo.com", "n": 10, "completed": 10, "strict": 6, "strict_rate": 0.6, "mean_reward": 0.9041666666666666, "legal_ratio": 1.0, "out": "run/teacher_probe/nova_10.jsonl"}

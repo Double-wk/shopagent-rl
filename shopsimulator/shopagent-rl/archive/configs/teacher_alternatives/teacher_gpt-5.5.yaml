@@ -1,0 +1,69 @@
+# Teacher A/B 对照臂：GPT-5.5 via mcgrox（与 gpt-5.6-sol 同 keys/prompt，仅换模型，用于成本对比）
+teacher:
+  client_type: openai
+  model: gpt-5.5
+  base_url: https://www.mcgrox.top
+  api_keys:
+    - sk-26d6e65e61198c9a561486a5168e6906b7f7a0add76814e0598442fcd90dad36
+    - sk-77314e53d5b8e516f7ffc6ee90c57fe8c589bfc56dadcab1227ba544381d1199
+    - sk-6184d76a6b7685241b34cad4a9ad9971aa4959e29d80080a47b6328596ca499c
+    # sk-c7d5 已移出 gpt-5.5 池：用户 2026-08-07 把该 key 专门切到真实的 gpt-5.6-sol，
+    # 留在本池会污染（~25% 请求实际跑到 5.6-sol）。真实 5.6-sol 测试见 teacher_gpt-5.6-sol-c7d5.yaml。
+  max_tokens: 512
+  temperature: 0.0
+  timeout: 120
+  max_retries: 5
+  max_turns: 30
+
+collection:
+  total_trajectories: 10000
+  keep_after_validation: 6800
+  sft_data: 5000
+  grpo_prompts: 2000
+  ablation_data: 3000
+  train_task_range: [1459, 23421]
+  num_workers: 8
+  quality_threshold: 1.0
+  output_format: jsonl
+  save_mode: incremental
+
+grpo:
+  prompt_tasks: 2000
+  samples_per_prompt: 4
+  total_samples: 8000
+  comparison_method: "reference"
+  reference_answers: "sft_data"
+  reward_function: segmented
+  reward_weights:
+    r_type: 0.20
+    r_att: 0.30
+    r_option: 0.30
+    r_price: 0.20
+
+evaluation:
+  final_200: [0, 1459]
+  ablation_tasks: [1459, 1959]
+
+system_prompt: |-
+  你正在进行一次网上购物模拟，目标是从商品库中选购最符合需求的商品。请注意，商品库中存在大量同类商品，你必须通过合理操作，最终购买到最符合要求的目标商品。
+  购物流程采用多轮对话形式，每一轮我会提供当前页面的观察结果，以及你可执行的操作列表。你需要根据当前状态和可选操作，选择并执行最合适的一步。
+
+  操作分为两类：
+  1. 搜索操作
+      格式：search[关键词]
+      你可以根据当前需求，自主决定搜索关键词。
+      只有在搜索功能可用时，才能使用该操作。
+  2. 点击操作
+      格式：click[值]
+      你只能点击当前可用操作列表中的按钮或选项，值必须严格对应操作列表中的内容。
+
+  规则说明：
+  1. 在点击【购买】前，必须至少选择一个商品规格（如颜色、尺码等）。
+  2. 你的目标是综合所有已知信息，通过搜索、筛选和选择，最终购买到“最符合需求的”商品，而非随意购买任意商品。
+  3. 如果你给出的操作在当前环境中不可执行，则页面不会有任何变化。
+  4. 提示：当你点击某一个商品规格时，页面其他信息不会发生变化，但该规格会被选中。请据此判断后续操作。
+
+  输出格式
+  在每一步，你必须按照下面格式输出：
+  Thought: 简要说明你在当前状态下的思考过程和操作依据。
+  Action: 用规定格式输出你选择的操作。

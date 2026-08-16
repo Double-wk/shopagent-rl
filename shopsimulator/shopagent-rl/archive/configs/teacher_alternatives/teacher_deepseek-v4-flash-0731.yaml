@@ -1,0 +1,88 @@
+# DeepSeek-V4-Flash-0731 teacher 配置：via tokenrhythm.studio，单 key。
+# 用户 2026-08-07 新增，用于对照/备选 teacher（gpt-5.6-sol 之外）。
+#
+# 实测确认（2026-08-07）：
+#   - GET /v1/models 列表含 deepseek-v4-flash-0731（另有 deepseek-v4-flash / deepseek-v4-pro）
+#   - POST chat 返回 200，模型名精确匹配
+#   - 该模型带 reasoning_tokens（推理模型，先思考后输出），与 gpt-5.6-sol 同类，Thought/Action 格式可正常解析
+#
+# ⚠️ base_url 故意写 https://tokenrhythm.studio（不带 /v1）：client_openai 会自动拼
+#    f"{base_url}/v1/chat/completions"。若误填 .../v1 会变成 .../v1/v1/chat/completions → 404。
+#    （用户给的 https://tokenrhythm.studio/v1 是 OpenAI SDK 约定的 base_url，我们的客户端少一层。）
+teacher:
+  client_type: openai
+  model: deepseek-v4-flash-0731
+  base_url: https://tokenrhythm.studio          # ✅ 不带 /v1（客户端自动补），实测 200
+  api_keys:
+    - sk_tr_OnYARP-8TgvO_OcJBuHJq-tYUb1RBOKHZgROqT-_WFA
+    - sk_tr_6mq9JSoyh88Ys-I-WyJkGZt9K1ilFmoRV9da2oXv0wA   # 2026-08-07 新增（用户提供，账号余额 ~$68）
+  max_tokens: 512
+  temperature: 0.0
+  timeout: 120
+  max_retries: 5
+  max_turns: 30
+
+collection:
+  # Teacher 完整采集计划（与 gpt-5.6-sol 配置一致，便于横向对比）
+  total_trajectories: 10000      # Teacher 总采集目标
+  keep_after_validation: 6800    # 预期保留 ~6,800 条高质量数据
+
+  # 数据分配
+  sft_data: 5000                # SFT 训练数据（标准答案）
+  grpo_prompts: 2000            # GRPO "问题"数据（用于多次采样）
+  ablation_data: 3000           # 消融实验数据
+
+  train_task_range: [1459, 23421]  # 官方 train 数据（21,962 个任务）
+  num_workers: 8                 # 单 key，若被 tokenrhythm 限流可在启动时调低 --workers
+  quality_threshold: 1.0         # strict_success 只保留满分轨迹
+
+  # 数据格式
+  output_format: jsonl
+  save_mode: incremental
+
+# GRPO 训练配置
+grpo:
+  prompt_tasks: 2000
+  samples_per_prompt: 4
+  total_samples: 8000
+
+  comparison_method: "reference"
+  reference_answers: "sft_data"
+
+  reward_function: segmented
+  reward_weights:
+    r_type: 0.20
+    r_att: 0.30
+    r_option: 0.30
+    r_price: 0.20
+
+# 评测数据（官方 eval，与训练零重叠）
+evaluation:
+  final_200: [0, 1459]
+  ablation_tasks: [1459, 1959]
+
+# ✅ 对齐官方 ShopSimulator PROMPT_TEMPLATE_zh，与其它 teacher 配置逐字一致。
+# action 格式不带内层引号（env.parse_action 用 (.+)\[(.+)\] 解析，click['值'] 会带引号 → no-op）。
+system_prompt: |-
+  你正在进行一次网上购物模拟，目标是从商品库中选购最符合需求的商品。请注意，商品库中存在大量同类商品，你必须通过合理操作，最终购买到最符合要求的目标商品。
+  购物流程采用多轮对话形式，每一轮我会提供当前页面的观察结果，以及你可执行的操作列表。你需要根据当前状态和可选操作，选择并执行最合适的一步。
+
+  操作分为两类：
+  1. 搜索操作
+      格式：search[关键词]
+      你可以根据当前需求，自主决定搜索关键词。
+      只有在搜索功能可用时，才能使用该操作。
+  2. 点击操作
+      格式：click[值]
+      你只能点击当前可用操作列表中的按钮或选项，值必须严格对应操作列表中的内容。
+
+  规则说明：
+  1. 在点击【购买】前，必须至少选择一个商品规格（如颜色、尺码等）。
+  2. 你的目标是综合所有已知信息，通过搜索、筛选和选择，最终购买到“最符合需求的”商品，而非随意购买任意商品。
+  3. 如果你给出的操作在当前环境中不可执行，则页面不会有任何变化。
+  4. 提示：当你点击某一个商品规格时，页面其他信息不会发生变化，但该规格会被选中。请据此判断后续操作。
+
+  输出格式
+  在每一步，你必须按照下面格式输出：
+  Thought: 简要说明你在当前状态下的思考过程和操作依据。
+  Action: 用规定格式输出你选择的操作。

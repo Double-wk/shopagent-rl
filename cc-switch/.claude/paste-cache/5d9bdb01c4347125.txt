@@ -1,0 +1,16 @@
+base) root@u-490-d48d5c66:/workspace# df -h
+Filesystem                         Size  Used Avail Use% Mounted on
+overlay                            3.5T  2.5T  1.1T  72% /
+tmpfs                               64M     0   64M   0% /dev
+/dev/loop24                         20G  995M   18G   6% /workspace
+tmpfs                               64G  4.0K   64G   1% /dev/shm
+/dev/mapper/ubuntu--vg-ubuntu--lv  437G  100G  315G  25% /etc/hosts
+/dev/nvme0n1                       3.5T  2.5T  1.1T  72% /etc/hostname
+tmpfs                             1003G   16K 1003G   1% /run/secrets/frp-self-service
+tmpfs                             1003G   12K 1003G   1% /run/secrets/kubernetes.io/serviceaccount
+tmpfs                              504G     0  504G   0% /proc/asound
+tmpfs                              504G     0  504G   0% /proc/acpi
+tmpfs                              504G     0  504G   0% /proc/scsi
+tmpfs                              504G     0  504G   0% /sys/firmware
+tmpfs                              504G     0  504G   0% /sys/devices/virtual/powercap
+(base) root@u-490-d48d5c66:/workspace# ccclaude

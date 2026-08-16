@@ -1,0 +1,9 @@
+{
+  "id": "2",
+  "subject": "Run main budget sweep Pareto curve experiment (seed 42, all strategies)",
+  "description": "Generate Pareto curves showing CTV vs baselines across different budget levels (10%-70%)",
+  "activeForm": "Running budget sweep Pareto curve experiments",
+  "status": "in_progress",
+  "blocks": [],
+  "blockedBy": []
+}

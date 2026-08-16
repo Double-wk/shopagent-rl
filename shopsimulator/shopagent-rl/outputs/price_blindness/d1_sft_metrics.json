@@ -1,0 +1,25 @@
+{
+  "tag": "SFT",
+  "adapter": "outputs/sft/v1/model/training_output/lora_adapter",
+  "n_questions": 580,
+  "arithmetic/original": {
+    "n": 145,
+    "acc": 0.531,
+    "unparseable": 0
+  },
+  "arithmetic/counterfactual": {
+    "n": 145,
+    "acc": 0.2759,
+    "unparseable": 0
+  },
+  "shopping/original": {
+    "n": 145,
+    "acc": 0.9793,
+    "unparseable": 0
+  },
+  "shopping/counterfactual": {
+    "n": 145,
+    "acc": 0.3586,
+    "unparseable": 0
+  }
+}

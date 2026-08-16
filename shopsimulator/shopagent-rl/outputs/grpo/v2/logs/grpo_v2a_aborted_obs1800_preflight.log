@@ -1,0 +1,46 @@
+shop-A vLLM env ready: PY=/overlay/miniconda3/envs/shop-A/bin/python  PYTHONPATH=/workspace/shopsimulator/shopagent-rl:/tmp/amdsmi_link:/tmp/functorch_shim:
+  remember: guard your LLM() call in  if __name__ == '__main__':
+=== ShopSim GRPO (veRL vLLM async) ===
+  model      : Qwen/Qwen3-1.7B-Base
+  sft adapter: /workspace/shopsimulator/shopagent-rl/outputs/sft/v1/model/training_output/lora_adapter  (exists=yes)
+  data       : /workspace/shopsimulator/shopagent-rl/data/grpo_train.parquet  (exists=yes)
+  steps=50  train_batch=2  rollout.n=8  (=16 rollouts/step)  lr=1e-5  n_gpus=1
+  lengths: prompt=512 turn=160 response=8192 model=10240 obs_chars=1800
+  sampling : temperature=0.85
+  actor batches: ppo_mini=2 ppo_micro=1 logprob_micro=1 | vLLM gpu_mem_util=0.25
+  vLLM load_format: auto
+  weight transfer : auto
+  output     : /overlay/shopagent_rl_grpo_outputs/grpo/v2/diagnostic_50
+  env        : http://127.0.0.1:5000
+/workspace/shopsimulator/shopagent-rl/verl/workers/engine/mindspeed/transformer_impl.py:24: UserWarning: NPU not support router replay for now.
+  from verl.utils.megatron.router_replay_patch import RouterReplay
+/workspace/shopsimulator/shopagent-rl/verl/trainer/main_ppo.py:380: FutureWarning: Warning: Function '__main__.main' is deprecated. Please use 'main_ppo.py is deprecated, and wil be replaced by main_ppo_sync.py in v0.8.0, please use main_ppo_sync.py instead.' instead.
+  main()
+2026-08-13 04:09:09,407	WARNING utils.py:469 -- Detecting docker specified CPUs. In previous versions of Ray, CPU detection in containers was incorrect. Please ensure that Ray has enough CPUs allocated. As a temporary workaround to revert to the prior behavior, set `RAY_USE_MULTIPROCESSING_CPU_COUNT=1` as an env var before starting Ray. Set the env var: `RAY_DISABLE_DOCKER_CPU_WARNING=1` to mute this warning.
+2026-08-13 04:09:10,677	INFO worker.py:2015 -- Started a local Ray instance. View the dashboard at [1m[32mhttp://127.0.0.1:8265 [39m[22m
+*** SIGTERM received at time=1786594152 on cpu 0 ***
+PC: @     0x712d5fa01d71  (unknown)  (unknown)
+    @     0x712d5f9ae330  1393329248  (unknown)
+    @     0x712d5fa04c8e        224  pthread_cond_timedwait
+    @     0x712cbba8f46f       1184  ray::core::GetRequest::Wait()
+    @     0x712cbba915c7       1328  ray::core::CoreWorkerMemoryStore::GetImpl()
+    @     0x712cbba92019         64  ray::core::CoreWorkerMemoryStore::Get()
+    @     0x712cbba9221f        208  ray::core::CoreWorkerMemoryStore::Get()
+    @     0x712cbb934cb6       1488  ray::core::CoreWorker::GetObjects()
+    @     0x712cbb935940        160  ray::core::CoreWorker::Get()
+    @     0x712cbb85d0a0        272  __pyx_pw_3ray_7_raylet_10CoreWorker_35get_objects()
+    @     0x6543b42f294e  (unknown)  PyObject_Vectorcall
+    @ ... and at least 4 more frames
+[2026-08-13 04:09:12,372 E 1664027 1664027] logging.cc:474: *** SIGTERM received at time=1786594152 on cpu 0 ***
+[2026-08-13 04:09:12,372 E 1664027 1664027] logging.cc:474: PC: @     0x712d5fa01d71  (unknown)  (unknown)
+[2026-08-13 04:09:12,373 E 1664027 1664027] logging.cc:474:     @     0x712d5f9ae330  1393329248  (unknown)
+[2026-08-13 04:09:12,373 E 1664027 1664027] logging.cc:474:     @     0x712d5fa04c8e        224  pthread_cond_timedwait
+[2026-08-13 04:09:12,373 E 1664027 1664027] logging.cc:474:     @     0x712cbba8f46f       1184  ray::core::GetRequest::Wait()
+[2026-08-13 04:09:12,373 E 1664027 1664027] logging.cc:474:     @     0x712cbba915c7       1328  ray::core::CoreWorkerMemoryStore::GetImpl()
+[2026-08-13 04:09:12,373 E 1664027 1664027] logging.cc:474:     @     0x712cbba92019         64  ray::core::CoreWorkerMemoryStore::Get()
+[2026-08-13 04:09:12,373 E 1664027 1664027] logging.cc:474:     @     0x712cbba9221f        208  ray::core::CoreWorkerMemoryStore::Get()
+[2026-08-13 04:09:12,373 E 1664027 1664027] logging.cc:474:     @     0x712cbb934cb6       1488  ray::core::CoreWorker::GetObjects()
+[2026-08-13 04:09:12,373 E 1664027 1664027] logging.cc:474:     @     0x712cbb935940        160  ray::core::CoreWorker::Get()
+[2026-08-13 04:09:12,373 E 1664027 1664027] logging.cc:474:     @     0x712cbb85d0a0        272  __pyx_pw_3ray_7_raylet_10CoreWorker_35get_objects()
+[2026-08-13 04:09:12,373 E 1664027 1664027] logging.cc:474:     @     0x6543b42f294e  (unknown)  PyObject_Vectorcall
+[2026-08-13 04:09:12,373 E 1664027 1664027] logging.cc:474:     @ ... and at least 4 more frames

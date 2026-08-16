@@ -1,0 +1,45 @@
+{
+  "showInTray": true,
+  "minimizeToTrayOnClose": true,
+  "enableClaudePluginIntegration": false,
+  "skipClaudeOnboarding": false,
+  "commonConfigConfirmed": true,
+  "currentProviderClaude": "glm",
+  "currentProviderCodex": "yingtian",
+  "visibleApps": {
+    "claude": true,
+    "codex": true,
+    "gemini": false,
+    "opencode": true,
+    "hermes": false,
+    "openclaw": false
+  },
+  "visibleAppsSettings": {
+    "mode": "auto",
+    "autoPromptDecided": true,
+    "manualHiddenInstalledNotices": {},
+    "lastDetectedInstalled": {
+      "opencode": true,
+      "hermes": false,
+      "gemini": false,
+      "openclaw": false
+    }
+  },
+  "launchOnStartup": false,
+  "preserveCodexOfficialAuthOnSwitch": false,
+  "unifyCodexSessionHistory": false,
+  "usageAutoSync": true,
+  "skillSyncMethod": "auto",
+  "localMigrations": {
+    "codexThirdPartyHistoryProviderBucketV2": {
+      "completedAt": "2026-08-02T16:21:00.254629915+00:00",
+      "targetProviderId": "custom",
+      "migratedJsonlFiles": 0,
+      "migratedStateRows": 0,
+      "scannedHistoryFiles": true
+    },
+    "codexProviderTemplateV2": {
+      "completedAt": "2026-08-02T16:21:00.292755440+00:00"
+    }
+  }
+}

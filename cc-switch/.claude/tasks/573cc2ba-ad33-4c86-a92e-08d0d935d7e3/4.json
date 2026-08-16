@@ -1,0 +1,8 @@
+{
+  "id": "4",
+  "subject": "等待CTV完成并启动并发策略",
+  "description": "等待 CTV 完成 20/20 迭代，然后测试并发运行 entropy + random",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

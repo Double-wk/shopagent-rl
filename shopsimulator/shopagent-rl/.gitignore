@@ -1,0 +1,34 @@
+# secrets / runtime endpoints
+.env
+.env.*
+
+# data & artifacts
+# data/   ← 私有仓库全量备份，shop_A/data/（轨迹数据）一并上传
+# outputs/ 不再整体忽略：experiment/outputs/ 下的 eval 结果（eval_*.jsonl /
+#   *_tasks/ / *_official_metrics.json / *_full_report.json）需备份上传。
+#   其中 SFT/GRPO 的 checkpoint 权重仍被下方 *.safetensors/*.bin/*.ckpt/*.log
+#   及根 .gitignore 的 experiment/**/*.pt 排除。
+checkpoints/
+# *.log  ← 私有仓库全量备份：运行/训练日志一并提交（sft_new3793.log, pack_api.log,
+#          collect.log 等）。持续增长的超大日志（shop_agent.log 56M+）由根 .gitignore 兜底排除。
+
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+archive/build/
+
+# model weights
+# 例外：*.safetensors.gz / .gz.partNN 是「复现必需权重」的压缩入库形式
+#（SFT lora_adapter 与 GRPO artifacts/），由 scripts/restore_large_artifacts.sh 还原。
+*.ckpt
+*.safetensors
+!*.safetensors.gz
+!*.safetensors.gz.part*
+*.bin
+
+# Local FSDP resume state for the final env16 GRPO run.  These multi-GB files
+# remain in outputs/ for resuming locally; the reproducible compressed adapter
+# is kept under artifact/ instead.
+outputs/grpo/v1/model/checkpoint_step_200/actor/*.pt
+outputs/grpo/v1/model/checkpoint_step_200/data.pt

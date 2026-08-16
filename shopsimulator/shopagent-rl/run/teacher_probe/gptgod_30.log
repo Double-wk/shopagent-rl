@@ -1,0 +1,283 @@
+task=3875 ok=True strict=True reward=1.0 steps=4
+task=2785 ok=True strict=True reward=1.0 steps=4
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+task=4695 ok=True strict=True reward=1.0 steps=4
+task=4566 ok=True strict=True reward=1.0 steps=4
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 5/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 20s
+task=4758 ok=False strict=False reward=0.0 steps=1
+task=6022 ok=True strict=True reward=1.0 steps=12
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+task=6274 ok=True strict=False reward=0.8888888888888888 steps=4
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+task=8616 ok=True strict=False reward=0.875 steps=6
+task=9667 ok=True strict=True reward=1.0 steps=4
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+task=9943 ok=True strict=True reward=1.0 steps=4
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+task=10694 ok=True strict=True reward=1.0 steps=4
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+task=6038 ok=True strict=False reward=0.5 steps=29
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+task=11397 ok=True strict=True reward=1.0 steps=6
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 5/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 20s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 5/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 20s
+task=11621 ok=False strict=False reward=0.0 steps=4
+task=12278 ok=False strict=False reward=0.0 steps=0
+task=13052 ok=True strict=True reward=1.0 steps=4
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+task=13191 ok=True strict=True reward=1.0 steps=4
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+task=14082 ok=True strict=True reward=1.0 steps=4
+task=14727 ok=True strict=False reward=0.8571428571428571 steps=5
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 5/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 20s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 5/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 20s
+task=16930 ok=False strict=False reward=0.0 steps=0
+task=15240 ok=False strict=False reward=0.0 steps=3
+task=17076 ok=True strict=True reward=1.0 steps=4
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+task=17996 ok=True strict=True reward=1.0 steps=4
+task=17381 ok=True strict=True reward=1.0 steps=4
+task=18212 ok=True strict=True reward=1.0 steps=5
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+task=19802 ok=True strict=True reward=1.0 steps=5
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 5/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 20s
+task=20575 ok=False strict=False reward=0.0 steps=0
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+task=21182 ok=True strict=True reward=1.0 steps=5
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 1/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 2s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 2/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 4s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 3/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 8s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+端点 https://api.gptgod.online/v1/chat/completions key ...k00ow4 冷却 60s(HTTPError('429 Client Error: Too Many Requests for url: http)。当前冷却中: 1 个 (url,key)
+teacher call failed (attempt 4/5): 429 Client Error: Too Many Requests for url: https://api.gptgod.online/v1/chat/completions; retry in 16s
+task=18910 ok=True strict=False reward=0.0 steps=30
+task=21721 ok=True strict=False reward=0.6 steps=13
+{"endpoint": "https://api.gptgod.online/v1", "n": 30, "completed": 24, "strict": 18, "strict_rate": 0.75, "mean_reward": 0.9050429894179893, "legal_ratio": 1.0, "out": "run/teacher_probe/gptgod_30.jsonl"}

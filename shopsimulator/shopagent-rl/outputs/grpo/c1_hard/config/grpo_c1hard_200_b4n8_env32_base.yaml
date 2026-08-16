@@ -1,0 +1,105 @@
+# ShopSim GRPO defaults. Paths, batch size, steps and output may be overridden by
+# scripts/run_grpo.sh.
+
+hydra:
+  searchpath:
+    - file://verl/trainer/config
+
+defaults:
+  - ppo_trainer
+  - _self_
+
+data:
+  train_files: ???          # CLI: one row per task_id
+  val_files: ???            # CLI
+  max_prompt_length: 512
+  max_response_length: 8192
+  return_raw_chat: True
+  shuffle: True
+  filter_overlong_prompts: True
+  truncation: error
+  # The 1,000-row parquet is tiny.  In the Ray/FSDP process tree, the inherited
+  # veRL default of eight StatefulDataLoader workers forks large parent state
+  # and was SIGKILLed at shutdown after consuming ~94 GB RAM.  Keep loading
+  # in-process; rollout generation, not data loading, is the bottleneck.
+  dataloader_num_workers: 0
+
+actor_rollout_ref:
+  hybrid_engine: True
+
+  model:
+    path: ???               # CLI: Qwen/Qwen3-1.7B-Base
+    lora_adapter_path: ???  # CLI: SFT adapter
+    lora_rank: 32           # non-zero is required to load/train the adapter
+    lora_alpha: 64
+    # Gradient checkpointing is inherited from veRL and already enabled.  The
+    # actor still peaks during long-response updates on the shared 48G card, so
+    # offload saved activations to host RAM between recomputation segments.
+    # This changes neither rollouts nor optimizer/GRPO hyperparameters.
+    enable_activation_offload: True
+    # Fuse LM-head projection with token log-probability/entropy computation.
+    # Avoid materializing the full [tokens, vocab] logits tensor for long
+    # responses; this is mathematically equivalent and only changes the kernel.
+    use_fused_kernels: True
+    override_config:
+      attn_implementation: sdpa
+
+  actor:
+    use_kl_loss: True
+    kl_loss_coef: 0.001
+    kl_loss_type: low_var_kl
+    entropy_coeff: 0
+    use_torch_compile: False
+
+    # Keep the FSDP actor in BF16 end-to-end. The inherited veRL default
+    # `model_dtype: fp32` first materializes the 1.7B base in FP32, wasting
+    # several GiB on this single-card colocated rollout/training setup.
+    fsdp_config:
+      model_dtype: bf16
+      dtype: bfloat16
+
+  rollout:
+    name: vllm
+    mode: async
+    load_format: auto
+    n: 4
+    response_length: 8192
+    max_model_len: 10240
+    # SFT assistant turns are strict Thought/Action records (P99=109 tokens).
+    # 0.7 retains within-group GRPO variation while reducing malformed actions.
+    temperature: 0.7
+    top_p: 1.0
+    tensor_model_parallel_size: 1
+    # 0.20 cannot allocate even one 10,240-token KV cache alongside the
+    # actor. 0.25 supplies the required KV-cache floor; BF16 actor loading
+    # offsets this increase while preserving single-card headroom.
+    gpu_memory_utilization: 0.25
+    enforce_eager: True
+    free_cache_engine: True
+    enable_prefix_caching: True
+    multi_turn:
+      enable: True
+      max_assistant_turns: 10
+      tokenization_sanity_check_mode: disable
+
+    agent:
+      num_workers: 4
+      default_agent_loop: shopsim_agent
+      agent_loop_config_path: /workspace/shopsimulator/shopagent-rl/configs/shopsim_agent_loop.yaml
+
+algorithm:
+  adv_estimator: grpo
+  norm_adv_by_std_in_grpo: True
+  use_kl_in_reward: False
+
+trainer:
+  total_epochs: 1
+  project_name: shopsim_grpo
+  experiment_name: qwen3-1.7b-grpo
+  logger: ["console"]
+  val_before_train: False
+  test_freq: -1
+  save_freq: ???                    # CLI (per run)
+  default_local_dir: /overlay/shopagent_rl_grpo_outputs/grpo
+  n_gpus_per_node: ???              # CLI
+  nnodes: 1

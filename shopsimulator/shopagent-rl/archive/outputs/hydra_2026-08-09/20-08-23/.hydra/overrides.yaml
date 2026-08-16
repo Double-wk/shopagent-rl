@@ -1,0 +1,15 @@
+- actor_rollout_ref.model.path=Qwen/Qwen3-1.7B-Base
+- actor_rollout_ref.model.lora_adapter_path=/workspace/shopsimulator/shop_A/experiment/outputs/sft_new3793/lora_adapter
+- data.train_files=/workspace/shopsimulator/shop_A/experiment/data/grpo_train.parquet
+- data.val_files=/workspace/shopsimulator/shop_A/experiment/data/grpo_train.parquet
+- data.train_batch_size=8
+- actor_rollout_ref.actor.optim.lr=1e-5
+- actor_rollout_ref.actor.ppo_mini_batch_size=8
+- actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=1
+- actor_rollout_ref.rollout.n=4
+- actor_rollout_ref.rollout.gpu_memory_utilization=0.35
+- actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=1
+- actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=1
+- trainer.total_training_steps=2
+- trainer.save_freq=2
+- trainer.n_gpus_per_node=1

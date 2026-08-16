@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shop-a-verl"
+version = "0.8.0"
+description = "Vendored veRL 0.8.0 used by the ShopSimulator shopagent-rl project"
+requires-python = ">=3.10"
+# Dependency versions are intentionally owned by requirements.txt.  Declaring
+# none here makes `pip install -e . --no-deps` safe for the ROCm environment.
+dependencies = []
+
+[tool.setuptools.packages.find]
+include = ["verl*"]

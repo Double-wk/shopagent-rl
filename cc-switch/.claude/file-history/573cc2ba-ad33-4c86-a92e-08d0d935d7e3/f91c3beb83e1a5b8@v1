@@ -1,0 +1,134 @@
+"""Headline 4-strategy budget-matched baseline (no oracle arm -- added later).
+
+Runs ctv / entropy / random / all_query from the SAME init on the SAME
+seed-determined split+prompt order (fairness: every strategy sees identical
+prompts + identical iter-0 rollouts per iteration; rollouts diverge from iter 1
+on only because the strategies train differently, which is inherent to
+on-policy distillation). All non-all_query arms share one teacher-forward-token
+budget fraction; all_query spends the whole pool as the reference ceiling.
+Reports pass@1 + cumulative teacher-forward tokens so the quality-vs-cost Pareto
+falls out directly.
+
+Each strategy runs in its OWN subprocess so the process exit fully releases
+VRAM (train_loop does not free its models at return, and ROCm's caching
+allocator pool is not handed back without empty_cache -- running all four in one
+process risks an OOM on the 2nd/3rd strategy). The parent aggregates the
+per-strategy summary JSONs that train_loop writes to disk.
+
+Fire it with env vars once the de-risk has confirmed lr + per-iter cost:
+  LR=1e-5 ITERS=20 BUDGET=0.2 TEST_N=16 SAMPLES=8 python runs/baseline4_loop.py
+Two seeds -> SEEDS=7,11 (PLAN sec 1.5 wants >=2 seeds for a real claim).
+"""
+
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+LR = float(os.environ.get("LR", "1e-5"))
+ITERS = int(os.environ.get("ITERS", "20"))
+BUDGET = float(os.environ.get("BUDGET", "0.2"))
+TEST_N = int(os.environ.get("TEST_N", "16"))
+SAMPLES = int(os.environ.get("SAMPLES", "8"))
+CALIB_N = int(os.environ.get("CALIB_N", "48"))  # ridge expands to 21 params -> need >=~48
+SEEDS = [int(s) for s in os.environ.get("SEEDS", "7").split(",")]
+OUT = os.environ.get("OUT", "runs/baseline4")
+STRATEGIES = ["ctv", "entropy", "random", "all_query"]
+
+# Internal env flags for the parent->child handshake.
+_CHILD = "__BASELINE4_CHILD"
+C_SEED = "__BASELINE4_SEED"
+C_STRAT = "__BASELINE4_STRAT"
+C_BF = "__BASELINE4_BF"
+
+
+def _child():
+    """Run ONE (seed, strategy) train_loop in this fresh process, then exit."""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+    from ctv_opd.training_loop import TrainingLoopConfig, train_loop
+
+    seed = int(os.environ[C_SEED])
+    strat = os.environ[C_STRAT]
+    bf = float(os.environ[C_BF])
+    cfg = TrainingLoopConfig(
+        student_model="Qwen/Qwen3-1.7B-Base",
+        teacher_model="Qwen/Qwen3-4B",
+        data_path="/persistent/opd/OPD/datasets/dapo-math-17k.parquet",
+        output_dir=f"{OUT}/{strat}_seed{seed}",
+        seed=seed,
+        train_n=64,
+        calibrate_n=CALIB_N,
+        test_n=TEST_N,
+        iterations=ITERS,
+        prompts_per_iter=8,
+        max_prompt_tokens=512,
+        max_new_tokens=1536,
+        teacher_budget_fraction=bf,
+        learning_rate=LR,
+        student_dtype="bfloat16",
+        gradient_checkpointing=True,
+        vocab_chunk_size=16384,
+        generation_batch_size=4,
+        passk_samples=SAMPLES,
+        passk_k_values=(1,),
+        bootstrap_resamples=1000,
+        strategy=strat,
+        min_free_vram_gib=8.0,
+        resume=False,
+        checkpoint_every=1000,
+    )
+    train_loop(cfg)
+    return 0
+
+
+def _run_one(seed, strat):
+    """Spawn a child process for one (seed, strategy); return its summary dict."""
+    bf = 1.0 if strat == "all_query" else BUDGET
+    env = dict(os.environ)
+    env[_CHILD] = "1"
+    env[C_SEED] = str(seed)
+    env[C_STRAT] = strat
+    env[C_BF] = str(bf)
+    # Inherit the opd-rocm interpreter + cwd; the child re-imports fresh so all
+    # VRAM is released when it exits.
+    proc = subprocess.run([sys.executable, str(Path(__file__).resolve())], env=env)
+    if proc.returncode != 0:
+        raise RuntimeError(f"child for {strat} seed{seed} exited {proc.returncode}")
+    sp = Path(OUT) / f"{strat}_seed{seed}" / f"summary_{strat}_seed{seed}.json"
+    return json.loads(sp.read_text())
+
+
+def _parent():
+    Path(OUT).mkdir(parents=True, exist_ok=True)
+    all_results = {}
+    for seed in SEEDS:
+        seed_results = {}
+        for strat in STRATEGIES:
+            summary = _run_one(seed, strat)
+            seed_results[strat] = {
+                "pass1": summary["test_pass1_raw"],
+                "pass1_ci": summary["passk"].get("1"),
+                "cumulative_teacher_forward_tokens": summary["cumulative_teacher_forward_tokens"],
+                "calibration_teacher_forward_tokens": summary.get("calibration_teacher_forward_tokens", 0),
+                "final_loss": summary.get("final_distill_loss"),
+                "iterations_completed": summary["iterations_completed"],
+            }
+            print(
+                f"=== seed{seed} {strat}: pass1={seed_results[strat]['pass1']:.3f} "
+                f"teacher_tok={seed_results[strat]['cumulative_teacher_forward_tokens']} "
+                f"loss={seed_results[strat]['final_loss']}",
+                flush=True,
+            )
+        all_results[str(seed)] = seed_results
+
+    (Path(OUT) / "baseline4_summary.json").write_text(
+        json.dumps(all_results, indent=2, sort_keys=True) + "\n"
+    )
+    print("DONE " + json.dumps(all_results, sort_keys=True), flush=True)
+
+
+if __name__ == "__main__":
+    if os.environ.get(_CHILD):
+        sys.exit(_child())
+    _parent()

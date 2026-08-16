@@ -1,0 +1,64 @@
+# shop_A — 基于 ShopSimulator 的 Long-Horizon 购物 Agent 后训练
+
+后训练 **Qwen3.5-2B**,使其在 ShopSimulator 中文购物环境中自主完成
+商品检索、详情浏览、规格选择与购买(单轮完整需求 + 多步环境交互)。
+
+**目标指标(Final-200,与训练零重叠,严格成功率):**
+`Base 19.5% → SFT 45.0% → GRPO 47.5%`。
+
+---
+
+## 架构:两个 conda 环境(用 HTTP 解耦)
+
+| 环境 | 技术栈 | 职责 |
+|---|---|---|
+| `shopenv` | 老栈(flask 2.1 / gym 0.24 / torch 1.11 / pyserini / rank_bm25) | 跑 ShopSimulator 的 `pack_api.py` Flask 服务 @ `http://127.0.0.1:5000`,纯环境模拟器 |
+| `shopsimulator` | 新栈(克隆自 `opd-rocm`:torch 2.10+rocm7.2.1 / vLLM 0.11+rocm721 / veRL 0.7) | Teacher 推理、学生 vLLM rollout、LoRA SFT、GRPO、评测,经 HTTP 连 `:5000` |
+
+> ⚠️ 老栈**绝不能**装进 `shopsimulator`(会降级 torch、直接砸掉 vLLM/veRL)。两套环境用 HTTP 解耦。
+>
+> ✅ **veRL + vLLM + ROCm 已在 `opd-rocm` 上跑通**,`shopsimulator` 由其克隆而来 —— veRL-on-ROCm **不是 blocker**。(早期误判已纠正,见记忆 `opd-rocm-env`。)
+
+## 目录
+
+```
+shop_A/
+├── README.md
+├── .env                 # 密钥/端点(已 gitignore)
+├── .gitignore
+├── requirements.txt     # 仅项目层依赖;torch/vllm/verl 来自 conda 环境
+├── configs/             # paths.yaml, teacher.yaml, (后续 sft.yaml/grpo.yaml/eval.yaml)
+├── shop_env/            # 环境封装:client(HTTP)+ wrapper(search/click)+ reward(分段)
+├── teacher/             # Teacher 轨迹采集(Anthropic-compat client + collect)
+├── sft/                 # (待建)LoRA SFT,对 Assistant token 算 loss
+├── rl/                  # (待建)veRL GRPO + 分段 reward + 无 KL + 组内方差过滤
+├── eval/                # (待建)Final-200 隔离评测,代码规则 + LLM Judge
+├── data/                # 轨迹(raw→校验保留)/ SFT 数据集 / final_200
+└── scripts/             # (待建)00_start_env.sh … 04_eval.sh
+```
+
+## 运行(分阶段)
+
+0. **起服务**(`shopenv`):`cd ../ShopSimulator/shop_env && python shop_env/pack_api.py` → `:5000` 就绪。
+1. **环境封装自测**:`shop_env/` 经 HTTP reset/interact,验证 search/click 动作合法性、observation 字段化压缩、最大步数终止。
+2. **Teacher 采集**(`teacher/`):glm-4.6 跑训练任务 → ~628 条轨迹 → 环境回放 + 动作合法性 + 任务结果校验 → 保留 ~428。
+3. **LoRA SFT**:对 Assistant 输出 token 算 loss,训练 Qwen3.5-2B。
+4. **veRL GRPO**:分段 reward(派生自 `reward_detail`)+ 无 KL + 每 prompt 采样 4 条 + 组内 reward 无差异样本过滤,8K 上下文,低并发 rollout、策略更新分阶段执行。
+5. **评测**:构建与训练零重叠的 Final-200,代码规则 + LLM Judge,产出 Base/SFT/GRPO 严格成功率。
+
+## 关键决策(由 recon 确定)
+
+- **Teacher**:智谱 **glm-4.6**,经 Anthropic 兼容端点 `open.bigmodel.cn/api/anthropic`(已实测 200 OK)。
+- **Base**:[`Qwen/Qwen3.5-2B`](https://huggingface.co/Qwen/Qwen3.5-2B)(已确认存在)。
+- **Reward**:环境 `interact` 返回的 `reward_detail` 已含按维度(category/attribute/price)拆分,**分段 reward 直接派生**,无需重写匹配逻辑。
+- **veRL**:用其 config / `reward_function` 插件机制接入自定义 reward 与 rollout,**不 fork** verl 源码(与 opd 项目的 verl 保持隔离)。
+
+## 安全
+
+`.env` 含 Teacher API Key,**已 gitignore**;代码用环境变量读取,绝不硬编码进 `.py` / yaml / README。
+该 key 曾出现在对话记录中,正式使用前建议轮换一次。
+
+## 相关
+
+- 上游环境代码:`../ShopSimulator/`(只读引用,不改)
+- conda 克隆配方与坑:记忆 `conda-clone-from-opd-rocm`

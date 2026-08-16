@@ -1,0 +1,2 @@
+2026-08-08 12:01:37 auto_resume: 开始等 pack_api :5000（冷启 ~8-10min）
+2026-08-08 12:21:37 TIMEOUT：pack_api :5000 在 ~20min 内没就绪——collect 未启动，请检查 pack_api

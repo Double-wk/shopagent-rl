@@ -1,0 +1,65 @@
+"""De-risk: does the multi-step loop move student pass@1 off baseline?
+
+all_query (full teacher budget = max distillation signal), 20 iters, lr=1e-5,
+max_new=1536 (enough for boxed answers per the token-budget finding). Runs a
+0-iter baseline eval on the identical split first, so the pass@1 delta is
+within-run and not borrowed from Gate A. If after > baseline by a clear margin,
+the loop produces a learnable signal -> proceed to the 5-strategy matrix.
+"""
+
+import json
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from ctv_opd.training_loop import TrainingLoopConfig, train_loop
+
+base = dict(
+    student_model="Qwen/Qwen3-1.7B-Base",
+    teacher_model="Qwen/Qwen3-4B",
+    data_path="/workspace/opd/OPD/datasets/dapo-math-17k.parquet",
+    seed=7,
+    train_n=64,
+    calibrate_n=8,
+    test_n=8,
+    prompts_per_iter=8,
+    max_prompt_tokens=512,
+    max_new_tokens=1536,
+    student_dtype="bfloat16",
+    gradient_checkpointing=True,
+    vocab_chunk_size=16384,
+    generation_batch_size=4,
+    passk_samples=8,
+    passk_k_values=(1,),
+    bootstrap_resamples=500,
+    strategy="all_query",
+    teacher_budget_fraction=1.0,
+    min_free_vram_gib=8.0,
+    resume=False,
+    checkpoint_every=1000,
+)
+
+baseline = train_loop(TrainingLoopConfig(iterations=0, output_dir="runs/derisk_baseline", **base))
+print(
+    "BASELINE (0 iter): "
+    + json.dumps({"pass1": baseline["test_pass1_raw"], "passk": baseline["passk"]}, sort_keys=True),
+    flush=True,
+)
+
+trained = train_loop(
+    TrainingLoopConfig(iterations=20, learning_rate=1e-5, output_dir="runs/derisk_allquery_lr1e5", **base)
+)
+print(
+    "TRAINED (20 iter, lr1e-5): "
+    + json.dumps(
+        {
+            "pass1": trained["test_pass1_raw"],
+            "passk": trained["passk"],
+            "final_loss": trained["final_distill_loss"],
+            "iters": trained["iterations_completed"],
+        },
+        sort_keys=True,
+    ),
+    flush=True,
+)

@@ -1,0 +1,9 @@
+== 1. filter raw -> train-only (task_id in [1459, 23421)) ==
+  in=5000  kept_train=5000  excluded=0  bad_json=0
+== 2. clear stale per-task SFT files ==
+  cleared.
+== 3. validate (strict-pass) -> data/trajectories_sft/ + sft_train.jsonl ==
+raw=5000 passed=3793 kept=3793 (max_keep=6800)
+SFT index -> /workspace/shopsimulator/shop_A/data/sft_train.jsonl
+WARNING: only 3793 passed strict_success — collect more to reach 6800
+done. SFT set -> data/sft_train.jsonl

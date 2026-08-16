@@ -1,0 +1,25 @@
+{
+  "tag": "Base",
+  "adapter": null,
+  "n_questions": 580,
+  "arithmetic/original": {
+    "n": 145,
+    "acc": 0.7655,
+    "unparseable": 2
+  },
+  "arithmetic/counterfactual": {
+    "n": 145,
+    "acc": 0.2897,
+    "unparseable": 5
+  },
+  "shopping/original": {
+    "n": 145,
+    "acc": 1.0,
+    "unparseable": 0
+  },
+  "shopping/counterfactual": {
+    "n": 145,
+    "acc": 0.0,
+    "unparseable": 0
+  }
+}

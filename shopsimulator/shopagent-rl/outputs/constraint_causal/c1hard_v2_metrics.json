@@ -1,0 +1,79 @@
+{
+  "tag": "C1HARD_CC_V2_SMOKE",
+  "model": "Qwen/Qwen3-1.7B-Base",
+  "adapter": "/overlay/shopagent_rl_grpo_outputs/grpo/c1_hard/full_200_b4_n8_env32/checkpoint_step_200/lora_adapter",
+  "pairs": "data/counterfactual/final200_constraint_causal_v2.jsonl",
+  "n_pairs": 134,
+  "original_action_accuracy": 0.3806,
+  "counterfactual_action_accuracy": 0.4104,
+  "counterfactual_action_accuracy_lenient": 0.4104,
+  "paired_robust_accuracy": 0.2164,
+  "causal_success_certification_rate": 0.5686,
+  "shortcut_success_rate": 0.4314,
+  "commit_persistence_error": 0.1194,
+  "by_intervention_type": {
+    "nuisance_display_note": {
+      "n_pairs": 67,
+      "original_action_accuracy": 0.3881,
+      "counterfactual_action_accuracy": 0.3881,
+      "counterfactual_action_accuracy_lenient": 0.3881,
+      "paired_robust_accuracy": 0.3134,
+      "commit_persistence_error": null,
+      "orig_action_types": {
+        "click": 67
+      },
+      "cf_action_types": {
+        "click": 67
+      },
+      "same_action_both_sides": 0.8507,
+      "causal_success_certification_rate": 0.8077,
+      "shortcut_success_rate": 0.1923
+    },
+    "option_goal_swap": {
+      "n_pairs": 3,
+      "original_action_accuracy": 0.3333,
+      "counterfactual_action_accuracy": 1.0,
+      "counterfactual_action_accuracy_lenient": 1.0,
+      "paired_robust_accuracy": 0.3333,
+      "commit_persistence_error": 0.0,
+      "orig_action_types": {
+        "click": 3
+      },
+      "cf_action_types": {
+        "click": 3
+      },
+      "same_action_both_sides": 0.0,
+      "causal_success_certification_rate": 1.0,
+      "shortcut_success_rate": 0.0
+    },
+    "option_goal_swap_structured": {
+      "n_pairs": 64,
+      "original_action_accuracy": 0.375,
+      "counterfactual_action_accuracy": 0.4062,
+      "counterfactual_action_accuracy_lenient": 0.4062,
+      "paired_robust_accuracy": 0.1094,
+      "commit_persistence_error": 0.125,
+      "orig_action_types": {
+        "click": 64
+      },
+      "cf_action_types": {
+        "click": 64
+      },
+      "same_action_both_sides": 0.3906,
+      "causal_success_certification_rate": 0.2917,
+      "shortcut_success_rate": 0.7083
+    }
+  },
+  "by_price_upper_source": {
+    "canonical_from_target_price": {
+      "n_pairs": 88,
+      "counterfactual_action_accuracy": 0.3636,
+      "commit_persistence_error": 0.0682
+    },
+    "observed_eval_goal": {
+      "n_pairs": 46,
+      "counterfactual_action_accuracy": 0.5,
+      "commit_persistence_error": 0.0435
+    }
+  }
+}

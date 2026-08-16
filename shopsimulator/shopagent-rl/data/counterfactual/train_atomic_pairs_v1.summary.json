@@ -1,0 +1,17 @@
+{
+  "output": "data/counterfactual/train_atomic_pairs_v1.jsonl",
+  "products": "/workspace/shopsimulator/ShopSimulator/shop_env/data/items_eval_train.json.gz",
+  "schema_version": "shopsim-atomic-constraint-pairs-v1",
+  "stats": {
+    "goals_with_observed_budget": 2881,
+    "pairs_option_swap": 1161,
+    "pairs_price_above_budget": 2510,
+    "pairs_total": 3671,
+    "records_seen": 2964,
+    "rejected_original_over_budget": 371,
+    "rejected_unmapped_goal_option": 83,
+    "skipped_no_same_price_alternative": 1349,
+    "tasks_with_pairs": 2510
+  },
+  "trajectories": "run/natural_rewrite/train_strict_goals.jsonl"
+}

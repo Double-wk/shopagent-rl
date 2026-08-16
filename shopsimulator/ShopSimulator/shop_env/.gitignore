@@ -1,0 +1,6 @@
+# tb_items目录中除了指定文件外的所有文件
+data/*.json
+!data/*.json.gz
+# 原始 Lucene 索引目录不入库（20M 散碎文件）；以 search_engine.tar.gz（13M）压缩入库，
+# 由 scripts/restore_large_artifacts.sh 还原——env 缺它起不来。
+search_engine/

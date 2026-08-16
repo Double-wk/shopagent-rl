@@ -1,0 +1,44 @@
+From 10a1018c127ac34ad0f255ae9fffdc452d0cf4d7 Mon Sep 17 00:00:00 2001
+From: Zhaodong Bing <45478848+aaab8b@users.noreply.github.com>
+Date: Mon, 23 Mar 2026 21:07:19 +0800
+Subject: [PATCH] [ROCm] fix sleep mode not releasing GPU memory problem on ROCm
+
+Backport of vllm-project/vllm#37533 for this project's pinned vLLM 0.16.0
+ROCm source build. Upstream commit:
+10a1018c127ac34ad0f255ae9fffdc452d0cf4d7
+
+diff --git a/csrc/cumem_allocator.cpp b/csrc/cumem_allocator.cpp
+index 58ce8f71a..8800ebaed 100644
+--- a/csrc/cumem_allocator.cpp
++++ b/csrc/cumem_allocator.cpp
+@@ -230,6 +230,28 @@ void unmap_and_release(unsigned long long device, ssize_t size,
+     }
+   }
+ 
++  // ROCm workaround: hipMemRelease does not return physical VRAM to the
++  // free pool while the virtual-address reservation is still held.
++  // Cycling cuMemAddressFree → cuMemAddressReserve (at the same address)
++  // forces the driver to actually release the physical pages while keeping
++  // the same VA available for a later create_and_map.
++  if (first_error == no_error) {
++    first_error = cuMemAddressFree(d_mem, size);
++    if (first_error == no_error) {
++      CUdeviceptr d_mem_new = 0;
++      first_error = cuMemAddressReserve(&d_mem_new, size, 0, d_mem, 0);
++      if (first_error == no_error && d_mem_new != d_mem) {
++        cuMemAddressFree(d_mem_new, size);
++        snprintf(error_msg, sizeof(error_msg),
++                 "ROCm: VA re-reserve got %p instead of %p", (void*)d_mem_new,
++                 (void*)d_mem);
++        error_code = CUresult(1);
++        std::cerr << error_msg << std::endl;
++        return;
++      }
++    }
++  }
++
+   if (first_error != no_error) {
+     CUDA_CHECK(first_error);
+   }
+-- 
+2.43.0

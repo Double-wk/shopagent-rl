@@ -1,0 +1,57 @@
+{
+  "tag": "C1_hard",
+  "model": "Qwen/Qwen3-1.7B-Base",
+  "adapter": "/overlay/shopagent_rl_grpo_outputs/grpo/c1_hard/full_200_b4_n8_env32/checkpoint_step_200/lora_adapter",
+  "pairs": "/workspace/shopsimulator/shopagent-rl/data/counterfactual/final200_atomic_pairs_v1.jsonl",
+  "n_pairs": 212,
+  "original_action_accuracy": 0.4623,
+  "counterfactual_action_accuracy": 0.2028,
+  "counterfactual_action_accuracy_lenient": 0.2075,
+  "paired_robust_accuracy": 0.0943,
+  "commit_persistence_error": 0.3302,
+  "by_intervention_type": {
+    "option_swap": {
+      "n_pairs": 67,
+      "original_action_accuracy": 0.4776,
+      "counterfactual_action_accuracy": 0.6418,
+      "counterfactual_action_accuracy_lenient": 0.6418,
+      "paired_robust_accuracy": 0.2985,
+      "commit_persistence_error": 0.1791,
+      "orig_action_types": {
+        "click": 67
+      },
+      "cf_action_types": {
+        "click": 67
+      },
+      "same_action_both_sides": 0.5224
+    },
+    "price_above_budget": {
+      "n_pairs": 145,
+      "original_action_accuracy": 0.4552,
+      "counterfactual_action_accuracy": 0.0,
+      "counterfactual_action_accuracy_lenient": 0.0069,
+      "paired_robust_accuracy": 0.0,
+      "commit_persistence_error": 0.4,
+      "orig_action_types": {
+        "click": 145
+      },
+      "cf_action_types": {
+        "click": 144,
+        "search": 1
+      },
+      "same_action_both_sides": 0.7586
+    }
+  },
+  "by_price_upper_source": {
+    "canonical_from_target_price": {
+      "n_pairs": 139,
+      "counterfactual_action_accuracy": 0.2014,
+      "commit_persistence_error": 0.3525
+    },
+    "observed_eval_goal": {
+      "n_pairs": 73,
+      "counterfactual_action_accuracy": 0.2055,
+      "commit_persistence_error": 0.2877
+    }
+  }
+}

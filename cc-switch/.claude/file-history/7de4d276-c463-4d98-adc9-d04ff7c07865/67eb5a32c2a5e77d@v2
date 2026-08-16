@@ -1,0 +1,87 @@
+# CTV-OPD Project Status Summary
+
+**Date**: 2026-08-07
+
+---
+
+## ✅ Completed
+
+### 1. Core Experiments (Synthetic Data)
+- **Budget sweep**: 5%, 10%, 20%, 30%, 50% budget fractions
+- **Seed stability**: 5 seeds tested (1, 7, 42, 100, 2024)
+- **Results**: All saved to `results/comprehensive_experiments.json`
+
+### 2. Key Findings
+- CTV captures **34%** of all-query value with only **10%** budget
+- **+180%** lift over random routing at 10% budget
+- Results stable across seeds (mean lift: 50.0, range: 45-53)
+- Entropy routing unreliable (sometimes worse than random)
+- Confidence routing worst (high confidence ≠ high teacher value)
+
+### 3. Code Health
+- All tests passing (35 passed, 3 skipped)
+- Fixed missing `sympy` dependency in `pyproject.toml`
+- Visualization script created (`results/visualize.py`)
+
+### 4. Documentation
+- Paper draft updated with experimental results
+- Abstract filled
+- Results section (§5) completed
+- Reproducibility checklist updated
+
+---
+
+## ⏳ Pending (Requires GPU + Models)
+
+### Real Model Experiments
+- [ ] De-risk run (verify learnable signal on Qwen3 pair)
+- [ ] 4-strategy baseline (ctv/entropy/random/all_query)
+- [ ] Budget Pareto sweep
+- [ ] Oracle ceiling analysis
+
+**Requirements**:
+- GPU (48 GB VRAM recommended)
+- PyTorch with ROCm/CUDA
+- HuggingFace models: Qwen3-1.7B-Base (student), Qwen3-4B (teacher)
+- DAPO-Math-17K dataset
+
+---
+
+## 📊 Quick Results
+
+```
+STRATEGY COMPARISON (10% Budget, Seed 7)
+==========================================
+CTV            70.3 ████████████████████████████████████████
+Placebo        38.1 █████████████████████
+Entropy        29.7 ████████████████
+Random         25.1 ██████████████
+Confidence      8.2 ████
+==========================================
+
+Budget  CTV    Random  Lift    % of All
+5%      38.9   12.9    +202%   18.7%
+10%     70.3   25.1    +180%   33.8%
+20%    116.4   46.1    +153%   55.9%
+30%    140.5   69.5    +102%   67.5%
+50%    165.1  111.6     +48%   79.3%
+```
+
+---
+
+## 📁 Files
+
+| File | Purpose |
+|------|---------|
+| `results/comprehensive_experiments.json` | All experiment results |
+| `results/visualize.py` | Visualization script |
+| `paper/draft.md` | Paper draft (updated with results) |
+| `src/ctv_opd/experiment.py` | Synthetic experiment runner |
+
+---
+
+## 🚀 Next Steps
+
+1. **Run visualization**: `python results/visualize.py`
+2. **Paper work**: Refine draft based on results
+3. **Real experiments** (when GPU available): Follow scripts in `runs/` directory

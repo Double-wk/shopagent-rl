@@ -1,0 +1,129 @@
+# 正式全量采集配置：GPT-5.6-TERRA via mcgrox + nova 双渠道。
+# 2026-08-07 mcgrox 旧 4 key 全部 402 余额耗尽（原 sol 采集中断转 grok-4.5）。
+# 2026-08-08 terra 号池（4 key，均已充值，smoke 全 OK @08-08）：
+#   sk-d5b1（2068588618@qq.com）、sk-7731（1577948378@qq.com）、sk-6af0（杨敬雷）、sk-c7d5（3315439213@qq.com）。
+# 2026-08-08 接入第 2 渠道 nova.vcrauo.com（单 key），与 mcgrox 并行 round-robin，吞吐 ×~1.2-1.4。
+# terra 探针 strict 80% / reward 0.961（teacher_compare：略低于 sol 87%/0.971，但远胜 5.5 70%/0.889）。
+# ⚠️ mcgrox 有 model 别名陷阱（曾把 gpt-5.6-sol 路由到 gpt-5.5）；nova 同理有别名风险——
+#    两渠道的 terra 探针分数(80%)与 sol(87%)/5.5(70%) 明显不同，说明 terra 路由为真 terra、未被别名。
+#    全量采集中仍需留意分数漂移（尤其 nova 新接入，首跑留意 strict 是否仍 ~80%）。
+# 单 key 探针见 teacher_gpt-5.6-terra-c7d5.yaml；5.5 基线见 teacher_gpt-5.5.yaml。
+teacher:
+  client_type: openai          # 使用 OpenAI 兼容客户端
+  model: gpt-5.6-terra
+  # ✅ 多端点 endpoints（client_openai.py 原生支持）：跨 (端点,key) round-robin，
+  #    任一 (端点,key) 余额耗尽(401/402/403) 自动剔除、5xx/超时短期冷却后恢复。
+  #    取代旧的单一 base_url + api_keys（二者仅在 endpoints 为空时作兜底，已弃用）。
+  endpoints:
+    # —— 渠道 1：mcgrox —— ⛔ 2026-08-15 实测全部候选返回 403
+    # SUBSCRIPTION_NOT_FOUND；保留记录但不参与 round-robin。
+    # - base_url: https://www.mcgrox.top
+    #   api_keys:
+        # - sk-26d6e65e61198c9a561486a5168e6906b7f7a0add76814e0598442fcd90dad36  # double200302@163.com（全量采集主力，全程存活；403 SUBSCRIPTION_NOT_FOUND @08-15）
+        # - sk-81e86a16c25ec7c6fcbeb276d1067e0ff2aba14116126bf180321bf196dde6b2  # 2324035320@qq.com（smoke 200；403 SUBSCRIPTION_NOT_FOUND @08-15）
+        # —— ⚠️ 当日额度耗尽（daily limit），明天重置后取消注释即可复用 ——
+        # - sk-77314e53d5b8e516f7ffc6ee90c57fe8c589bfc56dadcab1227ba544381d1199  # 1577948378@qq.com（daily usage limit exceeded @08-08）
+        # - sk-6af08971ee5e653153c749836717d3ca323049b43b9eee403f9787a148538145  # 杨敬雷（USAGE_LIMIT_EXCEEDED @08-08）
+        # - sk-c7d57ec9ae632e13b9796bce1d6fce6a95b36d5016a98fef1f71f37214ecf462  # 3315439213@qq.com（daily usage limit exceeded @08-08；原 terra-c7d5 探针验证真 terra 80%；403 SUBSCRIPTION_NOT_FOUND @08-15）
+        # —— ❌ 余额不足，需充值后取消注释 ——
+        # - sk-d5b1e2e913dd6383d22773e0e02435a02f56267b0d9e61784ed736c2db5ae7ff  # 2068588618@qq.com（INSUFFICIENT_BALANCE @08-08）
+        # - sk-6184d76a6b7685241b34cad4a9ad9971aa4959e29d80080a47b6328596ca499c  # 看完00302@163.com（账户余额不足 @08-08）
+        # - sk-de573e9353d7f9e09282a7cbcedc397e5a0a8e93ce1276457f9252d9299678ee  # 杨敬雷小号（INSUFFICIENT_BALANCE @08-08 smoke）
+        # - sk-43ec74e08ba307877a56d1253208e805cf3f8270119a77b28ba9f9743eb1970e  # 待补（401 INVALID_API_KEY @08-08；smoke 曾 200 后转无效，疑 mcgrox 新 key 生效延迟，待复查）
+    # —— 渠道 2：nova.vcrauo.com —— ⚠️ 10 题探针 strict 6/10=0.60、reward 0.904 @08-15。
+    #    低于 terra 0.8 判据但 n=10 无定论（P(X≤6|p=0.8)≈0.12）；用于低风险任务
+    #    （如带程序验证门的指令改写），关键采集前需 30 题复测。
+    - base_url: https://nova.vcrauo.com
+      api_keys:
+        - sk-tDDoywV4UrNZftwj4gmseRYaWZllbQX0mp9dIJ1e9aA8icLz  # HTTP 200 probe @08-15
+    # —— 渠道 3：api.gptgod.online —— ✅ 质量/别名探针通过 @08-15：30 题探针
+    #    strict 18/24=0.75（6 题因 429 限流未完成，非模型问题），mean_reward 0.905，
+    #    与真 terra 0.8 基线相容（binomial p=0.34，无别名证据）。
+    #    ⚠️ 并发 2 即触发 429，采集时 workers=1 或降低速率。
+    - base_url: https://api.gptgod.online/v1
+      api_keys:
+        - sk-o0xw120l1ok00ow4kkj5xyz4ljzlwwj2o0xw120l1ok00ow4  # 用户提供 @08-15
+    # —— 渠道 4：seekai.cc —— ⛔ 弃用 @08-15：模型名 gpt-5-6-terra（连字符写法），
+    #    但上游持续 500 do_request_failed、延迟 12-39s，探针 0/10 完成后放弃。
+    # - base_url: https://seekai.cc/v1
+    #   model: gpt-5-6-terra
+    #   weight: 1
+    #   api_keys:
+    #     - sk-1mlJlTGp6e67qvT5og3oMUZ3CssoJzqZwBpoKCFrVfixfzYS  # 用户提供 @08-15
+  max_tokens: 512
+  temperature: 0.0
+  timeout: 120
+  max_retries: 5
+  max_turns: 30
+
+collection:
+  # —— ✅ 采集已完成 @2026-08-08（gpt-5.6-terra）。原计划 10000，1.8B 判够用即停，不再追量 ——
+  total_trajectories: 5000       # 实采 5000 条（seed 42 全 train 随机目标 sft_collect_targets_5000.json）
+  keep_after_validation: 3793    # teacher.validate 实过 strict（canonical ok/steps/legal，略严于 raw 标记 3826；75.9%，reward 均值 0.897）= 真正进 SFT 的量
+  raw_file: data/trajectories_raw/gpt-5.6-terra/trajectories_raw.jsonl  # 5000 条源头（72.9MB）
+
+  # 数据分配（与实际 json 一致；级联互斥 + seed 42，详见 DATA.md）
+  sft_data: 5000                 # SFT 采集目标 → teacher.validate 实过 strict 3793 入训；data/sft_collect_targets_5000.json
+  grpo_prompts: 1000             # GRPO prompts（排除 SFT+eval）；data/grpo_prompts_1000.json
+  ablation_data: 500             # 消融 held-out（排除 SFT+GRPO+eval）；data/ablation_tasks_500.json
+
+  train_task_range: [1459, 23421]  # 官方 train 区（21,962 个任务）
+  num_workers: 24                # 实跑并发（8→12→24；最终 2 活 key 跑满 5000）
+  quality_threshold: 1.0         # strict_success 只留满分轨迹
+
+  # 数据格式
+  output_format: jsonl          # ✅ 使用 JSONL 格式（每行一个 JSON 对象）
+  save_mode: incremental        # ✅ 边生成边保存，实时写入
+
+# GRPO 训练配置
+grpo:
+  # GRPO 不采集数据：student 自采样 rollout + env reward，只需 task_id（详见 DATA.md）
+  prompt_tasks: 1000            # GRPO prompts（data/grpo_prompts_1000.json，与 SFT/eval 互斥）
+  samples_per_prompt: 4          # 每问题采样 4 次（GRPO 组大小 G=4）
+  total_samples: 4000           # 1000 × 4 = 4,000 rollout / 单遍
+
+  # 对比学习
+  comparison_method: "reference" # 用真实答案作为标准进行打分
+  reference_answers: "sft_data"  # 用 SFT 数据作为真实答案
+
+  # 奖励函数
+  reward_function: segmented    # 分段 reward
+  reward_weights:                # 权重分配
+    r_type: 0.20
+    r_att: 0.30
+    r_option: 0.30
+    r_price: 0.20
+
+# 评测数据（使用官方 eval 数据，与训练零重叠）
+evaluation:
+  final_200: [0, 1459]          # 官方 eval 区（1,459 个，随机采样 200）→ data/final200.json
+  ablation_tasks: data/ablation_tasks_500.json  # 消融 held-out（500，随机，与 SFT/GRPO/eval 互斥；
+                                                #   旧的顺序 [1459,1959] 会和 SFT 重叠 109 条，已废）
+
+# ✅ 对齐官方 ShopSimulator PROMPT_TEMPLATE_zh（web_agent_text_env.py:25-47，逐字照搬）。
+# env / reward / multi_eval 评测均按此 prompt 设计。关键修正：action 格式去掉内层引号——
+# env.parse_action 用 (.+)\[(.+)\] 解析，click['值'] 的 arg 会带引号 → 与可点击项不等 → 静默
+# no-op（wrapper.py 曾加 strip 补丁兜底，但会污染 SFT 数据：student 学会带引号，官方评测必崩）。
+system_prompt: |-
+  你正在进行一次网上购物模拟，目标是从商品库中选购最符合需求的商品。请注意，商品库中存在大量同类商品，你必须通过合理操作，最终购买到最符合要求的目标商品。
+  购物流程采用多轮对话形式，每一轮我会提供当前页面的观察结果，以及你可执行操作列表。你需要根据当前状态和可选操作，选择并执行最合适的一步。
+
+  操作分为两类：
+  1. 搜索操作
+      格式：search[关键词]
+      你可以根据当前需求，自主决定搜索关键词。
+      只有在搜索功能可用时，才能使用该操作。
+  2. 点击操作
+      格式：click[值]
+      你只能点击当前可用操作列表中的按钮或选项，值必须严格对应操作列表中的内容。
+
+  规则说明：
+  1. 在点击【购买】前，必须至少选择一个商品规格（如颜色、尺码等）。
+  2. 你的目标是综合所有已知信息，通过搜索、筛选和选择，最终购买到“最符合需求的”商品，而非随意购买任意商品。
+  3. 如果你给出的操作在当前环境中不可执行，则页面不会有任何变化。
+  4. 提示：当你点击某一个商品规格时，页面其他信息不会发生变化，但该规格会被选中。请据此判断后续操作。
+
+  输出格式
+  在每一步，你必须按照下面格式输出：
+  Thought: 简要说明你在当前状态下的思考过程和操作依据。
+  Action: 用规定格式输出你选择的操作。

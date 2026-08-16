@@ -1,0 +1,16 @@
+{
+  "pid": 313714,
+  "version": "2.1.224",
+  "jsonPath": "/workspace/cc-switch/.claude/daemon.json",
+  "logPath": "/workspace/cc-switch/.claude/daemon.log",
+  "startedAt": 1786091664645,
+  "origin": "transient",
+  "spawnedBy": {
+    "label": "claude",
+    "cwd": "/workspace/opd/ctv-opd",
+    "pid": 101358
+  },
+  "procStart": "1316207351",
+  "launchTarget": "/usr/lib/node_modules/@anthropic-ai/claude-code/bin/claude.exe",
+  "processWrapper": ""
+}

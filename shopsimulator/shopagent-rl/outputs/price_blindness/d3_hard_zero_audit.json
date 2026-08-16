@@ -1,0 +1,72 @@
+{
+  "log": "outputs/grpo/c1_hard/logs/grpo_c1hard_200_b4n8_env32.log",
+  "note": "hard_zero_buys is an upper-bound-ish estimate (ray line dedup + task_id reuse across steps); buy attribution may double-count",
+  "rollouts": 6400,
+  "zero_reward": 609,
+  "hard_zero_buys": 423,
+  "buys_total": 6194,
+  "hard_zero_rate_per_rollout": 0.06609,
+  "hard_zero_rate_per_buy": 0.06829,
+  "by_decile": [
+    {
+      "decile": 0,
+      "n": 640,
+      "zero_reward": 147,
+      "hard_zero_buys": 67
+    },
+    {
+      "decile": 1,
+      "n": 640,
+      "zero_reward": 99,
+      "hard_zero_buys": 74
+    },
+    {
+      "decile": 2,
+      "n": 640,
+      "zero_reward": 55,
+      "hard_zero_buys": 37
+    },
+    {
+      "decile": 3,
+      "n": 640,
+      "zero_reward": 40,
+      "hard_zero_buys": 31
+    },
+    {
+      "decile": 4,
+      "n": 640,
+      "zero_reward": 49,
+      "hard_zero_buys": 41
+    },
+    {
+      "decile": 5,
+      "n": 640,
+      "zero_reward": 56,
+      "hard_zero_buys": 44
+    },
+    {
+      "decile": 6,
+      "n": 640,
+      "zero_reward": 37,
+      "hard_zero_buys": 23
+    },
+    {
+      "decile": 7,
+      "n": 640,
+      "zero_reward": 21,
+      "hard_zero_buys": 13
+    },
+    {
+      "decile": 8,
+      "n": 640,
+      "zero_reward": 44,
+      "hard_zero_buys": 39
+    },
+    {
+      "decile": 9,
+      "n": 640,
+      "zero_reward": 61,
+      "hard_zero_buys": 54
+    }
+  ]
+}

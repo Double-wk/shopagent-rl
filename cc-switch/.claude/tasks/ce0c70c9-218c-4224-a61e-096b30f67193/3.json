@@ -1,0 +1,8 @@
+{
+  "id": "3",
+  "subject": "Compile comprehensive results for paper",
+  "description": "Combine all experimental results into a single comprehensive JSON for paper figures",
+  "status": "pending",
+  "blocks": [],
+  "blockedBy": []
+}

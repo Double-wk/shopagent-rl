@@ -1,0 +1,31 @@
+shop-A vLLM env ready: PY=/overlay/miniconda3/envs/shop-A/bin/python  PYTHONPATH=/workspace/shopsimulator/shopagent-rl:/tmp/amdsmi_link:/tmp/functorch_shim:
+  remember: guard your LLM() call in  if __name__ == '__main__':
+=== [D3] hard-zero trigger audit (CPU) ===
+{'rollouts': 6400, 'zero_reward': 609, 'hard_zero_buys': 423, 'hard_zero_rate_per_rollout': 0.06609, 'hard_zero_rate_per_buy': 0.06829}
+=== [D1] comparison probe: Base ===
+shop-A vLLM env ready: PY=/overlay/miniconda3/envs/shop-A/bin/python  PYTHONPATH=/workspace/shopsimulator/shopagent-rl:/tmp/amdsmi_link:/tmp/functorch_shim:
+  remember: guard your LLM() call in  if __name__ == '__main__':
+=== [D3] hard-zero trigger audit (CPU) ===
+{'rollouts': 6400, 'zero_reward': 609, 'hard_zero_buys': 423, 'hard_zero_rate_per_rollout': 0.06609, 'hard_zero_rate_per_buy': 0.06829}
+=== [D1] comparison probe: Base ===
+    "unparseable": 0
+  }
+}
+=== [D1] comparison probe: SFT ===
+    "unparseable": 0
+  }
+}
+=== [D1] comparison probe: V2B ===
+    "unparseable": 0
+  }
+}
+=== [D1] comparison probe: C1HARD ===
+    "unparseable": 0
+  }
+}
+=== [D2] cf-probe variants on C1-hard ===
+--- variant: salience ---
+price cf acc: 0.0069 | commit err: 0.1655
+--- variant: instruct ---
+price cf acc: 0.0 | commit err: 0.2621
+=== D1-D3 complete: outputs/price_blindness ===

@@ -1,0 +1,77 @@
+{
+  "proto": 1,
+  "supervisorPid": 313714,
+  "updatedAt": 1786091680431,
+  "workers": {
+    "00048085": {
+      "pid": 313812,
+      "procStart": "1316207427",
+      "sessionId": "00048085-1dfe-4cbd-853b-6d628fbabd5f",
+      "rendezvousSock": "/tmp/cc-daemon-0/ef0c2c85/rv/00048085.sock",
+      "ptySock": "/tmp/cc-daemon-0/ef0c2c85/spare/f78d9a7c.pty.sock",
+      "cliVersion": "2.1.224",
+      "startedAt": 1786091679769,
+      "attempt": 1,
+      "cwd": "/workspace",
+      "dispatch": {
+        "proto": 1,
+        "short": "00048085",
+        "nonce": "22649803",
+        "sessionId": "00048085-1dfe-4cbd-853b-6d628fbabd5f",
+        "createdAt": 1786091663956,
+        "source": "slash",
+        "cwd": "/workspace",
+        "launch": {
+          "mode": "resume",
+          "sessionId": "/workspace/cc-switch/.claude/projects/-workspace/7de4d276-c463-4d98-adc9-d04ff7c07865.jsonl",
+          "fork": true,
+          "flagArgs": [
+            "--settings",
+            "/tmp/cc-switch-claude-glm-101336-1786084142596410113.json",
+            "--permission-mode",
+            "auto"
+          ],
+          "restoresTranscript": true
+        },
+        "env": {
+          "CLAUDE_BG_ISOLATION": "none"
+        },
+        "isolation": "none",
+        "respawnFlags": [
+          "--settings",
+          "/tmp/cc-switch-claude-glm-101336-1786084142596410113.json",
+          "--permission-mode",
+          "auto"
+        ],
+        "seed": {
+          "intent": "继续",
+          "name": "检查项目状态和待办事项"
+        },
+        "cols": 132,
+        "rows": 26
+      },
+      "decModes": [
+        1000,
+        1002,
+        1003,
+        1006,
+        2004,
+        1004,
+        2031
+      ],
+      "firedInteractiveMarks": [
+        {
+          "kind": "content_paint",
+          "msgsLoaded": 242,
+          "msgsInJsonl": 242,
+          "msgsRenderedAtFirstPaint": 244
+        },
+        {
+          "kind": "prompt_idle"
+        }
+      ],
+      "rvAuth": "9ac6f1998327af197b3c54a51c797168",
+      "ptyAuth": "f4f5f008d408585de012ea31da71a3b6"
+    }
+  }
+}

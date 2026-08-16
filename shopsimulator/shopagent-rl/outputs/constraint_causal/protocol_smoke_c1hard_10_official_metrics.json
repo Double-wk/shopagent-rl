@@ -1,0 +1,16 @@
+{
+  "tag": "C1HARD_PROTOCOL_SMOKE",
+  "metrics": {
+    "样本总量": 10,
+    "完成率": 0.9,
+    "平均分_r_loose": 0.5658,
+    "平均分_r_hard": 0.35,
+    "平均分_r_success": 0.3,
+    "平均分_r_types": 0.9,
+    "平均分_r_attribute": 0.5933,
+    "平均分_r_option": 0.35,
+    "平均分_r_price": 0.7,
+    "选对商品率": 0.3
+  },
+  "n_tasks": 10
+}

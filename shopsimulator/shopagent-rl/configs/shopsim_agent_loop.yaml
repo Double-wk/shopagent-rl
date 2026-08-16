@@ -1,0 +1,9 @@
+# Registers ShopsimAgentLoop with veRL's agent-loop registry.
+# Consumed at verl/experimental/agent_loop/agent_loop.py:283-288 (load) and
+# 386-388 (hydra.utils.instantiate). Pointed to by, in the GRPO config:
+#   actor_rollout_ref.rollout.agent.agent_loop_config_path: <absolute path to this file>
+#   actor_rollout_ref.rollout.agent.default_agent_loop: shopsim_agent
+# hydra imports the `_target_` class on demand, so the module need only be
+# importable in the opd-rocm env (shopagent-rl root must be on PYTHONPATH).
+- name: shopsim_agent
+  _target_: experiment.grpo.shopsim_agent_loop.ShopsimAgentLoop

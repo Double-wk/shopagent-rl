@@ -1,0 +1,750 @@
+"""Multi-step on-policy CTV training loop — the method-paper experiment.
+
+The single-step ``real_math_experiment`` does one AdamW update on dozens of
+rows, which produces no measurable accuracy change (its before/after both read
+0.0). A paper claim needs routing decisions to ACCUMULATE across a fixed teacher-
+forward-token budget. This module is that loop.
+
+Design (see PLAN.md §-1 and the routing/gate analysis):
+
+* ON-POLICY: distillation is over the STUDENT's own rollout, not the teacher's
+  generated continuation. Every selected row's teacher cost then equals its
+  rollout token length, which is fixed at generation time and identical across
+  strategies -- so teacher-forward-token budgets match exactly.
+* BUDGET-AWARE ROUTING: the method's claim is cost-value decoupling. Entropy
+  ranks samples by difficulty only; CTV ranks by teacher INCREMENTAL value per
+  token, which entropy cannot represent. The headline metric is
+  ``frac_teacher_forward_skipped`` and a quality-vs-teacher-budget Pareto curve.
+* HF-IN-LOOP: the student trains (weights change each iter) so any engine built
+  from it would go stale; the student stays on HF for generation + forward +
+  backward. The frozen teacher is HF too (we need its logits for KL, which vLLM
+  does not expose). vLLM is reserved for the offline oracle-tau pass and the
+  post-training pass@k eval -- both on frozen weights, where engines are safe.
+* VRAM: the cold-start OOM came from the vocab projection at
+  [batch, seqlen, 151936]. ``_distill_step_onpolicy`` chunks the forward-KL loss
+  over the vocab dimension (mathematically exact -- the cross-entropy sum
+  decomposes additively over v) and uses gradient checkpointing, keeping a
+  single step under the shared 48 GB budget.
+
+Routed arms: ctv (ridge-predicted tau), entropy, random, oracle (true tau,
+upper bound), all_query (full budget reference). The router's ``score`` branch
+is the only place Gate B's result matters; everything else is shared.
+"""
+
+from __future__ import annotations
+
+import argparse
+import gc
+import json
+import time
+from collections.abc import Sequence
+from dataclasses import asdict, dataclass, field
+from pathlib import Path
+
+import numpy as np
+
+
+@dataclass(frozen=True)
+class TrainingLoopConfig:
+    student_model: str
+    teacher_model: str
+    data_path: str
+    output_dir: str
+    seed: int = 7
+    # Splits (deterministic from seed)
+    train_n: int = 200
+    calibrate_n: int = 48
+    test_n: int = 64
+    # Iterations
+    iterations: int = 40
+    prompts_per_iter: int = 16
+    # Tokens (the matched axes across strategies)
+    max_prompt_tokens: int = 512
+    max_new_tokens: int = 1024
+    # THE budget axis: fraction of teacher-forward tokens spent per iteration
+    teacher_budget_fraction: float = 0.20
+    budget_fractions: tuple[float, ...] = (0.10, 0.20, 0.50, 1.0)
+    # Distillation
+    learning_rate: float = 1e-6
+    vocab_chunk_size: int = 16384
+    gradient_checkpointing: bool = True
+    autocast_dtype: str = "bfloat16"
+    # Master-weight dtype. PLAN.md mandates fp32 master weights for the paper run;
+    # "bfloat16" trades a little numerical safety for ~2x speed and half the VRAM
+    # and is the right choice for the smoke test on the shared 48 GB card.
+    student_dtype: str = "float32"
+    # Generation (student rollout in the loop is HF -- the weights change every
+    # iteration, so a vLLM engine would go stale and cost ~60-90s/iter to rebuild).
+    temperature: float = 0.8
+    placebo_temperature: float = 0.7
+    generation_batch_size: int = 1
+    score_chunk_tokens: int = 512
+    # Calibration. tau_source="kl" fits the ridge on the KL-divergence effect
+    # (teacher_kl - placebo_kl, one HF forward -- self-contained, smoke-ready).
+    # The paper's defensible target is verifier-tau (rate_teacher - rate_placebo
+    # over k samples); set calibrate_tau_path to a Gate-B-style pickle holding a
+    # length-matched tau vector and tau_source="verifier" to use it instead. The
+    # loop structure is identical; only the ridge's target vector changes.
+    tau_source: str = "kl"
+    calibrate_tau_path: str = ""
+    # Routing
+    strategy: str = "ctv"  # ctv|entropy|random|oracle|all_query
+    # For the oracle arm: path to an offline true-tau vector (compute_oracle_tau).
+    # Required when strategy="oracle"; ignored otherwise.
+    oracle_tau_path: str = ""
+    # Eval
+    passk_samples: int = 32
+    passk_k_values: tuple[int, ...] = (1, 8, 32)
+    bootstrap_resamples: int = 2000
+    eval_backend: str = "hf"  # "hf" (self-contained) | "vllm" (frozen checkpoint)
+    checkpoint_every: int = 10
+    # VRAM safety
+    min_free_vram_gib: float = 28.0
+    # Resume
+    resume: bool = True
+
+
+@dataclass
+class IterationRecord:
+    """One JSONL line; the resume unit. Losing the GPU mid-run loses <=1 iter."""
+
+    iteration: int
+    seed: int
+    strategy: str
+    budget_fraction: float
+    prompt_indices: list[int]
+    selected_indices: list[int]
+    teacher_forward_tokens: int
+    teacher_forward_tokens_cumulative: int
+    student_rollout_tokens: int
+    distill_loss: float
+    grad_norm: float
+    mean_entropy_selected: float
+    mean_entropy_all: float
+    elapsed_seconds: float
+    peak_vram_gib: float
+
+
+# ---------------------------------------------------------------------------
+# VRAM safety for a shared card
+# ---------------------------------------------------------------------------
+
+def measure_free_vram_gib(torch) -> float:
+    """Current free VRAM in GiB (the allocator's view, not the card's nominal)."""
+
+    free, total = torch.cuda.mem_get_info()
+    return free / 1024**3
+
+
+def safe_engine_utilization(free_gib: float, total_gib: float = 48.0, headroom: float = 0.85) -> float:
+    """A gpu_memory_utilization that fits in CURRENT free VRAM, not the whole card.
+
+    vLLM sizes its KV cache to ``utilization * total``; if another process (or a
+    leaked engine) holds memory, a fixed 0.85 OOMs. Cap at headroom of free.
+    """
+
+    return min(0.90, max(0.1, headroom * free_gib / total_gib))
+
+
+# ---------------------------------------------------------------------------
+# On-policy distillation step (vocab-chunked, exact)
+# ---------------------------------------------------------------------------
+
+def _distill_step_onpolicy(
+    torch,
+    student,
+    teacher,
+    sequences,
+    attention_mask,
+    prompt_width,
+    generated_mask,
+    selected,
+    optimizer,
+    vocab_chunk_size: int,
+    *,
+    scaler=None,
+):
+    """One optimizer step: forward KL over the student's own rollout, selected rows only.
+
+    The loss is ``sum_t mask_t * sum_v teacher_prob[t,v] * (-log_softmax(student)[t,v])``.
+    The inner sum over v is chunked: each chunk materializes only
+    ``[seqlen, vocab_chunk_size]`` of the student log-softmax in fp32, instead of
+    the full ``[seqlen, 151936]``. Because the sum over v is additive, chunking
+    is exact, not an approximation -- the gradient is identical to the
+    materialised version. This is what keeps the peak below the OOM that killed
+    cold-start (which computed the full [B,L,V] tensor at once).
+
+    Teacher logits are computed once per selected row under no_grad (frozen),
+    then the student backward runs over the accumulated chunked loss.
+    """
+
+    if not selected:
+        return 0.0, 0.0
+    vocab = student.config.vocab_size
+    optimizer.zero_grad(set_to_none=True)
+    total_tokens = max(sum(float(generated_mask[i].sum().item()) for i in selected), 1.0)
+    total_loss = 0.0
+
+    for index in selected:
+        row_ids = sequences[index : index + 1]
+        row_attn = attention_mask[index : index + 1]
+        row_mask = generated_mask[index : index + 1].to(torch.float32)
+        # Teacher target: frozen, no grad.
+        with torch.no_grad():
+            t_logits = teacher(input_ids=row_ids, attention_mask=row_attn).logits
+            t_logits = t_logits[:, prompt_width - 1 : -1, :]
+            t_prob = torch.softmax(t_logits.float(), dim=-1)
+        # Student logits with grad.
+        s_logits = student(input_ids=row_ids, attention_mask=row_attn).logits
+        s_logits = s_logits[:, prompt_width - 1 : -1, :]
+        seq_len = s_logits.shape[1]
+        # Chunked forward-KL: accumulate loss_sum by vocab blocks.
+        loss_sum = torch.zeros((), device=s_logits.device, dtype=torch.float32)
+        # logsumexp over the FULL vocab, computed once; unsqueezed to [1, seq, 1] so
+        # each vocab chunk's log_softmax = s_chunk - log_denom broadcasts correctly.
+        log_denom = torch.logsumexp(s_logits.float(), dim=-1).unsqueeze(-1)
+        for v_start in range(0, vocab, vocab_chunk_size):
+            v_stop = min(v_start + vocab_chunk_size, vocab)
+            s_chunk = s_logits[:, :, v_start:v_stop].float()
+            # log_softmax over full vocab = s_chunk - logsumexp(full) ; the chunk's
+            # contribution to sum_v teacher_prob * (-log_softmax) is exact here.
+            s_log_chunk = s_chunk - log_denom
+            t_chunk = t_prob[:, :, v_start:v_stop]
+            token_loss_chunk = -(t_chunk * s_log_chunk).sum(dim=-1)  # [1, seq]
+            loss_sum = loss_sum + (token_loss_chunk * row_mask).sum()
+            del s_chunk, s_log_chunk, t_chunk, token_loss_chunk
+        (loss_sum / total_tokens).backward()
+        total_loss += float(loss_sum.detach().cpu())
+        del t_logits, t_prob, s_logits, log_denom, loss_sum
+
+    grad_norm = float(torch.nn.utils.clip_grad_norm_(student.parameters(), 1.0))
+    optimizer.step()
+    return total_loss / total_tokens, grad_norm
+
+
+# ---------------------------------------------------------------------------
+# Value model fit (calibrate split, once)
+# ---------------------------------------------------------------------------
+
+def fit_value_model(features, tau_targets):
+    """Fit the ridge value model that predicts tau from student-only features.
+
+    Gate B certified whether student-only features (entropy, placebo_kl, length)
+    predict tau; this is the deployed router's predictor. Returns a fitted
+    RidgeValueModel (see value.py for the 5->21 quadratic expansion).
+    """
+
+    from .value import RidgeValueModel
+
+    return RidgeValueModel().fit(features, tau_targets)
+
+
+# ---------------------------------------------------------------------------
+# pass@k + bootstrap
+# ---------------------------------------------------------------------------
+
+def passk_from_counts(correct_counts: Sequence[int], k: int, n: int) -> float:
+    """Chen et al. unbiased pass@k from per-prompt correct-out-of-n counts."""
+
+    import math
+
+    totals = []
+    for c in correct_counts:
+        if n - c < k:
+            totals.append(1.0)
+        else:
+            # 1 - C(n-c, k)/C(n, k), computed stably as a product.
+            prod = 1.0
+            for i in range(k):
+                prod *= (n - c - i) / (n - i)
+            totals.append(1.0 - prod)
+    return float(np.mean(totals)) if totals else 0.0
+
+
+def bootstrap_passk(correct_counts, k_values, n, resamples=2000, seed=0):
+    """Bootstrap percentile CIs for pass@k across k_values."""
+
+    rng = np.random.default_rng(seed)
+    counts = np.asarray(correct_counts)
+    m = len(counts)
+    out = {}
+    for k in k_values:
+        point = passk_from_counts(counts, k, n)
+        boots = np.empty(resamples)
+        for b in range(resamples):
+            sample = counts[rng.integers(0, m, m)]
+            boots[b] = passk_from_counts(sample, k, n)
+        out[k] = {
+            "point": point,
+            "ci_low": float(np.percentile(boots, 2.5)),
+            "ci_high": float(np.percentile(boots, 97.5)),
+        }
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Resume / persistence
+# ---------------------------------------------------------------------------
+
+def write_jsonl(path: Path, record: IterationRecord) -> None:
+    line = json.dumps(asdict(record), sort_keys=True)
+    with path.open("a") as fh:
+        fh.write(line + "\n")
+
+
+def last_completed_iteration(path: Path) -> int:
+    if not path.exists():
+        return -1
+    last = -1
+    with path.open() as fh:
+        for line in fh:
+            try:
+                last = json.loads(line)["iteration"]
+            except json.JSONDecodeError:
+                continue
+    return last
+
+
+def latest_checkpoint(output_dir: Path) -> Path | None:
+    cands = sorted(output_dir.glob("checkpoint_iter*.pt"))
+    return cands[-1] if cands else None
+
+
+def _save_checkpoint(path: Path, torch, student, optimizer, iteration: int) -> None:
+    torch.save(
+        {"iteration": iteration, "student": student.state_dict(), "optimizer": optimizer.state_dict()},
+        path,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Model loading, splits, calibration, routing, eval
+# ---------------------------------------------------------------------------
+
+def _load_loop_models(config: TrainingLoopConfig):
+    """Student (trainable, ``student_dtype``) + frozen bf16 teacher.
+
+    Reuses real_experiment's tokenizer setup. The teacher is always bf16: it is
+    frozen and only ever run forward for its logits, so fp32 would waste VRAM
+    the student's optimizer state needs.
+    """
+
+    from .real_experiment import _imports
+
+    torch, AutoModelForCausalLM, AutoTokenizer = _imports()
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    dtypes = {"float32": torch.float32, "bfloat16": torch.bfloat16, "float16": torch.float16}
+    if config.student_dtype not in dtypes:
+        raise ValueError(f"unsupported student_dtype: {config.student_dtype}")
+    tokenizer = AutoTokenizer.from_pretrained(config.student_model, use_fast=True)
+    if tokenizer.pad_token_id is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.padding_side = "left"
+    student = AutoModelForCausalLM.from_pretrained(config.student_model, dtype=dtypes[config.student_dtype])
+    teacher = AutoModelForCausalLM.from_pretrained(config.teacher_model, dtype=torch.bfloat16)
+    if student.config.vocab_size != teacher.config.vocab_size:
+        raise ValueError("student and teacher must share a vocabulary")
+    if config.gradient_checkpointing:
+        student.gradient_checkpointing_enable()
+    student.to(device).train()
+    teacher.to(device).eval()
+    for parameter in teacher.parameters():
+        parameter.requires_grad_(False)
+    return torch, tokenizer, student, teacher, device
+
+
+def _split_examples(examples, config: TrainingLoopConfig):
+    """Deterministic train / calibrate / test partition from the seed.
+
+    The order is fixed by load_dapo_examples' seed, so every strategy sees the
+    same split -- a prerequisite for the budget-matched comparison.
+    """
+
+    need = config.train_n + config.calibrate_n + config.test_n
+    if len(examples) < need:
+        raise ValueError(f"need {need} examples, got {len(examples)}")
+    train = examples[: config.train_n]
+    calibrate = examples[config.train_n : config.train_n + config.calibrate_n]
+    test = examples[config.train_n + config.calibrate_n :]
+    return train, calibrate, test
+
+
+def _iter_prompts(train_examples, iteration: int, config: TrainingLoopConfig) -> list[str]:
+    """The prompts for one iteration: a fixed-width window that cycles the split.
+
+    Window start advances by prompts_per_iter each iteration and wraps, so every
+    strategy draws the same prompts in the same order regardless of strategy.
+    """
+
+    n = len(train_examples)
+    start = (iteration * config.prompts_per_iter) % n
+    idx = [(start + i) % n for i in range(config.prompts_per_iter)]
+    return [train_examples[i].prompt for i in idx]
+
+
+def _student_only_features(features: np.ndarray) -> np.ndarray:
+    """Columns entropy, placebo_kl, length -- the budget-honest router input.
+
+    _score_pair returns [entropy, confidence, placebo_kl, teacher_kl, length];
+    with teacher=None the teacher-dependent columns are zero. The router must
+    use only student-side information, so we keep the three that survive.
+    """
+
+    return features[:, [0, 2, 4]]
+
+
+def _calibrate_value_model(torch, tokenizer, student, teacher, calibrate_examples, config, device):
+    """Fit the CTV ridge once, on the calibrate split. Returns (model, record).
+
+    tau_source="kl": the target is the KL effect (teacher_kl - placebo_kl) from
+    one HF forward over the student's own rollout on every calibrate row. The
+    teacher is therefore forwarded on ALL calibrate rows -- this is CTV's
+    amortized cost and is reported as calibration_teacher_forward_tokens.
+
+    tau_source="verifier": the target is a precomputed verifier-tau vector
+    (rate_teacher - rate_placebo over k samples) loaded from
+    calibrate_tau_path, length-matched to the calibrate split. Features are
+    still computed in-place from the student rollout; only the target differs.
+    """
+
+    from .real_experiment import _generate, _score_pair, _tokenize
+    from .value import RidgeValueModel
+
+    prompts = [e.prompt for e in calibrate_examples]
+    inputs = _tokenize(tokenizer, prompts, config.max_prompt_tokens, device)
+    sequences, attention, prompt_width, gen_mask = _generate(
+        torch, tokenizer, student, inputs, config, seed=config.seed
+    )
+    features, effects, _teacher_reward, _placebo_reward = _score_pair(
+        torch, student, teacher, sequences, attention, prompt_width, gen_mask,
+        config.placebo_temperature, config.score_chunk_tokens,
+    )
+    student_features = _student_only_features(features)
+    calib_teacher_tokens = int(attention.sum().item())
+    if config.tau_source == "verifier":
+        if not config.calibrate_tau_path:
+            raise ValueError("tau_source='verifier' requires calibrate_tau_path")
+        import pickle
+
+        tau = np.asarray(pickle.load(open(config.calibrate_tau_path, "rb"))["tau"], dtype=np.float64)
+        if len(tau) != len(calibrate_examples):
+            raise ValueError(
+                f"calibrate_tau_path has {len(tau)} entries; calibrate split has {len(calibrate_examples)}"
+            )
+        targets = tau
+        target_source = "verifier"
+    elif config.tau_source == "kl":
+        targets = effects
+        target_source = "kl_effect"
+    else:
+        raise ValueError(f"unknown tau_source: {config.tau_source}")
+    value_model = RidgeValueModel().fit(student_features, targets)
+    record = {
+        "tau_source": target_source,
+        "calibration_n": len(calibrate_examples),
+        "calibration_teacher_forward_tokens": calib_teacher_tokens,
+        "calibration_tau_mean": float(np.mean(targets)),
+    }
+    return value_model, record
+
+
+def _route_selection(config, student_features, costs, rng, value_model, oracle_tau):
+    """Pick selected indices for this iteration's strategy under the token budget.
+
+    Returns (selected_indices, teacher_forward_tokens). The budget is the SAME
+    token cap for every non-all_query strategy so the teacher-forward-token axis
+    is matched; all_query spends the whole pool as the reference ceiling.
+    """
+
+    from .routing import select_strategy
+
+    total_cost = float(costs.sum())
+    if config.strategy == "all_query":
+        budget = total_cost
+        predicted = None
+    else:
+        budget = config.teacher_budget_fraction * total_cost
+        if config.strategy == "ctv":
+            predicted = value_model.predict(student_features)
+        elif config.strategy == "oracle":
+            if oracle_tau is None:
+                raise ValueError("oracle strategy requires oracle_tau_path")
+            predicted = np.asarray(oracle_tau, dtype=np.float64)
+        else:  # entropy, random -- ignore the prediction
+            predicted = None
+    selected = select_strategy(
+        config.strategy,
+        features=np.asarray(student_features, dtype=np.float64),
+        predicted_value=predicted,
+        costs=costs,
+        budget=budget,
+        rng=rng,
+    )
+    teacher_tokens = float(sum(costs[i] for i in selected))
+    return selected, teacher_tokens
+
+
+def _eval_passk(torch, student, tokenizer, test_examples, config, device):
+    """pass@{k} on the test split via student generation. Returns correct_counts.
+
+    HF here for self-containment; eval_backend='vllm' saves the trained student
+    to disk and builds a one-shot engine for the much faster batched pass@k pass.
+    """
+
+    from .math_verifier import verify_math
+    from .vllm_engine import apply_chat_template
+
+    was_training = student.training
+    student.eval()
+    # Generation under gradient checkpointing is O(n^2); toggle it off + KV
+    # cache on for the eval generations only (same pattern as _generate).
+    grad_ckpt_was_on = bool(
+        getattr(student, "is_gradient_checkpointing", False)
+        or getattr(student, "gradient_checkpointing", False)
+    )
+    _cfg = getattr(student, "config", None)
+    use_cache_was = getattr(_cfg, "use_cache", None) if _cfg is not None else None
+    if grad_ckpt_was_on:
+        student.gradient_checkpointing_disable()
+    if _cfg is not None:
+        _cfg.use_cache = True
+    correct_counts = []
+    try:
+        for example in test_examples:
+            prompt = apply_chat_template(tokenizer, example.prompt)
+            enc = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=config.max_prompt_tokens)
+            enc = {k: v.to(device) for k, v in enc.items()}
+            prompt_len = enc["input_ids"].shape[1]
+            n = config.passk_samples
+            # Batch the n samples for one prompt into a single generate call:
+            # ~n-fold speedup over the per-sample loop, reusing the KV cache that
+            # is already on above. Left-padding keeps rows aligned for slicing.
+            batched = {k: v.repeat(n, *([1] * (v.dim() - 1))) for k, v in enc.items()}
+            with torch.no_grad():
+                out = student.generate(
+                    **batched,
+                    do_sample=True,
+                    temperature=config.temperature,
+                    max_new_tokens=config.max_new_tokens,
+                    pad_token_id=tokenizer.pad_token_id,
+                )
+            correct = 0
+            for row in range(n):
+                text = tokenizer.decode(out[row][prompt_len:], skip_special_tokens=True)
+                correct += int(verify_math(text, example.answer))
+            correct_counts.append(correct)
+    finally:
+        if _cfg is not None:
+            _cfg.use_cache = use_cache_was
+        if grad_ckpt_was_on:
+            student.gradient_checkpointing_enable()
+        student.train(was_training)
+    return correct_counts
+
+
+# ---------------------------------------------------------------------------
+# Entry point
+# ---------------------------------------------------------------------------
+
+def train_loop(config: TrainingLoopConfig) -> dict:
+    """Run the multi-step loop for ``config.strategy`` and return a summary.
+
+    Per iteration:
+      1. take prompts_per_iter train prompts (seed-determined order, same for
+         every strategy);
+      2. student HF rollout -> sequences + generated_mask (cost counted);
+      3. cheap features on ALL candidates via _score_pair(teacher=None) -> 0
+         teacher forwards (budget-honest router input);
+      4. route under token budget (select_strategy) -- only ctv/oracle need a
+         prediction; entropy/random/all_query ignore it;
+      5. teacher HF forward on SELECTED rows only (inside _distill_step);
+      6. _distill_step_onpolicy (vocab-chunked), one optimizer.step();
+      7. append IterationRecord, checkpoint every N iters.
+    Then evaluate pass@k on the test split and write the summary.
+    """
+
+    from .real_experiment import _generate, _score_pair, _tokenize
+
+    output_dir = Path(config.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # ---- startup ----
+    torch, tokenizer, student, teacher, device = _load_loop_models(config)
+    free_gib = measure_free_vram_gib(torch)
+    if free_gib < config.min_free_vram_gib:
+        raise RuntimeError(
+            f"only {free_gib:.1f} GiB free at startup (< {config.min_free_vram_gib}); "
+            "free the GPU or lower min_free_vram_gib"
+        )
+    torch.manual_seed(config.seed)
+    rng = np.random.default_rng(config.seed)
+
+    examples = _load_data(config)
+    train_ex, calib_ex, test_ex = _split_examples(examples, config)
+
+    # ---- one-time calibration (CTV's amortized teacher cost) ----
+    if config.strategy == "ctv":
+        value_model, calib_record = _calibrate_value_model(
+            torch, tokenizer, student, teacher, calib_ex, config, device
+        )
+    else:
+        value_model, calib_record = None, {"tau_source": "n/a (strategy needs no value model)"}
+
+    oracle_tau = _load_oracle_tau(config)  # None unless strategy == "oracle"
+
+    optimizer = torch.optim.AdamW(student.parameters(), lr=config.learning_rate)
+
+    jsonl_path = output_dir / f"iterations_{config.strategy}_seed{config.seed}.jsonl"
+    start_iter = last_completed_iteration(jsonl_path) + 1 if config.resume else 0
+    if config.resume and start_iter > 0:
+        ckpt = latest_checkpoint(output_dir)
+        if ckpt is not None:
+            state = torch.load(ckpt, map_location=device)
+            student.load_state_dict(state["student"])
+            optimizer.load_state_dict(state["optimizer"])
+
+    cumulative_teacher_tokens = calib_record.get("calibration_teacher_forward_tokens", 0)
+
+    # ---- the loop ----
+    for iteration in range(start_iter, config.iterations):
+        t0 = time.time()
+        prompts = _iter_prompts(train_ex, iteration, config)
+        inputs = _tokenize(tokenizer, prompts, config.max_prompt_tokens, device)
+        sequences, attention, prompt_width, gen_mask = _generate(
+            torch, tokenizer, student, inputs, config, engine=None, seed=config.seed + iteration
+        )
+        # Cheap features: teacher=None -> 0 teacher forwards on candidates.
+        features, _effects, _tr, _pr = _score_pair(
+            torch, student, None, sequences, attention, prompt_width, gen_mask,
+            config.placebo_temperature, config.score_chunk_tokens,
+        )
+        student_features = _student_only_features(features)
+        mean_entropy_all = float(np.mean(student_features[:, 0]))
+
+        costs = attention.sum(dim=1).to(torch.float32).cpu().numpy()
+        selected_rel, teacher_tokens = _route_selection(
+            config, student_features, costs, rng, value_model, oracle_tau
+        )
+        selected = list(selected_rel)
+        mean_entropy_sel = float(np.mean(student_features[selected, 0])) if selected else 0.0
+
+        loss, grad_norm = _distill_step_onpolicy(
+            torch, student, teacher, sequences, attention, prompt_width, gen_mask,
+            selected, optimizer, config.vocab_chunk_size,
+        )
+        cumulative_teacher_tokens += int(round(teacher_tokens))
+        peak_vram = (torch.cuda.max_memory_allocated() / 1024**3) if torch.cuda.is_available() else 0.0
+
+        record = IterationRecord(
+            iteration=iteration,
+            seed=config.seed,
+            strategy=config.strategy,
+            budget_fraction=config.teacher_budget_fraction,
+            prompt_indices=list(range(len(prompts))),
+            selected_indices=selected,
+            teacher_forward_tokens=int(round(teacher_tokens)),
+            teacher_forward_tokens_cumulative=cumulative_teacher_tokens,
+            student_rollout_tokens=int(round(float(costs.sum()))),
+            distill_loss=loss,
+            grad_norm=grad_norm,
+            mean_entropy_selected=mean_entropy_sel,
+            mean_entropy_all=mean_entropy_all,
+            elapsed_seconds=time.time() - t0,
+            peak_vram_gib=peak_vram,
+        )
+        write_jsonl(jsonl_path, record)
+        if (iteration + 1) % config.checkpoint_every == 0:
+            _save_checkpoint(
+                output_dir / f"checkpoint_iter{iteration + 1}.pt", torch, student, optimizer, iteration + 1
+            )
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
+    # ---- eval ----
+    # Save checkpoint to overlay to avoid filling workspace
+    checkpoint_dir = Path("/overlay/opd-checkpoints")
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+    checkpoint_name = f"{Path(config.output_dir).name}_final.pt"
+    checkpoint_path = checkpoint_dir / checkpoint_name
+    _save_checkpoint(checkpoint_path, torch, student, optimizer, config.iterations)
+    # Also create symlink in output_dir for convenience
+    symlink_path = Path(config.output_dir) / "final.pt"
+    if symlink_path.exists():
+        symlink_path.unlink()
+    try:
+        symlink_path.symlink_to(checkpoint_path)
+    except OSError:
+        pass  # Symlink might fail on some systems
+    correct_counts = _eval_passk(torch, student, tokenizer, test_ex, config, device)
+    passk = bootstrap_passk(
+        correct_counts, config.passk_k_values, config.passk_samples, config.bootstrap_resamples, seed=config.seed
+    )
+    baseline_passk = passk_from_counts(correct_counts, 1, config.passk_samples)
+
+    summary = {
+        "config": {k: v for k, v in asdict(config).items()},
+        "device": str(device),
+        "strategy": config.strategy,
+        "iterations_completed": config.iterations - start_iter,
+        "calibration": calib_record,
+        "cumulative_teacher_forward_tokens": cumulative_teacher_tokens,
+        "calibration_teacher_forward_tokens": calib_record.get("calibration_teacher_forward_tokens", 0),
+        "final_distill_loss": loss if start_iter < config.iterations else None,
+        "test_n": len(test_ex),
+        "passk": {str(k): v for k, v in passk.items()},
+        "test_pass1_raw": baseline_passk,
+        "iterations_path": str(jsonl_path),
+        "free_vram_gib_at_startup": free_gib,
+    }
+    (output_dir / f"summary_{config.strategy}_seed{config.seed}.json").write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n"
+    )
+    return summary
+
+
+def _load_data(config: TrainingLoopConfig):
+    from .math_verifier import load_dapo_examples
+
+    need = config.train_n + config.calibrate_n + config.test_n
+    return load_dapo_examples(config.data_path, limit=need, seed=config.seed)
+
+
+def _load_oracle_tau(config: TrainingLoopConfig):
+    if config.strategy != "oracle":
+        return None
+    if not config.oracle_tau_path:
+        raise ValueError("oracle strategy requires oracle_tau_path (offline true-tau vector)")
+    import pickle
+
+    return np.asarray(pickle.load(open(config.oracle_tau_path, "rb"))["tau"], dtype=np.float64)
+
+
+def main(argv: Sequence[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--student-model", required=True)
+    parser.add_argument("--teacher-model", required=True)
+    parser.add_argument("--data", required=True)
+    parser.add_argument("--output-dir", required=True)
+    parser.add_argument("--strategy", choices=("ctv", "entropy", "random", "oracle", "all_query"), default="ctv")
+    parser.add_argument("--iterations", type=int, default=40)
+    parser.add_argument("--teacher-budget-fraction", type=float, default=0.20)
+    parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--max-new-tokens", type=int, default=1024)
+    args = parser.parse_args(argv)
+    config = TrainingLoopConfig(
+        student_model=args.student_model,
+        teacher_model=args.teacher_model,
+        data_path=args.data,
+        output_dir=args.output_dir,
+        strategy=args.strategy,
+        iterations=args.iterations,
+        teacher_budget_fraction=args.teacher_budget_fraction,
+        seed=args.seed,
+        max_new_tokens=args.max_new_tokens,
+    )
+    print(json.dumps(train_loop(config), indent=2, sort_keys=True))
+
+
+if __name__ == "__main__":
+    main()
