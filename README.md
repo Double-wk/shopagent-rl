@@ -334,11 +334,66 @@ git clone https://gh-proxy.com/https://github.com/<org>/<repo>.git
 
 PyPI 不受影响。另：`apt-get update` 经代理拉 AMD 内网源 `compute-artifactory.amd.com` 会 502，不影响装公共包。
 
-## 阶段 4：安装并初始化 cc-switch
+## 阶段 4：安装 Claude Code 和 Codex CLI
+
+**目的：** 安装实际执行 AI 编程任务的命令行客户端；它们的服务商配置由下一阶段的 cc-switch 统一管理。
+
+```bash
+npm install -g @anthropic-ai/claude-code@latest
+npm install -g @openai/codex@latest
+```
+
+验证安装结果：
+
+```bash
+claude --version
+codex --version
+```
+
+若 npm 下载失败，优先确认阶段 2 的代理服务和环境变量是否正常：
+
+```bash
+curl -I https://registry.npmjs.org/
+```
+
+### Codex 登录：设备码方式
+
+在没有可直接打开浏览器的远程服务器上，可用设备码完成 ChatGPT 登录（服务商 Key 交给阶段 5 的 cc-switch 托管时可跳过本节）：
+
+```bash
+codex login --device-auth
+```
+
+命令会输出验证地址和一次性代码；在本地浏览器打开该地址，登录并输入代码后，保持服务器终端运行至显示登录成功。
+
+
+### Codex 启动方式
+
+明确限制 Codex 只能写入当前工作区：
+
+```bash
+codex --sandbox workspace-write
+```
+
+放开沙箱访问范围，使 Codex 可以按当前系统用户的权限访问更多目录，但执行敏感命令前仍需人工确认。适用于项目需要访问多个目录、同时希望保留审批确认的场景：
+
+```bash
+codex --sandbox danger-full-access
+```
+
+同时跳过人工审批并禁用沙箱。仅适用于可以随意破坏、且与重要数据和系统隔离的环境：
+
+```bash
+codex --dangerously-bypass-approvals-and-sandbox
+```
+
+## 阶段 5：安装并初始化 cc-switch
 
 **目的：** 安装 `cc-switch` 并完成初始化：始终将服务商数据保存在项目内的 `cc-switch/.cc-switch/`，避免依赖或污染 `/root/.cc-switch`，并在切换服务商前准备好 Claude/Codex 所需的最小配置文件。
 
-### 4.1 安装 cc-switch
+### 5.1 安装 cc-switch
+
+若仓库已带 `cc-switch/bin/cc-switch`（git 会保留执行位，clone 下来即可用），可跳过本节下载，直接从 5.2 开始。
 
 ```bash
 cd /workspace
@@ -363,7 +418,7 @@ rm -f cc-switch/cc-switch-cli-linux-x64-musl.tar.gz
 ./cc-switch/bin/cc-switch --version
 ```
 
-### 4.2 通过包装脚本初始化
+### 5.2 通过包装脚本初始化
 
 仓库中的 [`cc-switch/init-cc-switch.sh`](cc-switch/init-cc-switch.sh) 已实现以下流程：
 
@@ -381,7 +436,7 @@ chmod +x cc-switch/init-cc-switch.sh
 ./cc-switch/init-cc-switch.sh provider list -a codex
 ```
 
-### 4.3 切换与检查服务商
+### 5.3 切换与检查服务商
 
 先列出服务商，确认实际 ID；再按 ID 切换：
 
@@ -399,7 +454,7 @@ chmod +x cc-switch/init-cc-switch.sh
 ./cc-switch/init-cc-switch.sh provider current -a codex
 ```
 
-### 4.4 cc-switch 日常命令速查
+### 5.4 cc-switch 日常命令速查
 
 在 `cc-switch/` 目录中执行以下常用命令：
 
@@ -414,28 +469,6 @@ chmod +x cc-switch/init-cc-switch.sh
 | 修改 Provider（名称、Token、模型） | `./bin/cc-switch -a claude provider edit <id>`（Codex 将 `-a claude` 改为 `-a codex`） |
 
 切换或恢复后，请重启对应的 Claude Code 或 Codex 客户端，使新配置生效。
-
-## 阶段 5：安装 Claude Code 和 Codex CLI
-
-**目的：** 安装实际执行 AI 编程任务的命令行客户端；cc-switch 只负责管理它们的服务商配置。
-
-```bash
-npm install -g @anthropic-ai/claude-code@latest
-npm install -g @openai/codex@latest
-```
-
-验证安装结果：
-
-```bash
-claude --version
-codex --version
-```
-
-若 npm 下载失败，优先确认阶段 2 的代理服务和环境变量是否正常：
-
-```bash
-curl -I https://registry.npmjs.org/
-```
 
 ### 新机器配置服务商（装完 claude / codex 之后）
 
@@ -468,38 +501,7 @@ claude --version && codex --version               # 裸跑即可用
 
 之后直接敲 `claude` / `codex` 就走 cc-switch 配好的服务商，不需要任何额外包装函数。
 
-为什么要四条：这台机器有两个 HOME——SSH 终端的 `/root`，和 Claude Code 会话内 shell 的 `/workspace/cc-switch`——`use` 只写执行时 HOME 的那一份，漏了哪边、哪边就「不跟随 cc-switch」。若新机器上 Claude Code 会话的 HOME 也是 `/root`，后两条可以省，但四条全跑永远没错。换服务商同样是这四条（见阶段 4.3）；Claude Code 记忆文件与全局 settings 的迁移另见 `服务器迁移指南.md` Part D。
-
-### Codex 登录：设备码方式
-
-在没有可直接打开浏览器的远程服务器上，可用设备码完成 ChatGPT 登录：
-
-```bash
-codex login --device-auth
-```
-
-命令会输出验证地址和一次性代码；在本地浏览器打开该地址，登录并输入代码后，保持服务器终端运行至显示登录成功。
-
-
-### Codex 启动方式
-
-明确限制 Codex 只能写入当前工作区：
-
-```bash
-codex --sandbox workspace-write
-```
-
-放开沙箱访问范围，使 Codex 可以按当前系统用户的权限访问更多目录，但执行敏感命令前仍需人工确认。适用于项目需要访问多个目录、同时希望保留审批确认的场景：
-
-```bash
-codex --sandbox danger-full-access
-```
-
-同时跳过人工审批并禁用沙箱。仅适用于可以随意破坏、且与重要数据和系统隔离的环境：
-
-```bash
-codex --dangerously-bypass-approvals-and-sandbox
-```
+为什么要四条：这台机器有两个 HOME——SSH 终端的 `/root`，和 Claude Code 会话内 shell 的 `/workspace/cc-switch`——`use` 只写执行时 HOME 的那一份，漏了哪边、哪边就「不跟随 cc-switch」。若新机器上 Claude Code 会话的 HOME 也是 `/root`，后两条可以省，但四条全跑永远没错。换服务商同样是这四条（见 5.3）；Claude Code 记忆文件与全局 settings 的迁移另见 `服务器迁移指南.md` Part D。
 
 ## 阶段 6：配置 GitHub 账号级 SSH Key 并提交项目
 
