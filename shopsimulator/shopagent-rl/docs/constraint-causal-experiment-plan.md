@@ -64,3 +64,23 @@ success？若是，原子环境干预下的行为认证能否筛选并训练出�
    Final-200 strict 不低于最强基线的置信区间下界，才进入 GRPO。
 3. Certified GRPO 必须同时优于 matched hard-negative 与普通 GRPO，且 nuisance
    invariance 不下降，才作为方法主结果。
+
+## 判定记录
+
+### 2026-08-16 · Gate 2（paired SFT → GRPO）：通过
+
+Adapter：`outputs/sft/v2_paired/model/training_output/lora_adapter`（natural option-swap
+配对 + 基线混合 6226 例 ×3 epoch；expandable_segments 修复后 2337/2337 步零事故）。
+
+- **门 2 前半（natural held-out paired robust）**：option_swap 4.5%（sft_v1）→
+  **73.1%**（49/67）；GRPO 各变体 16–30%。original 侧同步升至 93.9%。
+- **门 2 后半（Final-200 strict）**：r_success **0.250**（50/200）；最强基线
+  GRPO-c1hard 0.200，95% CI 下界 ≈0.145 → 高于下界。r_hard 0.278、r_loose 0.392
+  亦为全方法最高；r_option 0.212→0.300。
+- **预期解离**：price_above_budget 配对鲁棒全方法 0%（含 v2_paired）——配对数据
+  只覆盖 option-swap，未触及 budget 条件；价格捷径留给方法 4/5。
+
+证据：`outputs/sft/v2_paired/evaluation/cf_sft_v2_paired_0816_134013.jsonl`、
+`outputs/sft/v2_paired/evaluation/final200_t10x512_0816_134013_official_metrics.json`。
+
+结论：满足门 2，进入 paired/certified GRPO（门 3 前置）。

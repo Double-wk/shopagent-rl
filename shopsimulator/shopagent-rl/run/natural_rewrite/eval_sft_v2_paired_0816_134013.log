@@ -1,3 +1,4 @@
 START stamp=0816_134013 adapter=outputs/sft/v2_paired/model/training_output/lora_adapter
 COUNTERFACTUAL exit=0
 SMOKE exit=0
+FINAL exit=0

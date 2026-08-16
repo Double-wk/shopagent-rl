@@ -38,3 +38,53 @@ INFO 08-16 13:54:51 [llm.py:355] Supported tasks: ['generate']
 INFO 08-16 13:54:51 [hf.py:318] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
 WARNING 08-16 13:54:51 [input_processor.py:327] vLLM has deprecated support for supporting different tokenizers for different LoRAs. By default, vLLM uses base model's tokenizer. If you are using a LoRA with its own tokenizer, consider specifying `--tokenizer [lora_path]` to use the LoRA tokenizer.
 (EngineCore_DP0 pid=529904) WARNING 08-16 13:54:52 [utils.py:268] Using default LoRA kernel configs
+[rank0]:[W816 14:39:28.032334309 ProcessGroupNCCL.cpp:1525] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+    wave done: 1/16 strict | total 16/200 (216s)
+  wave 2: tasks 669..727 (16)
+    wave done: 3/16 strict | total 32/200 (418s)
+  wave 3: tasks 741..816 (16)
+    wave done: 3/16 strict | total 48/200 (626s)
+  wave 4: tasks 817..870 (16)
+    wave done: 5/16 strict | total 64/200 (832s)
+  wave 5: tasks 871..948 (16)
+    wave done: 5/16 strict | total 80/200 (1031s)
+  wave 6: tasks 952..1010 (16)
+    wave done: 2/16 strict | total 96/200 (1224s)
+  wave 7: tasks 1029..1119 (16)
+    wave done: 8/16 strict | total 112/200 (1433s)
+  wave 8: tasks 1121..1198 (16)
+    wave done: 4/16 strict | total 128/200 (1637s)
+  wave 9: tasks 1203..1258 (16)
+    wave done: 4/16 strict | total 144/200 (1849s)
+  wave 10: tasks 1263..1318 (16)
+    wave done: 3/16 strict | total 160/200 (2056s)
+  wave 11: tasks 1321..1379 (16)
+    wave done: 4/16 strict | total 176/200 (2263s)
+  wave 12: tasks 1381..1438 (16)
+    wave done: 5/16 strict | total 192/200 (2479s)
+  wave 13: tasks 1442..1458 (8)
+    wave done: 3/8 strict | total 200/200 (2678s)
+
+[SFT_V2_PAIRED] n=200 strict_success=0.250 (r_type=0.52 r_att=0.41 r_option=0.30 r_price=0.47) avg_steps=7.8
+
+[official ShopSimulator get_score.py]
+
+==================================================
+Evaluation Results Statistics
+==================================================
+Total Samples: 200
+Completion Rate: 0.52
+Average Score--r_loose: 0.392
+Average Score--r_hard: 0.2777
+Average Score--r_success: 0.25
+Average Score--r_types: 0.52
+Average Score--r_attribute: 0.4072
+Average Score--r_option: 0.3
+Average Score--r_price: 0.465
+Correct Product Rate: 0.275
+==================================================
+
+full self-contained report -> outputs/sft/v2_paired/evaluation/final200_t10x512_0816_134013_full_report.json
+
+results -> outputs/sft/v2_paired/evaluation/final200_t10x512_0816_134013.jsonl
+official-schema per-task -> outputs/sft/v2_paired/evaluation/final200_t10x512_0816_134013_tasks
