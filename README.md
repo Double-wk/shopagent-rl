@@ -179,7 +179,19 @@ source ~/.bashrc
 
 小写和大写变量分别兼容不同命令行工具与运行时。`source ~/.bashrc` 让配置立即在当前终端生效；之后打开的新终端会自动加载。
 
-### 2.4 切换代理节点（可选）
+### 2.4 内网与平台域名绕过代理（NO_PROXY）
+
+**目的：** 设置代理后，本机回环地址和云平台的内网服务域名（如 `ps.air-outer.com`）必须直连，不能进 mihomo，否则本地服务和平台接口会访问失败或绕远。`NO_PROXY`/`no_proxy` 大小写各一份，与代理变量同理。
+
+```bash
+echo 'export NO_PROXY="localhost,127.0.0.1,ps.air-outer.com"' >> ~/.bashrc
+echo 'export no_proxy="localhost,127.0.0.1,ps.air-outer.com"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+**两个 HOME 都要配（与 5.3 同理）。** 终端默认 HOME 是 `/root`，上面命令写的就是 `/root/.bashrc`；Claude Code 会话内的 HOME 是 `/workspace/cc-switch`，需要把同样两行追加到 `/workspace/cc-switch/.bashrc`（该文件已含 2.3 的四行代理变量）。漏配的表现：Claude Code 会话里跑的工具访问平台内网域名仍走代理。
+
+### 2.5 切换代理节点（可选）
 
 将 `<代理组>` 和 `<节点名>` 替换为 `config.yaml` 中的真实名称：
 
