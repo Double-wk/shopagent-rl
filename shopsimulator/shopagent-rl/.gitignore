@@ -9,8 +9,20 @@
 #   其中 SFT/GRPO 的 checkpoint 权重仍被下方 *.safetensors/*.bin/*.ckpt/*.log
 #   及根 .gitignore 的 experiment/**/*.pt 排除。
 checkpoints/
-# *.log  ← 私有仓库全量备份：运行/训练日志一并提交（sft_new3793.log, pack_api.log,
-#          collect.log 等）。持续增长的超大日志（shop_agent.log 56M+）由根 .gitignore 兜底排除。
+# Keep completed training/evaluation logs when they provide experiment
+# provenance. Exclude service noise, process state, failed superseded attempts,
+# and incomplete evaluations; a completed formal log can still be added
+# explicitly after the corresponding run finishes.
+run/*.pid
+run/pack_api.log
+run/serve_*.log
+run/merge_*.log
+run/single_eval_*.log
+run/certified_sft_b1_gc.log
+run/certified_sft_b2_prefilter.log
+
+# Superseded data snapshot that violates the current 10-turn protocol.
+data/sft_train_certified_mix_pre10turn.jsonl
 
 # python
 __pycache__/
