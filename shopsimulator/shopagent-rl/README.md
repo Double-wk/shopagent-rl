@@ -4,12 +4,13 @@ ShopSimulator 中文购物 Agent 的完整后训练工程：环境适配、teach
 
 ## 当前状态
 
-Base、SFT v1、GRPO v1 与 GRPO v2b 的 Final-200 评测均已完成（同一 10 步协议、每轮 512 token）；step20 结果仅作历史归档对照。
+Base、SFT v1、Paired SFT v2、GRPO v1、GRPO v2b 与 GRPO C1-hard 的 Final-200 评测均已完成（同一 10 步协议、每轮 512 token）；step20 结果仅作历史归档对照。
 
 | 模型 | 完成率 | **strict success (Rsucc)** | r_hard | r_loose | 选对商品率 | 报告文件 |
 |---|---:|---:|---:|---:|---:|---|
 | Base v1 | 0% | **0%** (0/200) | 0 | 0 | 0% | `outputs/base/v1/evaluation/` |
 | SFT v1 | 39.5% | **17%** (34/200) | 0.201 | 0.306 | 25.5% | `outputs/sft/v1/evaluation/` |
+| **SFT v2 Paired Constraint** | **52.0%** | **25%** (50/200) | **0.278** | **0.392** | 27.5% | `outputs/sft/v2_paired/evaluation/` |
 | GRPO v1（env16, step200） | 32.5% | **8.5%** (17/200) | 0.118 | 0.238 | 19.0% | `outputs/grpo/v1/evaluation/` |
 | GRPO v2b（env32, n=8, step200） | 68.0% | **18%** (36/200) | 0.215 | 0.435 | 27.5% | `outputs/grpo/v2/evaluation/` |
 | GRPO C1-hard（hard 预算惩罚, step200） | 53.5% | **20%** (40/200) | 0.228 | 0.385 | 28.0% | `outputs/grpo/c1_hard/evaluation/` |
@@ -26,6 +27,7 @@ Base、SFT v1、GRPO v1 与 GRPO v2b 的 Final-200 评测均已完成（同一 1
 
 | 阶段 | 当前结果 |
 |---|---|
+| Constraint-causal Gate 2 | **已通过**：Paired SFT v2 的 natural option-swap paired robust `73.1%`（49/67），Final-200 strict `25%`（50/200）；进入 Certified GRPO 前置阶段。价格反事实 paired robust 仍为 `0%`。 |
 | GRPO smoke | 已完成 1 step：reward/pg_loss 非零，checkpoint 写入 overlay |
 | GRPO 正式训练 | env16 固定配方 `TRAIN_BATCH=4 / ROLLOUT_N=4 / PPO_MINI_BATCH=4` 已完成 **200 steps**；最终可恢复 checkpoint 为 `outputs/grpo/v1/model/checkpoint_step_200/` |
 | GRPO v2b | `TRAIN_BATCH=4 / ROLLOUT_N=8 / env32` 已完成 **200 steps**；导出 adapter 为 `/overlay/shopagent_rl_grpo_outputs/grpo/v2/export_step_200/lora_adapter/` |
