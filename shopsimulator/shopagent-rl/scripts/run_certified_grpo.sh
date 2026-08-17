@@ -3,8 +3,8 @@
 set -euo pipefail
 
 ROOT=/workspace/shopsimulator/shopagent-rl
-export TRAIN_FILES="${TRAIN_FILES:-$ROOT/data/grpo_certified_train.parquet}"
-export SFT_ADAPTER="${SFT_ADAPTER:-$ROOT/outputs/sft/v3_certified/model/training_output/lora_adapter}"
+export TRAIN_FILES="${TRAIN_FILES:-$ROOT/data/grpo_certified_natural_train.parquet}"
+export SFT_ADAPTER="${SFT_ADAPTER:-$ROOT/outputs/sft/v4_certified_corrective/model/training_output/lora_adapter}"
 export OUTPUT_DIR="${OUTPUT_DIR:-/overlay/shopagent_rl_grpo_outputs/grpo/certified_single_seed}"
 export RUN_NAME="${RUN_NAME:-certified_grpo}"
 export MAX_PROMPT_LENGTH="${MAX_PROMPT_LENGTH:-2048}"

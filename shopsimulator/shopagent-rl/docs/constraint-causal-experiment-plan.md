@@ -84,3 +84,18 @@ Adapter：`outputs/sft/v2_paired/model/training_output/lora_adapter`（natural o
 `outputs/sft/v2_paired/evaluation/final200_t10x512_0816_134013_official_metrics.json`。
 
 结论：满足门 2，进入 paired/certified GRPO（门 3 前置）。
+
+### 2026-08-17 · Certified SFT v3 审计：未通过价格门
+
+- heldout-v2（150 option + 384 price）自然输入：option cf 82%，price cf 0%，
+  price commit persistence 94.27%。
+- 恢复仅训练负例出现的 `任务约束摘要` 后：price cf 100%，但 original 32.55%。
+- 判定：v3 学到 summary-presence shortcut，不构成价格比较能力证据；Gate 3 不得启动。
+
+纠正动作：v4 从 v3 adapter 继续训练 10,057 条 mix，价格 original/counterfactual 各
+2,000 条且都不带 summary；加入 811 条 summary-positive nuisance。训练后先过
+heldout-v2 price cf ≥30%，再过 Final-200 strict ≥16%，两门均通过后才允许人工启动
+Certified GRPO。评测链不会自动启动 GRPO。
+
+在最终论文口径前还必须审计 `goal.price_upper` 是否与自然指令预算一致；不一致样本应
+分层、重建或剔除，不能把隐藏 canonical budget 当作自然语言推理标签。

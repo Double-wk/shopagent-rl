@@ -1,7 +1,7 @@
 # shopagent-rl 数据划分与现状（单一事实源）
 
-> 最后更新：2026-08-10。本文是 shopagent-rl **数据集合的唯一事实源**——
-> SFT / GRPO / Ablation / EVAL 四份数据的来源、规模、生成方式、互斥关系与当前状态全在这里。
+> 最后更新：2026-08-17。本文是 shopagent-rl **数据集合的唯一事实源**——
+> SFT / GRPO / Ablation / EVAL 及 constraint-causal 数据的来源、规模、生成方式、互斥关系与当前状态全在这里。
 > README 里的旧「数据采集策略/数据划分」数字已过期，以本文为准。
 
 ---
@@ -82,6 +82,21 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
 - **当前状态**：✅ 5000 已采完、3793 strict 已确认；**训练集 `sft_train.jsonl`（3793 条，41MB）已由 `build_sft_data.sh` 生成**（本次按要求只生成、不训练）。
 - **为什么停 5000 不追 10000**：原计划 10000，但 1.8B（Qwen3-1.7B-Base）判 3793 strict 够用，不再追量（详见 commit）。
 
+### 2b) Constraint-causal / Certified 数据
+
+- **训练来源**：全部来自官方 `train` 区；Final-200 和 heldout-v2 只用于评测，不回流训练。
+- **原子干预**：同一商品、规格和指令保持不变，只改变当前价格；预算内侧目标是
+  `COMMIT`，超预算侧目标是 `SEARCH_ALTERNATIVE`。option pair 同理只翻转目标规格。
+- **v3 失败数据**：价格训练只包含超预算侧，并只在该侧追加 `任务约束摘要`。heldout-v2
+  自然输入 price cf 为 0%；恢复摘要后为 100%，证明形成了摘要存在性捷径。
+- **v4 corrective mix**：`data/sft_train_certified_corrective_mix.jsonl` 共 10,057 条：
+  2,000 预算内价格、2,000 超预算价格、1,622 option、811 nuisance control，其余为基线
+  SFT 保留样本。价格双侧都不追加摘要；811 条 summary-positive nuisance 用来打破旧触发器。
+- **GRPO 混合**：`data/grpo_certified_natural_train.parquet` 保留 environment row，并对
+  price/option/nuisance 配对同时写入 original 和 counterfactual 两侧，输入与自然评测同格式。
+- **可观察性要求**：价格标签使用的预算必须能从自然指令中读出。若上游随机
+  `goal.price_upper` 与人类指令预算不一致，必须分层、重建或剔除，不能要求模型预测隐藏变量。
+
 ### 3) GRPO —— 强化学习 prompts
 
 - **是什么**：GRPO 自监督 RL 的"题目池"。**注意：GRPO 不用 teacher 轨迹**——student 自己对每个 task_id 采样多条 rollout，环境 reward 打分，组内对比算优势。所以这里只需要 **task_id 列表**。
@@ -117,6 +132,9 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
 | `ablation_tasks_500.json` | Ablation 500 个 task_id | 3.3K |
 | `trajectories_raw/gpt-5.6-terra/trajectories_raw.jsonl` | teacher raw 轨迹 5000 条（strict 标记 3826 → validate 3793 入训） | 72.9MB |
 | `trajectories_raw_old/` | 历史采集归档（不用，留底） | — |
+| `counterfactual/heldout_atomic_pairs_v2.jsonl` | task-disjoint 原子 heldout：150 option + 384 price | — |
+| `sft_certified_corrective_train.jsonl` | v4 方法数据：自然格式 paired price/option/nuisance | — |
+| `sft_train_certified_corrective_mix.jsonl` | v4 基线混合训练集，共 10,057 条 | — |
 
 ### `scripts/`（采样/构建脚本，全可复现）
 | 脚本 | 作用 |
@@ -126,11 +144,14 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
 | `sample_ablation_targets.py` | 全 train 随机采 Ablation 目标（排除 **SFT+GRPO**+eval），seed 42 |
 | `build_sft_data.sh` | raw jsonl → train-range 过滤 + validate → `sft_train.jsonl` |
 | `build_grpo_data.py` | grpo_prompts + system_prompt → `data/grpo_train.parquet` |
+| `build_paired_sft_data.py` | 构造 paired constraint SFT；价格默认无 summary，可选双侧 |
+| `build_certified_grpo_data.py` | 构造自然格式 environment + paired counterfactual GRPO parquet |
 
 ### `data/`
 | 文件 | 内容 |
 |---|---|
 | `grpo_train.parquet` | GRPO 训练 parquet（1000 行，veRL 格式），**已重建** |
+| `grpo_certified_natural_train.parquet` | v4 后续 Certified GRPO 输入；不含价格 summary |
 
 ---
 
@@ -147,6 +168,10 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
 
 ## 六、下一步（数据侧）
 
-1. **SFT 训练集** ✅：已跑 `build_sft_data.sh` → `sft_train.jsonl`（3793 strict，41MB）已生成，可开始 SFT 训练（本次按要求**只生成、不训练**）。
-2. **GRPO**：`grpo_train.parquet` 已就绪，SFT 跑完即可接 veRL GRPO。
-3. **量可调**：GRPO 想改 2000 / Ablation 想改别的量，重跑对应 `sample_*_targets.py --num N --seed 42` 即可（GRPO 改量需同步 `build_grpo_data.py` 硬编码文件名）。
+1. **Corrective SFT v4**：正在从 v3 adapter 继续训练；不要并行启动其他 GPU job。
+2. **自然反事实门**：训练后先跑 heldout-v2。price cf accuracy 必须 ≥30%，同时检查
+   original accuracy，排除“整体不买”的伪改善。
+3. **Final-200 门**：只有第一道门通过才运行，strict 必须 ≥16%。
+4. **Certified GRPO**：两道门都通过后才人工启动；评测链不会自动启动训练。
+5. **数据有效性复核**：在最终论文数字前核对自然指令预算与标签预算的一致性，并补
+   matched one-sided hard-negative、summary ablation、nuisance invariance 和多 seed 对照。

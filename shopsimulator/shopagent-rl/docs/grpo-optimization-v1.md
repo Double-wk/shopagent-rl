@@ -1,5 +1,9 @@
 # GRPO 优化 v1
 
+> 历史诊断文档。2026-08-17 当前主结果已推进到 Paired-C1-hard step 200：Final-200
+> strict 40%、completion 90%，说明 v1 的工程/信号问题后来已被绕过；但 price cf 仍为 0%。
+> 本文的“下一步”不再是当前执行计划，现行门控见 `constraint-causal-experiment-plan.md`。
+
 诊断对象:`outputs/grpo/v1/logs/grpo_env16_0812_shm_resume50_to200.log` 及同 resume 链前序 log，覆盖 step 1-200（实测 196 步，缺 47-50）。
 基线权重:`outputs/grpo/v1/model/checkpoint_step_200/lora_adapter`。
 轨迹级统计来自训练 log 内 `[ShopsimAgentLoop] summary` 行,共 1600 条(step 51-200 区间)。

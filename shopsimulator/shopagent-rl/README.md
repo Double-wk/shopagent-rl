@@ -4,6 +4,10 @@ ShopSimulator 中文购物 Agent 的完整后训练工程：环境适配、teach
 
 ## 当前状态
 
+> 最后同步：2026-08-17。当前维护文档以本节、[`DATA.md`](DATA.md) 和
+> [`docs/constraint-causal-experiment-plan.md`](docs/constraint-causal-experiment-plan.md)
+> 为准；`archive/` 与 checkpoint/adapter 内的 README 是历史快照，不随当前实验改写。
+
 Base、SFT v1、Paired SFT v2、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的 Final-200 评测均已完成（同一 10 步协议、每轮 512 token）；step20 结果仅作历史归档对照。当前最好是 **GRPO Paired-C1-hard：strict 40%**。
 
 | 模型 | 完成率 | **strict success (Rsucc)** | r_hard | r_loose | 选对商品率 | 报告文件 |
@@ -33,6 +37,16 @@ Base、SFT v1、Paired SFT v2、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paire
 > 准确率 93.9%——预算内选品很准，只是不把价格比较纳入购买决策。判定见
 > [`docs/counterfactual-eval.md`](docs/counterfactual-eval.md)。
 
+> ⚠️ **Certified SFT v3 的价格结果无效，不能作为“学会价格比较”的证据**：在 task-disjoint
+> heldout-v2（384 对价格）自然输入上，price cf accuracy 为 **0%**，94.27% 的超预算侧仍提交；
+> 只恢复训练时单独附加的 `任务约束摘要` 后，price cf accuracy 变为 **100%**，但原始侧准确率
+> 仅 **32.55%**。这证明 v3 学到的是摘要存在性捷径，不是 `当前价格 > 预算` 的比较规则。
+
+> 🚧 **Certified Corrective SFT v4 正在运行**：从 v3 adapter 继续训练 1 epoch，混合数据共
+> 10,057 条，其中价格双侧各 2,000 条（预算内 `COMMIT` / 超预算 `SEARCH_ALTERNATIVE`）、
+> option 1,622 条、summary nuisance 811 条。价格样本不再追加摘要。训练完成后自动先跑
+> heldout-v2 自然反事实门；price cf accuracy <30% 时不会跑 Final-200，更不会自动启动 GRPO。
+
 | 阶段 | 当前结果 |
 |---|---|
 | Constraint-causal Gate 2 | **已通过**：Paired SFT v2 的 natural option-swap paired robust `73.1%`（49/67），Final-200 strict `25%`（50/200）；进入 Certified GRPO 前置阶段。价格反事实 paired robust 仍为 `0%`。 |
@@ -40,6 +54,9 @@ Base、SFT v1、Paired SFT v2、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paire
 | GRPO 正式训练 | env16 固定配方 `TRAIN_BATCH=4 / ROLLOUT_N=4 / PPO_MINI_BATCH=4` 已完成 **200 steps**；最终可恢复 checkpoint 为 `outputs/grpo/v1/model/checkpoint_step_200/` |
 | GRPO v2b | `TRAIN_BATCH=4 / ROLLOUT_N=8 / env32` 已完成 **200 steps**；导出 adapter 为 `/overlay/shopagent_rl_grpo_outputs/grpo/v2/export_step_200/lora_adapter/` |
 | GRPO Paired-C1-hard | SFT v2 paired 起训 + hard 预算惩罚（b4/n4/lr1e-5）已完成 **200 steps**；Final-200 strict **40%**（80/200，历史最好），adapter 在 `/overlay/shopagent_rl_grpo_outputs/grpo/paired_c1hard_200_direct/export_step_200/lora_adapter/` |
+| Certified SFT v3 | heldout-v2 option cf **82%**，price cf **0%**；summary 恢复诊断为 price cf **100% / original 32.55%**，判定为输入格式捷径，结果作失败消融保留 |
+| Corrective SFT v4 | **运行中**：自然格式价格双侧 + nuisance control，从 v3 LoRA 续训；完成后由 `scripts/chain_certified_corrective_eval.sh` 串行执行两道评测门 |
+| Certified GRPO | **未启动**：只在 v4 heldout-v2 price cf ≥30% 且 Final-200 strict ≥16% 后人工启动；脚本已指向 v4 adapter 与无摘要 parquet |
 | 训练期 reward | 早期 reward 波动较大，当前步数仍不足以判断收敛；进入 200/250-step 长跑前先完成 20–30 个连续 step 的显存稳定性验收 |
 | OOM 根因 | 旧版 vLLM/ROCm sleep 没有稳定归还物理 VRAM，整卡占用逐 step 增长；fused PPO backward 又为冻结 LM head 无效申请 593.5MiB 梯度。两处均已修复，不需要改变训练参数 |
 
@@ -177,11 +194,21 @@ bash scripts/eval_sft_grpo_serial.sh
 
 # 10. CPU-only：构造 Final-200 原子约束反事实评测对（不启动模型/环境）
 python scripts/build_counterfactual_pairs.py
+
+# 11. 修正版 Certified SFT（自然格式价格双侧；单卡上不要与其他 GPU job 并行）
+bash scripts/run_certified_corrective_sft.sh
+
+# 12. 训练后串行门控：heldout-v2 price >= 30% 才继续 Final-200
+bash scripts/chain_certified_corrective_eval.sh
+
+# 13. 两道门均通过后才人工启动，脚本不会被评测链自动调用
+bash scripts/run_certified_grpo.sh
 ```
 
 反事实对的干预定义、有效性门和第一阶段指标见
-[`docs/counterfactual-eval.md`](docs/counterfactual-eval.md)。它是独立诊断集，不修改 Final-200
-成功率口径，也不参与当前 GRPO 训练。
+[`docs/counterfactual-eval.md`](docs/counterfactual-eval.md)。Final-200 原子对是独立诊断集，
+不修改 Final-200 成功率口径；Certified 训练使用来自 train 区的任务隔离配对数据，不能把
+评测对回流训练。
 
 ## 优化顺序
 

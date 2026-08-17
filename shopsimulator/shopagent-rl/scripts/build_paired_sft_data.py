@@ -93,7 +93,12 @@ def emit(pair: dict, side: str) -> dict | None:
     }
 
 
-def emit_price(pair: dict, side: str = "counterfactual") -> dict | None:
+def emit_price(
+    pair: dict,
+    side: str = "counterfactual",
+    *,
+    include_budget_summary: bool = False,
+) -> dict | None:
     """Build a certified price-comparison target from an atomic price pair."""
     if pair.get("intervention_type") != "price_above_budget":
         return None
@@ -104,11 +109,11 @@ def emit_price(pair: dict, side: str = "counterfactual") -> dict | None:
 
     price = _number(state["current_price"])
     budget = _number(pair["goal"]["price_upper"])
-    # Upstream realized goals may randomize price_upper independently of the
-    # colloquial budget in instruction_text. Keep the numeric target observable
-    # in this structured training control rather than leaking it only in Thought.
-    # Natural heldout evaluation intentionally does not add this summary.
-    obs = f"{obs}\n任务约束摘要: 预算上限={budget}元。"
+    # Keep the default prompt byte-compatible with natural evaluation. A prior
+    # certified run appended this line only to negative price examples, which
+    # taught a perfect summary-presence shortcut instead of price comparison.
+    if include_budget_summary:
+        obs = f"{obs}\n任务约束摘要: 预算上限={budget}元。"
     if side == "counterfactual":
         action = state.get("allowed_actions", ["click[back to search]"])[0]
         thought = (
@@ -151,6 +156,8 @@ def main() -> None:
                     help="cap price pairs (0 = all); E1 uses 1000-2000")
     ap.add_argument("--include-price-original", action="store_true",
                     help="also emit the within-budget side for each price pair")
+    ap.add_argument("--include-price-summary", action="store_true",
+                    help="append the structured budget line (diagnostic/legacy only)")
     ap.add_argument("--mix-out", default="",
                     help="optional baseline+method JSONL output")
     args = ap.parse_args()
@@ -182,7 +189,11 @@ def main() -> None:
             sides = ("original", "counterfactual") if args.include_price_original \
                 else ("counterfactual",)
             for side in sides:
-                rec = emit_price(pair, side)
+                rec = emit_price(
+                    pair,
+                    side,
+                    include_budget_summary=args.include_price_summary,
+                )
                 if rec:
                     records.append(rec)
 

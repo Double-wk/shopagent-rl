@@ -19,7 +19,7 @@ from typing import Any, Dict, List
 import torch
 import yaml
 from datasets import Dataset
-from peft import LoraConfig, TaskType, get_peft_model
+from peft import LoraConfig, PeftModel, TaskType, get_peft_model
 from transformers import (AutoModelForCausalLM, AutoTokenizer,
                           DataCollatorForSeq2Seq, Trainer, TrainingArguments)
 
@@ -133,12 +133,17 @@ def main() -> None:
     # model peaked at ~42 GiB at batch=4 with the double-enable; it should be
     # ~12-15 GiB once checkpointing actually takes effect).
 
-    lora = LoraConfig(
-        task_type=TaskType.CAUSAL_LM, r=model_cfg["lora_r"],
-        lora_alpha=model_cfg["lora_alpha"], lora_dropout=model_cfg["lora_dropout"],
-        target_modules=model_cfg["lora_target_modules"], bias="none",
-    )
-    model = get_peft_model(model, lora)
+    init_adapter = model_cfg.get("init_adapter")
+    if init_adapter:
+        model = PeftModel.from_pretrained(model, init_adapter, is_trainable=True)
+        print(f"continuing LoRA training from {init_adapter}")
+    else:
+        lora = LoraConfig(
+            task_type=TaskType.CAUSAL_LM, r=model_cfg["lora_r"],
+            lora_alpha=model_cfg["lora_alpha"], lora_dropout=model_cfg["lora_dropout"],
+            target_modules=model_cfg["lora_target_modules"], bias="none",
+        )
+        model = get_peft_model(model, lora)
     # LoRA + gradient checkpointing: the frozen base needs input embeddings to
     # require grad, or checkpointed activations get no gradient (and the memory
     # savings silently fail to apply). Standard PEFT fix.

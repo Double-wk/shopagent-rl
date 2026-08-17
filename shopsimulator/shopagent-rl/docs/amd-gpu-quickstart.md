@@ -137,6 +137,20 @@ bash scripts/run_grpo.sh
 
 日志写入 `run/<RUN_NAME>.log`，大 checkpoint 应写到实例的大盘（示例为 `/overlay/...`），不要写满代码所在的小系统盘。
 
+如果复现当前 Certified corrective 路线，先运行 SFT，再运行串行评测门；同一张卡上
+不要同时启动 vLLM 评测、SFT 和 GRPO：
+
+```bash
+bash scripts/run_certified_corrective_sft.sh
+bash scripts/chain_certified_corrective_eval.sh
+
+# 仅在 natural heldout-v2 price >= 30% 且 Final-200 strict >= 16% 后人工执行
+bash scripts/run_certified_grpo.sh
+```
+
+评测链不会自动启动 GRPO。`run/certified_corrective_*.log` 是运行日志，不应提交；
+可复现数据、配置、指标 JSON 和构建脚本才是版本化对象。
+
 ## 7. 单卡显存的关键限制
 
 当前推荐配方固定为 BF16：vLLM 的 KV cache 与 FSDP actor 的反向传播峰值会同时占用显存。请保持以下默认值，除非先完成一轮 smoke：

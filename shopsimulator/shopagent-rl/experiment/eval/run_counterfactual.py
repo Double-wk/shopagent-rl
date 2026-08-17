@@ -124,11 +124,14 @@ def main() -> None:
     ap.add_argument("--out", required=True, help="output JSONL path (metrics go next to it)")
     ap.add_argument("--model", default="Qwen/Qwen3-1.7B-Base")
     ap.add_argument("--adapter", default=None, help="LoRA adapter dir (SFT/GRPO); omit for Base")
-    ap.add_argument("--variant", default="base", choices=["base", "salience", "instruct"],
+    ap.add_argument("--variant", default="base",
+                    choices=["base", "salience", "instruct", "summary"],
                     help="D2 A/B variants (docs/price-blindness-next.md §2): base = unchanged; "
                          "salience = append the pair's own price/budget as adjacent final lines "
                          "(information-equivalent, no verdict); instruct = add a generic "
-                         "compare-before-buy rule to the system prompt (no per-pair leak)")
+                         "compare-before-buy rule to the system prompt (no per-pair leak); "
+                         "summary = append the exact structured budget line used by certified SFT "
+                         "(diagnostic only, not a natural-input metric)")
     ap.add_argument("--system_prompt", default=str(_ROOT / "configs" / "teacher_gpt-5.6-terra.yaml"))
     ap.add_argument("--max_tokens", type=int, default=512)
     ap.add_argument("--temperature", type=float, default=0.0)
@@ -152,6 +155,9 @@ def main() -> None:
             budget = side_pair["goal"]["price_upper"]
             text += (f"\n\n当前价格: {side['current_price']:g} 元\n"
                      f"预算上限: {budget:g} 元")
+        elif args.variant == "summary":
+            budget = side_pair["goal"]["price_upper"]
+            text += f"\n任务约束摘要: 预算上限={budget:g}元。"
         return text
 
     from experiment.eval.local_vllm import LocalVLLM

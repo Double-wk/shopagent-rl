@@ -38,9 +38,14 @@ class CertifiedDataTests(unittest.TestCase):
         record = sft_builder.emit_price(price_pair(), "counterfactual")
         target = record["messages"][-1]["content"]
         prompt = record["messages"][-2]["content"]
-        self.assertIn("预算上限=100元", prompt)
+        self.assertNotIn("任务约束摘要", prompt)
         self.assertIn("105元 > 预算上限100元", target)
         self.assertIn("Action: click[back to search]", target)
+
+        original = sft_builder.emit_price(price_pair(), "original")
+        original_target = original["messages"][-1]["content"]
+        self.assertIn("90元 <= 预算上限100元", original_target)
+        self.assertIn("Action: click[buy now]", original_target)
 
     def test_certified_grpo_rows_keep_both_sides(self) -> None:
         rows = build_rows(
@@ -54,7 +59,7 @@ class CertifiedDataTests(unittest.TestCase):
         self.assertEqual(len(rows), 3)
         cf_rows = [row for row in rows if row["sample_mode"] == "counterfactual"]
         self.assertEqual({row["side"] for row in cf_rows}, {"original", "counterfactual"})
-        self.assertTrue(all("预算上限=100元" in row["prompt"][-1]["content"] for row in cf_rows))
+        self.assertTrue(all("任务约束摘要" not in row["prompt"][-1]["content"] for row in cf_rows))
         self.assertEqual(len({row["extra_info"]["index"] for row in rows}), 3)
 
 

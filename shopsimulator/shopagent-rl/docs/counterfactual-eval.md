@@ -141,3 +141,29 @@ v2b / C1-hard 完全一致：Final-200（10 turns × 512，wave 16）+ 212 对�
 
 与 [`price-blindness-next.md`](price-blindness-next.md) 的衔接不变：E1
 （合成约束违反数据注入）仍是预注册选定的修复路线。
+
+## Certified SFT v3 heldout-v2（2026-08-17，判定：summary shortcut）
+
+v3 adapter 在与训练 task/product 隔离的 534 对 heldout-v2 上评测。自然输入中 option
+方向继续改善，但价格方向完全失败：
+
+| 指标 | option swap (n=150) | price above budget (n=384) |
+|---|---:|---:|
+| original action accuracy | 0.940 | 0.951 |
+| counterfactual action accuracy | **0.820** | **0.000** |
+| paired robust | 0.813 | 0.000 |
+| commit persistence error | 0.080 | **0.943** |
+
+训练数据审计发现，v3 只给价格负例追加 `任务约束摘要: 预算上限=...`，自然评测没有
+该行。新增 `--variant summary` 仅作诊断：恢复该行后，price cf accuracy 变为 1.000，
+但 price original accuracy 只有 0.326。该反转证明模型依赖 summary presence，而非
+执行价格比较。因此 structured/summary 数字只能作为 shortcut 证据，不能替代 natural headline。
+
+修正版数据同时提供预算内 `COMMIT` 与超预算 `SEARCH_ALTERNATIVE`，两侧都保持自然输入，
+并加入 summary nuisance control。自动链只在 natural heldout-v2 price cf ≥0.30 后继续
+Final-200；Final strict ≥0.16 后也只记录通过，GRPO 仍须人工启动。
+
+产物：
+
+- `outputs/counterfactual/cf_sft_v3_certified_heldout_v2_metrics.json`
+- `outputs/counterfactual/cf_sft_v3_certified_heldout_v2_summary_diag_metrics.json`

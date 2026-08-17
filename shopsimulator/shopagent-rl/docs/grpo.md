@@ -5,6 +5,11 @@
 
 训练 log 的诊断结论与优化项见 [`grpo-optimization-v1.md`](grpo-optimization-v1.md)。
 
+> 2026-08-17 状态：env16、v2b、C1-hard、Paired-C1-hard 均已完成 200 steps；当前最好
+> Paired-C1-hard Final-200 strict 40% / completion 90%。但其 price counterfactual accuracy
+> 仍为 0%，因此不能把 overall 提升解释为价格约束推理。Certified GRPO 尚未启动，必须等
+> corrective SFT 的自然 heldout-v2 price ≥30% 且 Final-200 strict ≥16%。
+
 ## 目标
 
 从 SFT LoRA adapter 继续训练多轮购物 Agent。每个 task 在线与 ShopEnv 交互，
@@ -60,6 +65,10 @@ r_type=.20, r_att=.30, r_option=.30, r_price=.20
 4. `response_length/clip_ratio` 不长期为 1；若持续截断，先修动作停止/observation 压缩。
 
 通过后再运行默认 50 steps；不要先扩大 G、prompt 池或训练步数。
+
+Certified 路线另有行为门：不能只看训练 reward 或 Final-200。启动
+[`run_certified_grpo.sh`](../scripts/run_certified_grpo.sh) 前必须同时保存 natural
+counterfactual 与 Final-200 结果，并确认提升不是由 original 侧整体拒绝购买造成。
 
 ## ROCm 单卡显存修复（vLLM 0.16.0）
 

@@ -42,9 +42,6 @@ def environment_row(task_id: int, system_prompt: str) -> dict:
 def counterfactual_row(pair: dict, side: str, system_prompt: str) -> dict:
     state = pair[side]
     observation = state["observation"]
-    if pair.get("intervention_type") == "price_above_budget":
-        budget = float(pair["goal"]["price_upper"])
-        observation += f"\n任务约束摘要: 预算上限={budget:g}元。"
     return {
         "prompt": [
             {"role": "system", "content": system_prompt},

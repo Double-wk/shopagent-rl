@@ -146,3 +146,26 @@ D1 双失败 + D2 双失败 + D3 排除 E2 → **执行 E1**：用反事实生�
 预算"），以完整 agent 格式混入 SFT 重训，再以 hard 模式续跑 GRPO（合成
 状态同时进入 GRPO 任务混合，防止 RL 再次覆盖）。评测：换 seed 的 v2
 持留对集 + Final-200，闸门为 price cf accuracy ≥ 0.3 且 strict ≥ 16%。
+
+## 6. E1 首次实现审计与 v4 修正（2026-08-17）
+
+E1-v3 不能算成功。虽然训练目标 Thought 显式写入正确比较，数据构造却把
+`任务约束摘要` 只追加到超预算负例，并默认只生成 counterfactual 侧。结果是：
+
+- heldout-v2 自然 price cf accuracy：0.000；
+- price commit persistence error：0.9427；
+- 恢复训练 summary 后 price cf accuracy：1.000；
+- 同一 summary 诊断中的 price original accuracy：0.3255。
+
+这不是“模型完全不会执行恢复动作”，而是“模型把 summary presence 当成恢复动作开关”。
+E1 的首次实现因此作为失败消融保留，不能用于支持价格反事实创新。
+
+v4 corrective 做三项修正：
+
+1. 每个价格 pair 同时生成预算内 original 与超预算 counterfactual；
+2. 两侧均使用自然 observation，不追加 hidden/canonical summary；
+3. 加入带 summary 但仍应 `COMMIT` 的 nuisance-positive 样本，主动破坏旧触发器。
+
+当前 v4 从 v3 LoRA 继续训练 1 epoch（1,258 steps）。完成后自动运行自然 heldout-v2；
+price cf <0.30 立即停止，达到后再跑 Final-200，strict <0.16 仍停止。任何情况下都不会
+自动启动 GRPO。另需在最终统计前核对自然指令预算与内部 `goal.price_upper` 的一致性。

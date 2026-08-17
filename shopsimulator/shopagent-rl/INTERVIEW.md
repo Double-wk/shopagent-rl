@@ -1,6 +1,7 @@
 # shopagent-rl 面试话术与技术要点
 
-> 用于面试前过一遍。两条主线：**①讲清楚 ShopSimulator 环境怎么模拟**，**②讲清楚我做的 SFT+GRPO 后训练**。
+> 最后同步：2026-08-17。三条主线：**①讲清楚 ShopSimulator 环境怎么模拟**，
+> **②讲清楚 SFT+GRPO 后训练**，**③讲清楚为什么 Final 成功率不等于约束敏感性，以及如何用原子反事实认证发现 shortcut**。
 > 最后有「数字状态」表——**报数前先看那张表，只报实测过的**。
 
 ---
@@ -10,9 +11,11 @@
 > "我用 **SFT + GRPO** 把一个 **1.7B 小模型**（Qwen3-1.7B-Base）在**中文购物多步决策**任务上做后训练。
 > 任务要求模型在一个**模拟电商环境**里自主完成'搜索→选品→选规格→比价→购买'的多轮交互。
 > 我搭了**完整流水线**：环境集成（40-env 并发池）、teacher 轨迹采集、LoRA SFT、veRL GRPO、
-> 以及一个**与训练零重叠**的 Final-200 评测集，产出 Base/SFT/GRPO 的严格成功率对比。"
+> 与训练零重叠的 Final-200 评测，以及原子反事实认证。最强模型 strict 从 0% 提到 40%，
+> 但价格反事实仍是 0%；这暴露了 outcome 指标掩盖的约束 shortcut，并推动我设计自然格式的
+> paired corrective training，而不是只继续堆终端奖励。"
 
-一句话关键词：**agentic RL / GRPO / 多步决策 / 端到端流水线 / 小模型后训练**。
+一句话关键词：**agentic RL / GRPO / 多步决策 / counterfactual certification / shortcut audit / 小模型后训练**。
 
 ---
 
@@ -123,25 +126,27 @@ env 内部 `total_reward = (attr命中+option命中+r_price)/(属性数+规格�
 | **LoRA SFT** | 对 assistant token 算 loss，蒸馏 teacher 行为 | peft + bf16，3.8K（3793）轨迹 |
 | **veRL GRPO** | 去 KL、分段 reward、组内零方差样本过滤、从 SFT adapter 续训 | verl，ref 用 disable_adapter 免占显存 |
 | **Final-200 评测** | 与训练零重叠的 held-out 集，vLLM 批量 rollout，调官方 get_score 出规范指标 | 波束批处理，seed=42 disjoint 检查 |
+| **原子反事实认证** | 在购买提交点只改变价格或目标规格，要求动作从 COMMIT 定向切换；同时加入 nuisance control | paired robust / commit persistence / shortcut rate |
+| **Corrective training** | 发现 v3 的 summary-presence shortcut 后，改为自然格式价格双侧训练并设置 heldout/Final 双门 | paired SFT + gated Certified GRPO |
 
 ### GRPO 配置（唯一事实源是 `configs/grpo.yaml` + `docs/grpo.md`）
 
 ```
-TRAIN_BATCH   = 4（默认）/ 6（实跑那轮）   ← 每步不同 task 数
-ROLLOUT_N (G) = 4        ← 每个 task 4 条 rollout；被「40-env 池吞吐」卡住，不是显存
-规划 steps    = 50 诊断 / 250 完整覆盖（250×4 ≈ 1000 prompt 池过一遍）
-实际训到      = step 20（step 23 撞 HIP OOM），约 120 个 task draw
+TRAIN_BATCH   = 4
+ROLLOUT_N (G) = 4（v2b 消融使用 8）
+主结果 steps  = 200
+当前最好      = Paired-C1-hard strict 40%（80/200），完成率 90%
 ```
 
-**别报"对齐官方 batch32/G8"**：那是早期计划值，本地从没这么跑过。诚实版本是
-「单卡预算下我用 batch 4-6 × G4，规划 250 步覆盖 1000 题池，实际只训到 20 步就 OOM 了」。
+**别把历史 step20 当当前结果**：ROCm/vLLM sleep、HIP IPC 权重同步和冻结 LM head
+无效梯度问题修复后，env16、v2b、C1-hard、Paired-C1-hard 均已完成 200 steps。
 
 **本地真瓶颈（两层，都要说）**：
-1. **env 吞吐**：每步 rollout 数 = batch × G，但只有 40 个 env 同时 alive → 提 G 到 8 是翻倍 wall-clock
-   换更准一点的优势估计，不值；要省时间该降 steps 不该减 prompt 池。
-2. **单卡显存 co-tenancy**（实际卡死我的那个）：hybrid_engine 模式下 vLLM rollout 池和 FSDP actor
-   在同一张 48G 卡上峰值叠加。崩的时候 PyTorch 只占 11.16G 但卡上 0 字节可分配，
-   `micro_batch` 已经是 1 了 → 旋钮只剩 `GPU_MEM_UTIL`（压 vLLM 预留）和 chunking。
+1. **env 吞吐**：每步 rollout 数 = batch × G，受 env 池与多轮网页交互延迟限制。
+2. **单卡显存共居**：vLLM rollout 与 FSDP actor 共用 48GB；最终通过 ROCm sleep release、
+   POSIX shared-memory 权重同步和跳过冻结 LM head 梯度修复，而不是改变训练语义。
+3. **行为信用分配**：hard-zero 能减少整体购买，却没有教会条件化价格比较；最终奖励改善
+   不能代替 paired counterfactual evaluation。
 
 
 ---
@@ -152,7 +157,8 @@ ROLLOUT_N (G) = 4        ← 每个 task 4 条 rollout；被「40-env 池吞吐�
 2. **GRPO 原理透 + 踩坑真**——组内相对优势（无 value model 省一半算力）、去 KL、`batch×G×steps` 怎么定；最值钱的是**踩过真实的单卡 OOM**：hybrid_engine 下 vLLM rollout 池与 FSDP actor 峰值在同一张 48G 卡上叠加，崩溃时 PyTorch 才占 11G 卡却 0 字节可分，`micro_batch` 已是 1 仍救不回——这比"瓶颈是 env 池不是显存"的纸面结论更可信（后者只描述了吞吐瓶颈那一层）。
 3. **工程严谨**——40-env 池 lease/超时回收、train/eval 互斥采样（seed=42 disjoint 检查）、数据完整性 guard、vLLM 批量评测。
 4. **评测方法论**——零重叠 held-out、官方 get_score 口径、分层 reward。
-5. **批判性思维**——自己发现并记录了 SFT 集 task 覆盖偏斜（README 的 🚧 TODO），不只跑管线还会审计。
+5. **批判性思维**——主动推翻 v3 的“价格已修复”结论：自然输入 0%，恢复训练摘要 100%，
+   由此定位 summary-presence shortcut，并重做 paired 数据和门控协议。
 
 ---
 
@@ -163,8 +169,10 @@ ROLLOUT_N (G) = 4        ← 每个 task 4 条 rollout；被「40-env 池吞吐�
 | 为什么 GRPO 不用 PPO？ | 无 value 网络（省一半显存/算力）；组内相对优势天然适配稀疏奖励；大模型 RL 事实标准（DeepSeek-R1）。|
 | reward 怎么设计？ | 4 维规则 + 3 聚合（loose 训练 / strict 评测）；不用 LLM Judge 因为可复现 + 对齐官方。|
 | 怎么防 eval 泄露？ | Final-200 从 eval 区采，与 SFT/GRPO 池 seed=42 互斥，代码层 disjoint 检查。|
-| G/batch/steps 怎么定？ | 默认 batch 4、G 4、规划 250 步覆盖 1000 题池一遍；**实跑用 batch 6 只到 step 20 就 OOM**（约 120 draw）。两道瓶颈：env 池吞吐限 G 上限，单卡 vLLM+FSDP 共居限显存。|
-| 最大难点？ | 单卡 OOM：vLLM rollout 池和 FSDP actor 峰值叠加，`micro_batch=1` 仍崩；旋钮只剩 `GPU_MEM_UTIL` 和 chunking。次要瓶颈是 env 池吞吐 + 多轮长上下文 + 组内零方差样本过滤。|
+| G/batch/steps 怎么定？ | 主结果 batch 4、G 4、200 steps；v2b 用 G8 做信号消融。参数先由单卡共居和 env 吞吐约束，再用零方差率、pg loss、显存稳定性验收。|
+| 最大难点？ | 一是 ROCm/vLLM/FSDP 共居的物理显存与权重同步问题；二是 outcome reward 会强化“买对大部分属性就提交”，却不保证模型响应预算反转。|
+| 反事实创新是什么？ | 不是简单加负样本，而是原状态/单变量干预/无关扰动三类对照，按动作意图计算 paired robust、commit persistence 和 shortcut rate，并用自然 heldout 阻断格式捷径。|
+| v3 为什么作废？ | 价格负例单独带预算摘要且缺少预算内双侧对照；自然测试 0%，恢复摘要 100%，说明模型学了提示存在性。|
 | 多轮交互怎么接 veRL？ | rollout 阶段 env 多步交互、终态 reward 广播回 assistant token 算优势（懂 multi-turn RL）。|
 | SFT teacher 怎么选？ | 5 模型同条件对比（质量/成本/稳定性），见 `run/teacher_compare/`。|
 | 数据怎么划分？ | 官方 tag 字段（eval 0-1458 / train 1459-23420），三集 seed=42 不相交。|
@@ -175,31 +183,30 @@ ROLLOUT_N (G) = 4        ← 每个 task 4 条 rollout；被「40-env 池吞吐�
 
 ## 6. ⚠️ 数字状态（报数前必看）
 
-> 最后更新：2026-08-11。下表全部为 Final-200（n=200）实测，10 步协议。
-> Base 为 2026-08-09 run；SFT / GRPO 为 2026-08-10 16:12 同一次串行 run（同协议、可直接对比）。
+> 最后更新：2026-08-17。下表全部为 Final-200（n=200）实测，10 步、每轮 512 token 协议。
 
 | 指标 | 完成率 | strict success (Rsucc) | r_hard | r_loose | 选对商品率 |
 |---|---:|---:|---:|---:|---:|
 | Base | 0% | **0%（0/200）** | 0 | 0 | 0% |
 | SFT（`sft_new3793`） | 39.5% | **17%（34/200）** | 0.201 | 0.306 | 25.5% |
-| GRPO（step 20） | 33.5% | **18%（36/200）** | 0.197 | 0.270 | 24.0% |
+| SFT v2 Paired | 52.0% | **25%（50/200）** | 0.278 | 0.392 | 27.5% |
+| GRPO v2b（step 200） | 68.0% | **18%（36/200）** | 0.215 | 0.435 | 27.5% |
+| GRPO C1-hard（step 200） | 53.5% | **20%（40/200）** | 0.228 | 0.385 | 28.0% |
+| **GRPO Paired-C1-hard（step 200）** | **90.0%** | **40%（80/200）** | **0.425** | **0.644** | **45.0%** |
 | 官方 Qwen3-8B（参照）| — | SFT 32.5% / SFT+RL 38.9%（Table 3）| — | — | — |
 
 **怎么说 GRPO（关键，别说过头）**：
 
-- 能说的：GRPO 管线在 veRL 0.8.0 + 单卡 ROCm 上**真的跑通了**——多轮 AgentLoop 接上、reward/pg_loss 非零、
-  checkpoint 落盘、adapter 抽出来能过 Final-200 评测。这是工程上最难的部分。
-- **不能说 GRPO 提升了**：strict 17%→18% 只是 34→36 题，n=200 下落在噪声内；而完成率 39.5%→33.5%、
-  r_loose 0.306→0.270 是一致地略降。**目前没有 GRPO 优于 SFT 的证据。**
-- 为什么：只训到 **step 20**（step 23 撞 HIP OOM），`TRAIN_BATCH=6` 下约 120 个 task draw，
-  而规划的完整覆盖是 250 步 ≈ 1000 draw——**样本量差一个数量级，这条曲线还不足以判定 GRPO 有没有效**。
-  训练期 `critic/score/mean` 也没有上升趋势（step 1-10 均值 ~0.24，step 11-23 ~0.15）。
-- 被追问时的正确姿态：「RL 阶段我打通了链路但还没训够步数，所以我只报 SFT 的 17% 作为模型效果，
-  GRPO 目前只能作为工程完成度来讲。OOM 的根因是单卡上 vLLM rollout 池和 FSDP actor 峰值叠加，
-  下一步是调 `GPU_MEM_UTIL` 和 chunking 从 step 20 续训。」——**主动说清边界比虚报数字加分**。
+- 能说的：paired 初始化 + hard 预算惩罚把 strict 从 SFT v2 的 25% 提到 40%，且完成率、
+  r_hard、选对商品率同步提升；规格反事实 paired robust 维持 73.1%。
+- 不能说的：不能据此声称模型学会价格约束。Paired-C1-hard 的 price cf 仍为 0%，
+  93.1% 的原状态正确样本在超预算干预后继续提交。
+- v3 Certified 也不能报成功：自然 price cf 0%，summary 诊断 100% 只证明输入格式捷径。
+- 当前诚实表述：**整体购物策略和规格约束显著改善；价格条件化决策尚未解决，v4 修正版正在验证。**
 
-**铁律**：把"设计了什么 / 实测到什么 / 还在做什么"分清楚。对外报模型效果就报 Base 0% → SFT 17%；
-GRPO 报"链路通、step 20、+1pt 在噪声内、未训够"，不要说成 RL 带来了提升。
+**铁律**：把"设计了什么 / 实测到什么 / 还在做什么"分清楚。可以报 Base 0% →
+Paired-C1-hard 40%，但必须同句补充 option paired robust 73.1%、price cf 0%；v4 没出自然 heldout
+结果前，不宣称 Certified 方法解决了价格推理。
 
 > ⚠️ 价格随机化（见 §2 深挖）会让单任务 strict 跨 run 抖动，所以只报 Final-200 聚合、不报单任务，
 > 也不要拿 1-2 个 pt 的差异讲故事。

@@ -12,6 +12,10 @@
 “用户约束 × 当前商品状态”的双向干预及无关属性不变性；评估比较动作**意图**，
 而不是动态 `click[...]` 字符串。
 
+> 2026-08-17 更新：规格方向已有 Paired SFT v2 / Paired-C1-hard 的 heldout paired robust
+> 73.1% 支持；价格方向仍未解决。Certified SFT v3 的结构化 summary 结果已判定为
+> summary-presence shortcut，不能与自然输入指标混报。
+
 ## v3-natural 首轮结果（2026-08-15，C1-hard @ step200 adapter，160-token 对齐协议）
 
 数据：55 对教师改写、纯程序验证门的自然语言规格反向对
@@ -69,3 +73,20 @@ r_option=0.30 权重，提交完成另有奖励结构），提示 shortcut 的�
   无非法动作。两种读法：(a) 模型倾向"再确认选项"而非提交，符合"提交决策未绑定
   约束复核"假设；(b) 单轮探针协议本身会惩罚"先复核再买"的合理轨迹形态。
   因此 headline 只用 paired/认证率（条件于原状态正确），不用原状态绝对准确率。
+
+## Certified SFT v3 捷径审计（2026-08-17）
+
+task-disjoint heldout-v2 共 534 对：150 option、384 `price_above_budget`。自然输入结果：
+
+| 类型 | original acc | cf acc | paired robust | commit persistence |
+|---|---:|---:|---:|---:|
+| option swap | 0.940 | **0.820** | 0.813 | 0.080 |
+| price above budget | 0.951 | **0.000** | 0.000 | **0.943** |
+
+v3 的价格负例只在 counterfactual 侧追加 `任务约束摘要`，且训练未同时提供对应的
+预算内 original 侧。诊断时给两侧都恢复同样 summary 后，price cf 变为 1.000，
+但 original acc 只有 0.326。模型能够被 summary 强制推向恢复动作，却没有学会根据
+`price <= budget` / `price > budget` 选择动作。
+
+修正版 v4 因此要求：价格双侧成对、自然输入字节格式一致、summary-positive nuisance、
+task-disjoint heldout，以及 original/counterfactual 双指标同时过门。v4 结果尚未产生。
