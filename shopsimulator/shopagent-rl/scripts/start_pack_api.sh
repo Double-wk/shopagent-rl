@@ -20,8 +20,10 @@ export JAVA_TOOL_OPTIONS
 export SHOP_ENV_MAX_NUM
 
 # 防重复启动: 若已在跑, 提示并退出
-if pgrep -f "python pack_api.py" >/dev/null 2>&1; then
-  echo "pack_api 已在运行 (PID $(pgrep -f 'python pack_api.py'))"; exit 0
+# 注意实际 cmdline 是 "python -u pack_api.py"（带 -u），匹配 pack_api.py 即可；
+# [p]ack 的写法避免 pgrep 匹配到含本模式字面量的调用方自身 shell。
+if pgrep -f "[p]ack_api.py" >/dev/null 2>&1; then
+  echo "pack_api 已在运行 (PID $(pgrep -f '[p]ack_api.py'))"; exit 0
 fi
 
 # A separate session prevents managed shells from forwarding their teardown

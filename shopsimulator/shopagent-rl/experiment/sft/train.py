@@ -168,6 +168,7 @@ def main() -> None:
         gradient_checkpointing=use_gc,
         report_to="none",
         dataloader_num_workers=2,
+        group_by_length=train_cfg.get("group_by_length", False),
     )
     if train_cfg["save_strategy"] == "steps":
         # checkpoint every N steps: crash-recovery (resume) + mid-run eval

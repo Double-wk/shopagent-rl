@@ -1,0 +1,18 @@
+{
+  "schema_version": "shopsim-atomic-constraint-pairs-v1",
+  "split": "heldout-v2",
+  "task_ids": "/workspace/shopsimulator/shopagent-rl/data/ablation_tasks_500.json",
+  "train_overlap": 0,
+  "final200_overlap": 0,
+  "output": "/workspace/shopsimulator/shopagent-rl/data/counterfactual/heldout_atomic_pairs_v2.jsonl",
+  "stats": {
+    "goals_with_canonical_budget": 384,
+    "pairs_option_swap": 150,
+    "pairs_price_above_budget": 384,
+    "pairs_total": 534,
+    "records_seen": 500,
+    "rejected_multi_target": 116,
+    "skipped_no_same_price_alternative": 234,
+    "tasks_with_pairs": 384
+  }
+}

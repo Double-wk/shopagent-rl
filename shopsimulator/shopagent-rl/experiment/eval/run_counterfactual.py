@@ -26,7 +26,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -37,50 +36,15 @@ import yaml
 _ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(_ROOT))
 
-from shop_env.wrapper import parse_model_action  # noqa: E402
-
-_ACTION_RE = re.compile(r"^(search|click)\s*\[(.*?)\]$", re.IGNORECASE)
+from experiment.counterfactual_grading import (  # noqa: E402
+    grade_response as grade,
+    parse_allowed,
+)
 
 
 def load_system_prompt(path: str) -> str:
     with open(path, encoding="utf-8") as f:
         return yaml.safe_load(f)["system_prompt"]
-
-
-def parse_allowed(action_str: str) -> Optional[tuple]:
-    m = _ACTION_RE.match(action_str.strip())
-    if not m:
-        return None
-    return m.group(1).lower(), m.group(2).strip()
-
-
-def grade(response: str, side: Dict[str, Any]) -> Dict[str, Any]:
-    """Grade one model response against one pair side."""
-    action = parse_model_action(response)
-    allowed = [parse_allowed(a) for a in side["allowed_actions"]]
-    allowed = [a for a in allowed if a is not None]
-    intents = side["expected_action_intents"]
-
-    out: Dict[str, Any] = {
-        "action": f"{action.type}[{action.value}]" if action else None,
-        "action_type": action.type if action else None,
-        "is_commit": bool(action and action.type == "click"
-                          and action.value.strip().lower() == "buy now"),
-        "intents": intents,
-    }
-    if action is None:
-        out.update(correct_strict=False, correct_lenient=False, unparseable=True)
-        return out
-    out["unparseable"] = False
-    out["correct_strict"] = any(
-        action.type == t and action.value.strip().lower() == v.lower()
-        for t, v in allowed
-    )
-    lenient = out["correct_strict"]
-    if not lenient and "SEARCH_ALTERNATIVE" in intents and action.type == "search":
-        lenient = True
-    out["correct_lenient"] = lenient
-    return out
 
 
 def aggregate(records: List[Dict[str, Any]]) -> Dict[str, Any]:

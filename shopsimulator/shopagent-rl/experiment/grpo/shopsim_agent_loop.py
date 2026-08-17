@@ -51,6 +51,7 @@ from shop_env.client import ShopEnvClient  # noqa: E402
 from shop_env.wrapper import ShopSimEnv, parse_model_action  # noqa: E402
 from shop_env.obs_format import format_observation  # noqa: E402
 from shop_env import reward as R  # noqa: E402
+from experiment.counterfactual_grading import grade_response  # noqa: E402
 
 # Per-dimension shaped-reward weights for GRPO credit assignment (shop_env/reward.py).
 # Attribute / spec weighted high -- the long-horizon discriminative skill.
@@ -61,6 +62,8 @@ SHOPSIM_REWARD_WEIGHTS = {"r_type": 0.20, "r_att": 0.30, "r_option": 0.30, "r_pr
 # committing. "none" (default) keeps the v2b behaviour bit-exact.
 SHOPSIM_BUDGET_MODE = os.environ.get("SHOPSIM_REWARD_BUDGET_MODE", "none")
 SHOPSIM_BUDGET_PENALTY = float(os.environ.get("SHOPSIM_REWARD_BUDGET_PENALTY", "0.5"))
+SHOPSIM_CERTIFIED_REWARD_WEIGHT = float(os.environ.get("SHOPSIM_CERTIFIED_REWARD_WEIGHT", "1.0"))
+SHOPSIM_CF_LENIENT_REWARD = float(os.environ.get("SHOPSIM_CF_LENIENT_REWARD", "0.5"))
 
 # Match the first complete, dispatchable action.  This is deliberately stricter
 # than the environment's permissive parser: it provides the exact token boundary
@@ -155,9 +158,98 @@ class ShopsimAgentLoop(AgentLoopBase):
                 return toks[:end]
         return []
 
+    @staticmethod
+    def _string_list(value: Any) -> list[str]:
+        if value is None:
+            return []
+        if isinstance(value, str):
+            return [value]
+        return [str(item) for item in value]
+
+    async def _run_counterfactual(
+        self, raw_prompt: list[dict[str, Any]], sampling_params: dict[str, Any], **kwargs
+    ) -> AgentLoopOutput:
+        """Run and programmatically grade one validated counterfactual state."""
+        prompt_ids = [int(value) for value in await self.loop.run_in_executor(
+            None,
+            lambda: self.tokenizer.apply_chat_template(
+                raw_prompt,
+                add_generation_prompt=True,
+                tokenize=True,
+                **self.apply_chat_template_kwargs,
+            ),
+        )]
+        turn_sampling_params = dict(sampling_params)
+        turn_sampling_params["max_tokens"] = min(self.turn_max_tokens, self.response_length)
+        turn_sampling_params["stop_token_ids"] = self.stop_token_ids
+        started = time.monotonic()
+        output = await self.server_manager.generate(
+            request_id=uuid4().hex,
+            prompt_ids=prompt_ids,
+            sampling_params=turn_sampling_params,
+        )
+        gen_time = time.monotonic() - started
+        sampled = [int(value) for value in output.token_ids]
+        response_ids = self._tokens_through_first_action(sampled)
+        if response_ids:
+            text = await self.loop.run_in_executor(
+                None, lambda: self.tokenizer.decode(response_ids, skip_special_tokens=True)
+            )
+            side = {
+                "expected_action_intents": self._string_list(kwargs.get("expected_action_intents")),
+                "allowed_actions": self._string_list(kwargs.get("allowed_actions")),
+            }
+            grade = grade_response(text, side)
+            if grade["correct_strict"]:
+                reward_score = SHOPSIM_CERTIFIED_REWARD_WEIGHT
+            elif grade["correct_lenient"]:
+                reward_score = SHOPSIM_CERTIFIED_REWARD_WEIGHT * SHOPSIM_CF_LENIENT_REWARD
+            else:
+                reward_score = 0.0
+            response_mask = [1] * len(response_ids)
+        else:
+            text = self.tokenizer.decode(sampled, skip_special_tokens=True) if sampled else ""
+            grade = {
+                "action": None,
+                "correct_strict": False,
+                "correct_lenient": False,
+                "unparseable": True,
+            }
+            response_ids = sampled[: self.response_length] or [self.eos_id]
+            response_mask = [0] * len(response_ids)
+            reward_score = 0.0
+
+        pair_id = str(kwargs.get("pair_id") or "")
+        side_name = str(kwargs.get("side") or "")
+        intervention_type = str(kwargs.get("intervention_type") or "")
+        print(
+            f"[ShopsimAgentLoop] certified pair_id={pair_id} side={side_name} "
+            f"type={intervention_type} action={grade.get('action')} "
+            f"strict={grade['correct_strict']} lenient={grade['correct_lenient']} "
+            f"reward={reward_score:.4f}",
+            flush=True,
+        )
+        return AgentLoopOutput(
+            prompt_ids=prompt_ids,
+            response_ids=response_ids[: self.response_length],
+            response_mask=response_mask[: self.response_length],
+            reward_score=reward_score,
+            num_turns=1,
+            metrics=AgentLoopMetrics(generate_sequences=gen_time),
+            extra_fields={
+                "pair_id": pair_id,
+                "side": side_name,
+                "intervention_type": intervention_type,
+                "counterfactual_grade": grade,
+                "response_preview": " ".join(text.split())[:180],
+            },
+        )
+
     # -------------------------------------------------------------- main loop
     async def run(self, sampling_params: dict[str, Any], **kwargs) -> AgentLoopOutput:
         raw_prompt = list(kwargs["raw_prompt"])
+        if str(kwargs.get("sample_mode") or "environment") == "counterfactual":
+            return await self._run_counterfactual(raw_prompt, sampling_params, **kwargs)
         task_id = kwargs.get("task_id")
         if task_id is None:
             task_id = kwargs.get("extra_info", {}).get("task_id")
