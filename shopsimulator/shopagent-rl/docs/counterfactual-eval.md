@@ -102,3 +102,42 @@ python scripts/build_counterfactual_pairs.py
 状态依赖响应；问题更可能在观测侧（模型无法从页面文本中读取/绑定预算数字），
 而非奖励侧。下一步应先诊断 observation 中价格与预算的可辨识性
 （如 token 级注意力/探针分析），再决定是否构造显式价格-预算对照的中间奖励。
+
+## Paired-C1-hard 双评测结果（2026-08-17，判定：strict 大涨，价格盲视仍在）
+
+训练：SFT v2 paired adapter 初始化 + `SHOPSIM_REWARD_BUDGET_MODE=hard`，
+b4/n4/lr1e-5，200 步正常完成（`paired_c1hard_200_direct`）。评测协议与
+v2b / C1-hard 完全一致：Final-200（10 turns × 512，wave 16）+ 212 对原子
+反事实探测。产物：`outputs/grpo/paired_c1_hard/evaluation/`、
+`outputs/counterfactual/cf_pairedc1hard_s200*`。
+
+| 指标 | SFT v2 Paired | GRPO C1-hard | GRPO Paired-C1-hard |
+|---|---:|---:|---:|
+| Final-200 strict success | 25% (50/200) | 20% (40/200) | **40% (80/200)** |
+| Final-200 完成率（官方口径=真实购买） | 52.0% | 53.5% | **90.0%** |
+| r_loose / r_hard | 0.392 / 0.278 | 0.385 / 0.228 | **0.644 / 0.425** |
+| r_price | — | 0.425 | **0.765** |
+| 选对商品率 | 27.5% | 28.0% | **45.0%** |
+| cf price_above_budget accuracy | 0.000 | 0.000 | **0.000** |
+| price commit_persistence_error | — | 0.400 | 0.931 |
+| paired_robust（option_swap） | 73.1% | 29.9% | **73.1%**（49/67，与 SFT v2 持平） |
+| probe original_action_accuracy | — | 0.462 | 0.938 |
+| cf same_action_both_sides（price） | — | 0.759 | 0.986 |
+
+判定：
+
+1. **strict 40% 是真实跃升**：80 vs 50 题（SFT v2）的差距远超单 run 抖动量级；
+   完成率、r_hard、选对商品率同步大幅改善。paired 初始化（保留规格因果的 SFT
+   起点）+ hard 预算惩罚的组合有效。
+2. **option_swap 因果性未被 GRPO 破坏**：paired_robust 73.1% 与 SFT v2 完全持平
+   （C1-hard 从 base 起训时只有 29.9%）。
+3. **价格盲视依旧**：145 对超预算场景 cf accuracy 0.000，143/145 两边同样
+   `click`，same_action_both_sides 0.986。与 C1-hard 的关键差别在 original 侧
+   准确率 0.938（预算内选品很准）：策略把「属性匹配」先验外推到价格维度——
+   价格数字读得到（[`price-blindness-next.md`](price-blindness-next.md) 的
+   Thought 层证据：模型复述价格与预算但不执行比较），比较没有进入决策。
+   commit_persistence_error 0.931 为全系列最高：strict 提升全部来自"买对"，
+   没有来自"超预算不买"。
+
+与 [`price-blindness-next.md`](price-blindness-next.md) 的衔接不变：E1
+（合成约束违反数据注入）仍是预注册选定的修复路线。

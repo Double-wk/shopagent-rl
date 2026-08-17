@@ -4,7 +4,7 @@ ShopSimulator 中文购物 Agent 的完整后训练工程：环境适配、teach
 
 ## 当前状态
 
-Base、SFT v1、Paired SFT v2、GRPO v1、GRPO v2b 与 GRPO C1-hard 的 Final-200 评测均已完成（同一 10 步协议、每轮 512 token）；step20 结果仅作历史归档对照。
+Base、SFT v1、Paired SFT v2、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的 Final-200 评测均已完成（同一 10 步协议、每轮 512 token）；step20 结果仅作历史归档对照。当前最好是 **GRPO Paired-C1-hard：strict 40%**。
 
 | 模型 | 完成率 | **strict success (Rsucc)** | r_hard | r_loose | 选对商品率 | 报告文件 |
 |---|---:|---:|---:|---:|---:|---|
@@ -14,6 +14,7 @@ Base、SFT v1、Paired SFT v2、GRPO v1、GRPO v2b 与 GRPO C1-hard 的 Final-20
 | GRPO v1（env16, step200） | 32.5% | **8.5%** (17/200) | 0.118 | 0.238 | 19.0% | `outputs/grpo/v1/evaluation/` |
 | GRPO v2b（env32, n=8, step200） | 68.0% | **18%** (36/200) | 0.215 | 0.435 | 27.5% | `outputs/grpo/v2/evaluation/` |
 | GRPO C1-hard（hard 预算惩罚, step200） | 53.5% | **20%** (40/200) | 0.228 | 0.385 | 28.0% | `outputs/grpo/c1_hard/evaluation/` |
+| **GRPO Paired-C1-hard（paired init + hard 惩罚, step200）** | **90.0%** | **40%** (80/200) | **0.425** | **0.644** | **45.0%** | `outputs/grpo/paired_c1_hard/evaluation/` |
 | GRPO step20（历史归档） | 33.5% | **18%** (36/200) | 0.197 | 0.270 | 24.0% | `archive/grpo_global_step_20_2026-08-10/` |
 
 > ⚠️ **GRPO v2b 的行为指标明显改善，但 headline strict 提升尚未验证**：相对 SFT，完成率
@@ -25,12 +26,20 @@ Base、SFT v1、Paired SFT v2、GRPO v1、GRPO v2b 与 GRPO C1-hard 的 Final-20
 > 144/145 仍照常购买；hard 惩罚只把购买率从 68% 压到 53.5%，strict 20% 与 v2b 的 18%
 > 在噪声内。判定与机制分析见 [`docs/counterfactual-eval.md`](docs/counterfactual-eval.md)。
 
+> ✅ **Paired-C1-hard（SFT v2 paired 初始化 + hard 预算惩罚）strict 40%，全线最好**：
+> 完成率 90%、r_hard 0.425、选对商品率 45%，较 SFT v2 +15pt（80 vs 50 题，远超单 run
+> 抖动）。option-swap paired robust 维持 73.1%（C1-hard 从 base 起训时只有 29.9%）；
+> 但价格反事实仍为 0%（145 对超预算场景 143/145 两边同样照买），probe original 侧动作
+> 准确率 93.9%——预算内选品很准，只是不把价格比较纳入购买决策。判定见
+> [`docs/counterfactual-eval.md`](docs/counterfactual-eval.md)。
+
 | 阶段 | 当前结果 |
 |---|---|
 | Constraint-causal Gate 2 | **已通过**：Paired SFT v2 的 natural option-swap paired robust `73.1%`（49/67），Final-200 strict `25%`（50/200）；进入 Certified GRPO 前置阶段。价格反事实 paired robust 仍为 `0%`。 |
 | GRPO smoke | 已完成 1 step：reward/pg_loss 非零，checkpoint 写入 overlay |
 | GRPO 正式训练 | env16 固定配方 `TRAIN_BATCH=4 / ROLLOUT_N=4 / PPO_MINI_BATCH=4` 已完成 **200 steps**；最终可恢复 checkpoint 为 `outputs/grpo/v1/model/checkpoint_step_200/` |
 | GRPO v2b | `TRAIN_BATCH=4 / ROLLOUT_N=8 / env32` 已完成 **200 steps**；导出 adapter 为 `/overlay/shopagent_rl_grpo_outputs/grpo/v2/export_step_200/lora_adapter/` |
+| GRPO Paired-C1-hard | SFT v2 paired 起训 + hard 预算惩罚（b4/n4/lr1e-5）已完成 **200 steps**；Final-200 strict **40%**（80/200，历史最好），adapter 在 `/overlay/shopagent_rl_grpo_outputs/grpo/paired_c1hard_200_direct/export_step_200/lora_adapter/` |
 | 训练期 reward | 早期 reward 波动较大，当前步数仍不足以判断收敛；进入 200/250-step 长跑前先完成 20–30 个连续 step 的显存稳定性验收 |
 | OOM 根因 | 旧版 vLLM/ROCm sleep 没有稳定归还物理 VRAM，整卡占用逐 step 增长；fused PPO backward 又为冻结 LM head 无效申请 593.5MiB 梯度。两处均已修复，不需要改变训练参数 |
 

@@ -1,0 +1,16 @@
+{
+  "tag": "GRPO_PAIRED_C1HARD",
+  "metrics": {
+    "样本总量": 200,
+    "完成率": 0.9,
+    "平均分_r_loose": 0.6438,
+    "平均分_r_hard": 0.425,
+    "平均分_r_success": 0.4,
+    "平均分_r_types": 0.9,
+    "平均分_r_attribute": 0.6829,
+    "平均分_r_option": 0.4475,
+    "平均分_r_price": 0.765,
+    "选对商品率": 0.45
+  },
+  "n_tasks": 200
+}
