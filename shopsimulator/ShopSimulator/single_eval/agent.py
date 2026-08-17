@@ -3,6 +3,7 @@
 import argparse
 import json
 import os
+import time
 import traceback
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Dict, List, Optional, Tuple
@@ -19,6 +20,10 @@ DEFAULT_MAX_RETRY = 200
 IDEALAB_DEFAULT_KEY = "{your_api_key}"  # Should be set via config file or environment variable
 IDEALAB_DEFAULT_BASE_URL = "{your_base_url}"  # Should be set via config file or environment variable
 FAILED_CALL_MESSAGE = "failed call"
+# vLLM turn terminators for Qwen3-ChatML models: stop at <|im_end|>, not just
+# the base-model eos <|endoftext|>. Passed per request via extra_body because a
+# base+LoRA server does not inherit them from the adapter.
+STOP_TOKEN_IDS = [151645, 151643]
 
 
 class Agent:
@@ -139,6 +144,7 @@ class Agent:
         if llm_response == FAILED_CALL_MESSAGE:
             raise RuntimeError("LLM call failed")
 
+        llm_response = _truncate_after_first_action(llm_response)
         self.messages.append({"role": "assistant", "content": llm_response})
         action = llm_response
 
@@ -203,12 +209,21 @@ class Agent:
                     model=self.model_name,
                     messages=messages,
                     temperature=DEFAULT_TEMPERATURE,
+                    max_tokens=DEFAULT_MAX_TOKENS,
+                    extra_body={"stop_token_ids": STOP_TOKEN_IDS},
                 )
                 return completion.choices[0].message.content
             except Exception as e:
                 print(f"LLM call failed (attempt {attempt + 1}/{max_try}): {e}")
                 if attempt == max_try - 1:
                     traceback.print_exc()
+                # vLLM 0.16 quirk (local server): while the engine core is
+                # briefly stalled the frontend reports the served model as
+                # "does not exist" (404) even for a static model name. Retries
+                # without backoff burn 200 attempts in ~2s and always lose to
+                # the bad window; sleeping rides it out (windows observed <1min).
+                if "does not exist" in str(e):
+                    time.sleep(1.0)
                 continue
 
         return FAILED_CALL_MESSAGE
@@ -277,6 +292,22 @@ def get_finished_task(out_path: str) -> List[int]:
     return sorted(json_files)
 
 
+def _truncate_after_first_action(text: str) -> str:
+    """Keep the Thought plus the first Action line.
+
+    The environment executes the first action only; any text the policy emits
+    past the turn boundary (Qwen3-ChatML base+LoRA sometimes continues into a
+    hallucinated next turn instead of emitting <|im_end|>) is harness noise.
+    Truncating here matches the SFT turn format and keeps the next request's
+    context clean.
+    """
+    lines = text.split("\n")
+    for i, line in enumerate(lines):
+        if line.strip().startswith("Action:"):
+            return "\n".join(lines[: i + 1]).rstrip()
+    return text
+
+
 def run_task(task_id: int, config: Dict[str, Any]) -> None:
     """
     Run single task.
@@ -294,9 +325,20 @@ def run_task(task_id: int, config: Dict[str, Any]) -> None:
         agent.set_shop_env(shop_env)
         observation = agent.reset()
 
+        # Optional client-side turn cap (agent_config.max_turns in the yaml).
+        # 0/absent = unbounded (upstream behaviour: rely on env `over`).
+        # On cap we save an empty-record episode so get_score counts it as a
+        # failure and the resume scan does not retry it forever.
+        max_turns = config["agent_config"].get("max_turns", 0)
+        turns = 0
         while True:
             done, observation = agent.act(observation)
+            turns += 1
             if done:
+                break
+            if max_turns and turns >= max_turns:
+                agent.save_to_json(0.0, {}, {}, {})
+                print(f"[CAP] task {task_id} hit max_turns={max_turns}")
                 break
     except Exception as e:
         print(f"Error (task {task_id}): {e}")
