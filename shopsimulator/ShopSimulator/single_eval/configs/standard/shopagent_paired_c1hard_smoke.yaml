@@ -2,7 +2,7 @@ env_config:
   base_url: http://127.0.0.1:5000
 
 agent_config:
-  model_name: shopagent-paired_c1hard
+  model_name: shopagent-paired-c1hard
   source: idealab
   model_key: EMPTY
   base_url: http://127.0.0.1:8000/v1

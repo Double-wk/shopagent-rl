@@ -9,6 +9,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
+import httpx
 from openai import OpenAI
 from tqdm import tqdm
 
@@ -198,9 +199,18 @@ class Agent:
         if self.base_url is None:
             raise ValueError("base_url not set, cannot call API")
 
+        # vLLM 0.16 (local server) poisons keep-alive connections: once a
+        # pooled connection starts answering 404 "model does not exist" it
+        # never recovers, while fresh connections work (verified via serve-log
+        # source-port correlation: 7k 404s and 60+ 200s share zero ports).
+        # max_keepalive_connections=0 forces a new connection per request.
         client = OpenAI(
             api_key=self.model_key,
             base_url=self.base_url,
+            http_client=httpx.Client(
+                limits=httpx.Limits(max_keepalive_connections=0),
+                timeout=600.0,
+            ),
         )
 
         for attempt in range(max_try):
