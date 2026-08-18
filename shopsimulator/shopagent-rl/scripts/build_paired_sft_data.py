@@ -278,8 +278,8 @@ def main() -> None:
             default=0,
         )
     summary_path = Path(args.summary_out) if args.summary_out else out.with_suffix(".summary.json")
-    summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     summary["summary_out"] = str(summary_path)
+    summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(summary, ensure_ascii=False))
 
 

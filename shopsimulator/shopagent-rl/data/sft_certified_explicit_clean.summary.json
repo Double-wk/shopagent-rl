@@ -1,0 +1,21 @@
+{
+  "natural_pairs": 811,
+  "nuisance_matched": 811,
+  "price_pairs": 2000,
+  "excluded_task_count": 1000,
+  "records": 6433,
+  "by_side": {
+    "original": 2811,
+    "counterfactual": 3622
+  },
+  "by_intervention_type": {
+    "option_goal_swap_natural": 1622,
+    "price_above_budget": 4000,
+    "nuisance_display_note": 811
+  },
+  "out": "data/sft_certified_explicit_clean.jsonl",
+  "mix_out": "data/sft_train_certified_explicit_clean_mix.jsonl",
+  "mix_records": 10057,
+  "mix_max_n_steps": 10,
+  "summary_out": "data/sft_certified_explicit_clean.summary.json"
+}
