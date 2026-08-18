@@ -94,6 +94,7 @@ proxy-groups:
     - { name: 谷歌服务, type: select, proxies: [节点选择, 日本-优化, 日本-优化2, 日本-优化3, 日本JP-HY2, 日本JP-A, 新加坡SG-HY2, 新加坡SG-A-Gemini, 新加坡-优化-Gemini-GPT, 新加坡-优化2-Gemini-GPT, 新加坡-优化3-Gemini, 香港HK-A-Gemini, 香港HKT-A, 香港HK-HY2, 香港-优化-Gemini, 香港-优化2-Gemini, 香港-优化3-Gemini, 香港WAP-优化-Gemini, 香港WAP-优化2-Gemini, 香港WAP-优化3-Gemini, 韩国KR-HY2, 印度-优化, 台湾-优化, 台湾-优化2-GPT, 台湾-优化3, 美国USLA-A, 美国LA-优化-GPT, 美国LA-优化2-GPT, 美国LA-优化3-GPT, 加拿大-优化, 加拿大-优化2, 加拿大-优化3, 法国FR-A, 德国-优化, 德国-优化2, 英国-优化-GPT, 英国-优化2, 英国-优化3, 越南VN-A, 俄罗斯RU-A, 乌克兰UA-A, 土耳其TR-A, 尼日利亚NG-A] }
     - { name: Steam, type: select, proxies: [节点选择, DIRECT, 日本-优化, 日本-优化2, 日本-优化3, 日本JP-HY2, 日本JP-A, 新加坡SG-HY2, 新加坡SG-A-Gemini, 新加坡-优化-Gemini-GPT, 新加坡-优化2-Gemini-GPT, 新加坡-优化3-Gemini, 香港HK-A-Gemini, 香港HKT-A, 香港HK-HY2, 香港-优化-Gemini, 香港-优化2-Gemini, 香港-优化3-Gemini, 香港WAP-优化-Gemini, 香港WAP-优化2-Gemini, 香港WAP-优化3-Gemini, 韩国KR-HY2, 印度-优化, 台湾-优化, 台湾-优化2-GPT, 台湾-优化3, 美国USLA-A, 美国LA-优化-GPT, 美国LA-优化2-GPT, 美国LA-优化3-GPT, 加拿大-优化, 加拿大-优化2, 加拿大-优化3, 法国FR-A, 德国-优化, 德国-优化2, 英国-优化-GPT, 英国-优化2, 英国-优化3, 越南VN-A, 俄罗斯RU-A, 乌克兰UA-A, 土耳其TR-A, 尼日利亚NG-A] }
 rules:
+    - 'DOMAIN,ps.air-outer.com,DIRECT'
     - 'DOMAIN,mojie.me,DIRECT'
     - 'DOMAIN-KEYWORD,mojie,自动选择'
     - 'GEOIP,lan,DIRECT,no-resolve'

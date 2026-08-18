@@ -1,0 +1,122 @@
+shop-A vLLM env ready: PY=/overlay/miniconda3/envs/shop-A/bin/python  PYTHONPATH=/workspace/shopsimulator/shopagent-rl:/tmp/amdsmi_link:/tmp/functorch_shim:
+  remember: guard your LLM() call in  if __name__ == '__main__':
+[cf-eval SFT_V4_EXPLICIT_BUDGET_DEV_V1] 522 pairs (1044 prompts) | adapter=outputs/sft/v4_certified_corrective/model/training_output/lora_adapter
+INFO 08-18 02:49:32 [arg_utils.py:620] HF_HUB_OFFLINE is True, replace model_id [Qwen/Qwen3-1.7B-Base] to model_path [/root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1]
+INFO 08-18 02:49:33 [utils.py:223] non-default args: {'trust_remote_code': True, 'dtype': 'bfloat16', 'max_model_len': 10240, 'gpu_memory_utilization': 0.35, 'disable_log_stats': True, 'enforce_eager': True, 'enable_lora': True, 'max_lora_rank': 64, 'max_cpu_loras': 4, 'model': '/root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1'}
+The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+INFO 08-18 02:49:33 [model.py:529] Resolved architecture: Qwen3ForCausalLM
+INFO 08-18 02:49:33 [model.py:1549] Using max model len 10240
+INFO 08-18 02:49:33 [scheduler.py:224] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 08-18 02:49:33 [vllm.py:689] Asynchronous scheduling is enabled.
+WARNING 08-18 02:49:33 [vllm.py:727] Enforce eager set, overriding optimization level to -O0
+INFO 08-18 02:49:33 [vllm.py:845] Cudagraph is disabled under eager mode
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:40 [core.py:97] Initializing a V1 LLM engine (v0.16.1.dev1+gd12b7df63) with config: model='/root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1', speculative_config=None, tokenizer='/root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=10240, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=True, quantization=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=/root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'level': None, 'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all', '+sparse_attn_indexer'], 'splitting_ops': [], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_split_points': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'eliminate_noops': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': True, 'static_all_moe_layers': []}
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:42 [parallel_state.py:1234] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.232.5.53:40505 backend=nccl
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:42 [parallel_state.py:1445] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:42 [gpu_model_runner.py:4124] Starting to load model /root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1...
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:43 [rocm.py:377] Using Triton Attention backend.
+(EngineCore_DP0 pid=2444119) WARNING 08-18 02:49:43 [compilation.py:1096] Op 'sparse_attn_indexer' not present in model, enabling with '+sparse_attn_indexer' has no effect
+(EngineCore_DP0 pid=2444119) Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+(EngineCore_DP0 pid=2444119) Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.10s/it]
+(EngineCore_DP0 pid=2444119) Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.10s/it]
+(EngineCore_DP0 pid=2444119) 
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:46 [default_loader.py:293] Loading weights took 2.41 seconds
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:46 [punica_selector.py:20] Using PunicaWrapperGPU.
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:47 [gpu_model_runner.py:4221] Model loading took 3.5 GiB memory and 2.674075 seconds
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:49 [gpu_worker.py:373] Available KV cache memory: 11.56 GiB
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:49 [kv_cache_utils.py:1307] GPU KV cache size: 108,176 tokens
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:49 [kv_cache_utils.py:1312] Maximum concurrency for 10,240 tokens per request: 10.56x
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:49 [kernel_warmup.py:44] Skipping FlashInfer autotune because it is disabled.
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:49 [core.py:278] init engine (profile, create kv cache, warmup model) took 2.60 seconds
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:50 [vllm.py:689] Asynchronous scheduling is enabled.
+(EngineCore_DP0 pid=2444119) WARNING 08-18 02:49:50 [vllm.py:734] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+(EngineCore_DP0 pid=2444119) INFO 08-18 02:49:50 [vllm.py:845] Cudagraph is disabled under eager mode
+INFO 08-18 02:49:50 [llm.py:355] Supported tasks: ['generate']
+[LocalVLLM] loaded Qwen/Qwen3-1.7B-Base + LoRA outputs/sft/v4_certified_corrective/model/training_output/lora_adapter  stop_token_ids=[151645, 151643]
+INFO 08-18 02:49:50 [hf.py:318] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
+WARNING 08-18 02:49:51 [input_processor.py:327] vLLM has deprecated support for supporting different tokenizers for different LoRAs. By default, vLLM uses base model's tokenizer. If you are using a LoRA with its own tokenizer, consider specifying `--tokenizer [lora_path]` to use the LoRA tokenizer.
+(EngineCore_DP0 pid=2444119) WARNING 08-18 02:49:51 [utils.py:268] Using default LoRA kernel configs
+[rank0]:[W818 02:57:49.340685072 ProcessGroupNCCL.cpp:1525] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+  wave 1/17 done
+  wave 2/17 done
+  wave 3/17 done
+  wave 4/17 done
+  wave 5/17 done
+  wave 6/17 done
+  wave 7/17 done
+  wave 8/17 done
+  wave 9/17 done
+  wave 10/17 done
+  wave 11/17 done
+  wave 12/17 done
+  wave 13/17 done
+  wave 14/17 done
+  wave 15/17 done
+  wave 16/17 done
+  wave 17/17 done
+{
+  "tag": "SFT_V4_EXPLICIT_BUDGET_DEV_V1",
+  "model": "Qwen/Qwen3-1.7B-Base",
+  "adapter": "outputs/sft/v4_certified_corrective/model/training_output/lora_adapter",
+  "pairs": "data/counterfactual/explicit_budget_dev_v1.jsonl",
+  "n_pairs": 522,
+  "original_action_accuracy": 0.9808,
+  "counterfactual_action_accuracy": 0.8774,
+  "counterfactual_action_accuracy_lenient": 0.8774,
+  "paired_robust_accuracy": 0.8678,
+  "causal_success_certification_rate": 0.8848,
+  "shortcut_success_rate": 0.1152,
+  "commit_persistence_error": 0.0939,
+  "by_intervention_type": {
+    "option_swap": {
+      "n_pairs": 160,
+      "original_action_accuracy": 0.9625,
+      "counterfactual_action_accuracy": 0.7875,
+      "counterfactual_action_accuracy_lenient": 0.7875,
+      "paired_robust_accuracy": 0.775,
+      "commit_persistence_error": 0.1187,
+      "orig_action_types": {
+        "click": 160
+      },
+      "cf_action_types": {
+        "click": 160
+      },
+      "same_action_both_sides": 0.1313,
+      "causal_success_certification_rate": 0.8052,
+      "shortcut_success_rate": 0.1948
+    },
+    "price_above_budget": {
+      "n_pairs": 362,
+      "original_action_accuracy": 0.989,
+      "counterfactual_action_accuracy": 0.9171,
+      "counterfactual_action_accuracy_lenient": 0.9171,
+      "paired_robust_accuracy": 0.9088,
+      "commit_persistence_error": 0.0829,
+      "orig_action_types": {
+        "click": 362
+      },
+      "cf_action_types": {
+        "click": 362
+      },
+      "same_action_both_sides": 0.0829,
+      "causal_success_certification_rate": 0.919,
+      "shortcut_success_rate": 0.081
+    }
+  },
+  "by_price_upper_source": {
+    "canonical_from_target_price": {
+      "n_pairs": 160,
+      "counterfactual_action_accuracy": 0.7875,
+      "commit_persistence_error": 0.1187
+    },
+    "programmatic_explicit_budget": {
+      "n_pairs": 362,
+      "counterfactual_action_accuracy": 0.9171,
+      "commit_persistence_error": 0.0829
+    }
+  }
+}
+
+wrote outputs/counterfactual/cf_sft_v4_explicit_budget_dev_v1.jsonl
+wrote outputs/counterfactual/cf_sft_v4_explicit_budget_dev_v1_metrics.json

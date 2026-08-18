@@ -5,7 +5,7 @@
   "skipClaudeOnboarding": false,
   "commonConfigConfirmed": true,
   "currentProviderClaude": "glm",
-  "currentProviderCodex": "yingtian",
+  "currentProviderCodex": "jianzhile",
   "visibleApps": {
     "claude": true,
     "codex": true,
@@ -19,10 +19,10 @@
     "autoPromptDecided": true,
     "manualHiddenInstalledNotices": {},
     "lastDetectedInstalled": {
-      "opencode": true,
       "hermes": false,
       "gemini": false,
-      "openclaw": false
+      "openclaw": false,
+      "opencode": true
     }
   },
   "launchOnStartup": false,

@@ -35,12 +35,26 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from experiment.explicit_budget_pairs import make_budget_explicit
+
 SYSTEM_PROMPT = None  # loaded from the baseline SFT file to stay byte-identical
 
 
 def load_jsonl(path: str) -> list[dict]:
     with open(path, encoding="utf-8") as f:
         return [json.loads(l) for l in f if l.strip()]
+
+
+def load_excluded_task_ids(paths: list[str]) -> set[int]:
+    """Load task IDs from JSON lists or split-summary objects."""
+    excluded: set[int] = set()
+    for path in paths:
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+        values = payload.get("task_ids", []) if isinstance(payload, dict) else payload
+        if not isinstance(values, list):
+            raise SystemExit(f"excluded task IDs must be a list in {path}")
+        excluded.update(int(value) for value in values)
+    return excluded
 
 
 def load_system_prompt(path: str) -> str:
@@ -158,12 +172,20 @@ def main() -> None:
                     help="also emit the within-budget side for each price pair")
     ap.add_argument("--include-price-summary", action="store_true",
                     help="append the structured budget line (diagnostic/legacy only)")
+    ap.add_argument("--explicit-price-budget", action="store_true",
+                    help="expose the same final-confirmed budget in both price sides")
     ap.add_argument("--mix-out", default="",
                     help="optional baseline+method JSONL output")
+    ap.add_argument("--baseline-max-steps", type=int, default=0,
+                    help="when writing --mix-out, keep baseline rows up to this many steps")
+    ap.add_argument("--exclude-task-ids", action="append", default=[],
+                    help="JSON list or split summary containing task_ids; repeatable")
     args = ap.parse_args()
 
     SYSTEM_PROMPT = load_system_prompt(args.system_from)
+    excluded_tasks = load_excluded_task_ids(args.exclude_task_ids)
     natural = load_jsonl(args.natural)
+    natural = [pair for pair in natural if pair.get("task_id") not in excluded_tasks]
     if args.exclude_verbatim:
         natural = [p for p in natural
                    if not p["intervention"]["verification_detail"].get("catalog_verbatim")]
@@ -183,6 +205,9 @@ def main() -> None:
             pair for pair in load_jsonl(args.atomic)
             if pair.get("intervention_type") == "price_above_budget"
         ]
+        price_pairs = [pair for pair in price_pairs if pair.get("task_id") not in excluded_tasks]
+        if args.explicit_price_budget:
+            price_pairs = [make_budget_explicit(pair) for pair in price_pairs]
         if args.price_limit:
             price_pairs = price_pairs[:args.price_limit]
         for pair in price_pairs:
@@ -200,7 +225,8 @@ def main() -> None:
     nuisance_by_task = {}
     if args.v2:
         for p in load_jsonl(args.v2):
-            if p.get("intervention_type") == "nuisance_display_note":
+            if (p.get("intervention_type") == "nuisance_display_note"
+                    and p.get("task_id") not in excluded_tasks):
                 nuisance_by_task.setdefault(p["task_id"], p)
     covered = 0
     for p in natural:
@@ -220,6 +246,7 @@ def main() -> None:
     summary = {
         "natural_pairs": len(natural), "nuisance_matched": covered,
         "price_pairs": len(price_pairs),
+        "excluded_task_count": len(excluded_tasks),
         "records": len(records),
         "by_side": dict(Counter(r["side"] for r in records)),
         "by_intervention_type": dict(Counter(r["intervention_type"] for r in records)),
@@ -229,11 +256,18 @@ def main() -> None:
         mix_out = Path(args.mix_out)
         mix_out.parent.mkdir(parents=True, exist_ok=True)
         with mix_out.open("w", encoding="utf-8") as f:
-            for source in (Path(args.system_from), out):
-                with source.open(encoding="utf-8") as src:
-                    for line in src:
-                        if line.strip():
-                            f.write(line)
+            with Path(args.system_from).open(encoding="utf-8") as src:
+                for line in src:
+                    if not line.strip():
+                        continue
+                    record = json.loads(line)
+                    if args.baseline_max_steps and record.get("n_steps", 0) > args.baseline_max_steps:
+                        continue
+                    f.write(json.dumps(record, ensure_ascii=False) + "\n")
+            with out.open(encoding="utf-8") as src:
+                for line in src:
+                    if line.strip():
+                        f.write(line)
         summary["mix_out"] = str(mix_out)
         summary["mix_records"] = sum(1 for line in mix_out.open(encoding="utf-8") if line.strip())
     print(json.dumps(summary, ensure_ascii=False))

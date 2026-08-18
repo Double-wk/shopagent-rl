@@ -1,9 +1,17 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
+import tempfile
 import unittest
 
 import scripts.build_paired_sft_data as sft_builder
 from scripts.build_certified_grpo_data import build_rows
+from experiment.explicit_budget_pairs import (
+    BUDGET_PREFIX,
+    make_budget_explicit,
+    validate_explicit_budget_pair,
+)
 
 
 SYSTEM = "system"
@@ -16,13 +24,13 @@ def price_pair() -> dict:
         "intervention_type": "price_above_budget",
         "goal": {"price_upper": 100},
         "original": {
-            "observation": "当前价格: 90",
+            "observation": "Instruction: test\n当前价格: 90",
             "current_price": 90,
             "expected_action_intents": ["COMMIT"],
             "allowed_actions": ["click[buy now]"],
         },
         "counterfactual": {
-            "observation": "当前价格: 105",
+            "observation": "Instruction: test\n当前价格: 105",
             "current_price": 105,
             "expected_action_intents": ["SEARCH_ALTERNATIVE"],
             "allowed_actions": ["click[back to search]", "click[< prev]"],
@@ -61,6 +69,27 @@ class CertifiedDataTests(unittest.TestCase):
         self.assertEqual({row["side"] for row in cf_rows}, {"original", "counterfactual"})
         self.assertTrue(all("任务约束摘要" not in row["prompt"][-1]["content"] for row in cf_rows))
         self.assertEqual(len({row["extra_info"]["index"] for row in rows}), 3)
+
+    def test_explicit_budget_is_identical_and_visible_on_both_sides(self) -> None:
+        pair = make_budget_explicit(price_pair())
+        self.assertEqual(pair["goal"]["price_upper_source"], "programmatic_explicit_budget")
+        self.assertEqual(pair["goal"]["price_upper_derivation_source"], "unknown")
+        for side in ("original", "counterfactual"):
+            observation = pair[side]["observation"]
+            self.assertIn(f"{BUDGET_PREFIX}100元", observation)
+        self.assertEqual(validate_explicit_budget_pair(pair), [])
+
+    def test_excluded_task_ids_accept_lists_and_split_summaries(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            list_path = root / "list.json"
+            summary_path = root / "summary.json"
+            list_path.write_text(json.dumps([1, 2]), encoding="utf-8")
+            summary_path.write_text(json.dumps({"task_ids": [2, 3]}), encoding="utf-8")
+            excluded = sft_builder.load_excluded_task_ids(
+                [str(list_path), str(summary_path)]
+            )
+        self.assertEqual(excluded, {1, 2, 3})
 
 
 if __name__ == "__main__":
