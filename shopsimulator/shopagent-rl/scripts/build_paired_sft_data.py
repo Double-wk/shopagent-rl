@@ -180,6 +180,8 @@ def main() -> None:
                     help="when writing --mix-out, keep baseline rows up to this many steps")
     ap.add_argument("--exclude-task-ids", action="append", default=[],
                     help="JSON list or split summary containing task_ids; repeatable")
+    ap.add_argument("--summary-out", default="",
+                    help="optional JSON summary path (default: alongside --out)")
     args = ap.parse_args()
 
     SYSTEM_PROMPT = load_system_prompt(args.system_from)
@@ -270,6 +272,14 @@ def main() -> None:
                         f.write(line)
         summary["mix_out"] = str(mix_out)
         summary["mix_records"] = sum(1 for line in mix_out.open(encoding="utf-8") if line.strip())
+        summary["mix_max_n_steps"] = max(
+            (json.loads(line).get("n_steps", 0)
+             for line in mix_out.open(encoding="utf-8") if line.strip()),
+            default=0,
+        )
+    summary_path = Path(args.summary_out) if args.summary_out else out.with_suffix(".summary.json")
+    summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    summary["summary_out"] = str(summary_path)
     print(json.dumps(summary, ensure_ascii=False))
 
 
