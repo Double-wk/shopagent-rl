@@ -9,6 +9,9 @@
 #   其中 SFT/GRPO 的 checkpoint 权重仍被下方 *.safetensors/*.bin/*.ckpt/*.log
 #   及根 .gitignore 的 experiment/**/*.pt 排除。
 checkpoints/
+# Trainer-generated intermediate checkpoints are local resume state; only the
+# final lora_adapter bundle for each experiment is archived in git.
+outputs/sft/**/model/training_output/checkpoint-*/
 # Keep completed training/evaluation logs when they provide experiment
 # provenance. Exclude service noise, process state, failed superseded attempts,
 # and incomplete evaluations; a completed formal log can still be added

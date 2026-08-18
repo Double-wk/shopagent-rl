@@ -77,7 +77,10 @@ def shaped(
         weights: per-component weights (sum need not be 1). Defaults to DEFAULT_WEIGHTS.
         legal_bonus: small bonus added when the final action was legal.
         illegal: if True (the terminal/purchase action was illegal), return 0.
-        budget_mode: C1 fix for price-blind committing, motivated by the
+        budget_mode: reward variant. ``strict`` returns the original
+            ShopSimulator multiplicative reward ``r_type * r_att *
+            r_option * r_price``; ``hard``/``pen`` are C1 fixes for
+            price-blind committing, motivated by the
             counterfactual probe (outputs/counterfactual, 2026-08-14:
             commit_persistence_error SFT 0.085 -> GRPO v1 0.203 -> v2b 0.519
             while price cf accuracy stays ~0 -- the weighted sum lets an
@@ -91,6 +94,13 @@ def shaped(
         return 0.0
     w = weights or DEFAULT_WEIGHTS
     c = components(detail)
+    if budget_mode == "strict":
+        # ShopSimulator's original bottleneck reward.  Keep the empty-detail
+        # case at zero (non-terminal/capped rollouts have no purchase credit).
+        return (
+            c["r_type"] * c["r_att"] * c["r_option"] * c["r_price"]
+            if detail else 0.0
+        ) + legal_bonus
     score = sum(w.get(k, 0.0) * v for k, v in c.items())
     if budget_mode != "none" and detail and c["r_price"] <= 0.0:
         # Only a real terminal buy populates reward_detail (wrapper returns {}

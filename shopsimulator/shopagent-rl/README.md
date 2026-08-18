@@ -4,11 +4,11 @@ ShopSimulator 中文购物 Agent 的完整后训练工程：环境适配、teach
 
 ## 当前状态
 
-> 最后同步：2026-08-17。当前维护文档以本节、[`DATA.md`](DATA.md) 和
+> 最后同步：2026-08-18。当前维护文档以本节、[`DATA.md`](DATA.md) 和
 > [`docs/constraint-causal-experiment-plan.md`](docs/constraint-causal-experiment-plan.md)
 > 为准；`archive/` 与 checkpoint/adapter 内的 README 是历史快照，不随当前实验改写。
 
-Base、SFT v1、Paired SFT v2、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的 Final-200 评测均已完成（同一 10 步协议、每轮 512 token）；step20 结果仅作历史归档对照。当前最好是 **GRPO Paired-C1-hard：strict 40%**。
+Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的 Final-200 评测均已完成（同一 10 步协议、每轮 512 token）；step20 结果仅作历史归档对照。v5 已完成训练，但只作为显式预算格式捷径的失败消融保留，未继续 Final-200/GRPO。当前自然格式 SFT 最好是 **v4：price counterfactual 78.65%，Final-200 strict 31.5%**；历史最高 Final-200 仍是 **GRPO Paired-C1-hard：strict 40%**。
 
 | 模型 | 完成率 | **strict success (Rsucc)** | r_hard | r_loose | 选对商品率 | 报告文件 |
 |---|---:|---:|---:|---:|---:|---|
@@ -42,10 +42,14 @@ Base、SFT v1、Paired SFT v2、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paire
 > 只恢复训练时单独附加的 `任务约束摘要` 后，price cf accuracy 变为 **100%**，但原始侧准确率
 > 仅 **32.55%**。这证明 v3 学到的是摘要存在性捷径，不是 `当前价格 > 预算` 的比较规则。
 
-> 🚧 **Certified Corrective SFT v4 正在运行**：从 v3 adapter 继续训练 1 epoch，混合数据共
-> 10,057 条，其中价格双侧各 2,000 条（预算内 `COMMIT` / 超预算 `SEARCH_ALTERNATIVE`）、
-> option 1,622 条、summary nuisance 811 条。价格样本不再追加摘要。训练完成后自动先跑
-> heldout-v2 自然反事实门；price cf accuracy <30% 时不会跑 Final-200，更不会自动启动 GRPO。
+> ✅ **Certified Corrective SFT v4 已完成**：从 v3 adapter 继续训练 1 epoch，混合数据共
+> 10,057 条。heldout-v2 自然格式 price cf accuracy **78.65%**、paired robust **73.70%**，
+> original action accuracy **94.53%**；Final-200 strict **31.5%**（63/200）。这是当前最好的
+> 自然格式 SFT，但仍保留约 22% shortcut failure，暂不直接启动 Certified GRPO。
+
+> ⚠️ **Certified Explicit-Clean SFT v5 已完成但判定为失败消融**：自然 heldout-v2 的 price cf
+> accuracy 仅 **0.26%**、paired robust **0.26%**，而显式预算测试集达到 **100%**。模型学到的是
+> 训练格式中的显式预算提示，不是自然输入里的价格比较规则；因此不跑 v5 Final-200 或 GRPO。
 
 | 阶段 | 当前结果 |
 |---|---|
@@ -55,9 +59,10 @@ Base、SFT v1、Paired SFT v2、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paire
 | GRPO v2b | `TRAIN_BATCH=4 / ROLLOUT_N=8 / env32` 已完成 **200 steps**；导出 adapter 为 `/overlay/shopagent_rl_grpo_outputs/grpo/v2/export_step_200/lora_adapter/` |
 | GRPO Paired-C1-hard | SFT v2 paired 起训 + hard 预算惩罚（b4/n4/lr1e-5）已完成 **200 steps**；Final-200 strict **40%**（80/200，历史最好），adapter 在 `/overlay/shopagent_rl_grpo_outputs/grpo/paired_c1hard_200_direct/export_step_200/lora_adapter/` |
 | Certified SFT v3 | heldout-v2 option cf **82%**，price cf **0%**；summary 恢复诊断为 price cf **100% / original 32.55%**，判定为输入格式捷径，结果作失败消融保留 |
-| Corrective SFT v4 | **运行中**：自然格式价格双侧 + nuisance control，从 v3 LoRA 续训；完成后由 `scripts/chain_certified_corrective_eval.sh` 串行执行两道评测门 |
-| Certified GRPO | **未启动**：只在 v4 heldout-v2 price cf ≥30% 且 Final-200 strict ≥16% 后人工启动；脚本已指向 v4 adapter 与无摘要 parquet |
-| 训练期 reward | 早期 reward 波动较大，当前步数仍不足以判断收敛；进入 200/250-step 长跑前先完成 20–30 个连续 step 的显存稳定性验收 |
+| Corrective SFT v4 | **已完成**：自然格式 price cf **78.65%**，paired robust **73.70%**，Final-200 strict **31.5%** |
+| Explicit-Clean SFT v5 | **已完成失败消融**：自然 price cf **0.26%**；显式预算测试 price cf **100%**；不进入后续 RL |
+| Certified GRPO | **未启动**：v4 已通过反事实门，但尚未开新的 GRPO 长跑；v5 明确不启动 |
+| 训练期 reward | `budget_mode="strict"` 已补回原始 ShopSimulator 乘法奖励，并由 `tests/test_reward_modes.py` 覆盖 |
 | OOM 根因 | 旧版 vLLM/ROCm sleep 没有稳定归还物理 VRAM，整卡占用逐 step 增长；fused PPO backward 又为冻结 LM head 无效申请 593.5MiB 梯度。两处均已修复，不需要改变训练参数 |
 
 最终 FSDP checkpoint 与可移植的 LoRA adapter 已归入
