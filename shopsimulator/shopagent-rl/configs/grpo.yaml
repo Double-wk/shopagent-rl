@@ -91,6 +91,11 @@ algorithm:
   adv_estimator: grpo
   norm_adv_by_std_in_grpo: True
   use_kl_in_reward: False
+  # Disabled for the matched Independent Certified GRPO baseline. The paired
+  # method enables this while keeping data/order/sampling otherwise identical.
+  paired_intervention:
+    enabled: False
+    weight: 1.0
 
 trainer:
   total_epochs: 1

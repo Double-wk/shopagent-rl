@@ -5,6 +5,8 @@ from pathlib import Path
 import tempfile
 import unittest
 
+import torch
+
 import scripts.build_paired_sft_data as sft_builder
 from scripts.build_certified_grpo_data import build_rows
 from experiment.explicit_budget_pairs import (
@@ -12,6 +14,7 @@ from experiment.explicit_budget_pairs import (
     make_budget_explicit,
     validate_explicit_budget_pair,
 )
+from experiment.grpo.paired_reward import add_joint_certified_bonus
 
 
 SYSTEM = "system"
@@ -90,6 +93,29 @@ class CertifiedDataTests(unittest.TestCase):
                 [str(list_path), str(summary_path)]
             )
         self.assertEqual(excluded, {1, 2, 3})
+
+    def test_joint_certified_bonus_couples_matching_rollouts(self) -> None:
+        rewards = torch.tensor([
+            [0.0, 1.0],
+            [0.0, 1.0],
+            [0.0, 1.0],
+            [0.0, 0.0],
+            [0.0, 0.7],
+        ])
+        mask = torch.ones_like(rewards)
+        updated, stats = add_joint_certified_bonus(
+            rewards,
+            mask,
+            ["p", "p", "p", "p", ""],
+            ["original", "original", "counterfactual", "counterfactual", ""],
+            [0, 1, 0, 1, 0],
+            weight=1.0,
+        )
+        self.assertEqual(updated.sum(dim=-1).tolist()[:4], [2.0, 1.0, 2.0, 0.0])
+        self.assertAlmostEqual(float(updated.sum(dim=-1)[4]), 0.7, places=5)
+        self.assertEqual(stats["complete_relations"], 1)
+        self.assertEqual(stats["matched_rollouts"], 2)
+        self.assertEqual(stats["joint_successes"], 1)
 
 
 if __name__ == "__main__":

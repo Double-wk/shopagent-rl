@@ -75,6 +75,7 @@ SAVE_FREQ="${SAVE_FREQ:-10}"
 # LoRA actor and long multi-turn responses on the shared 48G card.
 GPU_MEM_UTIL="${GPU_MEM_UTIL:-0.25}"
 TEMPERATURE="${TEMPERATURE:-0.7}"
+DATA_SHUFFLE="${DATA_SHUFFLE:-True}"
 MAX_PROMPT_LENGTH="${MAX_PROMPT_LENGTH:-512}"
 MAX_MODEL_LEN="${MAX_MODEL_LEN:-10240}"
 RESPONSE_LENGTH="${RESPONSE_LENGTH:-8192}"
@@ -110,6 +111,7 @@ echo "  data       : $TRAIN_FILES  (exists=$([ -e "$TRAIN_FILES" ] && echo yes |
 echo "  steps=$TOTAL_STEPS  train_batch=$TRAIN_BATCH  rollout.n=$ROLLOUT_N  (=$((TRAIN_BATCH*ROLLOUT_N)) rollouts/step)  lr=$LR  n_gpus=$N_GPUS"
 echo "  lengths: prompt=$MAX_PROMPT_LENGTH turn=$TURN_MAX_TOKENS response=$RESPONSE_LENGTH model=$MAX_MODEL_LEN obs_chars=$OBS_MAX_CHARS"
 echo "  sampling : temperature=$TEMPERATURE"
+echo "  data shuffle: $DATA_SHUFFLE"
 echo "  actor batches: ppo_mini=$PPO_MINI_BATCH ppo_micro=$PPO_MICRO_BATCH logprob_micro=$LOGPROB_MICRO_BATCH | vLLM gpu_mem_util=$GPU_MEM_UTIL"
 echo "  vLLM load_format: $LOAD_FORMAT"
 echo "  weight transfer : $VERL_VLLM_WEIGHT_TRANSFER"
@@ -125,6 +127,7 @@ exec "$PY" -m verl.trainer.main_ppo \
     actor_rollout_ref.model.lora_alpha=64 \
     data.train_files="$TRAIN_FILES" \
     data.val_files="$TRAIN_FILES" \
+    data.shuffle="$DATA_SHUFFLE" \
     data.train_batch_size="$TRAIN_BATCH" \
     data.max_prompt_length="$MAX_PROMPT_LENGTH" \
     data.max_response_length="$RESPONSE_LENGTH" \

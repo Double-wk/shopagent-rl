@@ -5,7 +5,7 @@
   "skipClaudeOnboarding": false,
   "commonConfigConfirmed": true,
   "currentProviderClaude": "glm",
-  "currentProviderCodex": "jianzhile",
+  "currentProviderCodex": "agentrouter",
   "visibleApps": {
     "claude": true,
     "codex": true,

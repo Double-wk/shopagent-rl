@@ -234,6 +234,34 @@ def compute_advantage(
         # Initialize the mask for GRPO calculation
         grpo_calculation_mask = data.batch["response_mask"]
 
+        paired_config = config.get("paired_intervention", {}) if config is not None else {}
+        if paired_config.get("enabled", False):
+            from experiment.grpo.paired_reward import add_joint_certified_bonus
+
+            relation_ids = data.non_tensor_batch.get(
+                "relation_id", data.non_tensor_batch.get("pair_id")
+            )
+            sides = data.non_tensor_batch.get("side")
+            if relation_ids is None or sides is None:
+                raise ValueError("paired intervention GRPO requires relation_id/pair_id and side metadata")
+            paired_rewards, paired_stats = add_joint_certified_bonus(
+                data.batch["token_level_rewards"],
+                grpo_calculation_mask,
+                relation_ids,
+                sides,
+                data.non_tensor_batch.get("session_id"),
+                weight=float(paired_config.get("weight", 1.0)),
+            )
+            data.batch["token_level_rewards"] = paired_rewards
+            print(
+                "[PairedIntervention] "
+                f"relations={paired_stats['complete_relations']} "
+                f"matched={paired_stats['matched_rollouts']} "
+                f"joint_rate={paired_stats['joint_success_rate']:.4f} "
+                f"mean_bonus={paired_stats['mean_joint_bonus']:.4f}",
+                flush=True,
+            )
+
         # Call compute_grpo_outcome_advantage with parameters matching its definition
         advantages, returns = core_algos.compute_grpo_outcome_advantage(
             token_level_rewards=data.batch["token_level_rewards"],
