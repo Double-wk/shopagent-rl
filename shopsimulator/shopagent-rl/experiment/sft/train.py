@@ -155,11 +155,10 @@ def main() -> None:
 
     collator = PadCollator(tok.pad_token_id, label_pad_token_id=-100)
     # Gradient checkpointing is config-driven (train.gradient_checkpointing):
-    # ON saves activation memory (needed at per_device>=2 on 8K seqs) but ~2x
-    # slower (recomputes the forward in backward). At per_device=1 the
-    # activations fit UN-checkpointed (~25 GiB), so we turn it OFF for speed and
-    # recover the recompute cost. The effective batch (per_device*grad_accum) is
-    # unchanged either way, so alignment to the paper's batch=32 holds regardless.
+    # ON saves activation memory but is slower because backward recomputes the
+    # forward activations. It is also required at per_device=1 for the longest
+    # 8K examples on a 48 GiB card. The effective batch
+    # (per_device*grad_accum) is unchanged.
     use_gc = train_cfg.get("gradient_checkpointing", True)
     ta_kwargs = dict(
         output_dir=cfg["output_dir"],

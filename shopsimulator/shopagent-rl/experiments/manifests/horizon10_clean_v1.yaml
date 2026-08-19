@@ -20,6 +20,7 @@ sft:
   max_environment_steps: 10
   seed: 42
   data_seed: 42
+  gradient_checkpointing: true
   output: outputs/sft/v6_horizon10_clean_from_base/model/training_output/lora_adapter
 
 grpo:

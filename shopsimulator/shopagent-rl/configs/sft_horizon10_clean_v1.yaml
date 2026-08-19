@@ -23,7 +23,7 @@ train:
   logging_steps: 10
   save_strategy: epoch
   save_total_limit: 3
-  gradient_checkpointing: false
+  gradient_checkpointing: true
   group_by_length: false
   seed: 42
   data_seed: 42
