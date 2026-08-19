@@ -12,9 +12,11 @@
 “用户约束 × 当前商品状态”的双向干预及无关属性不变性；评估比较动作**意图**，
 而不是动态 `click[...]` 字符串。
 
-> 2026-08-17 更新：规格方向已有 Paired SFT v2 / Paired-C1-hard 的 heldout paired robust
-> 73.1% 支持；价格方向仍未解决。Certified SFT v3 的结构化 summary 结果已判定为
-> summary-presence shortcut，不能与自然输入指标混报。
+> 2026-08-19 更新：本文保留为历史实施笔记；当前论文叙事与后续实验以
+> [`constraint-faithful-paired-policy.md`](constraint-faithful-paired-policy.md) 为准。规格方向已有
+> Paired SFT v2 / Paired-C1-hard 的 heldout paired robust 73.1% 支持；价格方向已由 Corrective
+> SFT v4 在自然 heldout-v2 上推进到 cf accuracy 78.65%、paired robust 73.70%。Certified SFT v3
+> 和 Explicit-Clean v5 的结构化高分均已判定为格式捷径，不能与自然输入指标混报。
 
 ## v3-natural 首轮结果（2026-08-15，C1-hard @ step200 adapter，160-token 对齐协议）
 
@@ -89,4 +91,9 @@ v3 的价格负例只在 counterfactual 侧追加 `任务约束摘要`，且训�
 `price <= budget` / `price > budget` 选择动作。
 
 修正版 v4 因此要求：价格双侧成对、自然输入字节格式一致、summary-positive nuisance、
-task-disjoint heldout，以及 original/counterfactual 双指标同时过门。v4 结果尚未产生。
+task-disjoint heldout，以及 original/counterfactual 双指标同时过门。v4 已完成：自然 heldout-v2
+共 534 对，overall original accuracy 93.82%、counterfactual accuracy 78.09%、paired robust
+73.03%；其中 384 个 price pair 的 original accuracy 94.53%、cf accuracy 78.65%、paired robust
+73.70%。Final-200 strict 为 31.5%（63/200）。该结果通过 SFT feasibility gate，但仍有约 22%
+shortcut failure；下一步需要 matched `CF-GRPO w/o Pair` 与显式 pair-relation GRPO，而不是直接把
+独立 CF reward 当作最终方法。

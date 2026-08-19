@@ -1,0 +1,302 @@
+# Beyond Task Success：购物 Agent 的约束忠实配对策略优化
+
+> 当前论文主线（2026-08-19）
+> 暂定标题：**Beyond Task Success: Certified Paired Intervention Learning for Shopping Agents**
+> 暂定方法名：**Constraint-Faithful Paired Policy Optimization**
+
+## 1. 研究定位
+
+本文只研究一个问题：
+
+> **当决定性用户约束发生最小变化时，购物策略是否产生正确变化；当无关因素变化时，策略是否保持稳定？**
+
+核心现象是：
+
+\[
+\boxed{\text{Task Success}\not\Rightarrow\text{Constraint-Faithful Decision Making}}
+\]
+
+购物 Agent 可能学会 `Search → Click → Buy` 的高频捷径，却没有真正执行
+`Check Constraint → Compare → Decide`。本文将其称为 **Constraint-Shortcut Behavior**，也可称
+**Outcome–Constraint Decoupling**。
+
+当前论文不同时纳入 `Constraint Ledger → Residual Risk → Active Verification`。那条路线研究的是
+“尚未确认的约束中应该验证什么、什么时候可以买”，留作后续独立论文 **Verify Before You Buy**。
+
+| 研究线 | 核心问题 | 当前处理 |
+|---|---|---|
+| Constraint-Faithful Paired Policy | 约束变了，策略是否正确变化？ | **本文主线** |
+| Verify Before You Buy | 哪个未决约束值得验证、何时安全提交？ | 后续论文 |
+
+## 2. 研究背景
+
+购物 Agent 通常按最终结果评测：是否找到商品、选对规格、满足预算并完成购买。这种 outcome 指标是必要的，
+但不能证明策略是依据用户约束作出决定。一个模型可以在常规任务上取得较高成功率，同时在只改变预算或规格后
+仍执行原来的购买动作。
+
+因此，本文不把“会不会买到一个看起来合适的商品”作为唯一问题，而是问：
+
+\[
+\text{Relevant change}\Rightarrow\text{appropriate policy change}
+\]
+
+\[
+\text{Irrelevant change}\Rightarrow\text{policy invariance}
+\]
+
+这将研究对象从单个状态上的动作正确性，提升为一对状态之间的策略关系。
+
+## 3. 以往研究及其边界
+
+### 3.1 Shopping Agent、环境与结果优化
+
+- [ShopSimulator](https://arxiv.org/html/2601.18225v1) 提供购物环境和 RL 训练框架，并报告 constraint violation、
+  AskShopper 不充分和 premature Buy。它证明问题真实存在，但没有直接认证“高成功策略是否依赖决定性约束”。
+- [Shop-R1](https://arxiv.org/abs/2507.17842) 用 RL 优化购物行为模拟与动作/理由生成，重点是分层奖励和难度适配，
+  不是原子干预下的配对策略关系。
+- [ShoppingComp](https://arxiv.org/html/2511.22978v2) 强调多约束与 safety-critical shopping，说明约束错误有现实后果，
+  但不是本文的 relation-level training 方法。
+- [EComAgentBench](https://arxiv.org/html/2606.17698v1) 覆盖隐藏意图、澄清、评论证据和长程工具使用，适合作为外部泛化环境。
+
+这些工作主要回答“Agent 能否完成购物任务”，不能单凭 task success 判断“Agent 是否因为正确使用约束而成功”。
+
+### 3.2 Constraint-aware learning
+
+[CARL](https://arxiv.org/html/2607.04854) 已直接研究 constraint-aware reinforcement learning。因此本文不声称
+“首次让购物 Agent 遵守约束”，也不把贡献写成一般性的 constraint-aware reward。
+
+区别在于训练对象：CARL 类方法主要约束单状态行为；本文把 `(x, x')` 与 `(a, a')` 的**配对关系**作为一等目标。
+
+### 3.3 信息获取与 explore-or-commit
+
+[Entropy-IDSS](https://arxiv.org/abs/2603.11399) 研究基于信息增益的偏好询问；
+[Calibrate-Then-Act](https://arxiv.org/html/2602.16699v3) 研究不确定条件下的探索/提交权衡；
+[Paying to Know](https://arxiv.org/html/2606.24783v1) 讨论有成本的 verified product information acquisition。
+
+它们与后续 **Verify Before You Buy** 直接相关，但当前论文假定干预后的信息已经出现，研究的是策略是否正确利用该变化。
+因此 residual risk、conformal calibration、active verification 和 calibrated stopping 不进入当前方法主线。
+
+### 3.4 研究空位
+
+现有研究分别覆盖 outcome optimization、constraint-aware reward、information acquisition 和 explore-or-commit，
+但仍缺少：
+
+> **对只改变一个决定性约束的配对状态进行程序认证，并直接训练策略满足两侧行为关系。**
+
+本文的贡献不是简单增加反事实样本，而是把 paired policy relation 作为优化目标。
+
+## 4. 当前项目的实证起点
+
+### 4.1 关键动机证据
+
+当前 GRPO Paired-C1-hard 在 Final-200 上达到 40% strict success，但价格干预几乎完全无效：
+
+| 指标 | 结果 |
+|---|---:|
+| Final-200 strict success | **40.0%（80/200）** |
+| 完成率 | **90.0%** |
+| 选对商品率 | **45.0%** |
+| Option-swap paired robust | **73.1%（49/67）** |
+| Price-CF Accuracy | **0.0%（0/145）** |
+| Price same-action-both-sides | **98.6%** |
+
+145 个仅把价格改到预算以上的 pair 中，143 个两侧仍执行相同购买动作。原状态动作准确率仍为 93.1%，
+说明模型并非完全不会购物，而是没有把价格比较绑定到提交决策。
+
+这构成本文的起点：
+
+> **高 task success 与严重 constraint blindness 可以同时存在。**
+
+### 4.2 SFT 与 shortcut 审计
+
+| 阶段 | 自然格式结果 | Final-200 strict | 结论 |
+|---|---:|---:|---|
+| SFT v2 Paired | option paired robust 73.1%；price 0% | 25.0% | 配对规格监督有效，但未覆盖价格 |
+| Certified SFT v3 | price CF 0%；恢复负例专属 summary 后 100% | — | summary-presence shortcut |
+| **Corrective SFT v4** | **price CF 78.65%；price PRA 73.70%** | **31.5%** | 自然双侧配对监督可行 |
+| Explicit-Clean SFT v5 | natural price CF 0.26%；显式 price CF 100% | 不进入后续 RL | 显式格式捷径失败消融 |
+
+当前可复现的 v4 混合训练集为 **10,057 条**；早期讨论中的 8,057 条是阶段快照，不作为最终数据规模。
+v3/v5 说明 summary、显式字段和模板格式都可能伪造高反事实分数。因此所有 headline 结果必须来自 natural atomic split，
+structured summary 只能作诊断。
+
+## 5. 研究问题与假设
+
+- **RQ1 / H1**：Outcome RL 可以提升 strict success，却不提升甚至降低 relevant paired robustness。
+- **RQ2 / H2**：在数据、verifier、token budget 和初始化完全匹配时，显式 pair-relation objective 优于独立 CF reward。
+- **RQ3 / H3**：模型能对 price、option 等 relevant intervention 正确改变，同时对 nuisance intervention 保持动作意图不变。
+- **RQ4 / H4**：收益可泛化到未见任务、商品、类别、约束组合和至少一种未见约束类型。
+
+## 6. 问题形式化
+
+设状态为 `x`，策略输出动作意图 `a ~ πθ(·|x)`。对单个因素 `c_j` 做原子干预：
+
+\[
+x' = I_j(x),\qquad \Delta(x,x')=c_j.
+\]
+
+确定性 verifier 根据商品目录、预算、可用规格和环境规则计算：
+
+\[
+a^*=V(x),\qquad a'^*=V(x').
+\]
+
+Relevant pair 还带有认证关系 `R*_j`。例如：
+
+- 价格从预算内变为超预算：`(COMMIT, SEARCH_ALTERNATIVE)`；
+- 目标规格从 M 变为 L：`(SELECT_M, SELECT_L)`；
+- 当前选择从目标规格变为其他规格：`(COMMIT, SELECT_TARGET_OPTION)`。
+
+对于 irrelevant intervention，期望动作意图保持不变。
+
+本文使用 **intervention-faithful / constraint-faithful**，不把受控行为关系夸大为识别模型内部因果机制。
+
+## 7. 方法：Constraint-Faithful Paired Policy Optimization
+
+### 7.1 Certified Atomic Intervention
+
+构造 `(x, x')`，只改变一个 price、size、color、material、capacity、compatibility 或 nuisance 因素。
+每条 pair 必须通过程序门：商品身份和非目标字段一致；自然指令的其他数字和规格 token 不漂移；两侧动作合法；标签由 verifier
+计算；拒绝 pair 与原因落盘。教师模型只负责表面改写，不能自证标签。
+
+### 7.2 Certified Paired SFT
+
+两侧分别做 action imitation：
+
+\[
+\mathcal L_{action}=-\log\pi_\theta(a^*|x)-\log\pi_\theta(a'^*|x').
+\]
+
+数据必须保留 `pair_id`、`side`、`intervention_type` 和 `expected_relation`。不能把 pair 最终混成 10,057 条无关独立样本，
+否则后续 RL 无法使用关系标签。
+
+v4 证明自然双侧 paired SFT 可恢复 price sensitivity，但不是最终方法贡献；下一步必须比较 relation-level GRPO。
+
+### 7.3 Paired GRPO
+
+同一 pair 的两侧 rollout 联合计算：
+
+\[
+R=R_{task}+\lambda_{cert}R_{cert}+\lambda_{pair}R_{pair}.
+\]
+
+\[
+R_{cert}=\tfrac12(\mathbb 1[a=V(x)]+\mathbb 1[a'=V(x')]).
+\]
+
+Relevant intervention：
+
+\[
+R_{pair}^{rel}=\mathbb 1[(intent(a),intent(a'))\in R_j^*].
+\]
+
+Irrelevant intervention：
+
+\[
+R_{pair}^{irr}=\mathbb 1[intent(a)=intent(a')].
+\]
+
+`R_cert` 防止两侧一起错或“永远 Search”；`R_pair` 则直接优化两个世界之间的关系。实现应比较规范化动作意图，
+而不是比较动态 `click[...]` 字符串。
+
+## 8. 评测指标与协议
+
+主表只突出四类指标：
+
+1. **Final-200 Strict Success**：正常购物能力；同时报告 completion、`r_hard`、`r_loose` 和步数。
+2. **Relevant Sensitivity**：Price-CF Accuracy、Option-CF Accuracy，以及后续 capacity/quantity/compatibility CF。
+3. **Irrelevant Invariance**：无关干预前后动作意图保持正确且稳定的比例。
+4. **Paired Robust Accuracy（PRA）**：
+
+\[
+\mathrm{PRA}=\frac1N\sum_i\mathbb 1[a_i=a_i^*\land a'_i=a_i'^*].
+\]
+
+PRA 防止模型通过“永远 Search”在反事实侧取得虚假高分。
+
+评测要求：headline 只用 natural atomic split；train/test 按 task、product、category 隔离；Final-200 至少 3 个价格随机化 seed；
+pair 指标使用 paired bootstrap CI；结构化 summary 只作为 shortcut 诊断；最终论文前审计自然指令 budget 与 verifier budget 一致。
+
+## 9. Baselines 与关键消融
+
+| Method | Final Strict ↑ | Price CF ↑ | Option CF ↑ | Invariance ↑ | PRA ↑ |
+|---|---:|---:|---:|---:|---:|
+| Base |  |  |  |  |  |
+| SFT |  |  |  |  |  |
+| Vanilla GRPO |  |  |  |  |  |
+| Hard Reward GRPO |  |  |  |  |  |
+| CF-SFT |  |  |  |  |  |
+| **CF-GRPO w/o Pair** |  |  |  |  |  |
+| **Ours: Paired GRPO** |  |  |  |  |  |
+
+关键 baseline `CF-GRPO w/o Pair` 必须使用完全相同的数据、verifier、初始 adapter、token budget、rollout 和 seed，
+唯一移除 `R_pair`。否则无法区分 paired optimization 与普通 CF augmentation/reward shaping。
+
+必须补做：去掉 pair reward、去掉 nuisance reward、独立 sampling、one-sided hard negative、structured-format、
+no-nuisance 和 constraint-type holdout 消融。
+
+## 10. 研究阶段与下一步
+
+### Stage 0：问题发现——已完成
+
+GRPO Paired-C1-hard 建立了 **40% strict / 0% Price-CF** 的解耦证据。
+
+### Stage 1：Certified SFT feasibility——已完成
+
+当前论文使用从 3,793 条 terra strict 母集中筛出的 `n_steps ≤ 10` 子集（独立文件 `data/sft_train_horizon10.jsonl`，共 3,624 条），并构建 10-turn aligned v4 mix。
+该 mix 在 natural heldout-v2 上达到 price CF 78.65%、price PRA 73.70%、original accuracy 94.53%，Final-200 strict 31.5%。
+超过 10 步的 169 条母集轨迹保留作后续 long-horizon 扩展，详见 [`trajectory-horizon-and-long-horizon.md`](trajectory-horizon-and-long-horizon.md)。
+
+### Stage 2：Matched independent CF-GRPO——下一步优先
+
+从同一 v4 adapter 起训，使用 `R_task + R_cert`，但不使用 `R_pair`。它测试普通 RL 是否再次覆盖 SFT 恢复的 price sensitivity，
+并作为完整方法的严格 matched baseline。
+
+### Stage 3：Paired GRPO——论文主实验
+
+在 Stage 2 完全匹配的设置中加入 `R_pair`，目标是同时提升 strict success、relevant PRA，并保持 nuisance invariance。
+
+### Stage 4：泛化与机制分析
+
+测试未见商品/类别/约束组合、constraint-type holdout、额外模型尺度，以及条件允许时的 EComAgentBench transfer；
+绘制 success 与 PRA 的 checkpoint trajectory，分析二者是否解耦。
+
+## 11. 风险与审计
+
+- **格式捷径**：natural headline、双侧同格式、summary-positive nuisance、heldout paraphrase。
+- **永远 Search**：同时报告 original accuracy、Final strict、PRA 和 task reward。
+- **非原子干预**：token preservation、catalog consistency、合法动作验证、拒绝样本审计。
+- **数据泄漏**：Final-200/heldout pair 不回流训练；近重复商品也隔离。
+- **因果表述过强**：只声称受控干预下的 behavior relation，不声称内部 causal identification。
+- **单轮探针偏差**：最终补充多轮 paired rollout，确认 probe 改善转化为完整任务收益。
+
+## 12. 与 Verify Before You Buy 的边界
+
+当前论文结束在：**信息已经出现后，模型是否正确利用该约束。**
+
+后续论文从这里继续：**信息尚未出现时，应该主动验证哪个约束，以及何时足够安全到可以购买。**
+
+后续可研究 Constraint Ledger、Residual Constraint Risk、Expected Risk Reduction 和 calibrated commit，
+但不进入当前论文主图、主目标或主实验表。
+
+## 13. 近期执行清单
+
+1. 冻结 v4 adapter、10,057 条 mix 和 natural heldout-v2，记录数据/模型 hash。
+2. 审计自然预算文本与 verifier budget 一致性。
+3. 扩充 train-only relevant/nuisance pair，并稳定保留 `pair_id`。
+4. 实现 pair-aware batch/sampler 和动作意图规范化。
+5. 先跑 `CF-GRPO w/o Pair`，再跑完全匹配的 `Paired GRPO`。
+6. 用 3 个 seed 评测 Final-200、Price CF、Option CF、Invariance 和 PRA。
+7. 完成 one-sided、structured-format、no-nuisance、no-pair 消融。
+8. 最后做 constraint holdout、模型尺度和外部环境泛化。
+
+## 14. 论文六句话故事
+
+1. Shopping agents are usually evaluated by whether they successfully purchase the target product.
+2. We show that high task success can coexist with severe constraint blindness: an RL agent reaches 40% strict success while achieving 0% accuracy under minimal price interventions.
+3. This reveals a gap between outcome success and constraint-faithful decision making.
+4. We construct programmatically certified atomic intervention pairs that change exactly one decision-relevant or irrelevant factor.
+5. We introduce paired intervention optimization, which explicitly trains the policy to change appropriately under relevant interventions while remaining invariant to irrelevant perturbations.
+6. We evaluate agents jointly by normal shopping success and paired constraint fidelity, including generalization to unseen constraints, products, and models.
+
+最终贡献压缩为三点：问题发现、程序认证的原子 pair 与 relation-level policy optimization、以及补足 task success 的 sensitivity/invariance/PRA 评测。

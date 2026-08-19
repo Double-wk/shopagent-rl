@@ -4,11 +4,11 @@ ShopSimulator 中文购物 Agent 的完整后训练工程：环境适配、teach
 
 ## 当前状态
 
-> 最后同步：2026-08-18。当前维护文档以本节、[`DATA.md`](DATA.md) 和
-> [`docs/constraint-causal-experiment-plan.md`](docs/constraint-causal-experiment-plan.md)
+> 最后同步：2026-08-19。当前维护文档以本节、[`DATA.md`](DATA.md) 和
+> [`docs/constraint-faithful-paired-policy.md`](docs/constraint-faithful-paired-policy.md)
 > 为准；`archive/` 与 checkpoint/adapter 内的 README 是历史快照，不随当前实验改写。
 
-Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的 Final-200 评测均已完成（同一 10 步协议、每轮 512 token）；step20 结果仅作历史归档对照。v5 已完成训练，但只作为显式预算格式捷径的失败消融保留，未继续 Final-200/GRPO。当前自然格式 SFT 最好是 **v4：price counterfactual 78.65%，Final-200 strict 31.5%**；历史最高 Final-200 仍是 **GRPO Paired-C1-hard：strict 40%**。
+Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的 Final-200 评测均已完成（历史可比协议为 10 步、每轮 512 token）；这只是评测协议，不是 SFT 数据或后续研究的固定 horizon。step20 结果仅作历史归档对照。v5 已完成训练，但只作为显式预算格式捷径的失败消融保留，未继续 Final-200/GRPO。当前自然格式 SFT 最好是 **v4：price counterfactual 78.65%，Final-200 strict 31.5%**；历史最高 Final-200 仍是 **GRPO Paired-C1-hard：strict 40%**。
 
 | 模型 | 完成率 | **strict success (Rsucc)** | r_hard | r_loose | 选对商品率 | 报告文件 |
 |---|---:|---:|---:|---:|---:|---|
@@ -45,7 +45,7 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 > ✅ **Certified Corrective SFT v4 已完成**：从 v3 adapter 继续训练 1 epoch，混合数据共
 > 10,057 条。heldout-v2 自然格式 price cf accuracy **78.65%**、paired robust **73.70%**，
 > original action accuracy **94.53%**；Final-200 strict **31.5%**（63/200）。这是当前最好的
-> 自然格式 SFT，但仍保留约 22% shortcut failure，暂不直接启动 Certified GRPO。
+> 自然格式 SFT，但仍保留约 22% shortcut failure；下一步先做 matched `CF-GRPO w/o Pair`，再决定是否进入完整 Paired GRPO。
 
 > ⚠️ **Certified Explicit-Clean SFT v5 已完成但判定为失败消融**：自然 heldout-v2 的 price cf
 > accuracy 仅 **0.26%**、paired robust **0.26%**，而显式预算测试集达到 **100%**。模型学到的是
@@ -53,7 +53,7 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 
 | 阶段 | 当前结果 |
 |---|---|
-| Constraint-causal Gate 2 | **已通过**：Paired SFT v2 的 natural option-swap paired robust `73.1%`（49/67），Final-200 strict `25%`（50/200）；进入 Certified GRPO 前置阶段。价格反事实 paired robust 仍为 `0%`。 |
+| Constraint-causal Gate 2（历史记录） | **已通过**：Paired SFT v2 的 natural option-swap paired robust `73.1%`（49/67），Final-200 strict `25%`（50/200）；价格反事实 paired robust 仍为 `0%`。当前主线已推进到 v4 与 matched GRPO 对照。 |
 | GRPO smoke | 已完成 1 step：reward/pg_loss 非零，checkpoint 写入 overlay |
 | GRPO 正式训练 | env16 固定配方 `TRAIN_BATCH=4 / ROLLOUT_N=4 / PPO_MINI_BATCH=4` 已完成 **200 steps**；最终可恢复 checkpoint 为 `outputs/grpo/v1/model/checkpoint_step_200/` |
 | GRPO v2b | `TRAIN_BATCH=4 / ROLLOUT_N=8 / env32` 已完成 **200 steps**；导出 adapter 为 `/overlay/shopagent_rl_grpo_outputs/grpo/v2/export_step_200/lora_adapter/` |
@@ -61,9 +61,26 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 | Certified SFT v3 | heldout-v2 option cf **82%**，price cf **0%**；summary 恢复诊断为 price cf **100% / original 32.55%**，判定为输入格式捷径，结果作失败消融保留 |
 | Corrective SFT v4 | **已完成**：自然格式 price cf **78.65%**，paired robust **73.70%**，Final-200 strict **31.5%** |
 | Explicit-Clean SFT v5 | **已完成失败消融**：自然 price cf **0.26%**；显式预算测试 price cf **100%**；不进入后续 RL |
-| Certified GRPO | **未启动**：v4 已通过反事实门，但尚未开新的 GRPO 长跑；v5 明确不启动 |
+| Certified/Paired GRPO | **尚未启动**：v4 已通过自然反事实门；下一步先做 `CF-GRPO w/o Pair`，再做加入 `R_pair` 的 Paired GRPO；v5 不进入后续 RL |
 | 训练期 reward | `budget_mode="strict"` 已补回原始 ShopSimulator 乘法奖励，并由 `tests/test_reward_modes.py` 覆盖 |
 | OOM 根因 | 旧版 vLLM/ROCm sleep 没有稳定归还物理 VRAM，整卡占用逐 step 增长；fused PPO backward 又为冻结 LM head 无效申请 593.5MiB 梯度。两处均已修复，不需要改变训练参数 |
+
+## 当前论文主线
+
+当前研究已经收敛为 **Constraint-Faithful Paired Policy Optimization**：研究高任务成功是否可能来自
+不依赖用户约束的行为捷径，并直接优化原始状态与原子干预状态之间的策略关系。完整的研究背景、相关工作边界、
+方法、评测协议和后续实验顺序见 [`docs/constraint-faithful-paired-policy.md`](docs/constraint-faithful-paired-policy.md)。
+
+核心动机证据是 GRPO Paired-C1-hard 的 **Final-200 strict 40% / Price-CF 0%**。当前下一步不是继续堆叠
+普通 outcome reward，而是从同一 v4 adapter 和同一 paired 数据出发，完成 `CF-GRPO w/o Pair` 与
+`Paired GRPO` 的严格 matched comparison。
+
+`Constraint Ledger → Residual Risk → Active Verification` 对应后续独立研究 **Verify Before You Buy**，
+不并入当前论文的方法主线。旧的 [`docs/constraint-causal-experiment-plan.md`](docs/constraint-causal-experiment-plan.md)
+与 [`docs/constraint-causal-consistency.md`](docs/constraint-causal-consistency.md) 继续作为实验计划和实施记录保留。
+
+基础 terra 轨迹的步数口径、v4 的 10-turn 对齐 mix，以及后续 full-horizon 实验设计见
+[`docs/trajectory-horizon-and-long-horizon.md`](docs/trajectory-horizon-and-long-horizon.md)。
 
 最终 FSDP checkpoint 与可移植的 LoRA adapter 已归入
 [`outputs/grpo/v1/model/checkpoint_step_200/`](outputs/grpo/v1/model/checkpoint_step_200/)；中间 checkpoint 仍保留在 `/overlay`。
@@ -115,7 +132,7 @@ docs/                     GRPO 配方与工程说明
 `shopagent-rl/` 目录执行一次：
 
 ```bash
-/overlay/miniconda3/envs/shop-A/bin/python -m pip install --no-deps -e .
+/overlay/miniconda3/envs/shopsim/bin/python -m pip install --no-deps -e .
 ```
 
 之后无论当前工作目录是什么，`import verl` 都会解析到 `shopagent-rl/verl/`。运行脚本仍设置 `PYTHONPATH`，但那是为了让 Ray worker

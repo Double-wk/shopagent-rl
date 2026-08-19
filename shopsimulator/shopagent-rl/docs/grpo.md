@@ -5,10 +5,11 @@
 
 训练 log 的诊断结论与优化项见 [`grpo-optimization-v1.md`](grpo-optimization-v1.md)。
 
-> 2026-08-17 状态：env16、v2b、C1-hard、Paired-C1-hard 均已完成 200 steps；当前最好
+> 2026-08-19 状态：env16、v2b、C1-hard、Paired-C1-hard 均已完成 200 steps；当前最好
 > Paired-C1-hard Final-200 strict 40% / completion 90%。但其 price counterfactual accuracy
-> 仍为 0%，因此不能把 overall 提升解释为价格约束推理。Certified GRPO 尚未启动，必须等
-> corrective SFT 的自然 heldout-v2 price ≥30% 且 Final-200 strict ≥16%。
+> 仍为 0%，因此不能把 overall 提升解释为价格约束推理。Corrective SFT v4 已通过自然
+> heldout-v2 price ≥30% 与 Final-200 strict ≥16% 两道门；下一步应先做 matched
+> `CF-GRPO w/o Pair`，再做加入 pair-relation reward 的 Paired GRPO。
 
 ## 目标
 
@@ -98,7 +99,7 @@ git -C "$VLLM_SRC" apply \
 
 cd "$VLLM_SRC"
 export TRITON_KERNELS_SRC_DIR=/overlay/triton-kernels-src/python/triton_kernels
-MAX_JOBS=8 /overlay/miniconda3/envs/shop-A/bin/pip install \
+MAX_JOBS=8 /overlay/miniconda3/envs/shopsim/bin/pip install \
   --no-build-isolation --no-deps -e .
 ```
 

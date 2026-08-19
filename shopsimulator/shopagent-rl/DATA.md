@@ -66,7 +66,7 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
   - **实采 raw**：5000 条（`trajectories_raw/gpt-5.6-terra/trajectories_raw.jsonl`，72.9MB）。
   - **strict_success（真正入训）**：`teacher.validate` 实过 **3793 条**（75.9% pass，reward 均值 0.897）。
     raw 的 `strict_success` 标记是 3826，但 validate canonical 复核又核掉 33 条 → 实际入训 **3793**。其余 1207 条 strict 没过（没买对）不进 SFT。
-- **质量门（`teacher.validate` 的 4 个条件，全过才入训）**：
+- **母集质量门（`teacher.validate` 的 4 个条件，全过才进入 3,793 条母集）**：
   1. `ok == True`
   2. `strict_success == True`（4 维 r_type/r_att/r_option/r_price 全 = 1.0）
   3. `2 ≤ n_steps ≤ 30`
@@ -80,6 +80,10 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
 - **生成流程**：`sample_sft_targets.py`（采样目标）→ `teacher.collect`（teacher 跑环境采轨迹）→ `build_sft_data.sh`（train-range 过滤 + `teacher.validate` 重新校验 → `sft_train.jsonl`）。
 - **要 teacher 采集吗**：✅ 需要（且**已采完**）。teacher temperature=0，所以失败任务重采无意义——这批最终 strict 入训 **3793**（raw 标记 3826，validate canonical 核掉 33）。
 - **当前状态**：✅ 5000 已采完、3793 strict 已确认；**训练集 `sft_train.jsonl`（3793 条，41MB）已由 `build_sft_data.sh` 生成**（本次按要求只生成、不训练）。
+- **当前论文子集**：从上述母集继续筛选 `n_steps ≤ 10`，得到 **3,624 条**，用于当前 10-turn 主实验；不覆盖母集文件。
+- **独立文件**：运行 `python scripts/build_sft_horizon_subset.py` 生成
+  `data/sft_train_horizon10.jsonl` 及其 `.summary.json`；该文件专供当前论文的 horizon-10 分析，
+  不覆盖 `data/sft_train.jsonl`。
 - **为什么停 5000 不追 10000**：原计划 10000，但 1.8B（Qwen3-1.7B-Base）判 3793 strict 够用，不再追量（详见 commit）。
 
 ### 2b) Constraint-causal / Certified 数据
@@ -134,7 +138,8 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
 | `trajectories_raw_old/` | 历史采集归档（不用，留底） | — |
 | `counterfactual/heldout_atomic_pairs_v2.jsonl` | task-disjoint 原子 heldout：150 option + 384 price | — |
 | `sft_certified_corrective_train.jsonl` | v4 方法数据：自然格式 paired price/option/nuisance | — |
-| `sft_train_certified_corrective_mix.jsonl` | v4 基线混合训练集，共 10,057 条 | — |
+| `sft_train_certified_corrective_mix.jsonl` | v4 的 10-turn aligned feasibility 混合训练集，共 10,057 条 | — |
+| `sft_train_horizon10.jsonl` | 从 3,793 条母集筛出的 `2 ≤ n_steps ≤ 10` 子集，共 3,624 条 | — |
 
 ### `scripts/`（采样/构建脚本，全可复现）
 | 脚本 | 作用 |
@@ -168,10 +173,18 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
 
 ## 六、下一步（数据侧）
 
-1. **Corrective SFT v4**：正在从 v3 adapter 继续训练；不要并行启动其他 GPU job。
-2. **自然反事实门**：训练后先跑 heldout-v2。price cf accuracy 必须 ≥30%，同时检查
-   original accuracy，排除“整体不买”的伪改善。
-3. **Final-200 门**：只有第一道门通过才运行，strict 必须 ≥16%。
-4. **Certified GRPO**：两道门都通过后才人工启动；评测链不会自动启动训练。
-5. **数据有效性复核**：在最终论文数字前核对自然指令预算与标签预算的一致性，并补
-   matched one-sided hard-negative、summary ablation、nuisance invariance 和多 seed 对照。
+1. **Corrective SFT v4 已完成并通过两道门**：natural heldout-v2 price cf 78.65%、price
+   paired robust 73.70%，Final-200 strict 31.5%。
+2. **数据有效性复核**：冻结 v4 数据与 adapter hash，并核对自然指令预算与标签预算的一致性。
+3. **保留 pair identity**：后续 parquet / sampler 必须稳定保留 `pair_id`、两侧标记、干预类型和
+   期望动作关系，不能把 paired 数据仅当作独立行混洗。
+4. **Matched GRPO 对照**：从同一 v4 adapter 起训，先运行 `CF-GRPO w/o Pair`，再运行加入
+   relation reward 的 Paired GRPO；两者只允许在 `R_pair` 上不同。
+5. **补齐评测控制**：增加 matched one-sided hard-negative、summary ablation、nuisance invariance、
+   constraint-type holdout 和多 seed 对照。完整研究顺序见
+   [`docs/constraint-faithful-paired-policy.md`](docs/constraint-faithful-paired-policy.md)。
+6. **当前论文 horizon**：从基础 `sft_train.jsonl` 的 3,793 条母集中筛选 `n_steps ≤ 10`，得到
+   3,624 条基础子集；现有 10,057 条 v4 aligned mix 即按此口径构建。超过 10 步的 169 条保留作后续
+   long-horizon 扩展，不进入当前主实验。设计细节见
+   [`docs/trajectory-horizon-and-long-horizon.md`](docs/trajectory-horizon-and-long-horizon.md)。
+   设计细节见 [`docs/trajectory-horizon-and-long-horizon.md`](docs/trajectory-horizon-and-long-horizon.md)。
