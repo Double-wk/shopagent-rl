@@ -110,7 +110,10 @@ def main() -> None:
     cfg = yaml.safe_load(open(args.config, encoding="utf-8"))
     data_cfg, model_cfg, train_cfg = cfg["data"], cfg["model"], cfg["train"]
 
-    tok = AutoTokenizer.from_pretrained(model_cfg["base_model"], trust_remote_code=True)
+    revision = model_cfg.get("revision")
+    tok = AutoTokenizer.from_pretrained(
+        model_cfg["base_model"], revision=revision, trust_remote_code=True
+    )
     if tok.pad_token is None:
         tok.pad_token = tok.eos_token
 
@@ -122,7 +125,7 @@ def main() -> None:
 
     model = AutoModelForCausalLM.from_pretrained(
         model_cfg["base_model"], torch_dtype=torch.bfloat16,
-        attn_implementation="sdpa", trust_remote_code=True,
+        attn_implementation="sdpa", revision=revision, trust_remote_code=True,
     )
     model.config.use_cache = False
     # NOTE: do NOT call model.gradient_checkpointing_enable() here. The Trainer
@@ -174,6 +177,8 @@ def main() -> None:
         report_to="none",
         dataloader_num_workers=2,
         group_by_length=train_cfg.get("group_by_length", False),
+        seed=train_cfg.get("seed", 42),
+        data_seed=train_cfg.get("data_seed", train_cfg.get("seed", 42)),
     )
     if train_cfg["save_strategy"] == "steps":
         # checkpoint every N steps: crash-recovery (resume) + mid-run eval

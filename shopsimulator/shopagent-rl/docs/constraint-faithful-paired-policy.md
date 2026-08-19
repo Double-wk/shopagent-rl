@@ -116,9 +116,15 @@
 | **Corrective SFT v4** | **price CF 78.65%；price PRA 73.70%** | **31.5%** | 自然双侧配对监督可行 |
 | Explicit-Clean SFT v5 | natural price CF 0.26%；显式 price CF 100% | 不进入后续 RL | 显式格式捷径失败消融 |
 
-当前可复现的 v4 混合训练集为 **10,057 条**；早期讨论中的 8,057 条是阶段快照，不作为最终数据规模。
+v4 的 10,057 条混合训练集只保留为 **feasibility/corrective ablation**，不作为主实验初始化。
 v3/v5 说明 summary、显式字段和模板格式都可能伪造高反事实分数。因此所有 headline 结果必须来自 natural atomic split，
 structured summary 只能作诊断。
+
+正式主实验使用独立版本 `horizon10-clean-v1`：从固定 revision 的
+`Qwen/Qwen3-1.7B-Base` 直接训练 `data/sft_train_horizon10.jsonl` 的 3,624 条普通
+strict-success 轨迹，不加载 v1--v5 的任何 adapter；随后从同一个 clean adapter 启动
+Independent GRPO 与 Paired GRPO。完整协议和数据哈希记录在
+[`experiments/manifests/horizon10_clean_v1.yaml`](../experiments/manifests/horizon10_clean_v1.yaml)。
 
 ## 5. 研究问题与假设
 
@@ -243,14 +249,15 @@ GRPO Paired-C1-hard 建立了 **40% strict / 0% Price-CF** 的解耦证据。
 
 ### Stage 1：Certified SFT feasibility——已完成
 
-当前论文使用从 3,793 条 terra strict 母集中筛出的 `n_steps ≤ 10` 子集（独立文件 `data/sft_train_horizon10.jsonl`，共 3,624 条），并构建 10-turn aligned v4 mix。
-该 mix 在 natural heldout-v2 上达到 price CF 78.65%、price PRA 73.70%、original accuracy 94.53%，Final-200 strict 31.5%。
+当前论文使用从 3,793 条 terra strict 母集中筛出的 `n_steps ≤ 10` 子集（独立文件 `data/sft_train_horizon10.jsonl`，共 3,624 条）。
+正式 clean SFT 直接从 base model 训练该子集；v4 aligned mix 的 natural heldout-v2 结果
+（price CF 78.65%、price PRA 73.70%、Final-200 strict 31.5%）仅作为 feasibility 记录。
 超过 10 步的 169 条母集轨迹保留作后续 long-horizon 扩展，详见 [`trajectory-horizon-and-long-horizon.md`](trajectory-horizon-and-long-horizon.md)。
 
 ### Stage 2：Matched independent CF-GRPO——下一步优先
 
-从同一 v4 adapter 起训，使用 `R_task + R_cert`，但不使用 `R_pair`。它测试普通 RL 是否再次覆盖 SFT 恢复的 price sensitivity，
-并作为完整方法的严格 matched baseline。
+从同一 clean SFT adapter 起训，使用 `R_task + R_cert`，但不使用 `R_pair`。它测试普通 RL 是否改变
+基础购物 SFT 的 constraint fidelity，并作为完整方法的严格 matched baseline。
 
 当前正式协议使用 `data/grpo_certified_natural_800_pairblocked.parquet`：400 个 environment row
 与 200 个完整 pair（100 price、60 option、40 nuisance）共 800 行。每 4 行构成一个不可拆分 block，
@@ -289,11 +296,11 @@ counterfactual prompt，再从候选池补足各类别配额；当前文件最�
 
 ## 13. 近期执行清单
 
-1. 冻结 v4 adapter、10,057 条 mix 和 natural heldout-v2，记录数据/模型 hash。
+1. 完成并冻结 `horizon10-clean-v1` SFT，记录 base revision、3,624 条数据 hash 和训练配置。
 2. 审计自然预算文本与 verifier budget 一致性。
 3. 扩充 train-only relevant/nuisance pair，并稳定保留 `pair_id`。
 4. 实现 pair-aware batch/sampler 和动作意图规范化。
-5. 先跑 `CF-GRPO w/o Pair`，再跑完全匹配的 `Paired GRPO`。
+5. 从 clean adapter 先跑 `CF-GRPO w/o Pair`，再跑完全匹配的 `Paired GRPO`。
 6. 用 3 个 seed 评测 Final-200、Price CF、Option CF、Invariance 和 PRA。
 7. 完成 one-sided、structured-format、no-nuisance、no-pair 消融。
 8. 最后做 constraint holdout、模型尺度和外部环境泛化。

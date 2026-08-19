@@ -59,7 +59,8 @@
 
 ## 4. 后续扩展：full-horizon paired mix
 
-当前论文的正式 Paired GRPO 使用现有 `10,057` 条 aligned mix。若后续单独研究 long-horizon，
+此前的 v4 `10,057` 条 aligned mix 仅用于 corrective feasibility/shortcut ablation，不是当前论文主实验初始化。
+当前论文正式 Paired GRPO 从 `horizon10-clean-v1` 的 3,624 条 clean SFT adapter 开始。若后续单独研究 long-horizon，
 再从完整 `sft_train.jsonl` 重建扩展版本：
 
 ```bash
@@ -174,7 +175,7 @@ python scripts/build_sft_certified_mix.py \
 
 1. 保留现有 `sft_train.jsonl` 作为 3,793 条母集；
 2. 当前论文直接筛选 `n_steps ≤ 10`，使用 3,624 条基础轨迹；
-3. 使用现有 10,057 条 v4 aligned mix 进行当前 paired policy 实验；
+3. 从原始 Qwen3-1.7B-Base 直接训练 3,624 条 horizon-10 clean SFT，并以此进行 paired policy 主实验；
 4. 从该起点分别运行 `CF-GRPO w/o Pair` 和 `Paired GRPO`；
 5. 未来若研究 long-horizon，再用 `--max-turns 30` 构建 10,226 条扩展 mix。
 

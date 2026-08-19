@@ -80,7 +80,7 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
 - **生成流程**：`sample_sft_targets.py`（采样目标）→ `teacher.collect`（teacher 跑环境采轨迹）→ `build_sft_data.sh`（train-range 过滤 + `teacher.validate` 重新校验 → `sft_train.jsonl`）。
 - **要 teacher 采集吗**：✅ 需要（且**已采完**）。teacher temperature=0，所以失败任务重采无意义——这批最终 strict 入训 **3793**（raw 标记 3826，validate canonical 核掉 33）。
 - **当前状态**：✅ 5000 已采完、3793 strict 已确认；**训练集 `sft_train.jsonl`（3793 条，41MB）已由 `build_sft_data.sh` 生成**（本次按要求只生成、不训练）。
-- **当前论文子集**：从上述母集继续筛选 `n_steps ≤ 10`，得到 **3,624 条**，用于当前 10-turn 主实验；不覆盖母集文件。
+- **当前论文 clean 主线**：从上述母集继续筛选 `n_steps ≤ 10`，得到 **3,624 条**，从原始 Qwen3-1.7B-Base 直接训练；不加载 v1--v5 adapter。
 - **独立文件**：运行 `python scripts/build_sft_horizon_subset.py` 生成
   `data/sft_train_horizon10.jsonl` 及其 `.summary.json`；该文件专供当前论文的 horizon-10 分析，
   不覆盖 `data/sft_train.jsonl`。
@@ -93,7 +93,7 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
   `COMMIT`，超预算侧目标是 `SEARCH_ALTERNATIVE`。option pair 同理只翻转目标规格。
 - **v3 失败数据**：价格训练只包含超预算侧，并只在该侧追加 `任务约束摘要`。heldout-v2
   自然输入 price cf 为 0%；恢复摘要后为 100%，证明形成了摘要存在性捷径。
-- **v4 corrective mix**：`data/sft_train_certified_corrective_mix.jsonl` 共 10,057 条：
+- **v4 corrective mix（历史 feasibility，不是主线起点）**：`data/sft_train_certified_corrective_mix.jsonl` 共 10,057 条：
   2,000 预算内价格、2,000 超预算价格、1,622 option、811 nuisance control，其余为基线
   SFT 保留样本。价格双侧都不追加摘要；811 条 summary-positive nuisance 用来打破旧触发器。
 - **GRPO 混合**：`data/grpo_certified_natural_train.parquet` 保留 environment row，并对
@@ -174,18 +174,17 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
 
 ## 六、下一步（数据侧）
 
-1. **Corrective SFT v4 已完成并通过两道门**：natural heldout-v2 price cf 78.65%、price
+1. **Corrective SFT v4 已完成并通过两道 feasibility 门**：natural heldout-v2 price cf 78.65%、price
    paired robust 73.70%，Final-200 strict 31.5%。
-2. **数据有效性复核**：冻结 v4 数据与 adapter hash，并核对自然指令预算与标签预算的一致性。
+2. **正式 clean SFT**：按 `experiments/manifests/horizon10_clean_v1.yaml` 从 base 直接训练 3,624 条普通轨迹。
 3. **保留 pair identity**：后续 parquet / sampler 必须稳定保留 `pair_id`、两侧标记、干预类型和
    期望动作关系，不能把 paired 数据仅当作独立行混洗。
-4. **Matched GRPO 对照**：从同一 v4 adapter 起训，先运行 `CF-GRPO w/o Pair`，再运行加入
+4. **Matched GRPO 对照**：从同一 clean adapter 起训，先运行 `CF-GRPO w/o Pair`，再运行加入
    relation reward 的 Paired GRPO；两者只允许在 `R_pair` 上不同。
 5. **补齐评测控制**：增加 matched one-sided hard-negative、summary ablation、nuisance invariance、
    constraint-type holdout 和多 seed 对照。完整研究顺序见
    [`docs/constraint-faithful-paired-policy.md`](docs/constraint-faithful-paired-policy.md)。
 6. **当前论文 horizon**：从基础 `sft_train.jsonl` 的 3,793 条母集中筛选 `n_steps ≤ 10`，得到
-   3,624 条基础子集；现有 10,057 条 v4 aligned mix 即按此口径构建。超过 10 步的 169 条保留作后续
+   3,624 条基础子集；v4 的 10,057 条 aligned mix 仅作为历史 corrective ablation。超过 10 步的 169 条保留作后续
    long-horizon 扩展，不进入当前主实验。设计细节见
    [`docs/trajectory-horizon-and-long-horizon.md`](docs/trajectory-horizon-and-long-horizon.md)。
-   设计细节见 [`docs/trajectory-horizon-and-long-horizon.md`](docs/trajectory-horizon-and-long-horizon.md)。

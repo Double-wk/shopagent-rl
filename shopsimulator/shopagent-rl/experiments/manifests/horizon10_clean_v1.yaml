@@ -1,0 +1,40 @@
+experiment_id: horizon10-clean-v1
+role: formal_mainline
+created: 2026-08-19
+
+lineage:
+  base_model: Qwen/Qwen3-1.7B-Base
+  base_revision: ea980cb0a6c2ae4b936e82123acc929f1cec04c1
+  init_adapter: null
+  forbidden_predecessors:
+    - outputs/sft/v3_certified
+    - outputs/sft/v4_certified_corrective
+    - outputs/sft/v5_certified_explicit_clean
+
+sft:
+  config: configs/sft_horizon10_clean_v1.yaml
+  data: data/sft_train_horizon10.jsonl
+  rows: 3624
+  sha256: 2d72041a9a3202550d1282bee85cfeb8b4f977059726950583118688dc1ee964
+  contents: ordinary_strict_success_trajectories_only
+  max_environment_steps: 10
+  seed: 42
+  data_seed: 42
+  output: outputs/sft/v6_horizon10_clean_from_base/model/training_output/lora_adapter
+
+grpo:
+  launcher: scripts/run_horizon10_clean_grpo.sh
+  base_snapshot: /root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1
+  data: data/grpo_certified_natural_800_pairblocked.parquet
+  rows: 800
+  sha256: 9536e6605afb155db2335c432a8eb86cb1ed93657178c042181a5f5f2155b266
+  total_steps: 200
+  train_batch: 4
+  rollout_n: 4
+  matched_difference: algorithm.paired_intervention.enabled
+  independent_output: /overlay/shopagent_rl_grpo_outputs/grpo/horizon10_clean_v1_independent
+  paired_output: /overlay/shopagent_rl_grpo_outputs/grpo/horizon10_clean_v1_paired
+
+historical_controls:
+  v4_corrective: feasibility_and_shortcut_correction_only
+  v5_explicit_clean: explicit_format_shortcut_ablation_only
