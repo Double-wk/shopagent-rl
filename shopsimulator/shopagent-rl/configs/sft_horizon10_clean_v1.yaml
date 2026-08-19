@@ -15,8 +15,8 @@ model:
 
 train:
   max_seq_length: 8192
-  batch_size: 1
-  grad_accum: 8
+  batch_size: 2
+  grad_accum: 4
   epochs: 3
   lr: 1.0e-4
   warmup_ratio: 0.03
@@ -24,6 +24,6 @@ train:
   save_strategy: epoch
   save_total_limit: 3
   gradient_checkpointing: true
-  group_by_length: false
+  group_by_length: true
   seed: 42
   data_seed: 42

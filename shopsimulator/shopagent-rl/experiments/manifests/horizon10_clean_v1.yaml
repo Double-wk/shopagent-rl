@@ -20,6 +20,10 @@ sft:
   max_environment_steps: 10
   seed: 42
   data_seed: 42
+  batch_size: 2
+  grad_accum: 4
+  effective_batch_size: 8
+  group_by_length: true
   gradient_checkpointing: true
   output: outputs/sft/v6_horizon10_clean_from_base/model/training_output/lora_adapter
 

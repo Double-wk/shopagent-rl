@@ -18,6 +18,9 @@ class ExperimentProtocolTests(unittest.TestCase):
         self.assertEqual(config["model"]["revision"], "ea980cb0a6c2ae4b936e82123acc929f1cec04c1")
         self.assertIn("v6_horizon10_clean_from_base", config["output_dir"])
         self.assertTrue(config["train"]["gradient_checkpointing"])
+        self.assertEqual(config["train"]["batch_size"], 2)
+        self.assertEqual(config["train"]["grad_accum"], 4)
+        self.assertTrue(config["train"]["group_by_length"])
 
     def test_grpo_uses_the_pinned_base_snapshot(self) -> None:
         launcher = (ROOT / "scripts/run_horizon10_clean_grpo.sh").read_text()
