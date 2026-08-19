@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Run a Final-200 eval (Base / SFT / GRPO) with the local vLLM policy.
-# Sources the shop-A ROCm vLLM launcher (amdsmi/functorch/shims/spawn/offline env;
-# ONE-env design — eval runs in the same shop-A env as SFT/GRPO, PY is set by the script),
+# Sources the shopsim ROCm vLLM launcher (amdsmi/functorch/shims/spawn/offline env;
+# ONE-env design — eval runs in the same shopsim env as SFT/GRPO, PY is set by the script),
 # then runs the round-stepped wave runner.
 #
 # Usage:
@@ -15,6 +15,6 @@ set -euo pipefail
 # shopagent-rl root regardless of where this is invoked from
 cd "$(dirname "$0")/.."      # -> shopagent-rl/
 
-source scripts/vllm_env_shopA.sh   # ONE-env: shop-A python + ROCm shims (sets PY)
+source scripts/vllm_env_shopA.sh   # ONE-env: shopsim python + ROCm shims (sets PY)
 
 exec "$PY" -m experiment.eval.run_final200 "$@"

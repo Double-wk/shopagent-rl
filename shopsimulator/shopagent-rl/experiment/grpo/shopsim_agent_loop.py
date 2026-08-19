@@ -18,7 +18,7 @@ Wired in with zero veRL source changes:
   * the dataset row carries `task_id` (a column) + `messages=[system]` so veRL
     passes `raw_prompt=[system]` and `task_id` as kwargs to run().
 
-Env: this module runs under shop-A (transformers 4.57.6 after the 2026-08-08
+Env: this module runs under shopsim (transformers 4.57.6 after the 2026-08-08
 downgrade; opd-rocm is identical). The sys.path insert below makes the shop_A
 package (shop_env.*) importable from veRL's worker cwd (the verl repo root).
 The env16 pack_api pool caps concurrent live trajectories; reset() retries on
@@ -249,7 +249,12 @@ class ShopsimAgentLoop(AgentLoopBase):
     async def run(self, sampling_params: dict[str, Any], **kwargs) -> AgentLoopOutput:
         raw_prompt = list(kwargs["raw_prompt"])
         if str(kwargs.get("sample_mode") or "environment") == "counterfactual":
-            return await self._run_counterfactual(raw_prompt, sampling_params, **kwargs)
+            # ``raw_prompt`` is supplied by veRL in kwargs.  Remove it before
+            # forwarding the remaining row metadata because it is already the
+            # explicit first argument to ``_run_counterfactual``.
+            cf_kwargs = dict(kwargs)
+            cf_kwargs.pop("raw_prompt", None)
+            return await self._run_counterfactual(raw_prompt, sampling_params, **cf_kwargs)
         task_id = kwargs.get("task_id")
         if task_id is None:
             task_id = kwargs.get("extra_info", {}).get("task_id")

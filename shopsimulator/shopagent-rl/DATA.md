@@ -157,6 +157,7 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
 |---|---|
 | `grpo_train.parquet` | GRPO 训练 parquet（1000 行，veRL 格式），**已重建** |
 | `grpo_certified_natural_train.parquet` | v4 后续 Certified GRPO 输入；不含价格 summary |
+| `grpo_certified_natural_800_pairblocked.parquet` | 当前 matched GRPO 输入；400 environment + 200 pairs×2 = 800 行，正好覆盖 200 steps；采样前按 3,000 字符过滤整对超长 CF prompt，当前最大 1,894 tokens，不触发 2,048-token 训练过滤 |
 
 ---
 

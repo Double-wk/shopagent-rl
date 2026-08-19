@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Build the pinned ROCm vLLM checkout into a named conda environment.
 CONDA_ROOT="${CONDA_ROOT:-/overlay/miniconda3}"
-CONDA_ENV="${1:-shop-A}"
+CONDA_ENV="${1:-shopsim}"
 VLLM_SRC="${VLLM_SRC:-/overlay/vllm-rocm-src}"
 ROCM_PATH="${ROCM_PATH:-/opt/rocm-7.2.1}"
 # 89a77b108 is the verified gfx1100/ROCm 7.2.1 build (v0.16.0 tag).

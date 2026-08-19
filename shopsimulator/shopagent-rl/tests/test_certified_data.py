@@ -73,6 +73,62 @@ class CertifiedDataTests(unittest.TestCase):
         self.assertTrue(all("任务约束摘要" not in row["prompt"][-1]["content"] for row in cf_rows))
         self.assertEqual(len({row["extra_info"]["index"] for row in rows}), 3)
 
+    def test_pair_blocking_keeps_complete_relations_in_each_batch(self) -> None:
+        rows = build_rows(
+            [1, 2, 3, 4], [price_pair(), {**price_pair(), "pair_id": "8:price_above_budget", "task_id": 8}],
+            [], [], SYSTEM,
+            environment_repeat=1,
+            price_pairs=2,
+            option_pairs=0,
+            nuisance_pairs=0,
+            seed=1,
+            pair_block_size=4,
+        )
+        self.assertEqual(len(rows), 8)
+        for start in range(0, len(rows), 4):
+            block = rows[start:start + 4]
+            relation_ids = {row["relation_id"] for row in block if row["relation_id"]}
+            if not relation_ids:
+                self.assertTrue(all(row["sample_mode"] == "environment" for row in block))
+                continue
+            self.assertEqual(len(relation_ids), 2)
+            for relation_id in relation_ids:
+                sides = {row["side"] for row in block if row["relation_id"] == relation_id}
+                self.assertEqual(sides, {"original", "counterfactual"})
+
+    def test_environment_task_limit_is_deterministic(self) -> None:
+        kwargs = dict(
+            environment_repeat=1,
+            environment_tasks=4,
+            price_pairs=0,
+            option_pairs=0,
+            nuisance_pairs=0,
+            seed=7,
+        )
+        first = build_rows(list(range(20)), [], [], [], SYSTEM, **kwargs)
+        second = build_rows(list(range(20)), [], [], [], SYSTEM, **kwargs)
+        self.assertEqual([row["task_id"] for row in first], [row["task_id"] for row in second])
+        self.assertEqual(len(first), 4)
+        self.assertEqual(len({row["task_id"] for row in first}), 4)
+
+    def test_prompt_char_limit_replaces_overlong_pairs_before_sampling(self) -> None:
+        long_pair = price_pair()
+        long_pair["pair_id"] = "9:price_above_budget"
+        long_pair["task_id"] = 9
+        long_pair["original"]["observation"] = "x" * 100
+        long_pair["counterfactual"]["observation"] = "y" * 100
+        rows = build_rows(
+            [], [long_pair, price_pair()], [], [], SYSTEM,
+            environment_repeat=0,
+            price_pairs=1,
+            option_pairs=0,
+            nuisance_pairs=0,
+            seed=1,
+            max_counterfactual_prompt_chars=80,
+        )
+        self.assertEqual(len(rows), 2)
+        self.assertEqual({row["pair_id"] for row in rows}, {"7:price_above_budget"})
+
     def test_explicit_budget_is_identical_and_visible_on_both_sides(self) -> None:
         pair = make_budget_explicit(price_pair())
         self.assertEqual(pair["goal"]["price_upper_source"], "programmatic_explicit_budget")

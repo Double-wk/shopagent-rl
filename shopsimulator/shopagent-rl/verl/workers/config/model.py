@@ -117,7 +117,7 @@ class HFModelConfig(BaseConfig):
     enable_gradient_checkpointing: bool = True
     enable_activation_offload: bool = False
 
-    # shop-A ROCm 环境无 flash_attn → use_remove_padding 走 varlen/fa_attn 路径(需要 fa2)会崩;
+    # shopsim ROCm 环境无 flash_attn → use_remove_padding 走 varlen/fa_attn 路径(需要 fa2)会崩;
     # 改 False 走标准 padded sdpa 路径(与 SFT/eval 一致, transformer_impl.prepare_model_inputs
     # 的 else 分支 + build_attention_mask_from_nested 完整支持)。engine_workers 的 actor/ref/rollout
     # 三处都读 model_config.get("use_remove_padding"), 此处一处覆盖全部。attn_implementation 见上/下文 sdpa。
@@ -186,7 +186,7 @@ class HFModelConfig(BaseConfig):
         )
 
         # construct hf_config
-        # shop-A ROCm 环境无 flash_attn → 默认 sdpa（与 SFT/eval 一致）。override_config 仍可覆盖。
+        # shopsim ROCm 环境无 flash_attn → 默认 sdpa（与 SFT/eval 一致）。override_config 仍可覆盖。
         attn_implementation = self.override_config.get("attn_implementation", "sdpa")
         self.hf_config = AutoConfig.from_pretrained(
             self.local_hf_config_path, trust_remote_code=self.trust_remote_code, attn_implementation=attn_implementation

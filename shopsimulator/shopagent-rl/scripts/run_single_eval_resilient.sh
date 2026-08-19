@@ -15,7 +15,7 @@ set -u
 YAML_PATH=${1:?usage: run_single_eval_resilient.sh <yaml> <max_workers> <rounds>}
 MAX_WORKERS=${2:-4}
 ROUNDS=${3:-20}
-PY=/overlay/miniconda3/envs/shop-A/bin/python
+PY=/overlay/miniconda3/envs/shopsim/bin/python
 cd /workspace/shopsimulator/ShopSimulator/single_eval
 
 export NO_PROXY=localhost,127.0.0.1

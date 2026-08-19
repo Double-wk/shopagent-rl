@@ -17,7 +17,7 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."      # -> shopagent-rl/
-source scripts/vllm_env_shopA.sh   # ONE-env: shop-A python + ROCm shims (sets PY)
+source scripts/vllm_env_shopA.sh   # ONE-env: shopsim python + ROCm shims (sets PY)
 
 MODEL=/overlay/qwen3_1.7b_paired_c1hard_merged
 if [ ! -f "$MODEL/model.safetensors" ]; then

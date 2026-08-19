@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# veRL multi-turn GRPO for the ShopSim agent — vLLM async backend, shop-A env.
+# veRL multi-turn GRPO for the ShopSim agent — vLLM async backend, shopsim env.
 # Continues from the SFT LoRA adapter (r=32/alpha=64/7-target-modules — the
 # adapter's own config carries these; we only point at it).
 #
-# Single env: SFT + GRPO + eval all run in shop-A (transformers 4.57.6 after the
+# Single env: SFT + GRPO + eval all run in shopsim (transformers 4.57.6 after the
 # 2026-08-08 downgrade). Sources the ROCm vLLM shims (amdsmi link + functorch
 # shim) and runs from the verl repo root so the hydra searchpath in
 # configs/grpo.yaml (file://verl/trainer/config) resolves.
@@ -17,7 +17,7 @@ set -euo pipefail
 
 SHOP_A=/workspace/shopsimulator/shopagent-rl
 VERL_ROOT="$SHOP_A"   # veRL 0.8.0 lives in shopagent-rl/verl (self-contained); cd here so hydra searchpath file://verl/trainer/config resolves
-PY=/overlay/miniconda3/envs/shop-A/bin/python
+PY=/overlay/miniconda3/envs/shopsim/bin/python
 
 # ---- persistent log + background detach (new session; survives terminal/SSH close) ----
 # Log lives under run/ (NOT /tmp) so real runs persist. Override name: RUN_NAME=...

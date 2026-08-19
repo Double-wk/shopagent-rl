@@ -871,7 +871,7 @@ class FSDPEngine(BaseEngine):
         return per_tensor_param, peft_config_dict
 
     def disable_adapter(self) -> ContextManager:
-        # shop-A FSDP+PEFT(0.20) 下 self.module 是 FSDP(PeftModel)，但 FSDP 的 _fsdp_wrapped_module
+        # shopsim FSDP+PEFT(0.20) 下 self.module 是 FSDP(PeftModel)，但 FSDP 的 _fsdp_wrapped_module
         # 解析到内层 Qwen3ForCausalLM（lora.Linear 子层在其 modules() 树里），PeftModel 外壳的
         # disable_adapter() / HF-native disable_adapters() 都触达不到（前者报 Qwen3 无此方法，
         # 后者报 "No adapter loaded"）。改用 PEFT 底层 _enable_adapter_layers 的同款机制：遍历

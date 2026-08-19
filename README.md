@@ -262,11 +262,11 @@ conda config --show-sources
 
 ## 阶段 3.5：AMD GPU 训练环境（ROCm 7.2.1）
 
-**目的：** 配置 AMD ROCm GPU 训练环境。本机单卡 gfx1100（RDNA3，48GB），ROCm 7.2.1（`/opt/rocm-7.2.1`），conda 在 `/overlay/miniconda3`。**shopsimulator 是本仓库主项目**，对应环境 `shop-A`；机器上另有 `rocm-base`（GPU 模板环境，`scripts/vllm_env_rocm_base.sh` 指向它）与 `opd-rocm`（opd 项目历史环境，该项目已迁出本仓库）。
+**目的：** 配置 AMD ROCm GPU 训练环境。本机单卡 gfx1100（RDNA3，48GB），ROCm 7.2.1（`/opt/rocm-7.2.1`），conda 在 `/overlay/miniconda3`。**shopsimulator 是本仓库主项目**，统一使用唯一环境 `shopsim`；旧的 `shopenv`/`rocm-base` 环境方案已废弃。
 
-### shopsimulator（shop-A 环境）
+### shopsimulator（shopsim 环境）
 
-依赖以 `shopsimulator/shopagent-rl/requirements.txt` 为准（275 行全部 `==` 钉死）。从零建环境的完整步骤见 [`shopsimulator/shopagent-rl/docs/amd-gpu-quickstart.md`](shopsimulator/shopagent-rl/docs/amd-gpu-quickstart.md)，要点顺序：conda 建环境 + 本地 ROCm wheel 装 torch 栈 → `bash scripts/build_vllm_rocm.sh shop-A` 源码编译 vLLM → 过滤 GPU 栈 5 行（torch 系 `+rocm` 本地版本号与 `vllm==0.16.1.dev0`，PyPI 取不到）后 `pip install --no-deps -r requirements.txt` → `pip install --no-deps -e shopsimulator/shopagent-rl`（editable 的 `shop-a-verl`）→ `bash scripts/restore_large_artifacts.sh` 还原压缩入库的 adapter / 商品库 / BM25 索引。
+依赖以 `shopsimulator/shopagent-rl/requirements.txt` 为准（275 行全部 `==` 钉死）。从零建环境的完整步骤见 [`shopsimulator/shopagent-rl/docs/amd-gpu-quickstart.md`](shopsimulator/shopagent-rl/docs/amd-gpu-quickstart.md)，要点顺序：conda 建 `shopsim` 环境 + 本地 ROCm wheel 装 torch 栈 → `bash scripts/build_vllm_rocm.sh shopsim` 源码编译 vLLM → `pip install --no-deps -r requirements.txt` → `pip install --no-deps -e shopsimulator/shopagent-rl`（editable 的 `shop-a-verl`）→ `bash scripts/restore_large_artifacts.sh` 还原压缩入库的 adapter / 商品库 / BM25 索引。
 
 ### 当前版本（GPU 栈）
 
@@ -289,9 +289,7 @@ conda config --show-sources
 
 | 环境 | 用途 |
 | --- | --- |
-| `shop-A` | shopsimulator 主项目：torch 全栈 + vLLM 0.16.0 + 依赖锁 + editable `shop-a-verl` |
-| `rocm-base` | GPU 模板环境；`scripts/vllm_env_rocm_base.sh` 的 `PY` 指向它 |
-| `opd-rocm` | opd 项目历史环境（opd 已迁出本仓库，保留备用） |
+| `shopsim` | shopsimulator 唯一环境：pack_api + SFT/GRPO/评测，包含 torch 全栈、vLLM 0.16.0、依赖锁和 editable `shop-a-verl` |
 
 另占：`/overlay/vllm-rocm-src`（vLLM 源码与编译产物）、`/overlay/triton-kernels-src`（v3.5.0，编译期 CMake FetchContent 用）、模型缓存 `/root/.cache/huggingface`。
 
@@ -301,7 +299,7 @@ conda config --show-sources
 
 ```bash
 source /workspace/scripts/vllm_env_rocm_base.sh
-PY=/overlay/miniconda3/envs/shop-A/bin/python
+PY=/overlay/miniconda3/envs/shopsim/bin/python
 
 "$PY" -c "import torch,vllm,transformers; \
   print(torch.__version__, torch.cuda.is_available(), vllm.__version__)"
@@ -316,7 +314,7 @@ PY=/overlay/miniconda3/envs/shop-A/bin/python
 # 真实引擎
 "$PY" /workspace/scripts/vllm_smoke.py         # 末行 RESULT=PASS
 
-# shopagent-rl CPU 测试
+# shopagent-rl 测试
 cd /workspace/shopsimulator/shopagent-rl && "$PY" -m pytest tests -q
 ```
 
@@ -328,7 +326,7 @@ gfx1100 非 gfx90a/gfx942，起引擎前必须先 source 工作区的 shim 脚�
 source /workspace/scripts/vllm_env_rocm_base.sh
 ```
 
-脚本做 amdsmi 符号链接 + functorch shim（重启后 `/tmp` 清空，每次都要重新 source）+ spawn 设置 + 离线模型缓存路径，`PY` 指向 `rocm-base` 环境。不 source 直接起引擎会报 `RuntimeError: Device string must not be empty`——那是 vLLM 找不到 amdsmi、平台探测为空，不是设备问题。
+脚本做 amdsmi 符号链接 + functorch shim（重启后 `/tmp` 清空，每次都要重新 source）+ spawn 设置 + 离线模型缓存路径，`PY` 指向 `shopsim` 环境。不 source 直接起引擎会报 `RuntimeError: Device string must not be empty`——那是 vLLM 找不到 amdsmi、平台探测为空，不是设备问题。
 
 真实引擎 smoke（2026-08-16 本机已通过）：`Qwen/Qwen3-1.7B-Base`、Triton Attention backend、权重 3.31 GiB、KV cache 23.76 GiB、生成 34 tokens、输出含 `17 + 28 = 45`、末行 `RESULT=PASS`。复跑用 `scripts/vllm_smoke.py`。
 

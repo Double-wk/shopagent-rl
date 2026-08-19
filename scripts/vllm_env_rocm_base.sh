@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# vLLM on ROCm, rocm-base env — general-purpose GPU environment.
-# rocm-base ships the full lock plus the vLLM 0.16.0 build at commit 89a77b108.
+# vLLM on ROCm, shopsim env — the single ShopSimulator environment.
+# shopsim ships the full lock plus the vLLM 0.16.0 build at commit 89a77b108.
 # veRL 0.8.0 is the vendored source under shopsimulator/shopagent-rl, installed once as
 # the editable `shop-a-verl` package (see shop_A/pyproject.toml); `import verl`
-# resolves to that source in bare Python, exactly like shop-A and opd-rocm.
+# resolves to that source in bare Python, exactly like shopsim and opd-rocm.
 #
 # Source before any vLLM / GPU script:
 #   source /workspace/scripts/vllm_env_rocm_base.sh
@@ -13,7 +13,7 @@
 # DO NOT `pip install` vLLM deps without --no-deps — it clobbers ROCm torch.
 set -u
 
-PY=/overlay/miniconda3/envs/rocm-base/bin/python
+PY=/overlay/miniconda3/envs/shopsim/bin/python
 
 # 1. amdsmi (system binding) -> PYTHONPATH so vLLM's rocm platform plugin finds it.
 #    Without this the engine dies in DeviceConfig: "Device string must not be empty".
@@ -34,5 +34,5 @@ export PYTHONPATH=/workspace/shopsimulator/shopagent-rl:/tmp/amdsmi_link:/tmp/fu
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 HF_HUB_CACHE=/root/.cache/huggingface/hub
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
-echo "rocm-base vLLM env ready: PY=$PY  PYTHONPATH=$PYTHONPATH"
+echo "shopsim vLLM env ready: PY=$PY  PYTHONPATH=$PYTHONPATH"
 echo "  remember: guard your LLM() call in  if __name__ == '__main__':"

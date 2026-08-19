@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# shop-A ships the canonical vendored veRL 0.8.0 as an editable package.
+# shopsim ships the canonical vendored veRL 0.8.0 as an editable package.
 # Install it once after a fresh clone: $PY -m pip install --no-deps -e .
-# shop-A already ships the verified vLLM 0.16.0 code at commit 89a77b108.
+# shopsim already ships the verified vLLM 0.16.0 code at commit 89a77b108.
 # This script only wires the two ROCm shims and the offline HF cache.
 #
 # Source before any vLLM/GRPO/eval script:
@@ -12,7 +12,7 @@
 # DO NOT `pip install` vLLM deps without --no-deps — it clobbers ROCm torch.
 set -u
 
-PY=/overlay/miniconda3/envs/shop-A/bin/python
+PY=/overlay/miniconda3/envs/shopsim/bin/python
 
 # 1. amdsmi (system binding) -> PYTHONPATH so vLLM's rocm platform plugin finds it.
 mkdir -p /tmp/amdsmi_link
@@ -32,5 +32,5 @@ export PYTHONPATH=/workspace/shopsimulator/shopagent-rl:/tmp/amdsmi_link:/tmp/fu
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 HF_HUB_CACHE=/root/.cache/huggingface/hub
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 
-echo "shop-A vLLM env ready: PY=$PY  PYTHONPATH=$PYTHONPATH"
+echo "shopsim vLLM env ready: PY=$PY  PYTHONPATH=$PYTHONPATH"
 echo "  remember: guard your LLM() call in  if __name__ == '__main__':"

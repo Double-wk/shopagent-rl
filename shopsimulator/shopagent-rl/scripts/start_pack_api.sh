@@ -6,9 +6,10 @@
 # nohup 后台: 关终端不影响 (PPID=1, 忽略 SIGHUP)。
 # 重启容器/机器后需手动重跑本脚本 (非 systemd, 不自启)。
 set -u
-PY=/overlay/miniconda3/envs/shop-A/bin/python
+PY=/overlay/miniconda3/envs/shopsim/bin/python
 cd /workspace/shopsimulator/ShopSimulator/shop_env/shop_env   # pack_api.py 的 sys.path.append("../") 依赖此 cwd
-export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64           # pyserini/pyjnius 要 libjvm.so
+export JAVA_HOME="${JAVA_HOME:-/overlay/miniconda3/envs/shopsim/lib/jvm}"
+export PATH="$JAVA_HOME/bin:$PATH"                         # pyserini/pyjnius uses Conda OpenJDK
 export JVM_PATH="$JAVA_HOME/lib/server/libjvm.so"
 # This container sees the host's 1-TiB RAM but is cgroup-limited to 64 GiB.
 # Cap Lucene's JVM explicitly so its ergonomics cannot size a heap from host RAM.

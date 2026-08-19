@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT=/workspace/shopsimulator/shopagent-rl
-PY=/overlay/miniconda3/envs/shop-A/bin/python
+PY=/overlay/miniconda3/envs/shopsim/bin/python
 RUN_NAME="${RUN_NAME:-certified_sft}"
 LOG_DIR="${LOG_DIR:-$ROOT/run}"
 LOG="$LOG_DIR/$RUN_NAME.log"

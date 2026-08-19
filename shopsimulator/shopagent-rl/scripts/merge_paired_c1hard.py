@@ -10,7 +10,7 @@ holds the GPU. Output is a self-contained model dir: merged weights + tokenizer
 files + generation_config with eos=[<|im_end|>, <|endoftext|>].
 
 Usage:
-  /overlay/miniconda3/envs/shop-A/bin/python scripts/merge_paired_c1hard.py
+  /overlay/miniconda3/envs/shopsim/bin/python scripts/merge_paired_c1hard.py
 """
 from __future__ import annotations
 

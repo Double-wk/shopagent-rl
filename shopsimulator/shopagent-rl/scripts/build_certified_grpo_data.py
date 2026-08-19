@@ -40,11 +40,20 @@ def select_pairs(
     limit: int,
     rng: random.Random,
     excluded_tasks: set[int],
+    system_prompt: str = "",
+    max_prompt_chars: int = -1,
 ) -> list[dict]:
     selected = [
         record for record in records
         if (record.get("intervention_type") == intervention_type
             and record.get("task_id") not in excluded_tasks)
+        and (
+            max_prompt_chars < 0
+            or len(system_prompt) + max(
+                len(str(record[side]["observation"]))
+                for side in ("original", "counterfactual")
+            ) <= max_prompt_chars
+        )
     ]
     rng.shuffle(selected)
     return selected if limit < 0 else selected[:limit]
@@ -93,6 +102,7 @@ def build_rows(
     system_prompt: str,
     *,
     environment_repeat: int,
+    environment_tasks: int = -1,
     price_pairs: int,
     option_pairs: int,
     nuisance_pairs: int,
@@ -100,19 +110,35 @@ def build_rows(
     explicit_price_budget: bool = False,
     excluded_tasks: set[int] | None = None,
     pair_block_size: int = 0,
+    max_counterfactual_prompt_chars: int = -1,
 ) -> list[dict]:
     rng = random.Random(seed)
     excluded_tasks = excluded_tasks or set()
+    available_environment_tasks = [
+        task_id for task_id in task_ids if task_id not in excluded_tasks
+    ]
+    if environment_tasks >= 0:
+        environment_rng = random.Random(seed + 1)
+        environment_rng.shuffle(available_environment_tasks)
+        available_environment_tasks = available_environment_tasks[:environment_tasks]
     environment_rows = [
         environment_row(task_id, system_prompt)
         for _ in range(environment_repeat)
-        for task_id in task_ids
-        if task_id not in excluded_tasks
+        for task_id in available_environment_tasks
     ]
     groups = [
-        select_pairs(atomic_pairs, "price_above_budget", price_pairs, rng, excluded_tasks),
-        select_pairs(natural_pairs, "option_goal_swap_natural", option_pairs, rng, excluded_tasks),
-        select_pairs(v2_pairs, "nuisance_display_note", nuisance_pairs, rng, excluded_tasks),
+        select_pairs(
+            atomic_pairs, "price_above_budget", price_pairs, rng, excluded_tasks,
+            system_prompt, max_counterfactual_prompt_chars,
+        ),
+        select_pairs(
+            natural_pairs, "option_goal_swap_natural", option_pairs, rng, excluded_tasks,
+            system_prompt, max_counterfactual_prompt_chars,
+        ),
+        select_pairs(
+            v2_pairs, "nuisance_display_note", nuisance_pairs, rng, excluded_tasks,
+            system_prompt, max_counterfactual_prompt_chars,
+        ),
     ]
     if explicit_price_budget:
         groups[0] = [make_budget_explicit(pair) for pair in groups[0]]
@@ -159,6 +185,8 @@ def main() -> None:
     parser.add_argument("--system", type=Path, default=ROOT / "configs/teacher_gpt-5.6-terra.yaml")
     parser.add_argument("--out", type=Path, default=ROOT / "data/grpo_certified_train.parquet")
     parser.add_argument("--environment-repeat", type=int, default=4)
+    parser.add_argument("--environment-tasks", type=int, default=-1,
+                        help="number of distinct environment tasks; -1 keeps all")
     parser.add_argument("--price-pairs", type=int, default=1000)
     parser.add_argument("--option-pairs", type=int, default=500)
     parser.add_argument("--nuisance-pairs", type=int, default=250)
@@ -168,6 +196,8 @@ def main() -> None:
     parser.add_argument("--exclude-task-ids", action="append", type=Path, default=[])
     parser.add_argument("--pair-block-size", type=int, default=0,
                         help="shuffle fixed-size blocks while keeping pair sides together")
+    parser.add_argument("--max-counterfactual-prompt-chars", type=int, default=-1,
+                        help="exclude a whole pair if either rendered prompt exceeds this many characters")
     args = parser.parse_args()
 
     import pyarrow as pa
@@ -189,6 +219,7 @@ def main() -> None:
         load_jsonl(args.v2),
         system_prompt,
         environment_repeat=args.environment_repeat,
+        environment_tasks=args.environment_tasks,
         price_pairs=args.price_pairs,
         option_pairs=args.option_pairs,
         nuisance_pairs=args.nuisance_pairs,
@@ -196,6 +227,7 @@ def main() -> None:
         explicit_price_budget=args.explicit_price_budget,
         excluded_tasks=excluded_tasks,
         pair_block_size=args.pair_block_size,
+        max_counterfactual_prompt_chars=args.max_counterfactual_prompt_chars,
     )
     schema = pa.schema([
         ("prompt", pa.list_(pa.struct([("role", pa.string()), ("content", pa.string())]))),
@@ -219,8 +251,10 @@ def main() -> None:
         "rows": len(rows),
         "by_mode": dict(counts),
         "by_intervention_type": dict(interventions),
+        "environment_tasks": len({row["task_id"] for row in rows if row["sample_mode"] == "environment"}),
         "excluded_task_count": len(excluded_tasks),
         "pair_block_size": args.pair_block_size,
+        "max_counterfactual_prompt_chars": args.max_counterfactual_prompt_chars,
         "explicit_price_budget": args.explicit_price_budget,
         "seed": args.seed,
     }, ensure_ascii=False, indent=2))

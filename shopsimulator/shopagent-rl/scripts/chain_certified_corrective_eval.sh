@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT=/workspace/shopsimulator/shopagent-rl
-PY=/overlay/miniconda3/envs/shop-A/bin/python
+PY=/overlay/miniconda3/envs/shopsim/bin/python
 TRAIN_LOG="$ROOT/run/certified_corrective_sft.log"
 ADAPTER="$ROOT/outputs/sft/v4_certified_corrective/model/training_output/lora_adapter"
 CF_OUT="$ROOT/outputs/counterfactual/cf_sft_v4_certified_corrective_heldout_v2.jsonl"

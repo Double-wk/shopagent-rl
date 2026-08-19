@@ -3,7 +3,7 @@
 Converts the service's data/items_eval_train.json (a list of product dicts) into a
 pyserini JsonCollection directory (search_engine/index_docs/docs.jsonl): one JSON
 object per line, {"id": <asin>, "contents": <searchable text>}. The Lucene index
-itself is then built by pyserini's indexer (see scripts/setup_shopenv.sh), which
+itself is then built by pyserini's indexer in the shared shopsim environment,
 the service loads at boot via engine.init_search_engine.
 
 This converter is pure Python and runs in any env (no pyserini needed here).
@@ -62,7 +62,7 @@ def main() -> None:
             f.write(json.dumps(doc, ensure_ascii=False) + "\n")
             n += 1
     print(f"wrote {n} docs (skipped {skipped}) -> {out_file}")
-    print(f"now build the index (in shopenv):")
+    print(f"now build the index (in shopsim):")
     print(f"  python -m pyserini.index.lucene --collection JsonCollection \\")
     print(f"    --input {OUT_DIR} --index {SHOP_ENV / 'search_engine' / 'indexes'} \\")
     print(f"    --generator DefaultLuceneDocumentGenerator --threads 8 \\")

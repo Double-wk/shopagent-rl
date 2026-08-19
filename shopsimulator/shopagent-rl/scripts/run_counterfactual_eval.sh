@@ -12,6 +12,6 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."      # -> shopagent-rl/
 
-source scripts/vllm_env_shopA.sh   # ONE-env: shop-A python + ROCm shims (sets PY)
+source scripts/vllm_env_shopA.sh   # ONE-env: shopsim python + ROCm shims (sets PY)
 
 exec "$PY" -m experiment.eval.run_counterfactual "$@"

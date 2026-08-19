@@ -7,5 +7,5 @@ set -euo pipefail
 cd /workspace/shopsimulator/shopagent-rl
 export PYTORCH_ALLOC_CONF=expandable_segments:True
 echo $$ > run/natural_rewrite/sft_paired_formal2.pid
-exec /overlay/miniconda3/envs/shop-A/bin/python -m experiment.sft.train \
+exec /overlay/miniconda3/envs/shopsim/bin/python -m experiment.sft.train \
   --config configs/sft_paired.yaml

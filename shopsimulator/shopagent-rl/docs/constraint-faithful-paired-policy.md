@@ -252,6 +252,14 @@ GRPO Paired-C1-hard 建立了 **40% strict / 0% Price-CF** 的解耦证据。
 从同一 v4 adapter 起训，使用 `R_task + R_cert`，但不使用 `R_pair`。它测试普通 RL 是否再次覆盖 SFT 恢复的 price sensitivity，
 并作为完整方法的严格 matched baseline。
 
+当前正式协议使用 `data/grpo_certified_natural_800_pairblocked.parquet`：400 个 environment row
+与 200 个完整 pair（100 price、60 option、40 nuisance）共 800 行。每 4 行构成一个不可拆分 block，
+其中 counterfactual block 含两个完整 pair；训练固定 `TRAIN_BATCH=4`、`TOTAL_STEPS=200`、
+`DATA_SHUFFLE=False` 和 `trainer.balance_batch=False`，正好完整读取一遍数据，并确保 original/CF
+rollout 在计算 joint reward 时仍可一一匹配。数据构造阶段先按 3,000 字符门槛排除整对超长
+counterfactual prompt，再从候选池补足各类别配额；当前文件最大 prompt 为 1,894 tokens，800 行
+均能通过训练端的 2,048-token 检查，不会因静默过滤而拆散 pair。
+
 ### Stage 3：Paired GRPO——论文主实验
 
 在 Stage 2 完全匹配的设置中加入 `R_pair`，目标是同时提升 strict success、relevant PRA，并保持 nuisance invariance。

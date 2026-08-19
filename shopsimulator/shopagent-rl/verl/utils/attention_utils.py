@@ -30,7 +30,7 @@ def _get_attention_functions() -> tuple[Callable, Callable, Callable, Callable]:
         try:
             from flash_attn.bert_padding import index_first_axis, pad_input, rearrange, unpad_input
         except ImportError:
-            # shop-A ROCm 环境无 flash_attn（仅 CUDA 构建）。veRL 0.8.0 训练流水线在
+            # shopsim ROCm 环境无 flash_attn（仅 CUDA 构建）。veRL 0.8.0 训练流水线在
             # ray_trainer._compute_old_log_prob / _compute_ref_log_prob / compute_values 等处
             # *无条件*调用 left_right_2_no_padding -> unpad_input（jagged/nested 去padding 表示，
             # 0.8.0 padding-free 设计），硬依赖 flash_attn.bert_padding。改用 transformers 自带的

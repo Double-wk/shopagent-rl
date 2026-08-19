@@ -4,7 +4,7 @@
 # All steps detached-safe; every step logs to run/natural_rewrite/.
 set -euo pipefail
 cd /workspace/shopsimulator/shopagent-rl
-PY=/overlay/miniconda3/envs/shop-A/bin/python
+PY=/overlay/miniconda3/envs/shopsim/bin/python
 LOG=run/natural_rewrite
 
 # 1. wait for the generation process (pid passed as $1) to finish
