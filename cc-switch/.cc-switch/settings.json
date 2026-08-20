@@ -4,7 +4,7 @@
   "enableClaudePluginIntegration": false,
   "skipClaudeOnboarding": false,
   "commonConfigConfirmed": true,
-  "currentProviderClaude": "glm",
+  "currentProviderClaude": "justwoker",
   "currentProviderCodex": "agentrouter",
   "visibleApps": {
     "claude": true,

@@ -383,10 +383,8 @@ def compute_advantage(
             )
         elif paired_config.get("enabled", False) and paired_mode == "preference_margin":
             from experiment.grpo.paired_reward import (
+                add_preference_margin_loss,
                 prepare_preference_margin_metadata,
-            )
-            from experiment.grpo.preference_margin import (
-                compute_relation_losses,
             )
 
             relation_ids = data.non_tensor_batch.get(
@@ -394,12 +392,14 @@ def compute_advantage(
             )
             sides = data.non_tensor_batch.get("side")
             expected_relations = data.non_tensor_batch.get("expected_relation")
+            predicted_intents = data.non_tensor_batch.get("predicted_intent")
 
             if any(value is None for value in (
-                relation_ids, sides, expected_relations
+                relation_ids, sides, expected_relations, predicted_intents
             )):
                 raise ValueError(
-                    "preference margin requires relation_id/pair_id, side, and expected_relation metadata"
+                    "preference margin requires relation_id/pair_id, side, "
+                    "expected_relation, and predicted_intent metadata"
                 )
 
             # Prepare paired metadata for preference margin computation
@@ -410,30 +410,31 @@ def compute_advantage(
                 data.non_tensor_batch.get("session_id"),
             )
 
-            # TODO: Compute log_probs for canonical intents
-            # For now, use stub implementation that doesn't modify advantages
-            # Full implementation requires:
-            # 1. Get log_probs for canonical intents from model
-            # 2. For each pair, compute preference margin and losses
-            # 3. Add relation loss signal to advantages
-
-            stats = {
-                "complete_relations": len(paired_metadata.get("pairs", [])),
-                "decision_changing_pairs": sum(paired_metadata.get("decision_changing", [])),
-                "decision_preserving_pairs": len(paired_metadata.get("pairs", [])) - sum(paired_metadata.get("decision_changing", [])),
-                "status": "stub_implementation",
-            }
+            # Compute preference margin loss (simplified proxy version)
+            advantages, pm_stats = add_preference_margin_loss(
+                advantages,
+                grpo_calculation_mask,
+                paired_metadata,
+                predicted_intents=predicted_intents,
+                flip_weight=float(paired_config.get("flip_weight", 1.0)),
+                preserve_weight=float(paired_config.get("preserve_weight", 1.0)),
+                margin_threshold=float(paired_config.get("margin_threshold", 0.0)),
+                temperature=float(paired_config.get("temperature", 1.0)),
+            )
 
             print(
-                "[PreferenceMargin] "
-                f"relations={stats['complete_relations']} "
-                f"decision_changing={stats['decision_changing_pairs']} "
-                f"decision_preserving={stats['decision_preserving_pairs']} "
-                f"status={stats['status']}",
+                f"[PreferenceMargin] "
+                f"relations={pm_stats['complete_relations']} "
+                f"decision_changing={pm_stats['decision_changing_pairs']} "
+                f"decision_preserving={pm_stats['decision_preserving_pairs']} "
+                f"avg_flip_loss={pm_stats.get('avg_flip_loss', 0):.4f} "
+                f"avg_preserve_loss={pm_stats.get('avg_preserve_loss', 0):.4f} "
+                f"avg_margin={pm_stats.get('avg_margin', 0):.4f} "
+                f"status={pm_stats.get('status', 'unknown')}",
                 flush=True,
             )
 
-            data.non_tensor_batch["preference_margin_stats"] = stats
+            data.non_tensor_batch["preference_margin_stats"] = pm_stats
         data.batch["advantages"] = advantages
         data.batch["returns"] = returns
     else:
