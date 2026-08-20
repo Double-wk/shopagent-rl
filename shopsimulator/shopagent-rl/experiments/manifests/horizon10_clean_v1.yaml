@@ -92,7 +92,7 @@ grpo:
       tuned_long_step_throughput_tokens_per_second: 431.45994951195905
       tuned_actor_peak_allocated_gb: 6.4125776290893555
   paired:
-    status: failed_to_start
+    status: smoke_passed_ready_for_formal
     attempted: 2026-08-19T19:09Z
     failed_at_global_step: 3
     cause: >-
@@ -103,6 +103,24 @@ grpo:
     fix: experiment/grpo/shopsim_agent_loop.py emits empty pair metadata for
       environment rollouts; covered by tests/test_paired_reward.py and
       tests/test_shopsim_agent_loop.py.
+    post_fix_smoke:
+      completed: 2026-08-20T05:42Z
+      total_steps: 3
+      result: passed
+      checkpoint: /overlay/shopagent_rl_artifacts/grpo_runs/horizon10_clean_v1_paired_smoke/global_step_3
+      adapter_export: /overlay/shopagent_rl_artifacts/grpo_runs/horizon10_clean_v1_paired_smoke/export_step_3/lora_adapter
+      adapter_sha256: b64f6750c0b3f8706945e9f8f28a4a6a220ec33bfb7bac486d18f242349dea6b
+      step_1_pg_loss: 0.006942052394151688
+      step_3_pg_loss: 0.1388208419084549
+      step_3_reward_min: 0.0
+      step_3_reward_max: 1.0
+      step_3_response_clip_ratio: 0.125
+      step_3_actor_peak_allocated_gb: 7.572737693786621
+      verified: >-
+        Counterfactual pair blocks emitted and matched pair metadata, and the
+        environment-only block at global_step 3 completed with zero relations
+        instead of raising the previous metadata error. Checkpoint saving and
+        LoRA export also completed successfully.
 
 # The 2026-08-19 instance restart destroyed /overlay (ephemeral container disk).
 # Everything under /workspace survived. Recorded here because it changes what
