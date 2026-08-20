@@ -1,0 +1,14 @@
+[2026-08-19T14:43:31+00:00] night chain started
+[2026-08-19T14:43:31+00:00] waiting for Independent training process 767861
+[2026-08-19T18:23:32+00:00] Independent training process 767861 exited
+[2026-08-19T18:23:32+00:00] GPU is idle enough for the next phase (used_bytes=28057600)
+[2026-08-19T18:23:32+00:00] exporting Independent step-200 adapter
+[2026-08-19T18:23:36+00:00] Independent adapter exported: /overlay/shopagent_rl_grpo_outputs/grpo/horizon10_clean_v1_independent/export_step_200/lora_adapter
+[2026-08-19T18:23:36+00:00] starting independent heldout-v2 counterfactual evaluation
+[2026-08-19T18:26:41+00:00] GPU is idle enough for the next phase (used_bytes=28057600)
+[2026-08-19T18:26:41+00:00] starting independent Final-200 evaluation
+[2026-08-19T19:09:18+00:00] independent evaluations complete
+[2026-08-19T19:09:19+00:00] GPU is idle enough for the next phase (used_bytes=28057600)
+[2026-08-19T19:09:19+00:00] starting formal Paired GRPO
+[2026-08-19T19:13:09+00:00] Paired GRPO exited with status 1
+[2026-08-19T19:13:09+00:00] ERROR: Paired GRPO failed; see /workspace/shopsimulator/shopagent-rl/run/horizon10_clean_v1_grpo_paired.log

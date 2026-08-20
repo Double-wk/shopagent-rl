@@ -74,6 +74,7 @@ SAVE_FREQ="${SAVE_FREQ:-10}"
 # vLLM reserves a KV-cache pool at startup. These defaults leave room for the
 # LoRA actor and long multi-turn responses on the shared 48G card.
 GPU_MEM_UTIL="${GPU_MEM_UTIL:-0.25}"
+MAX_NUM_BATCHED_TOKENS="${MAX_NUM_BATCHED_TOKENS:-8192}"
 TEMPERATURE="${TEMPERATURE:-0.7}"
 DATA_SHUFFLE="${DATA_SHUFFLE:-True}"
 MAX_PROMPT_LENGTH="${MAX_PROMPT_LENGTH:-512}"
@@ -112,7 +113,7 @@ echo "  steps=$TOTAL_STEPS  train_batch=$TRAIN_BATCH  rollout.n=$ROLLOUT_N  (=$(
 echo "  lengths: prompt=$MAX_PROMPT_LENGTH turn=$TURN_MAX_TOKENS response=$RESPONSE_LENGTH model=$MAX_MODEL_LEN obs_chars=$OBS_MAX_CHARS"
 echo "  sampling : temperature=$TEMPERATURE"
 echo "  data shuffle: $DATA_SHUFFLE"
-echo "  actor batches: ppo_mini=$PPO_MINI_BATCH ppo_micro=$PPO_MICRO_BATCH logprob_micro=$LOGPROB_MICRO_BATCH | vLLM gpu_mem_util=$GPU_MEM_UTIL"
+echo "  actor batches: ppo_mini=$PPO_MINI_BATCH ppo_micro=$PPO_MICRO_BATCH logprob_micro=$LOGPROB_MICRO_BATCH | vLLM gpu_mem_util=$GPU_MEM_UTIL batched_tokens=$MAX_NUM_BATCHED_TOKENS"
 echo "  vLLM load_format: $LOAD_FORMAT"
 echo "  weight transfer : $VERL_VLLM_WEIGHT_TRANSFER"
 echo "  output     : $OUTPUT_DIR"
@@ -138,6 +139,7 @@ exec "$PY" -m verl.trainer.main_ppo \
     actor_rollout_ref.rollout.n="$ROLLOUT_N" \
     actor_rollout_ref.rollout.temperature="$TEMPERATURE" \
     actor_rollout_ref.rollout.gpu_memory_utilization="$GPU_MEM_UTIL" \
+    actor_rollout_ref.rollout.max_num_batched_tokens="$MAX_NUM_BATCHED_TOKENS" \
     actor_rollout_ref.rollout.max_model_len="$MAX_MODEL_LEN" \
     actor_rollout_ref.rollout.load_format="$LOAD_FORMAT" \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu="$LOGPROB_MICRO_BATCH" \

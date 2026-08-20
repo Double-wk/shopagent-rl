@@ -8,7 +8,7 @@ ShopSimulator 中文购物 Agent 的完整后训练工程：环境适配、teach
 > [`docs/constraint-faithful-paired-policy.md`](docs/constraint-faithful-paired-policy.md)
 > 为准；`archive/` 与 checkpoint/adapter 内的 README 是历史快照，不随当前实验改写。
 
-Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的 Final-200 评测均已完成（历史可比协议为 10 步、每轮 512 token）；这只是评测协议，不是 SFT 数据或后续研究的固定 horizon。step20 结果仅作历史归档对照。v5 已完成训练，但只作为显式预算格式捷径的失败消融保留，未继续 Final-200/GRPO。当前自然格式 SFT 最好是 **v4：price counterfactual 78.65%，Final-200 strict 31.5%**；历史最高 Final-200 仍是 **GRPO Paired-C1-hard：strict 40%**。
+Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的 Final-200 评测均已完成（历史可比协议为 10 步、每轮 512 token）；这只是评测协议，不是 SFT 数据或后续研究的固定 horizon。step20 结果仅作历史归档对照。v5 已完成训练，但只作为显式预算格式捷径的失败消融保留，未继续 Final-200/GRPO。当前已评测的自然格式 SFT 最好是 **v4：price counterfactual 78.65%，Final-200 strict 31.5%**；历史最高 Final-200 仍是 **GRPO Paired-C1-hard：strict 40%**。正式主线已经切换为 `horizon10-clean-v1`：从固定 base revision 直接训练 3,624 条普通 strict-success 轨迹，再从同一个 clean adapter 启动 matched Independent/Paired GRPO；v4 只保留为 feasibility/corrective ablation。
 
 | 模型 | 完成率 | **strict success (Rsucc)** | r_hard | r_loose | 选对商品率 | 报告文件 |
 |---|---:|---:|---:|---:|---:|---|
@@ -45,7 +45,7 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 > ✅ **Certified Corrective SFT v4 已完成**：从 v3 adapter 继续训练 1 epoch，混合数据共
 > 10,057 条。heldout-v2 自然格式 price cf accuracy **78.65%**、paired robust **73.70%**，
 > original action accuracy **94.53%**；Final-200 strict **31.5%**（63/200）。这是当前最好的
-> 自然格式 SFT，但仍保留约 22% shortcut failure；下一步先做 matched `CF-GRPO w/o Pair`，再决定是否进入完整 Paired GRPO。
+> 自然格式 SFT，但仍保留约 22% shortcut failure；它证明自然双侧监督可行，但不再作为正式 matched GRPO 的初始化。
 
 > ⚠️ **Certified Explicit-Clean SFT v5 已完成但判定为失败消融**：自然 heldout-v2 的 price cf
 > accuracy 仅 **0.26%**、paired robust **0.26%**，而显式预算测试集达到 **100%**。模型学到的是
@@ -53,7 +53,7 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 
 | 阶段 | 当前结果 |
 |---|---|
-| Constraint-causal Gate 2（历史记录） | **已通过**：Paired SFT v2 的 natural option-swap paired robust `73.1%`（49/67），Final-200 strict `25%`（50/200）；价格反事实 paired robust 仍为 `0%`。当前主线已推进到 v4 与 matched GRPO 对照。 |
+| Constraint-causal Gate 2（历史记录） | **已通过**：Paired SFT v2 的 natural option-swap paired robust `73.1%`（49/67），Final-200 strict `25%`（50/200）；价格反事实 paired robust 仍为 `0%`。 |
 | GRPO smoke | 已完成 1 step：reward/pg_loss 非零，checkpoint 写入 overlay |
 | GRPO 正式训练 | env16 固定配方 `TRAIN_BATCH=4 / ROLLOUT_N=4 / PPO_MINI_BATCH=4` 已完成 **200 steps**；最终可恢复 checkpoint 为 `outputs/grpo/v1/model/checkpoint_step_200/` |
 | GRPO v2b | `TRAIN_BATCH=4 / ROLLOUT_N=8 / env32` 已完成 **200 steps**；导出 adapter 为 `/overlay/shopagent_rl_grpo_outputs/grpo/v2/export_step_200/lora_adapter/` |
@@ -61,7 +61,8 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 | Certified SFT v3 | heldout-v2 option cf **82%**，price cf **0%**；summary 恢复诊断为 price cf **100% / original 32.55%**，判定为输入格式捷径，结果作失败消融保留 |
 | Corrective SFT v4 | **已完成**：自然格式 price cf **78.65%**，paired robust **73.70%**，Final-200 strict **31.5%** |
 | Explicit-Clean SFT v5 | **已完成失败消融**：自然 price cf **0.26%**；显式预算测试 price cf **100%**；不进入后续 RL |
-| Certified/Paired GRPO | **尚未启动**：v4 已通过自然反事实门；下一步先做 `CF-GRPO w/o Pair`，再做加入 `R_pair` 的 Paired GRPO；v5 不进入后续 RL |
+| Horizon10 clean SFT | **已完成并完成正式评测**：Final-200 strict **24.5%**（49/200），完成率 52.5%；heldout-v2 价格反事实 paired robust **0%**；adapter 为 `outputs/sft/v6_horizon10_clean_from_base/model/training_output/lora_adapter` |
+| Matched Independent/Paired GRPO | **Independent 正式训练中**：200 steps，step 1 smoke 已通过。48GB GPU 实测后固定 `GPU_MEM_UTIL=0.35 / max_num_batched_tokens=16384 / micro_batch=1`；长 batch 吞吐由 346 提升到 431 tokens/s。Paired 待 Independent 训练与评测完成后启动，两组只允许 `R_pair` 开关不同 |
 | 训练期 reward | `budget_mode="strict"` 已补回原始 ShopSimulator 乘法奖励，并由 `tests/test_reward_modes.py` 覆盖 |
 | OOM 根因 | 旧版 vLLM/ROCm sleep 没有稳定归还物理 VRAM，整卡占用逐 step 增长；fused PPO backward 又为冻结 LM head 无效申请 593.5MiB 梯度。两处均已修复，不需要改变训练参数 |
 
@@ -72,8 +73,8 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 方法、评测协议和后续实验顺序见 [`docs/constraint-faithful-paired-policy.md`](docs/constraint-faithful-paired-policy.md)。
 
 核心动机证据是 GRPO Paired-C1-hard 的 **Final-200 strict 40% / Price-CF 0%**。当前下一步不是继续堆叠
-普通 outcome reward，而是从同一 v4 adapter 和同一 paired 数据出发，完成 `CF-GRPO w/o Pair` 与
-`Paired GRPO` 的严格 matched comparison。
+普通 outcome reward，而是先冻结从 base 直接训练的 `horizon10-clean-v1` adapter，再从同一个 clean adapter
+和同一份 800 行 pair-blocked 数据出发，完成 `CF-GRPO w/o Pair` 与 `Paired GRPO` 的严格 matched comparison。
 
 `Constraint Ledger → Residual Risk → Active Verification` 对应后续独立研究 **Verify Before You Buy**，
 不并入当前论文的方法主线。旧的 [`docs/constraint-causal-experiment-plan.md`](docs/constraint-causal-experiment-plan.md)

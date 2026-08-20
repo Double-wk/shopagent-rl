@@ -12,6 +12,8 @@ checkpoints/
 # Trainer-generated intermediate checkpoints are local resume state; only the
 # final lora_adapter bundle for each experiment is archived in git.
 outputs/sft/**/model/training_output/checkpoint-*/
+# Hydra creates date-stamped launch metadata even for failed preflight runs.
+outputs/20??-??-??/
 # Keep completed training/evaluation logs when they provide experiment
 # provenance. Exclude service noise, process state, failed superseded attempts,
 # and incomplete evaluations; a completed formal log can still be added
@@ -23,6 +25,12 @@ run/merge_*.log
 run/single_eval_*.log
 run/certified_sft_b1_gc.log
 run/certified_sft_b2_prefilter.log
+run/*failed*.log
+run/*interrupted*.log
+run/certified_natural_grpo_*.log
+
+# Full candidate pool used while constructing the frozen 800-row matched set.
+data/grpo_certified_natural_pairblocked.parquet
 
 # Superseded data snapshot that violates the current 10-turn protocol.
 data/sft_train_certified_mix_pre10turn.jsonl

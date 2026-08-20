@@ -1,6 +1,7 @@
 experiment_id: horizon10-clean-v1
 role: formal_mainline
 created: 2026-08-19
+status: in_progress
 
 lineage:
   base_model: Qwen/Qwen3-1.7B-Base
@@ -12,6 +13,8 @@ lineage:
     - outputs/sft/v5_certified_explicit_clean
 
 sft:
+  status: completed
+  completed: 2026-08-19
   config: configs/sft_horizon10_clean_v1.yaml
   data: data/sft_train_horizon10.jsonl
   rows: 3624
@@ -26,8 +29,22 @@ sft:
   group_by_length: true
   gradient_checkpointing: true
   output: outputs/sft/v6_horizon10_clean_from_base/model/training_output/lora_adapter
+  final_checkpoint: outputs/sft/v6_horizon10_clean_from_base/model/training_output/checkpoint-1359
+  adapter_sha256: 14f79037e7224187487033bd87f722d42513aff195dceafb102da1f4607a496a
+  total_steps: 1359
+  train_runtime_seconds: 23351.089
+  train_loss: 0.754670326283436
+  evaluation:
+    counterfactual_jsonl: outputs/sft/v6_horizon10_clean_from_base/evaluation/counterfactual_heldout_v2_0819_1255.jsonl
+    counterfactual_metrics: outputs/sft/v6_horizon10_clean_from_base/evaluation/counterfactual_heldout_v2_0819_1255_metrics.json
+    final200_jsonl: outputs/sft/v6_horizon10_clean_from_base/evaluation/final200_t10x512_0819_1255.jsonl
+    final200_official_metrics: outputs/sft/v6_horizon10_clean_from_base/evaluation/final200_t10x512_0819_1255_official_metrics.json
+    final200_strict_success: 0.245
+    final200_completed_rate: 0.525
+    price_counterfactual_paired_robust: 0.0
 
 grpo:
+  status: in_progress
   launcher: scripts/run_horizon10_clean_grpo.sh
   base_snapshot: /root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1
   data: data/grpo_certified_natural_800_pairblocked.parquet
@@ -36,9 +53,33 @@ grpo:
   total_steps: 200
   train_batch: 4
   rollout_n: 4
+  ppo_micro_batch: 1
+  logprob_micro_batch: 1
+  gpu_memory_utilization: 0.35
+  max_num_batched_tokens: 16384
   matched_difference: algorithm.paired_intervention.enabled
   independent_output: /overlay/shopagent_rl_grpo_outputs/grpo/horizon10_clean_v1_independent
   paired_output: /overlay/shopagent_rl_grpo_outputs/grpo/horizon10_clean_v1_paired
+  independent:
+    status: running
+    started: 2026-08-19T14:12:28Z
+    smoke_status: passed
+    smoke_global_step: 1
+    smoke_reward_min: 0.0
+    smoke_reward_max: 1.0
+    smoke_pg_loss: 0.015317745506763458
+    smoke_response_clip_ratio: 0.0
+    tuning:
+      baseline_micro_batch: 1
+      rejected_ppo_logprob_micro_batch: 2
+      rejected_reason: long_sequence_dynamic_padding_regression
+      baseline_long_step_seconds: 242.14501470234245
+      tuned_long_step_seconds: 213.850671665743
+      baseline_long_step_throughput_tokens_per_second: 346.16859695847836
+      tuned_long_step_throughput_tokens_per_second: 431.45994951195905
+      tuned_actor_peak_allocated_gb: 6.4125776290893555
+  paired:
+    status: pending
 
 historical_controls:
   v4_corrective: feasibility_and_shortcut_correction_only

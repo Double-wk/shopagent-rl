@@ -451,8 +451,8 @@ chmod +x cc-switch/init-cc-switch.sh
 先列出服务商，确认实际 ID；再按 ID 切换：
 
 ```bash
-./cc-switch/init-cc-switch.sh provider switch -a claude anyrouter
-./cc-switch/init-cc-switch.sh provider switch -a codex hhhl
+./cc-switch/init-cc-switch.sh provider switch -a claude agentrouter
+./cc-switch/init-cc-switch.sh provider switch -a codex agentrouter
 ```
 
 `anyrouter` 和 `hhhl` 是当前环境的示例 ID。服务商显示名称与 ID 不一定相同，切换命令必须使用列表第一列的 **ID**。

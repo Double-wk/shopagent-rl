@@ -1,0 +1,1176 @@
+shopsim vLLM env ready: PY=/overlay/miniconda3/envs/shopsim/bin/python  PYTHONPATH=/workspace/shopsimulator/shopagent-rl:/tmp/amdsmi_link:/tmp/functorch_shim:
+  remember: guard your LLM() call in  if __name__ == '__main__':
+=== ShopSim GRPO (veRL vLLM async) ===
+  model      : /root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1
+  sft adapter: /workspace/shopsimulator/shopagent-rl/outputs/sft/v6_horizon10_clean_from_base/model/training_output/lora_adapter  (exists=yes)
+  data       : /workspace/shopsimulator/shopagent-rl/data/grpo_certified_natural_800_pairblocked.parquet  (exists=yes)
+  steps=200  train_batch=4  rollout.n=4  (=16 rollouts/step)  lr=1e-5  n_gpus=1
+  lengths: prompt=2048 turn=160 response=8192 model=10240 obs_chars=1800
+  sampling : temperature=0.7
+  data shuffle: False
+  actor batches: ppo_mini=4 ppo_micro=1 logprob_micro=1 | vLLM gpu_mem_util=0.25
+  vLLM load_format: auto
+  weight transfer : auto
+  output     : /overlay/shopagent_rl_grpo_outputs/grpo/horizon10_clean_v1_independent
+  env        : http://127.0.0.1:5000
+/workspace/shopsimulator/shopagent-rl/verl/workers/engine/mindspeed/transformer_impl.py:24: UserWarning: NPU not support router replay for now.
+  from verl.utils.megatron.router_replay_patch import RouterReplay
+/workspace/shopsimulator/shopagent-rl/verl/trainer/main_ppo.py:380: FutureWarning: Warning: Function '__main__.main' is deprecated. Please use 'main_ppo.py is deprecated, and wil be replaced by main_ppo_sync.py in v0.8.0, please use main_ppo_sync.py instead.' instead.
+  main()
+2026-08-19 13:45:18,482	WARNING utils.py:469 -- Detecting docker specified CPUs. In previous versions of Ray, CPU detection in containers was incorrect. Please ensure that Ray has enough CPUs allocated. As a temporary workaround to revert to the prior behavior, set `RAY_USE_MULTIPROCESSING_CPU_COUNT=1` as an env var before starting Ray. Set the env var: `RAY_DISABLE_DOCKER_CPU_WARNING=1` to mute this warning.
+2026-08-19 13:45:19,689	INFO worker.py:2015 -- Started a local Ray instance. View the dashboard at [1m[32mhttp://127.0.0.1:8265 [39m[22m
+[36m(pid=716228)[0m /workspace/shopsimulator/shopagent-rl/verl/workers/engine/mindspeed/transformer_impl.py:24: UserWarning: NPU not support router replay for now.
+[36m(pid=716228)[0m   from verl.utils.megatron.router_replay_patch import RouterReplay
+ray init kwargs: {'num_cpus': None, 'runtime_env': {'env_vars': {'TOKENIZERS_PARALLELISM': 'true', 'NCCL_DEBUG': 'WARN', 'VLLM_LOGGING_LEVEL': 'WARN', 'VLLM_ALLOW_RUNTIME_LORA_UPDATING': 'true', 'CUDA_DEVICE_MAX_CONNECTIONS': '1', 'VLLM_DISABLE_COMPILE_CACHE': '1', 'HCCL_HOST_SOCKET_PORT_RANGE': 'auto', 'HCCL_NPU_SOCKET_PORT_RANGE': 'auto', 'HSA_NO_SCRATCH_RECLAIM': '1'}, 'working_dir': None}}
+[36m(TaskRunner pid=716228)[0m TaskRunner hostname: u-490-d48d5c66, PID: 716228
+[36m(TaskRunner pid=716228)[0m {'actor_rollout_ref': {'actor': {'_target_': 'verl.workers.config.FSDPActorConfig',
+[36m(TaskRunner pid=716228)[0m                                  'calculate_entropy': False,
+[36m(TaskRunner pid=716228)[0m                                  'calculate_sum_pi_squared': False,
+[36m(TaskRunner pid=716228)[0m                                  'checkpoint': {'_target_': 'verl.trainer.config.CheckpointConfig',
+[36m(TaskRunner pid=716228)[0m                                                 'async_save': False,
+[36m(TaskRunner pid=716228)[0m                                                 'load_contents': ['model',
+[36m(TaskRunner pid=716228)[0m                                                                   'optimizer',
+[36m(TaskRunner pid=716228)[0m                                                                   'extra'],
+[36m(TaskRunner pid=716228)[0m                                                 'mbridge_config': {},
+[36m(TaskRunner pid=716228)[0m                                                 'save_contents': ['model',
+[36m(TaskRunner pid=716228)[0m                                                                   'optimizer',
+[36m(TaskRunner pid=716228)[0m                                                                   'extra'],
+[36m(TaskRunner pid=716228)[0m                                                 'strict': True},
+[36m(TaskRunner pid=716228)[0m                                  'clip_ratio': 0.2,
+[36m(TaskRunner pid=716228)[0m                                  'clip_ratio_c': 3.0,
+[36m(TaskRunner pid=716228)[0m                                  'clip_ratio_high': 0.2,
+[36m(TaskRunner pid=716228)[0m                                  'clip_ratio_low': 0.2,
+[36m(TaskRunner pid=716228)[0m                                  'data_loader_seed': 42,
+[36m(TaskRunner pid=716228)[0m                                  'entropy_checkpointing': False,
+[36m(TaskRunner pid=716228)[0m                                  'entropy_coeff': 0,
+[36m(TaskRunner pid=716228)[0m                                  'entropy_from_logits_with_chunking': False,
+[36m(TaskRunner pid=716228)[0m                                  'freeze_vision_tower': False,
+[36m(TaskRunner pid=716228)[0m                                  'fsdp_config': {'_target_': 'verl.workers.config.FSDPEngineConfig',
+[36m(TaskRunner pid=716228)[0m                                                  'dtype': 'bfloat16',
+[36m(TaskRunner pid=716228)[0m                                                  'entropy_checkpointing': False,
+[36m(TaskRunner pid=716228)[0m                                                  'entropy_from_logits_with_chunking': False,
+[36m(TaskRunner pid=716228)[0m                                                  'forward_only': False,
+[36m(TaskRunner pid=716228)[0m                                                  'forward_prefetch': False,
+[36m(TaskRunner pid=716228)[0m                                                  'fsdp_size': -1,
+[36m(TaskRunner pid=716228)[0m                                                  'full_determinism': False,
+[36m(TaskRunner pid=716228)[0m                                                  'model_dtype': 'bf16',
+[36m(TaskRunner pid=716228)[0m                                                  'offload_policy': False,
+[36m(TaskRunner pid=716228)[0m                                                  'optimizer_offload': False,
+[36m(TaskRunner pid=716228)[0m                                                  'param_offload': False,
+[36m(TaskRunner pid=716228)[0m                                                  'qat': {'_target_': 'verl.workers.config.QATEngineConfig',
+[36m(TaskRunner pid=716228)[0m                                                          'activation_observer': 'static_minmax',
+[36m(TaskRunner pid=716228)[0m                                                          'enable': False,
+[36m(TaskRunner pid=716228)[0m                                                          'group_size': 16,
+[36m(TaskRunner pid=716228)[0m                                                          'ignore_patterns': ['lm_head',
+[36m(TaskRunner pid=716228)[0m                                                                              'embed_tokens',
+[36m(TaskRunner pid=716228)[0m                                                                              're:.*mlp.gate$'],
+[36m(TaskRunner pid=716228)[0m                                                          'mode': 'w4a16',
+[36m(TaskRunner pid=716228)[0m                                                          'quantization_config_path': None},
+[36m(TaskRunner pid=716228)[0m                                                  'reshard_after_forward': True,
+[36m(TaskRunner pid=716228)[0m                                                  'seed': 42,
+[36m(TaskRunner pid=716228)[0m                                                  'strategy': 'fsdp',
+[36m(TaskRunner pid=716228)[0m                                                  'ulysses_sequence_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                                                  'use_orig_params': False,
+[36m(TaskRunner pid=716228)[0m                                                  'use_torch_compile': True,
+[36m(TaskRunner pid=716228)[0m                                                  'wrap_policy': {'min_num_params': 0}},
+[36m(TaskRunner pid=716228)[0m                                  'grad_clip': 1.0,
+[36m(TaskRunner pid=716228)[0m                                  'kl_loss_coef': 0.001,
+[36m(TaskRunner pid=716228)[0m                                  'kl_loss_type': 'low_var_kl',
+[36m(TaskRunner pid=716228)[0m                                  'loss_agg_mode': 'token-mean',
+[36m(TaskRunner pid=716228)[0m                                  'loss_scale_factor': None,
+[36m(TaskRunner pid=716228)[0m                                  'optim': {'_target_': 'verl.workers.config.FSDPOptimizerConfig',
+[36m(TaskRunner pid=716228)[0m                                            'betas': [0.9, 0.999],
+[36m(TaskRunner pid=716228)[0m                                            'clip_grad': 1.0,
+[36m(TaskRunner pid=716228)[0m                                            'lr': 1e-05,
+[36m(TaskRunner pid=716228)[0m                                            'lr_scheduler_type': 'constant',
+[36m(TaskRunner pid=716228)[0m                                            'lr_warmup_steps': -1,
+[36m(TaskRunner pid=716228)[0m                                            'lr_warmup_steps_ratio': 0.0,
+[36m(TaskRunner pid=716228)[0m                                            'min_lr_ratio': 0.0,
+[36m(TaskRunner pid=716228)[0m                                            'num_cycles': 0.5,
+[36m(TaskRunner pid=716228)[0m                                            'optimizer': 'AdamW',
+[36m(TaskRunner pid=716228)[0m                                            'optimizer_impl': 'torch.optim',
+[36m(TaskRunner pid=716228)[0m                                            'override_optimizer_config': None,
+[36m(TaskRunner pid=716228)[0m                                            'total_training_steps': -1,
+[36m(TaskRunner pid=716228)[0m                                            'warmup_style': None,
+[36m(TaskRunner pid=716228)[0m                                            'weight_decay': 0.01,
+[36m(TaskRunner pid=716228)[0m                                            'zero_indexed_step': True},
+[36m(TaskRunner pid=716228)[0m                                  'policy_loss': {'_target_': 'verl.workers.config.PolicyLossConfig',
+[36m(TaskRunner pid=716228)[0m                                                  'clip_cov_lb': 1.0,
+[36m(TaskRunner pid=716228)[0m                                                  'clip_cov_ratio': 0.0002,
+[36m(TaskRunner pid=716228)[0m                                                  'clip_cov_ub': 5.0,
+[36m(TaskRunner pid=716228)[0m                                                  'kl_cov_ratio': 0.0002,
+[36m(TaskRunner pid=716228)[0m                                                  'loss_mode': 'vanilla',
+[36m(TaskRunner pid=716228)[0m                                                  'ppo_kl_coef': 0.1},
+[36m(TaskRunner pid=716228)[0m                                  'ppo_epochs': 1,
+[36m(TaskRunner pid=716228)[0m                                  'ppo_max_token_len_per_gpu': 16384,
+[36m(TaskRunner pid=716228)[0m                                  'ppo_micro_batch_size': None,
+[36m(TaskRunner pid=716228)[0m                                  'ppo_micro_batch_size_per_gpu': 1,
+[36m(TaskRunner pid=716228)[0m                                  'ppo_mini_batch_size': 4,
+[36m(TaskRunner pid=716228)[0m                                  'profiler': {'_target_': 'verl.utils.profiler.ProfilerConfig',
+[36m(TaskRunner pid=716228)[0m                                               'all_ranks': False,
+[36m(TaskRunner pid=716228)[0m                                               'enable': False,
+[36m(TaskRunner pid=716228)[0m                                               'ranks': [],
+[36m(TaskRunner pid=716228)[0m                                               'save_path': 'outputs/profile',
+[36m(TaskRunner pid=716228)[0m                                               'tool': None,
+[36m(TaskRunner pid=716228)[0m                                               'tool_config': {'npu': {'_target_': 'verl.utils.profiler.config.NPUToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                       'analysis': True,
+[36m(TaskRunner pid=716228)[0m                                                                       'contents': [],
+[36m(TaskRunner pid=716228)[0m                                                                       'discrete': False,
+[36m(TaskRunner pid=716228)[0m                                                                       'level': 'level0'},
+[36m(TaskRunner pid=716228)[0m                                                               'nsys': {'_target_': 'verl.utils.profiler.config.NsightToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                        'discrete': False},
+[36m(TaskRunner pid=716228)[0m                                                               'precision_debugger': {'_target_': 'verl.utils.profiler.config.PrecisionDebuggerToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                                      'config_path': None,
+[36m(TaskRunner pid=716228)[0m                                                                                      'stages': None,
+[36m(TaskRunner pid=716228)[0m                                                                                      'steps': None,
+[36m(TaskRunner pid=716228)[0m                                                                                      'strict': False},
+[36m(TaskRunner pid=716228)[0m                                                               'torch': {'_target_': 'verl.utils.profiler.config.TorchProfilerToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                         'contents': [],
+[36m(TaskRunner pid=716228)[0m                                                                         'discrete': False},
+[36m(TaskRunner pid=716228)[0m                                                               'torch_memory': {'_target_': 'verl.utils.profiler.config.TorchMemoryToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                                'stack_depth': 32,
+[36m(TaskRunner pid=716228)[0m                                                                                'trace_alloc_max_entries': 100000}}},
+[36m(TaskRunner pid=716228)[0m                                  'qat': {'activation_observer': 'static_minmax',
+[36m(TaskRunner pid=716228)[0m                                          'enable': False,
+[36m(TaskRunner pid=716228)[0m                                          'group_size': 16,
+[36m(TaskRunner pid=716228)[0m                                          'ignore_patterns': ['lm_head',
+[36m(TaskRunner pid=716228)[0m                                                              'embed_tokens',
+[36m(TaskRunner pid=716228)[0m                                                              're:.*mlp.gate$'],
+[36m(TaskRunner pid=716228)[0m                                          'mode': 'w4a16',
+[36m(TaskRunner pid=716228)[0m                                          'quantization_config_path': None},
+[36m(TaskRunner pid=716228)[0m                                  'rollout_n': 4,
+[36m(TaskRunner pid=716228)[0m                                  'router_replay': {'_target_': 'verl.workers.config.RouterReplayConfig',
+[36m(TaskRunner pid=716228)[0m                                                    'mode': 'disabled',
+[36m(TaskRunner pid=716228)[0m                                                    'record_file': None,
+[36m(TaskRunner pid=716228)[0m                                                    'replay_file': None},
+[36m(TaskRunner pid=716228)[0m                                  'shuffle': False,
+[36m(TaskRunner pid=716228)[0m                                  'strategy': 'fsdp',
+[36m(TaskRunner pid=716228)[0m                                  'tau_neg': 1.05,
+[36m(TaskRunner pid=716228)[0m                                  'tau_pos': 1.0,
+[36m(TaskRunner pid=716228)[0m                                  'ulysses_sequence_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                                  'use_dynamic_bsz': False,
+[36m(TaskRunner pid=716228)[0m                                  'use_fused_kernels': True,
+[36m(TaskRunner pid=716228)[0m                                  'use_kl_loss': True,
+[36m(TaskRunner pid=716228)[0m                                  'use_prefix_grouper': False,
+[36m(TaskRunner pid=716228)[0m                                  'use_remove_padding': True,
+[36m(TaskRunner pid=716228)[0m                                  'use_torch_compile': False},
+[36m(TaskRunner pid=716228)[0m                        'hybrid_engine': True,
+[36m(TaskRunner pid=716228)[0m                        'model': {'_target_': 'verl.workers.config.HFModelConfig',
+[36m(TaskRunner pid=716228)[0m                                  'custom_chat_template': None,
+[36m(TaskRunner pid=716228)[0m                                  'enable_activation_offload': True,
+[36m(TaskRunner pid=716228)[0m                                  'enable_gradient_checkpointing': True,
+[36m(TaskRunner pid=716228)[0m                                  'exclude_modules': None,
+[36m(TaskRunner pid=716228)[0m                                  'external_lib': None,
+[36m(TaskRunner pid=716228)[0m                                  'fused_kernel_options': {'impl_backend': 'torch'},
+[36m(TaskRunner pid=716228)[0m                                  'hf_config_path': None,
+[36m(TaskRunner pid=716228)[0m                                  'lora': {'a2a_experimental': False,
+[36m(TaskRunner pid=716228)[0m                                           'adapter_path': None,
+[36m(TaskRunner pid=716228)[0m                                           'alpha': 32,
+[36m(TaskRunner pid=716228)[0m                                           'dropout': 0.0,
+[36m(TaskRunner pid=716228)[0m                                           'dropout_position': 'pre',
+[36m(TaskRunner pid=716228)[0m                                           'dtype': None,
+[36m(TaskRunner pid=716228)[0m                                           'exclude_modules': [],
+[36m(TaskRunner pid=716228)[0m                                           'freeze_language_model': True,
+[36m(TaskRunner pid=716228)[0m                                           'freeze_vision_model': True,
+[36m(TaskRunner pid=716228)[0m                                           'freeze_vision_projection': True,
+[36m(TaskRunner pid=716228)[0m                                           'lora_A_init_method': 'xavier',
+[36m(TaskRunner pid=716228)[0m                                           'lora_B_init_method': 'zero',
+[36m(TaskRunner pid=716228)[0m                                           'merge': False,
+[36m(TaskRunner pid=716228)[0m                                           'rank': 0,
+[36m(TaskRunner pid=716228)[0m                                           'target_modules': ['linear_qkv',
+[36m(TaskRunner pid=716228)[0m                                                              'linear_proj',
+[36m(TaskRunner pid=716228)[0m                                                              'linear_fc1',
+[36m(TaskRunner pid=716228)[0m                                                              'linear_fc2'],
+[36m(TaskRunner pid=716228)[0m                                           'type': 'lora'},
+[36m(TaskRunner pid=716228)[0m                                  'lora_adapter_path': '/workspace/shopsimulator/shopagent-rl/outputs/sft/v6_horizon10_clean_from_base/model/training_output/lora_adapter',
+[36m(TaskRunner pid=716228)[0m                                  'lora_alpha': 64,
+[36m(TaskRunner pid=716228)[0m                                  'lora_rank': 32,
+[36m(TaskRunner pid=716228)[0m                                  'mtp': {'_target_': 'verl.workers.config.MtpConfig',
+[36m(TaskRunner pid=716228)[0m                                          'detach_encoder': False,
+[36m(TaskRunner pid=716228)[0m                                          'enable': False,
+[36m(TaskRunner pid=716228)[0m                                          'enable_rollout': False,
+[36m(TaskRunner pid=716228)[0m                                          'enable_train': False,
+[36m(TaskRunner pid=716228)[0m                                          'method': 'mtp',
+[36m(TaskRunner pid=716228)[0m                                          'mtp_loss_scaling_factor': 0.1,
+[36m(TaskRunner pid=716228)[0m                                          'num_speculative_tokens': 1,
+[36m(TaskRunner pid=716228)[0m                                          'speculative_algorithm': 'EAGLE',
+[36m(TaskRunner pid=716228)[0m                                          'speculative_eagle_topk': 1,
+[36m(TaskRunner pid=716228)[0m                                          'speculative_num_draft_tokens': 4,
+[36m(TaskRunner pid=716228)[0m                                          'speculative_num_steps': 3},
+[36m(TaskRunner pid=716228)[0m                                  'override_config': {'attn_implementation': 'sdpa'},
+[36m(TaskRunner pid=716228)[0m                                  'path': '/root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1',
+[36m(TaskRunner pid=716228)[0m                                  'target_modules': 'all-linear',
+[36m(TaskRunner pid=716228)[0m                                  'tiled_mlp': {'enabled': False,
+[36m(TaskRunner pid=716228)[0m                                                'num_shards': 4},
+[36m(TaskRunner pid=716228)[0m                                  'tokenizer_path': None,
+[36m(TaskRunner pid=716228)[0m                                  'trust_remote_code': False,
+[36m(TaskRunner pid=716228)[0m                                  'use_fused_kernels': True,
+[36m(TaskRunner pid=716228)[0m                                  'use_liger': False,
+[36m(TaskRunner pid=716228)[0m                                  'use_remove_padding': True,
+[36m(TaskRunner pid=716228)[0m                                  'use_shm': False},
+[36m(TaskRunner pid=716228)[0m                        'nccl_timeout': 600,
+[36m(TaskRunner pid=716228)[0m                        'ref': {'_target_': 'verl.workers.config.FSDPActorConfig',
+[36m(TaskRunner pid=716228)[0m                                'entropy_checkpointing': False,
+[36m(TaskRunner pid=716228)[0m                                'entropy_from_logits_with_chunking': False,
+[36m(TaskRunner pid=716228)[0m                                'fsdp_config': {'_target_': 'verl.workers.config.FSDPEngineConfig',
+[36m(TaskRunner pid=716228)[0m                                                'dtype': 'bfloat16',
+[36m(TaskRunner pid=716228)[0m                                                'entropy_checkpointing': False,
+[36m(TaskRunner pid=716228)[0m                                                'entropy_from_logits_with_chunking': False,
+[36m(TaskRunner pid=716228)[0m                                                'forward_only': True,
+[36m(TaskRunner pid=716228)[0m                                                'forward_prefetch': False,
+[36m(TaskRunner pid=716228)[0m                                                'fsdp_size': -1,
+[36m(TaskRunner pid=716228)[0m                                                'full_determinism': False,
+[36m(TaskRunner pid=716228)[0m                                                'model_dtype': 'fp32',
+[36m(TaskRunner pid=716228)[0m                                                'offload_policy': False,
+[36m(TaskRunner pid=716228)[0m                                                'optimizer_offload': False,
+[36m(TaskRunner pid=716228)[0m                                                'param_offload': False,
+[36m(TaskRunner pid=716228)[0m                                                'qat': {'_target_': 'verl.workers.config.QATEngineConfig',
+[36m(TaskRunner pid=716228)[0m                                                        'activation_observer': 'static_minmax',
+[36m(TaskRunner pid=716228)[0m                                                        'enable': False,
+[36m(TaskRunner pid=716228)[0m                                                        'group_size': 16,
+[36m(TaskRunner pid=716228)[0m                                                        'ignore_patterns': ['lm_head',
+[36m(TaskRunner pid=716228)[0m                                                                            'embed_tokens',
+[36m(TaskRunner pid=716228)[0m                                                                            're:.*mlp.gate$'],
+[36m(TaskRunner pid=716228)[0m                                                        'mode': 'w4a16',
+[36m(TaskRunner pid=716228)[0m                                                        'quantization_config_path': None},
+[36m(TaskRunner pid=716228)[0m                                                'reshard_after_forward': True,
+[36m(TaskRunner pid=716228)[0m                                                'seed': 42,
+[36m(TaskRunner pid=716228)[0m                                                'strategy': 'fsdp',
+[36m(TaskRunner pid=716228)[0m                                                'ulysses_sequence_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                                                'use_orig_params': False,
+[36m(TaskRunner pid=716228)[0m                                                'use_torch_compile': True,
+[36m(TaskRunner pid=716228)[0m                                                'wrap_policy': {'min_num_params': 0}},
+[36m(TaskRunner pid=716228)[0m                                'log_prob_max_token_len_per_gpu': 16384,
+[36m(TaskRunner pid=716228)[0m                                'log_prob_micro_batch_size': None,
+[36m(TaskRunner pid=716228)[0m                                'log_prob_micro_batch_size_per_gpu': 1,
+[36m(TaskRunner pid=716228)[0m                                'log_prob_use_dynamic_bsz': False,
+[36m(TaskRunner pid=716228)[0m                                'profiler': {'_target_': 'verl.utils.profiler.ProfilerConfig',
+[36m(TaskRunner pid=716228)[0m                                             'all_ranks': False,
+[36m(TaskRunner pid=716228)[0m                                             'enable': False,
+[36m(TaskRunner pid=716228)[0m                                             'ranks': [],
+[36m(TaskRunner pid=716228)[0m                                             'save_path': 'outputs/profile',
+[36m(TaskRunner pid=716228)[0m                                             'tool': None,
+[36m(TaskRunner pid=716228)[0m                                             'tool_config': {'npu': {'_target_': 'verl.utils.profiler.config.NPUToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                     'analysis': True,
+[36m(TaskRunner pid=716228)[0m                                                                     'contents': [],
+[36m(TaskRunner pid=716228)[0m                                                                     'discrete': False,
+[36m(TaskRunner pid=716228)[0m                                                                     'level': 'level0'},
+[36m(TaskRunner pid=716228)[0m                                                             'nsys': {'_target_': 'verl.utils.profiler.config.NsightToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                      'discrete': False},
+[36m(TaskRunner pid=716228)[0m                                                             'precision_debugger': {'_target_': 'verl.utils.profiler.config.PrecisionDebuggerToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                                    'config_path': None,
+[36m(TaskRunner pid=716228)[0m                                                                                    'stages': None,
+[36m(TaskRunner pid=716228)[0m                                                                                    'steps': None,
+[36m(TaskRunner pid=716228)[0m                                                                                    'strict': False},
+[36m(TaskRunner pid=716228)[0m                                                             'torch': {'_target_': 'verl.utils.profiler.config.TorchProfilerToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                       'contents': [],
+[36m(TaskRunner pid=716228)[0m                                                                       'discrete': False},
+[36m(TaskRunner pid=716228)[0m                                                             'torch_memory': {'_target_': 'verl.utils.profiler.config.TorchMemoryToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                              'stack_depth': 32,
+[36m(TaskRunner pid=716228)[0m                                                                              'trace_alloc_max_entries': 100000}}},
+[36m(TaskRunner pid=716228)[0m                                'rollout_n': 4,
+[36m(TaskRunner pid=716228)[0m                                'router_replay': {'_target_': 'verl.workers.config.RouterReplayConfig',
+[36m(TaskRunner pid=716228)[0m                                                  'mode': 'disabled',
+[36m(TaskRunner pid=716228)[0m                                                  'record_file': None,
+[36m(TaskRunner pid=716228)[0m                                                  'replay_file': None},
+[36m(TaskRunner pid=716228)[0m                                'strategy': 'fsdp',
+[36m(TaskRunner pid=716228)[0m                                'ulysses_sequence_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                                'use_torch_compile': False},
+[36m(TaskRunner pid=716228)[0m                        'rollout': {'_target_': 'verl.workers.config.RolloutConfig',
+[36m(TaskRunner pid=716228)[0m                                    'agent': {'_target_': 'verl.workers.config.AgentLoopConfig',
+[36m(TaskRunner pid=716228)[0m                                              'agent_loop_config_path': '/workspace/shopsimulator/shopagent-rl/configs/shopsim_agent_loop.yaml',
+[36m(TaskRunner pid=716228)[0m                                              'custom_async_server': {'_target_': 'verl.workers.config.CustomAsyncServerConfig',
+[36m(TaskRunner pid=716228)[0m                                                                      'name': None,
+[36m(TaskRunner pid=716228)[0m                                                                      'path': None},
+[36m(TaskRunner pid=716228)[0m                                              'default_agent_loop': 'shopsim_agent',
+[36m(TaskRunner pid=716228)[0m                                              'num_workers': 4},
+[36m(TaskRunner pid=716228)[0m                                    'calculate_log_probs': False,
+[36m(TaskRunner pid=716228)[0m                                    'checkpoint_engine': {'_target_': 'verl.workers.config.CheckpointEngineConfig',
+[36m(TaskRunner pid=716228)[0m                                                          'backend': 'naive',
+[36m(TaskRunner pid=716228)[0m                                                          'custom_backend_module': None,
+[36m(TaskRunner pid=716228)[0m                                                          'engine_kwargs': {},
+[36m(TaskRunner pid=716228)[0m                                                          'update_weights_bucket_megabytes': 2048},
+[36m(TaskRunner pid=716228)[0m                                    'cudagraph_capture_sizes': None,
+[36m(TaskRunner pid=716228)[0m                                    'data_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                                    'disable_log_stats': True,
+[36m(TaskRunner pid=716228)[0m                                    'disaggregation': {'bootstrap_port': None,
+[36m(TaskRunner pid=716228)[0m                                                       'decode_replicas': 1,
+[36m(TaskRunner pid=716228)[0m                                                       'decode_tensor_model_parallel_size': None,
+[36m(TaskRunner pid=716228)[0m                                                       'enabled': False,
+[36m(TaskRunner pid=716228)[0m                                                       'ib_device': None,
+[36m(TaskRunner pid=716228)[0m                                                       'prefill_replicas': 1,
+[36m(TaskRunner pid=716228)[0m                                                       'transfer_backend': 'nixl'},
+[36m(TaskRunner pid=716228)[0m                                    'do_sample': True,
+[36m(TaskRunner pid=716228)[0m                                    'dtype': 'bfloat16',
+[36m(TaskRunner pid=716228)[0m                                    'enable_chunked_prefill': True,
+[36m(TaskRunner pid=716228)[0m                                    'enable_prefix_caching': True,
+[36m(TaskRunner pid=716228)[0m                                    'enable_rollout_routing_replay': False,
+[36m(TaskRunner pid=716228)[0m                                    'enforce_eager': True,
+[36m(TaskRunner pid=716228)[0m                                    'engine_kwargs': {'sglang': {},
+[36m(TaskRunner pid=716228)[0m                                                      'trtllm': {},
+[36m(TaskRunner pid=716228)[0m                                                      'vllm': {}},
+[36m(TaskRunner pid=716228)[0m                                    'expert_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                                    'free_cache_engine': True,
+[36m(TaskRunner pid=716228)[0m                                    'gpu_memory_utilization': 0.25,
+[36m(TaskRunner pid=716228)[0m                                    'ignore_eos': False,
+[36m(TaskRunner pid=716228)[0m                                    'layered_summon': False,
+[36m(TaskRunner pid=716228)[0m                                    'load_format': 'auto',
+[36m(TaskRunner pid=716228)[0m                                    'log_prob_max_token_len_per_gpu': 16384,
+[36m(TaskRunner pid=716228)[0m                                    'log_prob_micro_batch_size': None,
+[36m(TaskRunner pid=716228)[0m                                    'log_prob_micro_batch_size_per_gpu': 1,
+[36m(TaskRunner pid=716228)[0m                                    'log_prob_use_dynamic_bsz': False,
+[36m(TaskRunner pid=716228)[0m                                    'logprobs_mode': 'processed_logprobs',
+[36m(TaskRunner pid=716228)[0m                                    'max_model_len': 10240,
+[36m(TaskRunner pid=716228)[0m                                    'max_num_batched_tokens': 8192,
+[36m(TaskRunner pid=716228)[0m                                    'max_num_seqs': 1024,
+[36m(TaskRunner pid=716228)[0m                                    'mode': 'async',
+[36m(TaskRunner pid=716228)[0m                                    'mtp': {'_target_': 'verl.workers.config.MtpConfig',
+[36m(TaskRunner pid=716228)[0m                                            'detach_encoder': False,
+[36m(TaskRunner pid=716228)[0m                                            'enable': False,
+[36m(TaskRunner pid=716228)[0m                                            'enable_rollout': False,
+[36m(TaskRunner pid=716228)[0m                                            'enable_train': False,
+[36m(TaskRunner pid=716228)[0m                                            'method': 'mtp',
+[36m(TaskRunner pid=716228)[0m                                            'mtp_loss_scaling_factor': 0.1,
+[36m(TaskRunner pid=716228)[0m                                            'num_speculative_tokens': 1,
+[36m(TaskRunner pid=716228)[0m                                            'speculative_algorithm': 'EAGLE',
+[36m(TaskRunner pid=716228)[0m                                            'speculative_eagle_topk': 1,
+[36m(TaskRunner pid=716228)[0m                                            'speculative_num_draft_tokens': 4,
+[36m(TaskRunner pid=716228)[0m                                            'speculative_num_steps': 3},
+[36m(TaskRunner pid=716228)[0m                                    'multi_stage_wake_up': False,
+[36m(TaskRunner pid=716228)[0m                                    'multi_turn': {'_target_': 'verl.workers.config.MultiTurnConfig',
+[36m(TaskRunner pid=716228)[0m                                                   'enable': True,
+[36m(TaskRunner pid=716228)[0m                                                   'format': 'hermes',
+[36m(TaskRunner pid=716228)[0m                                                   'function_tool_path': None,
+[36m(TaskRunner pid=716228)[0m                                                   'max_assistant_turns': 10,
+[36m(TaskRunner pid=716228)[0m                                                   'max_parallel_calls': 1,
+[36m(TaskRunner pid=716228)[0m                                                   'max_tool_response_length': 256,
+[36m(TaskRunner pid=716228)[0m                                                   'max_user_turns': None,
+[36m(TaskRunner pid=716228)[0m                                                   'num_repeat_rollouts': None,
+[36m(TaskRunner pid=716228)[0m                                                   'tokenization_sanity_check_mode': 'disable',
+[36m(TaskRunner pid=716228)[0m                                                   'tool_config_path': None,
+[36m(TaskRunner pid=716228)[0m                                                   'tool_response_truncate_side': 'middle',
+[36m(TaskRunner pid=716228)[0m                                                   'use_inference_chat_template': False},
+[36m(TaskRunner pid=716228)[0m                                    'n': 4,
+[36m(TaskRunner pid=716228)[0m                                    'n_gpus_per_node': 1,
+[36m(TaskRunner pid=716228)[0m                                    'name': 'vllm',
+[36m(TaskRunner pid=716228)[0m                                    'nnodes': 0,
+[36m(TaskRunner pid=716228)[0m                                    'over_sample_rate': 0,
+[36m(TaskRunner pid=716228)[0m                                    'pipeline_model_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                                    'profiler': {'_target_': 'verl.utils.profiler.ProfilerConfig',
+[36m(TaskRunner pid=716228)[0m                                                 'all_ranks': False,
+[36m(TaskRunner pid=716228)[0m                                                 'enable': False,
+[36m(TaskRunner pid=716228)[0m                                                 'ranks': [],
+[36m(TaskRunner pid=716228)[0m                                                 'save_path': 'outputs/profile',
+[36m(TaskRunner pid=716228)[0m                                                 'tool': None,
+[36m(TaskRunner pid=716228)[0m                                                 'tool_config': {'npu': {'_target_': 'verl.utils.profiler.config.NPUToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                         'analysis': True,
+[36m(TaskRunner pid=716228)[0m                                                                         'contents': [],
+[36m(TaskRunner pid=716228)[0m                                                                         'discrete': False,
+[36m(TaskRunner pid=716228)[0m                                                                         'level': 'level0'},
+[36m(TaskRunner pid=716228)[0m                                                                 'precision_debugger': {'_target_': 'verl.utils.profiler.config.PrecisionDebuggerToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                                        'config_path': None,
+[36m(TaskRunner pid=716228)[0m                                                                                        'stages': None,
+[36m(TaskRunner pid=716228)[0m                                                                                        'steps': None,
+[36m(TaskRunner pid=716228)[0m                                                                                        'strict': False},
+[36m(TaskRunner pid=716228)[0m                                                                 'torch': {'_target_': 'verl.utils.profiler.config.TorchProfilerToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                           'contents': [],
+[36m(TaskRunner pid=716228)[0m                                                                           'discrete': False}}},
+[36m(TaskRunner pid=716228)[0m                                    'prometheus': {'_target_': 'verl.workers.config.PrometheusConfig',
+[36m(TaskRunner pid=716228)[0m                                                   'enable': False,
+[36m(TaskRunner pid=716228)[0m                                                   'file': '/tmp/ray/session_latest/metrics/prometheus/prometheus.yml',
+[36m(TaskRunner pid=716228)[0m                                                   'port': 9090,
+[36m(TaskRunner pid=716228)[0m                                                   'served_model_name': '/root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1'},
+[36m(TaskRunner pid=716228)[0m                                    'prompt_length': 2048,
+[36m(TaskRunner pid=716228)[0m                                    'qat': {'_target_': 'verl.workers.config.QATEngineConfig',
+[36m(TaskRunner pid=716228)[0m                                            'activation_observer': 'static_minmax',
+[36m(TaskRunner pid=716228)[0m                                            'enable': False,
+[36m(TaskRunner pid=716228)[0m                                            'group_size': 16,
+[36m(TaskRunner pid=716228)[0m                                            'ignore_patterns': ['lm_head',
+[36m(TaskRunner pid=716228)[0m                                                                'embed_tokens',
+[36m(TaskRunner pid=716228)[0m                                                                're:.*mlp.gate$'],
+[36m(TaskRunner pid=716228)[0m                                            'mode': 'w4a16',
+[36m(TaskRunner pid=716228)[0m                                            'quantization_config_path': None},
+[36m(TaskRunner pid=716228)[0m                                    'quantization': None,
+[36m(TaskRunner pid=716228)[0m                                    'quantization_config_file': None,
+[36m(TaskRunner pid=716228)[0m                                    'response_length': 8192,
+[36m(TaskRunner pid=716228)[0m                                    'scheduling_policy': 'fcfs',
+[36m(TaskRunner pid=716228)[0m                                    'skip': {'_target_': 'verl.workers.config.SkipConfig',
+[36m(TaskRunner pid=716228)[0m                                             'action': 'cache',
+[36m(TaskRunner pid=716228)[0m                                             'dump_dir': '~/.verl/rollout_dump',
+[36m(TaskRunner pid=716228)[0m                                             'enable': False,
+[36m(TaskRunner pid=716228)[0m                                             'max_dump_step': 1},
+[36m(TaskRunner pid=716228)[0m                                    'skip_tokenizer_init': True,
+[36m(TaskRunner pid=716228)[0m                                    'temperature': 0.7,
+[36m(TaskRunner pid=716228)[0m                                    'tensor_model_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                                    'top_k': -1,
+[36m(TaskRunner pid=716228)[0m                                    'top_p': 1.0,
+[36m(TaskRunner pid=716228)[0m                                    'trace': {'_target_': 'verl.workers.config.TraceConfig',
+[36m(TaskRunner pid=716228)[0m                                              'backend': None,
+[36m(TaskRunner pid=716228)[0m                                              'experiment_name': 'qwen3-1.7b-grpo',
+[36m(TaskRunner pid=716228)[0m                                              'max_samples_per_step_per_worker': None,
+[36m(TaskRunner pid=716228)[0m                                              'project_name': 'shopsim_grpo',
+[36m(TaskRunner pid=716228)[0m                                              'token2text': False},
+[36m(TaskRunner pid=716228)[0m                                    'val_kwargs': {'_target_': 'verl.workers.config.SamplingConfig',
+[36m(TaskRunner pid=716228)[0m                                                   'do_sample': False,
+[36m(TaskRunner pid=716228)[0m                                                   'n': 1,
+[36m(TaskRunner pid=716228)[0m                                                   'temperature': 0,
+[36m(TaskRunner pid=716228)[0m                                                   'top_k': -1,
+[36m(TaskRunner pid=716228)[0m                                                   'top_p': 1.0}}},
+[36m(TaskRunner pid=716228)[0m  'algorithm': {'_target_': 'verl.trainer.config.AlgoConfig',
+[36m(TaskRunner pid=716228)[0m                'adv_estimator': 'grpo',
+[36m(TaskRunner pid=716228)[0m                'gamma': 1.0,
+[36m(TaskRunner pid=716228)[0m                'kl_ctrl': {'_target_': 'verl.trainer.config.KLControlConfig',
+[36m(TaskRunner pid=716228)[0m                            'horizon': 10000,
+[36m(TaskRunner pid=716228)[0m                            'kl_coef': 0.001,
+[36m(TaskRunner pid=716228)[0m                            'target_kl': 0.1,
+[36m(TaskRunner pid=716228)[0m                            'type': 'fixed'},
+[36m(TaskRunner pid=716228)[0m                'kl_penalty': 'kl',
+[36m(TaskRunner pid=716228)[0m                'lam': 1.0,
+[36m(TaskRunner pid=716228)[0m                'norm_adv_by_std_in_grpo': True,
+[36m(TaskRunner pid=716228)[0m                'paired_intervention': {'enabled': False, 'weight': 1.0},
+[36m(TaskRunner pid=716228)[0m                'pf_ppo': {'reweight_method': 'pow', 'weight_pow': 2.0},
+[36m(TaskRunner pid=716228)[0m                'rollout_correction': {'bypass_mode': False,
+[36m(TaskRunner pid=716228)[0m                                       'loss_type': 'ppo_clip',
+[36m(TaskRunner pid=716228)[0m                                       'rollout_is': None,
+[36m(TaskRunner pid=716228)[0m                                       'rollout_is_batch_normalize': False,
+[36m(TaskRunner pid=716228)[0m                                       'rollout_is_threshold': 2.0,
+[36m(TaskRunner pid=716228)[0m                                       'rollout_rs': None,
+[36m(TaskRunner pid=716228)[0m                                       'rollout_rs_threshold': None},
+[36m(TaskRunner pid=716228)[0m                'use_kl_in_reward': False,
+[36m(TaskRunner pid=716228)[0m                'use_pf_ppo': False},
+[36m(TaskRunner pid=716228)[0m  'critic': {'_target_': 'verl.workers.config.FSDPCriticConfig',
+[36m(TaskRunner pid=716228)[0m             'checkpoint': {'_target_': 'verl.trainer.config.CheckpointConfig',
+[36m(TaskRunner pid=716228)[0m                            'async_save': False,
+[36m(TaskRunner pid=716228)[0m                            'load_contents': ['model', 'optimizer', 'extra'],
+[36m(TaskRunner pid=716228)[0m                            'mbridge_config': {},
+[36m(TaskRunner pid=716228)[0m                            'save_contents': ['model', 'optimizer', 'extra']},
+[36m(TaskRunner pid=716228)[0m             'cliprange_value': 0.5,
+[36m(TaskRunner pid=716228)[0m             'data_loader_seed': 42,
+[36m(TaskRunner pid=716228)[0m             'enable': None,
+[36m(TaskRunner pid=716228)[0m             'forward_max_token_len_per_gpu': 32768,
+[36m(TaskRunner pid=716228)[0m             'forward_micro_batch_size': None,
+[36m(TaskRunner pid=716228)[0m             'forward_micro_batch_size_per_gpu': None,
+[36m(TaskRunner pid=716228)[0m             'fsdp': {'_target_': 'verl.workers.config.FSDPEngineConfig',
+[36m(TaskRunner pid=716228)[0m                      'dtype': 'bfloat16',
+[36m(TaskRunner pid=716228)[0m                      'entropy_checkpointing': False,
+[36m(TaskRunner pid=716228)[0m                      'entropy_from_logits_with_chunking': False,
+[36m(TaskRunner pid=716228)[0m                      'forward_only': False,
+[36m(TaskRunner pid=716228)[0m                      'forward_prefetch': False,
+[36m(TaskRunner pid=716228)[0m                      'fsdp_size': -1,
+[36m(TaskRunner pid=716228)[0m                      'full_determinism': False,
+[36m(TaskRunner pid=716228)[0m                      'model_dtype': 'fp32',
+[36m(TaskRunner pid=716228)[0m                      'offload_policy': False,
+[36m(TaskRunner pid=716228)[0m                      'optimizer_offload': False,
+[36m(TaskRunner pid=716228)[0m                      'param_offload': False,
+[36m(TaskRunner pid=716228)[0m                      'qat': {'_target_': 'verl.workers.config.QATEngineConfig',
+[36m(TaskRunner pid=716228)[0m                              'activation_observer': 'static_minmax',
+[36m(TaskRunner pid=716228)[0m                              'enable': False,
+[36m(TaskRunner pid=716228)[0m                              'group_size': 16,
+[36m(TaskRunner pid=716228)[0m                              'ignore_patterns': ['lm_head',
+[36m(TaskRunner pid=716228)[0m                                                  'embed_tokens',
+[36m(TaskRunner pid=716228)[0m                                                  're:.*mlp.gate$'],
+[36m(TaskRunner pid=716228)[0m                              'mode': 'w4a16',
+[36m(TaskRunner pid=716228)[0m                              'quantization_config_path': None},
+[36m(TaskRunner pid=716228)[0m                      'reshard_after_forward': True,
+[36m(TaskRunner pid=716228)[0m                      'seed': 42,
+[36m(TaskRunner pid=716228)[0m                      'strategy': 'fsdp',
+[36m(TaskRunner pid=716228)[0m                      'ulysses_sequence_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                      'use_orig_params': False,
+[36m(TaskRunner pid=716228)[0m                      'use_torch_compile': True,
+[36m(TaskRunner pid=716228)[0m                      'wrap_policy': {'min_num_params': 0}},
+[36m(TaskRunner pid=716228)[0m             'grad_clip': 1.0,
+[36m(TaskRunner pid=716228)[0m             'loss_agg_mode': 'token-mean',
+[36m(TaskRunner pid=716228)[0m             'model': {'_target_': 'verl.workers.config.HFModelConfig',
+[36m(TaskRunner pid=716228)[0m                       'custom_chat_template': None,
+[36m(TaskRunner pid=716228)[0m                       'enable_activation_offload': False,
+[36m(TaskRunner pid=716228)[0m                       'enable_gradient_checkpointing': True,
+[36m(TaskRunner pid=716228)[0m                       'exclude_modules': None,
+[36m(TaskRunner pid=716228)[0m                       'external_lib': None,
+[36m(TaskRunner pid=716228)[0m                       'fused_kernel_options': {'impl_backend': 'torch'},
+[36m(TaskRunner pid=716228)[0m                       'hf_config_path': None,
+[36m(TaskRunner pid=716228)[0m                       'lora': {'a2a_experimental': False,
+[36m(TaskRunner pid=716228)[0m                                'adapter_path': None,
+[36m(TaskRunner pid=716228)[0m                                'alpha': 32,
+[36m(TaskRunner pid=716228)[0m                                'dropout': 0.0,
+[36m(TaskRunner pid=716228)[0m                                'dropout_position': 'pre',
+[36m(TaskRunner pid=716228)[0m                                'dtype': None,
+[36m(TaskRunner pid=716228)[0m                                'exclude_modules': [],
+[36m(TaskRunner pid=716228)[0m                                'freeze_language_model': True,
+[36m(TaskRunner pid=716228)[0m                                'freeze_vision_model': True,
+[36m(TaskRunner pid=716228)[0m                                'freeze_vision_projection': True,
+[36m(TaskRunner pid=716228)[0m                                'lora_A_init_method': 'xavier',
+[36m(TaskRunner pid=716228)[0m                                'lora_B_init_method': 'zero',
+[36m(TaskRunner pid=716228)[0m                                'merge': False,
+[36m(TaskRunner pid=716228)[0m                                'rank': 0,
+[36m(TaskRunner pid=716228)[0m                                'target_modules': ['linear_qkv',
+[36m(TaskRunner pid=716228)[0m                                                   'linear_proj',
+[36m(TaskRunner pid=716228)[0m                                                   'linear_fc1',
+[36m(TaskRunner pid=716228)[0m                                                   'linear_fc2'],
+[36m(TaskRunner pid=716228)[0m                                'type': 'lora'},
+[36m(TaskRunner pid=716228)[0m                       'lora_adapter_path': None,
+[36m(TaskRunner pid=716228)[0m                       'lora_alpha': 16,
+[36m(TaskRunner pid=716228)[0m                       'lora_rank': 0,
+[36m(TaskRunner pid=716228)[0m                       'mtp': {'_target_': 'verl.workers.config.MtpConfig',
+[36m(TaskRunner pid=716228)[0m                               'detach_encoder': False,
+[36m(TaskRunner pid=716228)[0m                               'enable': False,
+[36m(TaskRunner pid=716228)[0m                               'enable_rollout': False,
+[36m(TaskRunner pid=716228)[0m                               'enable_train': False,
+[36m(TaskRunner pid=716228)[0m                               'method': 'mtp',
+[36m(TaskRunner pid=716228)[0m                               'mtp_loss_scaling_factor': 0.1,
+[36m(TaskRunner pid=716228)[0m                               'num_speculative_tokens': 1,
+[36m(TaskRunner pid=716228)[0m                               'speculative_algorithm': 'EAGLE',
+[36m(TaskRunner pid=716228)[0m                               'speculative_eagle_topk': 1,
+[36m(TaskRunner pid=716228)[0m                               'speculative_num_draft_tokens': 4,
+[36m(TaskRunner pid=716228)[0m                               'speculative_num_steps': 3},
+[36m(TaskRunner pid=716228)[0m                       'override_config': {},
+[36m(TaskRunner pid=716228)[0m                       'path': '~/models/deepseek-llm-7b-chat',
+[36m(TaskRunner pid=716228)[0m                       'target_modules': 'all-linear',
+[36m(TaskRunner pid=716228)[0m                       'tiled_mlp': {'enabled': False, 'num_shards': 4},
+[36m(TaskRunner pid=716228)[0m                       'tokenizer_path': None,
+[36m(TaskRunner pid=716228)[0m                       'trust_remote_code': False,
+[36m(TaskRunner pid=716228)[0m                       'use_fused_kernels': False,
+[36m(TaskRunner pid=716228)[0m                       'use_liger': False,
+[36m(TaskRunner pid=716228)[0m                       'use_remove_padding': True,
+[36m(TaskRunner pid=716228)[0m                       'use_shm': False},
+[36m(TaskRunner pid=716228)[0m             'optim': {'_target_': 'verl.workers.config.FSDPOptimizerConfig',
+[36m(TaskRunner pid=716228)[0m                       'betas': [0.9, 0.999],
+[36m(TaskRunner pid=716228)[0m                       'clip_grad': 1.0,
+[36m(TaskRunner pid=716228)[0m                       'lr': 1e-05,
+[36m(TaskRunner pid=716228)[0m                       'lr_scheduler_type': 'constant',
+[36m(TaskRunner pid=716228)[0m                       'lr_warmup_steps': -1,
+[36m(TaskRunner pid=716228)[0m                       'lr_warmup_steps_ratio': 0.0,
+[36m(TaskRunner pid=716228)[0m                       'min_lr_ratio': 0.0,
+[36m(TaskRunner pid=716228)[0m                       'num_cycles': 0.5,
+[36m(TaskRunner pid=716228)[0m                       'optimizer': 'AdamW',
+[36m(TaskRunner pid=716228)[0m                       'optimizer_impl': 'torch.optim',
+[36m(TaskRunner pid=716228)[0m                       'override_optimizer_config': None,
+[36m(TaskRunner pid=716228)[0m                       'total_training_steps': -1,
+[36m(TaskRunner pid=716228)[0m                       'warmup_style': None,
+[36m(TaskRunner pid=716228)[0m                       'weight_decay': 0.01,
+[36m(TaskRunner pid=716228)[0m                       'zero_indexed_step': True},
+[36m(TaskRunner pid=716228)[0m             'ppo_epochs': 1,
+[36m(TaskRunner pid=716228)[0m             'ppo_max_token_len_per_gpu': 32768,
+[36m(TaskRunner pid=716228)[0m             'ppo_micro_batch_size': None,
+[36m(TaskRunner pid=716228)[0m             'ppo_micro_batch_size_per_gpu': None,
+[36m(TaskRunner pid=716228)[0m             'ppo_mini_batch_size': 4,
+[36m(TaskRunner pid=716228)[0m             'profiler': {'_target_': 'verl.utils.profiler.ProfilerConfig',
+[36m(TaskRunner pid=716228)[0m                          'all_ranks': False,
+[36m(TaskRunner pid=716228)[0m                          'enable': False,
+[36m(TaskRunner pid=716228)[0m                          'ranks': [],
+[36m(TaskRunner pid=716228)[0m                          'save_path': 'outputs/profile',
+[36m(TaskRunner pid=716228)[0m                          'tool': None,
+[36m(TaskRunner pid=716228)[0m                          'tool_config': {'npu': {'_target_': 'verl.utils.profiler.config.NPUToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                  'analysis': True,
+[36m(TaskRunner pid=716228)[0m                                                  'contents': [],
+[36m(TaskRunner pid=716228)[0m                                                  'discrete': False,
+[36m(TaskRunner pid=716228)[0m                                                  'level': 'level0'},
+[36m(TaskRunner pid=716228)[0m                                          'nsys': {'_target_': 'verl.utils.profiler.config.NsightToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                   'discrete': False},
+[36m(TaskRunner pid=716228)[0m                                          'precision_debugger': {'_target_': 'verl.utils.profiler.config.PrecisionDebuggerToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                 'config_path': None,
+[36m(TaskRunner pid=716228)[0m                                                                 'stages': None,
+[36m(TaskRunner pid=716228)[0m                                                                 'steps': None,
+[36m(TaskRunner pid=716228)[0m                                                                 'strict': False},
+[36m(TaskRunner pid=716228)[0m                                          'torch': {'_target_': 'verl.utils.profiler.config.TorchProfilerToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                    'contents': [],
+[36m(TaskRunner pid=716228)[0m                                                    'discrete': False},
+[36m(TaskRunner pid=716228)[0m                                          'torch_memory': {'_target_': 'verl.utils.profiler.config.TorchMemoryToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                           'stack_depth': 32,
+[36m(TaskRunner pid=716228)[0m                                                           'trace_alloc_max_entries': 100000}}},
+[36m(TaskRunner pid=716228)[0m             'rollout_n': 4,
+[36m(TaskRunner pid=716228)[0m             'shuffle': False,
+[36m(TaskRunner pid=716228)[0m             'strategy': 'fsdp',
+[36m(TaskRunner pid=716228)[0m             'ulysses_sequence_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m             'use_dynamic_bsz': False},
+[36m(TaskRunner pid=716228)[0m  'data': {'apply_chat_template_kwargs': {},
+[36m(TaskRunner pid=716228)[0m           'audio_key': 'audios',
+[36m(TaskRunner pid=716228)[0m           'custom_cls': {'name': None, 'path': None},
+[36m(TaskRunner pid=716228)[0m           'dataloader_num_workers': 0,
+[36m(TaskRunner pid=716228)[0m           'filter_overlong_prompts': True,
+[36m(TaskRunner pid=716228)[0m           'filter_overlong_prompts_workers': 1,
+[36m(TaskRunner pid=716228)[0m           'function_tool_path': None,
+[36m(TaskRunner pid=716228)[0m           'image_key': 'images',
+[36m(TaskRunner pid=716228)[0m           'image_patch_size': 14,
+[36m(TaskRunner pid=716228)[0m           'max_prompt_length': 2048,
+[36m(TaskRunner pid=716228)[0m           'max_response_length': 8192,
+[36m(TaskRunner pid=716228)[0m           'mm_processor_kwargs': {},
+[36m(TaskRunner pid=716228)[0m           'prompt_key': 'prompt',
+[36m(TaskRunner pid=716228)[0m           'return_full_prompt': False,
+[36m(TaskRunner pid=716228)[0m           'return_multi_modal_inputs': True,
+[36m(TaskRunner pid=716228)[0m           'return_raw_chat': True,
+[36m(TaskRunner pid=716228)[0m           'return_raw_input_ids': False,
+[36m(TaskRunner pid=716228)[0m           'reward_fn_key': 'data_source',
+[36m(TaskRunner pid=716228)[0m           'seed': None,
+[36m(TaskRunner pid=716228)[0m           'shuffle': False,
+[36m(TaskRunner pid=716228)[0m           'tokenizer': None,
+[36m(TaskRunner pid=716228)[0m           'tool_config_path': None,
+[36m(TaskRunner pid=716228)[0m           'train_batch_size': 4,
+[36m(TaskRunner pid=716228)[0m           'train_files': '/workspace/shopsimulator/shopagent-rl/data/grpo_certified_natural_800_pairblocked.parquet',
+[36m(TaskRunner pid=716228)[0m           'train_max_samples': -1,
+[36m(TaskRunner pid=716228)[0m           'truncation': 'error',
+[36m(TaskRunner pid=716228)[0m           'trust_remote_code': False,
+[36m(TaskRunner pid=716228)[0m           'use_shm': False,
+[36m(TaskRunner pid=716228)[0m           'val_batch_size': None,
+[36m(TaskRunner pid=716228)[0m           'val_files': '/workspace/shopsimulator/shopagent-rl/data/grpo_certified_natural_800_pairblocked.parquet',
+[36m(TaskRunner pid=716228)[0m           'val_max_samples': -1,
+[36m(TaskRunner pid=716228)[0m           'validation_shuffle': False,
+[36m(TaskRunner pid=716228)[0m           'video_key': 'videos'},
+[36m(TaskRunner pid=716228)[0m  'distillation': {'_target_': 'verl.workers.config.DistillationConfig',
+[36m(TaskRunner pid=716228)[0m                   'distillation_loss': {'_target_': 'verl.workers.config.DistillationLossConfig',
+[36m(TaskRunner pid=716228)[0m                                         'clip_ratio': 0.2,
+[36m(TaskRunner pid=716228)[0m                                         'clip_ratio_high': 0.2,
+[36m(TaskRunner pid=716228)[0m                                         'clip_ratio_low': 0.2,
+[36m(TaskRunner pid=716228)[0m                                         'distillation_loss_coef': 1.0,
+[36m(TaskRunner pid=716228)[0m                                         'log_prob_min_clamp': None,
+[36m(TaskRunner pid=716228)[0m                                         'loss_max_clamp': None,
+[36m(TaskRunner pid=716228)[0m                                         'loss_mode': 'k3',
+[36m(TaskRunner pid=716228)[0m                                         'policy_loss_mode': 'vanilla',
+[36m(TaskRunner pid=716228)[0m                                         'topk': 32,
+[36m(TaskRunner pid=716228)[0m                                         'use_policy_gradient': False,
+[36m(TaskRunner pid=716228)[0m                                         'use_task_rewards': True},
+[36m(TaskRunner pid=716228)[0m                   'enabled': False,
+[36m(TaskRunner pid=716228)[0m                   'n_gpus_per_node': 8,
+[36m(TaskRunner pid=716228)[0m                   'nnodes': 0,
+[36m(TaskRunner pid=716228)[0m                   'teacher_key': 'data_source',
+[36m(TaskRunner pid=716228)[0m                   'teacher_models': {'teacher_model': {'_target_': 'verl.workers.config.DistillationTeacherModelConfig',
+[36m(TaskRunner pid=716228)[0m                                                        'inference': {'_target_': 'verl.workers.config.RolloutConfig',
+[36m(TaskRunner pid=716228)[0m                                                                      'cudagraph_capture_sizes': None,
+[36m(TaskRunner pid=716228)[0m                                                                      'data_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                                                                      'disable_log_stats': True,
+[36m(TaskRunner pid=716228)[0m                                                                      'dtype': 'bfloat16',
+[36m(TaskRunner pid=716228)[0m                                                                      'enable_chunked_prefill': True,
+[36m(TaskRunner pid=716228)[0m                                                                      'enable_prefix_caching': True,
+[36m(TaskRunner pid=716228)[0m                                                                      'enforce_eager': True,
+[36m(TaskRunner pid=716228)[0m                                                                      'engine_kwargs': {},
+[36m(TaskRunner pid=716228)[0m                                                                      'expert_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                                                                      'free_cache_engine': True,
+[36m(TaskRunner pid=716228)[0m                                                                      'gpu_memory_utilization': 0.5,
+[36m(TaskRunner pid=716228)[0m                                                                      'limit_images': None,
+[36m(TaskRunner pid=716228)[0m                                                                      'load_format': 'auto',
+[36m(TaskRunner pid=716228)[0m                                                                      'max_model_len': None,
+[36m(TaskRunner pid=716228)[0m                                                                      'max_num_batched_tokens': 8192,
+[36m(TaskRunner pid=716228)[0m                                                                      'max_num_seqs': 1024,
+[36m(TaskRunner pid=716228)[0m                                                                      'name': 'vllm',
+[36m(TaskRunner pid=716228)[0m                                                                      'prompt_length': 2048,
+[36m(TaskRunner pid=716228)[0m                                                                      'response_length': 8192,
+[36m(TaskRunner pid=716228)[0m                                                                      'skip_tokenizer_init': True,
+[36m(TaskRunner pid=716228)[0m                                                                      'temperature': 0.7,
+[36m(TaskRunner pid=716228)[0m                                                                      'tensor_model_parallel_size': 2},
+[36m(TaskRunner pid=716228)[0m                                                        'key': None,
+[36m(TaskRunner pid=716228)[0m                                                        'model_path': None,
+[36m(TaskRunner pid=716228)[0m                                                        'num_replicas': 0}}},
+[36m(TaskRunner pid=716228)[0m  'global_profiler': {'_target_': 'verl.utils.profiler.ProfilerConfig',
+[36m(TaskRunner pid=716228)[0m                      'global_tool_config': {'nsys': {'_target_': 'verl.utils.profiler.config.NsightToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                      'controller_nsight_options': {'cuda-graph-trace': 'graph',
+[36m(TaskRunner pid=716228)[0m                                                                                    'cuda-memory-usage': 'true',
+[36m(TaskRunner pid=716228)[0m                                                                                    'trace': 'cuda,nvtx,cublas,ucx'},
+[36m(TaskRunner pid=716228)[0m                                                      'discrete': False,
+[36m(TaskRunner pid=716228)[0m                                                      'worker_nsight_options': {'capture-range': 'cudaProfilerApi',
+[36m(TaskRunner pid=716228)[0m                                                                                'capture-range-end': None,
+[36m(TaskRunner pid=716228)[0m                                                                                'cuda-graph-trace': 'graph',
+[36m(TaskRunner pid=716228)[0m                                                                                'cuda-memory-usage': 'true',
+[36m(TaskRunner pid=716228)[0m                                                                                'kill': 'none',
+[36m(TaskRunner pid=716228)[0m                                                                                'trace': 'cuda,nvtx,cublas,ucx'}},
+[36m(TaskRunner pid=716228)[0m                                             'precision_debugger': {'_target_': 'verl.utils.profiler.config.PrecisionDebuggerToolConfig',
+[36m(TaskRunner pid=716228)[0m                                                                    'config_path': None,
+[36m(TaskRunner pid=716228)[0m                                                                    'stages': None,
+[36m(TaskRunner pid=716228)[0m                                                                    'steps': None,
+[36m(TaskRunner pid=716228)[0m                                                                    'strict': False},
+[36m(TaskRunner pid=716228)[0m                                             'torch_memory': {'context': 'all',
+[36m(TaskRunner pid=716228)[0m                                                              'kw_args': {},
+[36m(TaskRunner pid=716228)[0m                                                              'stack_depth': 32,
+[36m(TaskRunner pid=716228)[0m                                                              'stacks': 'all',
+[36m(TaskRunner pid=716228)[0m                                                              'trace_alloc_max_entries': 100000}},
+[36m(TaskRunner pid=716228)[0m                      'profile_continuous_steps': False,
+[36m(TaskRunner pid=716228)[0m                      'save_path': 'outputs/profile',
+[36m(TaskRunner pid=716228)[0m                      'steps': None,
+[36m(TaskRunner pid=716228)[0m                      'tool': None},
+[36m(TaskRunner pid=716228)[0m  'model_engine': 'dp',
+[36m(TaskRunner pid=716228)[0m  'ray_kwargs': {'ray_init': {'num_cpus': None}, 'timeline_json_file': None},
+[36m(TaskRunner pid=716228)[0m  'reward': {'_target_': 'verl.workers.config.RewardConfig',
+[36m(TaskRunner pid=716228)[0m             'custom_reward_function': {'name': 'compute_score', 'path': None},
+[36m(TaskRunner pid=716228)[0m             'num_workers': 8,
+[36m(TaskRunner pid=716228)[0m             'reward_manager': {'_target_': 'verl.workers.config.reward.RewardManagerConfig',
+[36m(TaskRunner pid=716228)[0m                                'module': {'_target_': 'verl.trainer.config.config.ModuleConfig',
+[36m(TaskRunner pid=716228)[0m                                           'name': 'custom_reward_manager',
+[36m(TaskRunner pid=716228)[0m                                           'path': None},
+[36m(TaskRunner pid=716228)[0m                                'name': 'naive',
+[36m(TaskRunner pid=716228)[0m                                'source': 'register'},
+[36m(TaskRunner pid=716228)[0m             'reward_model': {'_target_': 'verl.workers.config.RewardModelConfig',
+[36m(TaskRunner pid=716228)[0m                              'enable': False,
+[36m(TaskRunner pid=716228)[0m                              'enable_resource_pool': False,
+[36m(TaskRunner pid=716228)[0m                              'model_path': None,
+[36m(TaskRunner pid=716228)[0m                              'n_gpus_per_node': 8,
+[36m(TaskRunner pid=716228)[0m                              'nnodes': 0,
+[36m(TaskRunner pid=716228)[0m                              'rollout': {'_target_': 'verl.workers.config.RolloutConfig',
+[36m(TaskRunner pid=716228)[0m                                          'cudagraph_capture_sizes': None,
+[36m(TaskRunner pid=716228)[0m                                          'data_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                                          'disable_log_stats': True,
+[36m(TaskRunner pid=716228)[0m                                          'disaggregation': {'bootstrap_port': None,
+[36m(TaskRunner pid=716228)[0m                                                             'decode_replicas': 1,
+[36m(TaskRunner pid=716228)[0m                                                             'decode_tensor_model_parallel_size': None,
+[36m(TaskRunner pid=716228)[0m                                                             'enabled': False,
+[36m(TaskRunner pid=716228)[0m                                                             'ib_device': None,
+[36m(TaskRunner pid=716228)[0m                                                             'prefill_replicas': 1,
+[36m(TaskRunner pid=716228)[0m                                                             'transfer_backend': 'nixl'},
+[36m(TaskRunner pid=716228)[0m                                          'do_sample': True,
+[36m(TaskRunner pid=716228)[0m                                          'dtype': 'bfloat16',
+[36m(TaskRunner pid=716228)[0m                                          'enable_chunked_prefill': True,
+[36m(TaskRunner pid=716228)[0m                                          'enable_prefix_caching': True,
+[36m(TaskRunner pid=716228)[0m                                          'enforce_eager': True,
+[36m(TaskRunner pid=716228)[0m                                          'engine_kwargs': {},
+[36m(TaskRunner pid=716228)[0m                                          'expert_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                                          'free_cache_engine': True,
+[36m(TaskRunner pid=716228)[0m                                          'gpu_memory_utilization': 0.5,
+[36m(TaskRunner pid=716228)[0m                                          'ignore_eos': False,
+[36m(TaskRunner pid=716228)[0m                                          'layered_summon': False,
+[36m(TaskRunner pid=716228)[0m                                          'limit_images': None,
+[36m(TaskRunner pid=716228)[0m                                          'load_format': 'auto',
+[36m(TaskRunner pid=716228)[0m                                          'max_model_len': None,
+[36m(TaskRunner pid=716228)[0m                                          'max_num_batched_tokens': 8192,
+[36m(TaskRunner pid=716228)[0m                                          'max_num_seqs': 1024,
+[36m(TaskRunner pid=716228)[0m                                          'mtp': None,
+[36m(TaskRunner pid=716228)[0m                                          'multi_stage_wake_up': False,
+[36m(TaskRunner pid=716228)[0m                                          'n': 1,
+[36m(TaskRunner pid=716228)[0m                                          'name': '???',
+[36m(TaskRunner pid=716228)[0m                                          'pipeline_model_parallel_size': 1,
+[36m(TaskRunner pid=716228)[0m                                          'prompt_length': 2048,
+[36m(TaskRunner pid=716228)[0m                                          'quantization': None,
+[36m(TaskRunner pid=716228)[0m                                          'quantization_config_file': None,
+[36m(TaskRunner pid=716228)[0m                                          'response_length': 2048,[36m(TaskRunner pid=716228)[0m /workspace/shopsimulator/shopagent-rl/verl/trainer/main_ppo.py:258: UserWarning: Disabled critic as algorithm.adv_estimator != gae. If it is not intended, please set critic.enable=True
+[36m(TaskRunner pid=716228)[0m   use_critic=need_critic(config),
+[36m(TaskRunner pid=716228)[0m Setting TOKENIZERS_PARALLELISM=false for forked processes.
+[36m(TaskRunner pid=716228)[0m WARNING:2026-08-19 13:45:28,809:Setting TOKENIZERS_PARALLELISM=false for forked processes.
+[36m(TaskRunner pid=716228)[0m Filtering prompts longer than 2048 tokens (num_proc=1):   0%|          | 0/800 [00:00<?, ? examples/s]
+[36m(TaskRunner pid=716228)[0m Filtering prompts longer than 2048 tokens (num_proc=1): 100%|██████████| 800/800 [00:00<00:00, 816.53 examples/s]
+[36m(TaskRunner pid=716228)[0m Filtering prompts longer than 2048 tokens (num_proc=1): 100%|██████████| 800/800 [00:01<00:00, 724.01 examples/s]
+[36m(TaskRunner pid=716228)[0m Setting TOKENIZERS_PARALLELISM=false for forked processes.
+[36m(TaskRunner pid=716228)[0m WARNING:2026-08-19 13:45:30,059:Setting TOKENIZERS_PARALLELISM=false for forked processes.
+[36m(TaskRunner pid=716228)[0m /workspace/shopsimulator/shopagent-rl/verl/trainer/main_ppo.py:299: FutureWarning: Warning: Class 'verl.trainer.ppo.ray_trainer.RayPPOTrainer' is deprecated. Please use 'main_ppo.py is deprecated, and wil be replaced by main_ppo_sync.py in v0.8.0, please use main_ppo_sync.py instead.' instead.
+[36m(TaskRunner pid=716228)[0m   trainer = RayPPOTrainer(
+[36m(TaskRunner pid=716228)[0m /workspace/shopsimulator/shopagent-rl/verl/trainer/ppo/ray_trainer.py:376: UserWarning: Disabled critic as algorithm.adv_estimator != gae. If it is not intended, please set critic.enable=True
+[36m(TaskRunner pid=716228)[0m   self.use_critic = need_critic(self.config)
+[36m(WorkerDict pid=716629)[0m /workspace/shopsimulator/shopagent-rl/verl/workers/engine/mindspeed/transformer_impl.py:24: UserWarning: NPU not support router replay for now.
+[36m(WorkerDict pid=716629)[0m   from verl.utils.megatron.router_replay_patch import RouterReplay
+[36m(WorkerDict pid=716629)[0m `torch_dtype` is deprecated! Use `dtype` instead!
+[36m(WorkerDict pid=716629)[0m /overlay/miniconda3/envs/shopsim/lib/python3.12/site-packages/torch/distributed/fsdp/_init_utils.py:430: UserWarning: FSDP is switching to use `NO_SHARD` instead of ShardingStrategy.FULL_SHARD since the world size is 1.
+[36m(WorkerDict pid=716629)[0m   warnings.warn(
+
+[36m(TaskRunner pid=716228)[0m                                          'scheduling_policy': 'fcfs',
+[36m(TaskRunner pid=716228)[0m                                          'skip_tokenizer_init': False,
+[36m(TaskRunner pid=716228)[0m                                          'temperature': 1.0,
+[36m(TaskRunner pid=716228)[0m                                          'tensor_model_parallel_size': 2,
+[36m(TaskRunner pid=716228)[0m                                          'top_k': -1,
+[36m(TaskRunner pid=716228)[0m                                          'top_p': 1}},
+[36m(TaskRunner pid=716228)[0m             'sandbox_fusion': {'_target_': 'verl.workers.config.SandboxFusionConfig',
+[36m(TaskRunner pid=716228)[0m                                'max_concurrent': 64,
+[36m(TaskRunner pid=716228)[0m                                'memory_limit_mb': 1024,
+[36m(TaskRunner pid=716228)[0m                                'url': None}},
+[36m(TaskRunner pid=716228)[0m  'trainer': {'balance_batch': False,
+[36m(TaskRunner pid=716228)[0m              'critic_warmup': 0,
+[36m(TaskRunner pid=716228)[0m              'default_hdfs_dir': None,
+[36m(TaskRunner pid=716228)[0m              'default_local_dir': '/overlay/shopagent_rl_grpo_outputs/grpo/horizon10_clean_v1_independent',
+[36m(TaskRunner pid=716228)[0m              'del_local_ckpt_after_load': False,
+[36m(TaskRunner pid=716228)[0m              'device': 'cuda',
+[36m(TaskRunner pid=716228)[0m              'esi_redundant_time': 0,
+[36m(TaskRunner pid=716228)[0m              'experiment_name': 'qwen3-1.7b-grpo',
+[36m(TaskRunner pid=716228)[0m              'log_val_generations': 0,
+[36m(TaskRunner pid=716228)[0m              'logger': ['console'],
+[36m(TaskRunner pid=716228)[0m              'max_actor_ckpt_to_keep': None,
+[36m(TaskRunner pid=716228)[0m              'max_critic_ckpt_to_keep': None,
+[36m(TaskRunner pid=716228)[0m              'n_gpus_per_node': 1,
+[36m(TaskRunner pid=716228)[0m              'nnodes': 1,
+[36m(TaskRunner pid=716228)[0m              'project_name': 'shopsim_grpo',
+[36m(TaskRunner pid=716228)[0m              'ray_wait_register_center_timeout': 300,
+[36m(TaskRunner pid=716228)[0m              'resume_from_path': None,
+[36m(TaskRunner pid=716228)[0m              'resume_mode': 'auto',
+[36m(TaskRunner pid=716228)[0m              'rollout_data_dir': None,
+[36m(TaskRunner pid=716228)[0m              'save_freq': 10,
+[36m(TaskRunner pid=716228)[0m              'test_freq': -1,
+[36m(TaskRunner pid=716228)[0m              'total_epochs': 1,
+[36m(TaskRunner pid=716228)[0m              'total_training_steps': 200,
+[36m(TaskRunner pid=716228)[0m              'val_before_train': False,
+[36m(TaskRunner pid=716228)[0m              'val_only': False,
+[36m(TaskRunner pid=716228)[0m              'validation_data_dir': None},
+[36m(TaskRunner pid=716228)[0m  'transfer_queue': {'backend': {'MooncakeStore': {'auto_init': False,
+[36m(TaskRunner pid=716228)[0m                                                   'device_name': '',
+[36m(TaskRunner pid=716228)[0m                                                   'global_segment_size': 4294967296,
+[36m(TaskRunner pid=716228)[0m                                                   'local_buffer_size': 1073741824,
+[36m(TaskRunner pid=716228)[0m                                                   'local_hostname': 'localhost',
+[36m(TaskRunner pid=716228)[0m                                                   'master_server_address': 'localhost:50124',
+[36m(TaskRunner pid=716228)[0m                                                   'metadata_server': 'localhost:50123',
+[36m(TaskRunner pid=716228)[0m                                                   'protocol': 'tcp'},
+[36m(TaskRunner pid=716228)[0m                                 'SimpleStorage': {'num_data_storage_units': 8,
+[36m(TaskRunner pid=716228)[0m                                                   'total_storage_size': 100000},
+[36m(TaskRunner pid=716228)[0m                                 'storage_backend': 'SimpleStorage'},
+[36m(TaskRunner pid=716228)[0m                     'enable': False,
+[36m(TaskRunner pid=716228)[0m                     'metrics': {'enabled': False, 'port': 0}}}
+[36m(TaskRunner pid=716228)[0m [validate_config] All configuration checks passed successfully!
+[36m(TaskRunner pid=716228)[0m Using dataset class: RLHFDataset
+[36m(TaskRunner pid=716228)[0m dataset len: 800
+[36m(TaskRunner pid=716228)[0m filter dataset len: 800
+[36m(TaskRunner pid=716228)[0m Using dataset class: RLHFDataset
+[36m(TaskRunner pid=716228)[0m dataset len: 800
+[36m(TaskRunner pid=716228)[0m filter dataset len: 800
+[36m(TaskRunner pid=716228)[0m Size of train dataloader: 200, Size of val dataloader: 1
+[36m(TaskRunner pid=716228)[0m Total training steps: 200
+[36m(TaskRunner pid=716228)[0m colocated worker base class <class 'verl.single_controller.base.worker.Worker'>
+[36m(WorkerDict pid=716629)[0m [Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[36m(WorkerDict pid=716629)[0m Warning: pynvml not available, skipping NUMA affinity setup
+[36m(WorkerDict pid=716629)[0m Monkey patch _flash_attention_forward in transformers.integrations.flash_attention
+[36m(WorkerDict pid=716629)[0m Using Torch backend for fused kernels in Qwen3ForCausalLM
+[36m(WorkerDict pid=716629)[0m Loading pre-trained LoRA adapter to from: /workspace/shopsimulator/shopagent-rl/outputs/sft/v6_horizon10_clean_from_base/model/training_output/lora_adapter
+[36m(WorkerDict pid=716629)[0m PeftModelForCausalLM contains 1.76B parameters
+[36m(WorkerDict pid=716629)[0m Before FSDP, memory allocated (GB): 0.00, memory reserved (GB): 0.13, device memory used/total (GB): 0.38/47.98
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:38] u-490-d48d5c66:716629:716788 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/init.cc:197 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:38] u-490-d48d5c66:716629:716788 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/init.cc:197 NCCL WARN NUMA auto balancing enabled which can lead to variability in the RCCL performance! Disable by "sudo sysctl kernel.numa_balancing=0"
+[36m(WorkerDict pid=716629)[0m RCCL version : 2.27.7-HEAD:96a25b5
+[36m(WorkerDict pid=716629)[0m HIP version  : 7.2.53211-e1a6bc5663
+[36m(WorkerDict pid=716629)[0m ROCm version : 7.2.1.0-81-e1a6bc5663
+[36m(WorkerDict pid=716629)[0m Hostname     : u-490-d48d5c66
+[36m(WorkerDict pid=716629)[0m Librccl path : /opt/rocm-7.2.1/lib/librccl.so.1
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:709 NCCL WARN Could not read node # 7
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 7
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 7
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 7
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 7
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:709 NCCL WARN Could not read node # 5
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 5
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 5
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 5
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 5
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:709 NCCL WARN Could not read node # 3
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 3
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 3
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 3
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 3
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:709 NCCL WARN Could not read node # 8
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 8
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 8
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 8
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 8
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:709 NCCL WARN Could not read node # 4
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 4
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 4
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 4
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 4
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:709 NCCL WARN Could not read node # 2
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 2
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 2
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 2
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/
+[36m(WorkerDict pid=716629)[0m After FSDP, memory allocated (GB): 3.34, memory reserved (GB): 4.08, device memory used/total (GB): 4.72/47.98
+[36m(WorkerDict pid=716629)[0m Total steps: 200, num_warmup_steps: 0[36m(WorkerDict pid=716629)[0m /overlay/miniconda3/envs/shopsim/lib/python3.12/site-packages/torch/distributed/fsdp/fully_sharded_data_parallel.py:675: FutureWarning: FSDP.state_dict_type() and FSDP.set_state_dict_type() are being deprecated. Please use APIs, get_state_dict() and set_state_dict(), which can support different parallelisms, FSDP1, FSDP2, DDP. API doc: https://pytorch.org/docs/stable/distributed.checkpoint.html#torch.distributed.checkpoint.state_dict.get_state_dict .Tutorial: https://pytorch.org/tutorials/recipes/distributed_checkpoint_recipe.html .
+[36m(WorkerDict pid=716629)[0m   warnings.warn(
+[36m(WorkerDict pid=716629)[0m WARNING:2026-08-19 13:45:46,381:Using POSIX shared memory for rollout weight transfer (mode=auto, torch.version.hip=7.2.53211-e1a6bc5663). This avoids per-step ROCm HIP IPC/VMM retention; set VERL_VLLM_WEIGHT_TRANSFER=ipc only for diagnostics.
+[36m(vLLMHttpServer pid=716960)[0m (Worker pid=717861) Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+[36m(vLLMHttpServer pid=716960)[0m (Worker pid=717861) Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:01<00:00,  1.73s/it]
+[36m(vLLMHttpServer pid=716960)[0m (Worker pid=717861) Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:01<00:00,  1.73s/it]
+[36m(vLLMHttpServer pid=716960)[0m (Worker pid=717861) 
+[36m(WorkerDict pid=716629)[0m /overlay/miniconda3/envs/shopsim/lib/python3.12/site-packages/torch/distributed/fsdp/_state_dict_utils.py:763: UserWarning: When using ``NO_SHARD`` for ``ShardingStrategy``, full_state_dict will be returned.
+[36m(WorkerDict pid=716629)[0m   warnings.warn(
+[36m(WorkerDict pid=716629)[0m /overlay/miniconda3/envs/shopsim/lib/python3.12/site-packages/torch/distributed/fsdp/_state_dict_utils.py:701: UserWarning: When using ``NO_SHARD`` for ``ShardingStrategy``, full_state_dict will be returned.
+[36m(WorkerDict pid=716629)[0m   warnings.warn(
+[36m(WorkerDict pid=716629)[0m /overlay/miniconda3/envs/shopsim/lib/python3.12/site-packages/peft/utils/save_and_load.py:438: UserWarning: Could not find a config file in Qwen/Qwen3-1.7B-Base - will assume that the vocabulary was not modified.
+[36m(WorkerDict pid=716629)[0m   warnings.warn(
+[36m(TaskRunner pid=716228)[0m Training Progress:   0%|          | 0/200 [00:00<?, ?it/s]
+
+[36m(WorkerDict pid=716629)[0m ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 2
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:709 NCCL WARN Could not read node # 9
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 9
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 9
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 9
+[36m(WorkerDict pid=716629)[0m 
+[36m(WorkerDict pid=716629)[0m [2026-08-19 13:45:41] u-490-d48d5c66:716629:716811 [0] /longer_pathname_so_that_rpms_can_support_packaging_the_debug_info_for_all_os_profiles/src/out/ubuntu-24.04/24.04/build/rccl/hipify/src/misc/alt_rsmi.cc:668 NCCL WARN Could not read node # 9
+[36m(WorkerDict pid=716629)[0m [Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[36m(WorkerDict pid=716629)[0m [Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[36m(WorkerDict pid=716629)[0m [Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[36m(vLLMHttpServer pid=716960)[0m ['serve',
+[36m(vLLMHttpServer pid=716960)[0m  '/root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1',
+[36m(vLLMHttpServer pid=716960)[0m  '--dtype',
+[36m(vLLMHttpServer pid=716960)[0m  'bfloat16',
+[36m(vLLMHttpServer pid=716960)[0m  '--load_format',
+[36m(vLLMHttpServer pid=716960)[0m  'auto',
+[36m(vLLMHttpServer pid=716960)[0m  '--distributed_executor_backend',
+[36m(vLLMHttpServer pid=716960)[0m  'mp',
+[36m(vLLMHttpServer pid=716960)[0m  '--worker_extension_cls',
+[36m(vLLMHttpServer pid=716960)[0m  'verl.workers.rollout.vllm_rollout.utils.vLLMColocateWorkerExtension',
+[36m(vLLMHttpServer pid=716960)[0m  '--max_model_len',
+[36m(vLLMHttpServer pid=716960)[0m  '10240',
+[36m(vLLMHttpServer pid=716960)[0m  '--max_num_seqs',
+[36m(vLLMHttpServer pid=716960)[0m  '1024',
+[36m(vLLMHttpServer pid=716960)[0m  '--enable_chunked_prefill',
+[36m(vLLMHttpServer pid=716960)[0m  '--max_num_batched_tokens',
+[36m(vLLMHttpServer pid=716960)[0m  '8192',
+[36m(vLLMHttpServer pid=716960)[0m  '--enable_prefix_caching',
+[36m(vLLMHttpServer pid=716960)[0m  '--enable_sleep_mode',
+[36m(vLLMHttpServer pid=716960)[0m  '--logprobs_mode',
+[36m(vLLMHttpServer pid=716960)[0m  'processed_logprobs',
+[36m(vLLMHttpServer pid=716960)[0m  '--enforce_eager',
+[36m(vLLMHttpServer pid=716960)[0m  '--gpu_memory_utilization',
+[36m(vLLMHttpServer pid=716960)[0m  '0.25',
+[36m(vLLMHttpServer pid=716960)[0m  '--disable_log_stats',
+[36m(vLLMHttpServer pid=716960)[0m  '--tensor_parallel_size',
+[36m(vLLMHttpServer pid=716960)[0m  '1',
+[36m(vLLMHttpServer pid=716960)[0m  '--seed',
+[36m(vLLMHttpServer pid=716960)[0m  '0',
+[36m(vLLMHttpServer pid=716960)[0m  '--override_generation_config',
+[36m(vLLMHttpServer pid=716960)[0m  '{"temperature": 0.7, "top_k": -1, "top_p": 1.0, "repetition_penalty": 1.0, '
+[36m(vLLMHttpServer pid=716960)[0m  '"max_new_tokens": 8192}',
+[36m(vLLMHttpServer pid=716960)[0m  '--hf_overrides',
+[36m(vLLMHttpServer pid=716960)[0m  '{}',
+[36m(vLLMHttpServer pid=716960)[0m  '--scheduling_policy',
+[36m(vLLMHttpServer pid=716960)[0m  'fcfs',
+[36m(vLLMHttpServer pid=716960)[0m  '--compilation_config',
+[36m(vLLMHttpServer pid=716960)[0m  '{"cudagraph_mode": "FULL_AND_PIECEWISE"}',
+[36m(vLLMHttpServer pid=716960)[0m  '--enable_lora',
+[36m(vLLMHttpServer pid=716960)[0m  '--max_loras',
+[36m(vLLMHttpServer pid=716960)[0m  '1',
+[36m(vLLMHttpServer pid=716960)[0m  '--max_lora_rank',
+[36m(vLLMHttpServer pid=716960)[0m  '32']
+[36m(vLLMHttpServer pid=716960)[0m WARNING 08-19 13:45:56 [vllm.py:727] Enforce eager set, overriding optimization level to -O0
+[36m(vLLMHttpServer pid=716960)[0m (Worker pid=717861) WARNING 08-19 13:46:10 [compilation.py:1096] Op 'sparse_attn_indexer' not present in model, enabling with '+sparse_attn_indexer' has no effect
+[36m(vLLMHttpServer pid=716960)[0m (EngineCore_DP0 pid=717764) WARNING 08-19 13:46:16 [vllm.py:734] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+[36m(vLLMHttpServer pid=716960)[0m WARNING 08-19 13:46:16 [api_router.py:30] LoRA dynamic loading & unloading is enabled in the API server. This should ONLY be used for local development!
+[36m(vLLMHttpServer pid=716960)[0m WARNING 08-19 13:46:17 [model.py:1350] Default vLLM sampling parameters have been overridden by the model's `generation_config.json`: `{'repetition_penalty': 1.0, 'temperature': 0.7, 'top_k': -1, 'top_p': 1.0, 'max_tokens': 8192}`. If this is not intended, please relaunch vLLM instance with `--generation-config vllm`.
+[36m(TaskRunner pid=716228)[0m LLMServerManager: ['10.232.30.82:32889']
+[36m(TaskRunner pid=716228)[0m Checkpoint tracker file does not exist: /overlay/shopagent_rl_grpo_outputs/grpo/horizon10_clean_v1_independent/latest_checkpointed_iteration.txt
+[36m(TaskRunner pid=716228)[0m Training from scratch
+[36m(vLLMHttpServer pid=716960)[0m (EngineCore_DP0 pid=717764) WARNING 08-19 13:46:18 [scheduler.py:1794] reset_connector called but no KV connector is configured.
+[36m(vLLMHttpServer pid=716960)[0m (EngineCore_DP0 pid=717764) WARNING 08-19 13:46:19 [scheduler.py:1794] reset_connector called but no KV connector is configured.
+[36m(vLLMHttpServer pid=716960)[0m (EngineCore_DP0 pid=717764) WARNING 08-19 13:46:19 [scheduler.py:1794] reset_connector called but no KV connector is configured.
+[36m(AgentLoopWorker pid=718325)[0m Using dataset class: RLHFDataset
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(vLLMHttpServer pid=716960)[0m WARNING 08-19 13:46:29 [input_processor.py:327] vLLM has deprecated support for supporting different tokenizers for different LoRAs. By default, vLLM uses base model's tokenizer. If you are using a LoRA with its own tokenizer, consider specifying `--tokenizer [lora_path]` to use the LoRA tokenizer.[36m(AgentLoopWorker pid=718325)[0m You're using a Qwen2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+[36m(TaskRunner pid=716228)[0m W0819 13:46:36.507000 716228 site-packages/torch/fx/_symbolic_trace.py:52] is_fx_tracing will return true for both fx.symbolic_trace and torch.export. Please use is_fx_tracing_symbolic_tracing() for specifically fx.symbolic_trace or torch.compiler.is_compiling() for specifically torch.export/compile.
+[36m(WorkerDict pid=716629)[0m /overlay/miniconda3/envs/shopsim/lib/python3.12/site-packages/torch/nn/functional.py:2542: UserWarning: expandable_segments not supported on this platform (Triggered internally at /pytorch/c10/hip/HIPAllocatorConfig.h:36.)
+[36m(WorkerDict pid=716629)[0m   return torch.embedding(weight, input, padding_idx, scale_grad_by_freq, sparse)
+[36m(WorkerDict pid=716629)[0m /overlay/miniconda3/envs/shopsim/lib/python3.12/site-packages/transformers/integrations/sdpa_attention.py:96: UserWarning: Using AOTriton backend for Efficient Attention forward... (Triggered internally at /pytorch/aten/src/ATen/native/transformers/hip/attention.hip:1452.)
+[36m(WorkerDict pid=716629)[0m   attn_output = torch.nn.functional.scaled_dot_product_attention(
+[36m(WorkerDict pid=716629)[0m /overlay/miniconda3/envs/shopsim/lib/python3.12/site-packages/torch/autograd/graph.py:841: UserWarning: Using AOTriton backend for Efficient Attention backward... (Triggered internally at /pytorch/aten/src/ATen/native/transformers/hip/attention_backward.hip:551.)
+[36m(WorkerDict pid=716629)[0m   return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+[36m(AgentLoopWorker pid=718327)[0m You're using a Qwen2TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.[32m [repeated 3x across cluster][0m
+[36m(WorkerDict pid=716629)[0m [rank0]:W0819 13:46:36.652000 716629 site-packages/torch/fx/_symbolic_trace.py:52] is_fx_tracing will return true for both fx.symbolic_trace and torch.export. Please use is_fx_tracing_symbolic_tracing() for specifically fx.symbolic_trace or torch.compiler.is_compiling() for specifically torch.export/compile.
+[36m(TaskRunner pid=716228)[0m Training Progress:   0%|          | 1/200 [00:33<1:51:54, 33.74s/it]
+
+[36m(AgentLoopWorker pid=718327)[0m Using dataset class: RLHFDataset[32m [repeated 3x across cluster] (Ray deduplicates logs by default. Set RAY_DEDUP_LOGS=0 to disable log deduplication, or see https://docs.ray.io/en/master/ray-observability/user-guides/configure-logging.html#log-deduplication for more options.)[0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}[32m [repeated 12x across cluster][0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000[32m [repeated 12x across cluster][0m
+[36m(vLLMHttpServer pid=716960)[0m (Worker pid=717861) WARNING 08-19 13:46:30 [utils.py:268] Using default LoRA kernel configs
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] certified pair_id=18789:price_above_budget side=original type=price_above_budget action=click[description] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] certified pair_id=18789:price_above_budget side=original type=price_above_budget action=click[description] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] certified pair_id=18789:price_above_budget side=original type=price_above_budget action=click[description] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] certified pair_id=18789:price_above_budget side=original type=price_above_budget action=click[1000g] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] certified pair_id=18789:price_above_budget side=counterfactual type=price_above_budget action=click[description] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] certified pair_id=18789:price_above_budget side=counterfactual type=price_above_budget action=click[description] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] certified pair_id=18789:price_above_budget side=counterfactual type=price_above_budget action=click[description] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] certified pair_id=18789:price_above_budget side=counterfactual type=price_above_budget action=click[1000g] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] certified pair_id=7967:price_above_budget side=original type=price_above_budget action=click[竹语扣套链] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] certified pair_id=7967:price_above_budget side=original type=price_above_budget action=click[buy now] strict=True lenient=True reward=1.0000
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] certified pair_id=7967:price_above_budget side=counterfactual type=price_above_budget action=click[features] strict=False lenient=False reward=0.0000
+[36m(vLLMHttpServer pid=716960)[0m (EngineCore_DP0 pid=717764) WARNING 08-19 13:46:52 [scheduler.py:1794] reset_connector called but no KV connector is configured.
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] certified pair_id=7967:price_above_budget side=original type=price_above_budget action=click[description] strict=False lenient=False reward=0.0000[32m [repeated 2x across cluster][0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] certified pair_id=7967:price_above_budget side=counterfactual type=price_above_budget action=click[description] strict=False lenient=False reward=0.0000[32m [repeated 3x across cluster][0m
+[36m(vLLMHttpServer pid=716960)[0m (EngineCore_DP0 pid=717764) WARNING 08-19 13:46:53 [scheduler.py:1794] reset_connector called but no KV connector is configured.
+[36m(TaskRunner pid=716228)[0m step:1 - actor/entropy:0.376706063747406 - perf/mfu/actor_infer:0.0 - actor/pg_clipfrac:np.float64(0.00826434581540525) - actor/ppo_kl:np.float64(0.0038123447188809223) - actor/pg_clipfrac_lower:np.float64(0.0) - actor/pg_loss:np.float64(0.015317745506763458) - actor/kl_loss:np.float64(1.2578833885490894) - actor/kl_coef:np.float64(0.001) - actor/loss:np.float64(0.016575628891587257) - actor/grad_norm:np.float64(0.4453273117542267) - actor/lr:np.float64(1e-05) - actor/perf/max_memory_allocated_gb:np.float64(6.090311527252197) - actor/perf/max_memory_reserved_gb:np.float64(6.154296875) - actor/perf/cpu_memory_used_gb:np.float64(105.64222717285156) - perf/mfu/actor:np.float64(0.0) - training/global_step:1 - training/epoch:0 - critic/score/mean:0.0625 - critic/score/max:1.0 - critic/score/min:0.0 - critic/rewards/mean:0.0625 - critic/rewards/max:1.0 - critic/rewards/min:0.0 - critic/advantages/mean:-0.014790433458983898 - critic/advantages/max:1.4999970197677612 - critic/advantages/min:-0.4999989867210388 - critic/returns/mean:-0.014790433458983898 - critic/returns/max:1.4999970197677612 - critic/returns/min:-0.4999989867210388 - response_length/mean:76.0625 - response_length/max:93.0 - response_length/min:55.0 - response_length/clip_ratio:0.0 - response_length_non_aborted/mean:76.0625 - response_length_non_aborted/max:93.0 - response_length_non_aborted/min:55.0 - response_length_non_aborted/clip_ratio:0.0 - response/aborted_ratio:0.0 - prompt_length/mean:483.0 - prompt_length/max:490.0 - prompt_length/min:477.0 - prompt_length/clip_ratio:0.0 - num_turns/min:np.int32(1) - num_turns/max:np.int32(1) - num_turns/mean:np.float64(1.0) - timing_s/start_profile:3.481004387140274e-05 - timing_s/agent_loop/num_preempted/min:np.int64(-1) - timing_s/agent_loop/num_preempted/max:np.int64(-1) - timing_s/agent_loop/num_preempted/mean:np.float64(-1.0) - timing_s/agent_loop/generate_sequences/min:np.float64(12.812952236272395) - timing_s/agent_loop/generate_sequences/max:np.float64(12.99448564928025) - timing_s/agent_loop/generate_sequences/mean:np.float64(12.90925062034512) - timing_s/agent_loop/tool_calls/min:np.float64(0.0) - timing_s/agent_loop/tool_calls/max:np.float64(0.0) - timing_s/agent_loop/tool_calls/mean:np.float64(0.0) - timing_s/agent_loop/compute_score/min:np.float64(0.0) - timing_s/agent_loop/compute_score/max:np.float64(0.0) - timing_s/agent_loop/compute_score/mean:np.float64(0.0) - timing_s/agent_loop/slowest/generate_sequences:np.float64(12.99448564928025) - timing_s/agent_loop/slowest/tool_calls:np.float64(0.0) - timing_s/agent_loop/slowest/compute_score:np.float64(0.0) - timing_s/agent_loop/slowest/num_preempted:np.int64(-1) - timing_s/agent_loop/slowest/prompt_length:477 - timing_s/agent_loop/slowest/response_length:79 - timing_s/gen:16.662706167437136 - timing_s/reward:1.0289251804351807e-05 - timing_s/old_log_prob:3.704597226344049 - timing_s/ref:1.724128108471632 - timing_s/adv:0.0007048072293400764 - timing_s/update_actor:10.532621196471155 - timing_s/update_weights:1.1118489233776927 - timing_s/step:33.73801231384277 - timing_s/stop_profile:3.146938979625702e-05 - timing_per_token_ms/adv:7.8793429775302e-05 - timing_per_token_ms/ref:0.19274769239481632 - timing_per_token_ms/gen:13.691623802331254 - timing_per_token_ms/update_actor:1.1774869979285807 - perf/total_num_tokens:8945 - perf/time_per_step:33.73801231384277 - perf/throughput:265.13120917706965
+[36m(vLLMHttpServer pid=716960)[0m (EngineCore_DP0 pid=717764) WARNING 08-19 13:46:53 [scheduler.py:1794] reset_connector called but no KV connector is configured.
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] certified pair_id=5125:option_goal_swap_natural side=original type=option_goal_swap_natural action=click[12号-总重：4.41克] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] certified pair_id=5125:option_goal_swap_natural side=original type=option_goal_swap_natural action=click[12号-总重：4.41克] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}[32m [repeated 12x across cluster][0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000[32m [repeated 12x across cluster][0m
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] certified pair_id=5125:option_goal_swap_natural side=original type=option_goal_swap_natural action=click[12号-总重：4.41克] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] certified pair_id=5125:option_goal_swap_natural side=original type=option_goal_swap_natural action=click[12号-总重：4.41克] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] certified pair_id=5125:option_goal_swap_natural side=counterfactual type=option_goal_swap_natural action=click[13号-总重：4.41克] strict=True lenient=True reward=1.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] certified pair_id=5125:option_goal_swap_natural side=counterfactual type=option_goal_swap_natural action=click[13号-总重：4.41克] strict=True lenient=True reward=1.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] certified pair_id=5125:option_goal_swap_natural side=counterfactual type=option_goal_swap_natural action=click[13号-总重：4.41克] strict=True lenient=True reward=1.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] certified pair_id=5125:option_goal_swap_natural side=counterfactual type=option_goal_swap_natural action=click[13号-总重：4.41克] strict=True lenient=True reward=1.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] certified pair_id=14243:option_goal_swap_natural side=original type=option_goal_swap_natural action=click[天蓝色{棉芯}] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] certified pair_id=14243:option_goal_swap_natural side=original type=option_goal_swap_natural action=click[天蓝色{棉芯}] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] certified pair_id=14243:option_goal_swap_natural side=original type=option_goal_swap_natural action=click[天蓝色{棉芯}] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] certified pair_id=14243:option_goal_swap_natural side=original type=option_goal_swap_natural action=click[天蓝色{棉芯}] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] certified pair_id=14243:option_goal_swap_natural side=counterfactual type=option_goal_swap_natural action=click[咖啡色{棉芯}] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] certified pair_id=14243:option_goal_swap_natural side=counterfactual type=option_goal_swap_natural action=click[咖啡色{棉芯}] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] certified pair_id=14243:option_goal_swap_natural side=counterfactual type=option_goal_swap_natural action=click[咖啡色{棉芯}] strict=False lenient=False reward=0.0000
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] certified pair_id=14243:option_goal_swap_natural side=counterfactual type=option_goal_swap_natural action=click[咖啡色{棉芯}] strict=False lenient=False reward=0.0000
+[36m(vLLMHttpServer pid=716960)[0m (EngineCore_DP0 pid=717764) WARNING 08-19 13:47:14 [scheduler.py:1794] reset_connector called but no KV connector is configured.
+[36m(vLLMHttpServer pid=716960)[0m (EngineCore_DP0 pid=717764) WARNING 08-19 13:47:15 [scheduler.py:1794] reset_connector called but no KV connector is configured.
+[36m(TaskRunner pid=716228)[0m step:2 - actor/entropy:0.3432161211967468 - perf/mfu/actor_infer:0.0 - actor/pg_clipfrac:np.float64(0.0) - actor/ppo_kl:np.float64(0.004987870790500892) - actor/pg_clipfrac_lower:np.float64(0.0) - actor/pg_loss:np.float64(0.0) - actor/kl_loss:np.float64(1.1904975324869156) - actor/kl_coef:np.float64(0.001) - actor/loss:np.float64(0.0011904975399374962) - actor/grad_norm:np.float64(0.001981146400794387) - actor/lr:np.float64(1e-05) - actor/perf/max_memory_allocated_gb:np.float64(6.4125776290893555) - actor/perf/max_memory_reserved_gb:np.float64(6.658203125) - actor/perf/cpu_memory_used_gb:np.float64(105.72938919067383) - perf/mfu/actor:np.float64(0.0) - training/global_step:2 - training/epoch:0 - critic/score/mean:0.25 - critic/score/max:1.0 - critic/score/min:0.0 - critic/rewards/mean:0.25 - critic/rewards/max:1.0 - critic/rewards/min:0.0 - critic/advantages/mean:0.0 - critic/advantages/max:0.0 - critic/advantages/min:0.0 - critic/returns/mean:0.0 - critic/returns/max:0.0 - critic/returns/min:0.0 - response_length/mean:70.4375 - response_length/max:86.0 - response_length/min:45.0 - response_length/clip_ratio:0.0 - response_length_non_aborted/mean:70.4375 - response_length_non_aborted/max:86.0 - response_length_non_aborted/min:45.0 - response_length_non_aborted/clip_ratio:0.0 - response/aborted_ratio:0.0 - prompt_length/mean:645.75 - prompt_length/max:691.0 - prompt_length/min:601.0 - prompt_length/clip_ratio:0.0 - num_turns/min:np.int32(1) - num_turns/max:np.int32(1) - num_turns/mean:np.float64(1.0) - timing_s/start_profile:2.9649585485458374e-05 - timing_s/agent_loop/num_preempted/min:np.int64(-1) - timing_s/agent_loop/num_preempted/max:np.int64(-1) - timing_s/agent_loop/num_preempted/mean:np.float64(-1.0) - timing_s/agent_loop/generate_sequences/min:np.float64(5.6301932549104095) - timing_s/agent_loop/generate_sequences/max:np.float64(5.784295154735446) - timing_s/agent_loop/generate_sequences/mean:np.float64(5.7510225143050775) - timing_s/agent_loop/tool_calls/min:np.float64(0.0) - timing_s/agent_loop/tool_calls/max:np.float64(0.0) - timing_s/agent_loop/tool_calls/mean:np.float64(0.0) - timing_s/agent_loop/compute_score/min:np.float64(0.0) - timing_s/agent_loop/compute_score/max:np.float64(0.0) - timing_s/agent_loop/compute_score/mean:np.float64(0.0) - timing_s/agent_loop/slowest/generate_sequences:np.float64(5.784295154735446) - timing_s/agent_loop/slowest/tool_calls:np.float64(0.0) - timing_s/agent_loop/slowest/compute_score:np.float64(0.0) - timing_s/agent_loop/slowest/num_preempted:np.int64(-1) - timing_s/agent_loop/slowest/prompt_length:690 - timing_s/agent_loop/slowest/response_length:69 - timing_s/gen:6.130612589418888 - timing_s/reward:1.4008954167366028e-05 - timing_s/old_log_prob:3.0470544453710318 - timing_s/ref:1.9648339170962572 - timing_s/adv:0.0006247572600841522 - timing_s/update_actor:10.151347475126386 - timing_s/update_weights:1.09247958753258 - timing_s/step:22.387985597364604 - timing_s/stop_profile:2.9139220714569092e-05 - timing_per_token_ms/adv:5.4521097834379285e-05 - timing_per_token_ms/ref:0.1714664383538055 - timing_per_token_ms/gen:5.439762723530513 - timing_per_token_ms/update_actor:0.8858842372917695 - perf/total_num_tokens:11459 - perf/time_per_step:22.387985597364604 - perf/throughput:511.8370275059[36m(TaskRunner pid=716228)[0m Training Progress:   1%|          | 2/200 [00:56<1:29:18, 27.07s/it]
+
+[36m(vLLMHttpServer pid=716960)[0m (EngineCore_DP0 pid=717764) WARNING 08-19 13:47:15 [scheduler.py:1794] reset_connector called but no KV connector is configured.
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 turn=1 trimmed_after_action kept=80 discarded=80
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}[32m [repeated 12x across cluster][0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000[32m [repeated 12x across cluster][0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 turn=2 trimmed_after_action kept=69 discarded=91[32m [repeated 16x across cluster][0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 turn=2 trimmed_after_action kept=84 discarded=76[32m [repeated 13x across cluster][0m
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=2174 turn=3 trimmed_after_action kept=55 discarded=105[32m [repeated 11x across cluster][0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 turn=4 action=click legal=True done=True tokens=60 text='เคลื่อนไหว탶لف แก้Thought: 已选中“鲁海速冻橙浆560g*2瓶”，价格为58元，符合两瓶装、约550g且不超过60元的要求。现在点击购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 summary turns=4 actions=search,click,click,click legal=4 response_tokens=2575 reward=1.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=7457 turn=4 trimmed_after_action kept=59 discarded=101[32m [repeated 10x across cluster][0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 turn=4 action=click legal=True done=True tokens=47 text='อนุإِuser Thought: 已选中“560g×2瓶”，当前价格58元，符合不高于60元的要求。现在点击购买完成选购。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 summary turns=4 actions=search,click,click,click legal=4 response_tokens=2592 reward=1.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=7457 turn=4 action=click legal=True done=True tokens=72 text='漏ปัจจัยuser ภัยอารมณ์user บริการเลิuser รับผิดหนังสuser Thought: 已选择完全匹配的11.2×12.2×10.6毫米规格，当前价格为3300元，符合3500元以内要求。现在可以点击购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=7457 turn=4 trimmed_after_action kept=72 discarded=88[32m [repeated 8x across cluster][0m
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=7457 summary turns=4 actions=search,click,click,click legal=4 response_tokens=2572 reward=1.0000
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 turn=4 action=click legal=True done=True tokens=52 text='เดิไม่เคยuser Thought: 已选中两瓶装规格，价格为58元，符合预算。购买前确认商品为橙C美式用速冻浓缩原浆，再进行购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 summary turns=4 actions=search,click,click,click legal=4 response_tokens=2610 reward=1.0000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=12141 turn=5 trimmed_after_action kept=63 discarded=97[32m [repeated 8x across cluster][0m
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=12141 turn=5 action=click legal=True done=True tokens=74 text='เสียชีวิตอิuser ถือเป็นพรีเมียuser Thought: 60×60规格已选中，价格为73元，符合约70元预算；商品标题也满足羊皮、全包高弹、免洗防油防水等要求。已满足购买前选择规格的条件，现在购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=12141 summary turns=5 actions=search,click,click,click,click legal=5 response_tokens=4452 reward=1.0000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=12141 turn=5 action=click legal=True done=True tokens=49 text='เหมือน勒user Thought: 已确认蓝色升级防滑款并选择60×60规格，价格为73元，符合约70元预算。现在可以点击购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=12141 summary turns=5 actions=search,click,click,click,click legal=5 response_tokens=4482 reward=1.0000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=12141 turn=5 trimmed_after_action kept=68 discarded=92[32m [repeated 6x across cluster][0m
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=7457 turn=6 action=click legal=True done=True tokens=59 text='Thought: 已确认尺寸规格已选为“11.2x12.2x10.6”，价格3300元，商品标题包含天然、全品、配珠/佛珠。现在点击购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=7457 summary turns=6 actions=search,click,click,click,click,click legal=6 response_tokens=3057 reward=1.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=2174 turn=6 trimmed_after_action kept=76 discarded=84[32m [repeated 7x across cluster][0m
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=7457 turn=7 trimmed_after_action kept=42 discarded=118[32m [repeated 6x across cluster][0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 turn=7 trimmed_after_action kept=67 discarded=93[32m [repeated 5x across cluster][0m
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=7457 turn=8 action=click legal=True done=True tokens=85 text='เมื่อวันที่ได้อย่างuser 金เพิuser Thought: 已确认目标规格为11.2×12.2×10.6毫米，价格3300元，商品标题满足天然、全品、配珠、佛珠及配饰用途，标题未提供额外检测信息则无法核实。当前规格已选中，可进行购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=7457 summary turns=8 actions=search,click,click,click,click,click,click,click legal=8 response_tokens=3621 reward=1.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=2174 turn=7 trimmed_after_action kept=68 discarded=92[32m [repeated 5x across cluster][0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 turn=8 trimmed_after_action kept=74 discarded=86[32m [repeated 4x across cluster][0m[36m(TaskRunner pid=716228)[0m Training Progress:   2%|▏         | 3/200 [04:58<6:51:19, 125.28s/it]
+
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=2174 summary turns=8 actions=search,click,click,click,click,click,click,click legal=6 response_tokens=8192 reward=0.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=2174 turn=8 trimmed_after_action kept=80 discarded=80[32m [repeated 4x across cluster][0m
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=12141 summary turns=9 actions=search,click,click,click,click,search,click,click,click legal=8 response_tokens=8192 reward=0.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=7457 turn=9 action=click legal=True done=True tokens=68 text='จัดุ่มuser 龜ครอบครัวuser Thought: 已选择完全匹配的尺寸规格，价格为3300元，低于3500元。现在可以进入购买流程，商品标题及商品详情也符合天然、全品、配珠/佛珠等要求。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=7457 summary turns=9 actions=search,click,click,click,click,click,click,click,click legal=9 response_tokens=3997 reward=1.0000
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 turn=9 action=click legal=True done=True tokens=60 text='陵𨭉user Thought: 已选中560g×2瓶规格，价格58元，符合两瓶装且不超过60元。商品为橙C美式浓缩原浆，规格也符合需求，可以购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 turn=9 trimmed_after_action kept=60 discarded=100[32m [repeated 4x across cluster][0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=6334 summary turns=9 actions=search,click,click,click,click,click,click,click,click legal=9 response_tokens=5657 reward=1.0000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=12141 turn=10 format_failure=no_complete_action tokens=24
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=12141 summary turns=10 actions=search,click,click,click,search,click,click,click,click legal=9 response_tokens=8192 reward=0.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=2174 turn=9 trimmed_after_action kept=66 discarded=94[32m [repeated 3x across cluster][0m
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=2174 turn=10 action=click legal=False done=True tokens=87 text='Thought: 613748717876明确为艾博尼C1款原装替换刷头，标注杜邦软毛且礼盒装4支，虽价格99元高于预算但整体最贴合“4支黑色、软毛”的需求。先查看其特性，寻找磨尖处理、牙齿贴合和软毛信息。 Action: click[features]'
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=2174 summary turns=10 actions=search,click,click,click,click,search,click,click,search,click legal=9 response_tokens=7263 reward=0.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=2174 turn=10 action=search legal=True done=True tokens=70 text='Thought: 返回搜索页后重新搜索，重点锁定“多型号兼容”、磨尖软毛、4支黑色及预算范围，并使用更精确的规格关键词。 Action: search[力博得 替换刷头 黑色 4支 磨尖 软毛 多型号 兼容]'
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=2174 summary turns=10 actions=search,click,click,click,click,click,click,click,click,search legal=9 response_tokens=3921 reward=0.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=2174 turn=10 action=click legal=True done=True tokens=38 text='Thought: 评价页没有显示具体内容，只能返回商品页并继续完成购买流程。返回后规格已选中，继续执行购买。 Action: click[< prev]'
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=2174 summary turns=10 actions=search,click,click,search,click,click,click,click,click,click legal=10 response_tokens=5928 reward=0.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=2174 turn=10 trimmed_after_action kept=38 discarded=122[32m [repeated 3x across cluster][0m
+[36m(vLLMHttpServer pid=716960)[0m (EngineCore_DP0 pid=717764) WARNING 08-19 13:51:17 [scheduler.py:1794] reset_connector called but no KV connector is configured.
+[36m(vLLMHttpServer pid=716960)[0m (EngineCore_DP0 pid=717764) WARNING 08-19 13:51:17 [scheduler.py:1794] reset_connector called but no KV connector is configured.
+[36m(TaskRunner pid=716228)[0m step:3 - actor/entropy:0.4326636493206024 - perf/mfu/actor_infer:0.0 - actor/pg_clipfrac:np.float64(0.007865463267080486) - actor/ppo_kl:np.float64(0.0017633665611356264) - actor/pg_clipfrac_lower:np.float64(0.0) - actor/pg_loss:np.float64(0.05998142436146736) - actor/kl_loss:np.float64(1.0382662676274776) - actor/kl_coef:np.float64(0.001) - actor/loss:np.float64(0.06101969629526138) - actor/grad_norm:np.float64(0.2558072507381439) - actor/lr:np.float64(1e-05) - actor/perf/max_memory_allocated_gb:np.float64(6.4125776290893555) - actor/perf/max_memory_reserved_gb:np.float64(7.13671875) - actor/perf/cpu_memory_used_gb:np.float64(112.90681076049805) - perf/mfu/actor:np.float64(0.0) - training/global_step:3 - training/epoch:0 - critic/score/mean:0.625 - critic/score/max:1.0 - critic/score/min:0.0 - critic/rewards/mean:0.625 - critic/rewards/max:1.0 - critic/rewards/min:0.0 - critic/advantages/mean:-0.05970357730984688 - critic/advantages/max:0.8660238981246948 - critic/advantages/min:-0.8660238981246948 - critic/returns/mean:-0.05970357730984688 - critic/returns/max:0.8660238981246948 - critic/returns/min:-0.8660238981246948 - response_length/mean:4831.4375 - response_length/max:8192.0 - response_length/min:2572.0 - response_length/clip_ratio:0.1875 - response_length_non_aborted/mean:4831.4375 - response_length_non_aborted/max:8192.0 - response_length_non_aborted/min:2572.0 - response_length_non_aborted/clip_ratio:0.1875 - response/aborted_ratio:0.0 - prompt_length/mean:407.5 - prompt_length/max:419.0 - prompt_length/min:395.0 - prompt_length/clip_ratio:0.0 - num_turns/min:np.int32(4) - num_turns/max:np.int32(10) - num_turns/mean:np.float64(7.1875) - timing_s/start_profile:2.7540139853954315e-05 - timing_s/agent_loop/num_preempted/min:np.int64(-1) - timing_s/agent_loop/num_preempted/max:np.int64(-1) - timing_s/agent_loop/num_preempted/mean:np.float64(-1.0) - timing_s/agent_loop/generate_sequences/min:np.float64(31.84678878635168) - timing_s/agent_loop/generate_sequences/max:np.float64(139.54664024803787) - timing_s/agent_loop/generate_sequences/mean:np.float64(93.12370463158004) - timing_s/agent_loop/tool_calls/min:np.float64(0.0) - timing_s/agent_loop/tool_calls/max:np.float64(0.0) - timing_s/agent_loop/tool_calls/mean:np.float64(0.0) - timing_s/agent_loop/compute_score/min:np.float64(0.0) - timing_s/agent_loop/compute_score/max:np.float64(0.0) - timing_s/agent_loop/compute_score/mean:np.float64(0.0) - timing_s/agent_loop/slowest/generate_sequences:np.float64(139.54664024803787) - timing_s/agent_loop/slowest/tool_calls:np.float64(0.0) - timing_s/agent_loop/slowest/compute_score:np.float64(0.0) - timing_s/agent_loop/slowest/num_preempted:np.int64(-1) - timing_s/agent_loop/slowest/prompt_length:419 - timing_s/agent_loop/slowest/response_length:5928 - timing_s/gen:141.32317872624844 - timing_s/reward:1.0689720511436462e-05 - timing_s/old_log_prob:15.87341973837465 - timing_s/ref:14.87773431185633 - timing_s/adv:0.0005682474002242088 - timing_s/update_actor:69.02088601514697 - timing_s/update_weights:1.048281716182828 - timing_s/step:242.14501470234245 - timing_s/stop_profile:4.88990917801857e-05 - timing_per_token_ms/adv:6.779134607735452e-06 - timing_per_token_ms/ref:0.17748988120034273 - timing_per_token_ms/gen:1.828171982022023 - timing_per_token_ms/update_actor:0.8234122617318275 - perf/total_num_tokens:83823 - perf/time_per_step:242.14501470234245 - perf/throughput:346.16859695847836
+[36m(vLLMHttpServer pid=716960)[0m (EngineCore_DP0 pid=717764) WARNING 08-19 13:51:18 [scheduler.py:1794] reset_connector called but no KV connector is configured.
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=3013 turn=1 trimmed_after_action kept=80 discarded=80
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] reward budget_mode=hard budget_penalty=0.5 weights={'r_type': 0.2, 'r_att': 0.3, 'r_option': 0.3, 'r_price': 0.2}[32m [repeated 12x across cluster][0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] __init__: max_turns=10 response_length=8192 turn_max_tokens=160 stop_token_ids=[151645, 151643] base_url=http://127.0.0.1:5000[32m [repeated 12x across cluster][0m
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=3013 turn=2 trimmed_after_action kept=85 discarded=75[32m [repeated 16x across cluster][0m
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=22894 turn=2 trimmed_after_action kept=73 discarded=87[32m [repeated 15x across cluster][0m
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=5305 turn=3 trimmed_after_action kept=54 discarded=106[32m [repeated 10x across cluster][0m
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=5305 turn=4 action=click legal=True done=True tokens=55 text='主動註冊บังuser หล่อดันuser Thought: 已选择“nvme 单协议、黑色、带散热风扇、USB 数据线”规格，价格为76元，符合需求且接近预算。现在点击购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=5305 summary turns=4 actions=search,click,click,click legal=4 response_tokens=3036 reward=1.0000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=22894 turn=4 action=click legal=True done=True tokens=32 text='أيضاًปัญญาuser Thought: 已选择黑色规格，商品各项需求和价格均符合要求，现在点击购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=22894 turn=4 trimmed_after_action kept=32 discarded=128[32m [repeated 10x across cluster][0m
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=22894 summary turns=4 actions=search,click,click,click legal=4 response_tokens=2221 reward=1.0000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=22894 turn=4 action=click legal=True done=True tokens=38 text='ห่างאָuser Thought: 黑色规格已选择，商品符合需求且价格为6999元。现在可以点击购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=22894 summary turns=4 actions=search,click,click,click legal=4 response_tokens=2157 reward=1.0000
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=5305 turn=4 action=click legal=True done=True tokens=53 text='Thought: 已选择黑色规格，商品价格区间最高为766元，符合约75元预算，且满足NVMe、风扇、M.2和USB连接等要求。现在可以购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=21472 turn=4 trimmed_after_action kept=54 discarded=106[32m [repeated 10x across cluster][0m
+[36m(AgentLoopWorker pid=718329)[0m [ShopsimAgentLoop] task_id=5305 summary turns=4 actions=search,click,click,click legal=3 response_tokens=2376 reward=0.0000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=22894 turn=4 action=click legal=True done=True tokens=31 text='สิ่งแวด僚user Thought: 已选择黑色规格，商品各项条件均符合需求。现在可以点击购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=22894 turn=4 action=click legal=True done=True tokens=31 text='Thought: 已选择黑色规格，商品价格6999元，符合预算。现在点击购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=22894 summary turns=4 actions=search,click,click,click legal=4 response_tokens=2199 reward=1.0000
+[36m(AgentLoopWorker pid=718325)[0m [ShopsimAgentLoop] task_id=22894 summary turns=4 actions=search,click,click,click legal=4 response_tokens=2187 reward=1.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=3013 turn=5 action=click legal=True done=True tokens=63 text='ท้องถิ่นคับuser �กลับไปuser ความรู้ได้อย่างuser บัติผ้าuser Thought: 已选定梭织直筒拉链口袋款式和175/94B XXL尺码，价格635元符合预算。现在点击购买完成下单。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=3013 summary turns=5 actions=search,click,click,click,click legal=5 response_tokens=3701 reward=1.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=3013 turn=5 action=click legal=True done=True tokens=42 text='復蘆user วัฒนเส้นทางuser Thought: 已选择XXL和铁青灰配色，商品价格649元符合预算，现执行购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=3013 summary turns=5 actions=search,click,click,click,click legal=5 response_tokens=2817 reward=0.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=3013 turn=5 trimmed_after_action kept=54 discarded=106[32m [repeated 8x across cluster][0m
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=21472 turn=5 action=click legal=True done=True tokens=48 text='Thought: 已选中2.9g规格，价格正好为5800元，符合预算；商品也明确为古法花丝蝴蝶兰造型。现在可以购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=21472 summary turns=5 actions=search,click,click,click,click legal=5 response_tokens=2842 reward=1.0000
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=21472 turn=5 action=click legal=True done=True tokens=40 text='สุดยอดทรัuser Thought: 已选择2.9g规格，价格更新为5800元，符合预算。现在可以点击购买。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=21472 summary turns=5 actions=search,click,click,click,click legal=5 response_tokens=2815 reward=1.0000
+[36m(AgentLoopWorker pid=718326)[0m [ShopsimAgentLoop] task_id=3013 turn=5 action=click legal=True done=True tokens=53 text='沈嘆user เครดิตสร้างสรรค์user นิยยึuser ฤดู;user Thought: 已选择目标款式和XXL尺码，当前价格635元，符合预算。现在点击购买完成下单。 Action: click[buy now]'
+[36m(AgentLoopWorker pid=718327)[0m [ShopsimAgentLoop] task_id=21472 turn=5 action=click legal=True done=True tokens=69 text='พนันนต์ ต้านเนื้อหาThought: 已选择2.9g款式和2.9g规格，价格为5800元，符合预算上限；商品名称明确包含古法花丝、蝴蝶兰和轻奢定位，满足核心工艺与造型要求。现在点击购买。 Action: click[buy now]'*** SIGTERM received at time=1787147544 on cpu 76 ***
+PC: @     0x7d3bdf791d71  (unknown)  (unknown)
+    @     0x7d3bdf73e330  1430343632  (unknown)
+    @     0x7d3bdf794c8e        224  pthread_cond_timedwait
+    @     0x7d379ac4f46f       1184  ray::core::GetRequest::Wait()
+    @     0x7d379ac515c7       1328  ray::core::CoreWorkerMemoryStore::GetImpl()
+    @     0x7d379ac52019         64  ray::core::CoreWorkerMemoryStore::Get()
+    @     0x7d379ac5221f        208  ray::core::CoreWorkerMemoryStore::Get()
+    @     0x7d379aaf4cb6       1488  ray::core::CoreWorker::GetObjects()
+    @     0x7d379aaf5940        160  ray::core::CoreWorker::Get()
+    @     0x7d379aa1d0a0        272  __pyx_pw_3ray_7_raylet_10CoreWorker_35get_objects()
+    @     0x63111738cd6e  (unknown)  PyObject_Vectorcall
+    @ ... and at least 4 more frames
+[2026-08-19 13:52:24,254 E 714302 714302] logging.cc:474: *** SIGTERM received at time=1787147544 on cpu 76 ***
+[2026-08-19 13:52:24,254 E 714302 714302] logging.cc:474: PC: @     0x7d3bdf791d71  (unknown)  (unknown)
+[2026-08-19 13:52:24,254 E 714302 714302] logging.cc:474:     @     0x7d3bdf73e330  1430343632  (unknown)
+[2026-08-19 13:52:24,254 E 714302 714302] logging.cc:474:     @     0x7d3bdf794c8e        224  pthread_cond_timedwait
+[2026-08-19 13:52:24,254 E 714302 714302] logging.cc:474:     @     0x7d379ac4f46f       1184  ray::core::GetRequest::Wait()
+[2026-08-19 13:52:24,254 E 714302 714302] logging.cc:474:     @     0x7d379ac515c7       1328  ray::core::CoreWorkerMemoryStore::GetImpl()
+[2026-08-19 13:52:24,254 E 714302 714302] logging.cc:474:     @     0x7d379ac52019         64  ray::core::CoreWorkerMemoryStore::Get()
+[2026-08-19 13:52:24,254 E 714302 714302] logging.cc:474:     @     0x7d379ac5221f        208  ray::core::CoreWorkerMemoryStore::Get()
+[2026-08-19 13:52:24,254 E 714302 714302] logging.cc:474:     @     0x7d379aaf4cb6       1488  ray::core::CoreWorker::GetObjects()
+[2026-08-19 13:52:24,254 E 714302 714302] logging.cc:474:     @     0x7d379aaf5940        160  ray::core::CoreWorker::Get()
+[2026-08-19 13:52:24,254 E 714302 714302] logging.cc:474:     @     0x7d379aa1d0a0        272  __pyx_pw_3ray_7_raylet_10CoreWorker_35get_objects()
+[2026-08-19 13:52:24,254 E 714302 714302] logging.cc:474:     @     0x63111738cd6e  (unknown)  PyObject_Vectorcall
+[2026-08-19 13:52:24,254 E 714302 714302] logging.cc:474:     @ ... and at least 4 more frames
