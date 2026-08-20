@@ -3,10 +3,12 @@
 set -uo pipefail
 
 ROOT=/workspace/shopsimulator/shopagent-rl
-PY=/overlay/miniconda3/envs/shopsim/bin/python
+# shellcheck source=scripts/paths.sh
+source "$ROOT/scripts/paths.sh"
+PY="$SHOPAGENT_PY"
 RUN_DIR="$ROOT/run"
-INDEPENDENT_ROOT=/overlay/shopagent_rl_grpo_outputs/grpo/horizon10_clean_v1_independent
-PAIRED_ROOT=/overlay/shopagent_rl_grpo_outputs/grpo/horizon10_clean_v1_paired
+INDEPENDENT_ROOT="$SHOPAGENT_GRPO_ARTIFACT_ROOT/horizon10_clean_v1_independent"
+PAIRED_ROOT="$SHOPAGENT_GRPO_ARTIFACT_ROOT/horizon10_clean_v1_paired"
 INDEPENDENT_LOG="$RUN_DIR/horizon10_clean_v1_grpo_independent.log"
 PAIRED_LOG="$RUN_DIR/horizon10_clean_v1_grpo_paired.log"
 STATUS_LOG="$RUN_DIR/horizon10_clean_v1_night_chain.log"

@@ -3,6 +3,9 @@
 set -euo pipefail
 
 ROOT=/workspace/shopsimulator/shopagent-rl
+# shellcheck source=scripts/paths.sh
+source "$ROOT/scripts/paths.sh"
+shopagent_require_py
 BASE_SNAPSHOT=/root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1
 METHOD="${METHOD:-independent}"
 case "$METHOD" in
@@ -26,7 +29,7 @@ EXPECTED_DATA="$ROOT/data/grpo_certified_natural_800_pairblocked.parquet"
 EXPECTED_ROWS=800
 EXPECTED_SHA=9536e6605afb155db2335c432a8eb86cb1ed93657178c042181a5f5f2155b266
 if [ "$TRAIN_FILES" = "$EXPECTED_DATA" ]; then
-    rows=$(/overlay/miniconda3/envs/shopsim/bin/python -c \
+    rows=$("$SHOPAGENT_PY" -c \
         'import pyarrow.parquet as pq, sys; print(pq.read_metadata(sys.argv[1]).num_rows)' \
         "$TRAIN_FILES")
     sha=$(sha256sum "$TRAIN_FILES" | cut -d' ' -f1)
@@ -35,7 +38,7 @@ if [ "$TRAIN_FILES" = "$EXPECTED_DATA" ]; then
         exit 2
     fi
 fi
-export OUTPUT_DIR="${OUTPUT_DIR:-/overlay/shopagent_rl_grpo_outputs/grpo/horizon10_clean_v1_$METHOD}"
+export OUTPUT_DIR="${OUTPUT_DIR:-$SHOPAGENT_GRPO_ARTIFACT_ROOT/horizon10_clean_v1_$METHOD}"
 export RUN_NAME="${RUN_NAME:-horizon10_clean_v1_grpo_$METHOD}"
 export TOTAL_STEPS="${TOTAL_STEPS:-200}"
 export TRAIN_BATCH="${TRAIN_BATCH:-4}"

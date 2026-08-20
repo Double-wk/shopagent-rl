@@ -105,6 +105,15 @@ trainer:
   val_before_train: False
   test_freq: -1
   save_freq: ???                    # CLI (per run)
-  default_local_dir: /overlay/shopagent_rl_grpo_outputs/grpo
+  # Persistent bulk trainer state. MUST stay under /workspace: the old
+  # /overlay path was on the container's ephemeral disk and an instance restart
+  # on 2026-08-19 destroyed the horizon10-clean-v1 Independent adapter with it.
+  # Exported adapters and eval reports go to outputs/ (git-tracked) instead.
+  default_local_dir: /workspace/artifacts/grpo_runs
+  # Raw FSDP checkpoints carry the full 1.7B base weights, so 200 steps at
+  # save_freq=10 would otherwise pile up 20 of them on a 437G volume. Keeping
+  # the newest few is enough to resume; anything needed for the paper is
+  # exported as a 70MB LoRA adapter by scripts/export_lora_adapter.py.
+  max_actor_ckpt_to_keep: 4
   n_gpus_per_node: ???              # CLI
   nnodes: 1

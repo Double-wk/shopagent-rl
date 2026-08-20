@@ -17,7 +17,10 @@ set -euo pipefail
 
 SHOP_A=/workspace/shopsimulator/shopagent-rl
 VERL_ROOT="$SHOP_A"   # veRL 0.8.0 lives in shopagent-rl/verl (self-contained); cd here so hydra searchpath file://verl/trainer/config resolves
-PY=/overlay/miniconda3/envs/shopsim/bin/python
+# shellcheck source=scripts/paths.sh
+source "$SHOP_A/scripts/paths.sh"
+PY="$SHOPAGENT_PY"
+shopagent_require_py
 
 # ---- persistent log + background detach (new session; survives terminal/SSH close) ----
 # Log lives under run/ (NOT /tmp) so real runs persist. Override name: RUN_NAME=...
@@ -85,7 +88,7 @@ RESPONSE_LENGTH="${RESPONSE_LENGTH:-8192}"
 TURN_MAX_TOKENS="${SHOPSIM_TURN_MAX_TOKENS:-160}"
 OBS_MAX_CHARS="${SHOPSIM_OBS_MAX_CHARS:-1800}"
 LOAD_FORMAT="${LOAD_FORMAT:-auto}"          # vLLM loads the cached Base; sync only the LoRA adapter
-OUTPUT_DIR="${OUTPUT_DIR:-/overlay/shopagent_rl_grpo_outputs/grpo}"
+OUTPUT_DIR="${OUTPUT_DIR:-$SHOPAGENT_GRPO_ARTIFACT_ROOT}"
 if (( TRAIN_BATCH % PPO_MINI_BATCH != 0 )); then
     echo "PPO_MINI_BATCH ($PPO_MINI_BATCH) must divide TRAIN_BATCH ($TRAIN_BATCH)" >&2
     exit 2

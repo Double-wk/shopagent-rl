@@ -432,6 +432,18 @@ class ShopsimAgentLoop(AgentLoopBase):
             reward_score=reward_score,
             num_turns=assistant_turns,
             metrics=metrics,
+            # Environment rows carry no intervention pair, but the keys must still be
+            # present: `_get_gen_batch` pops every non-reward column out of the driver
+            # batch, so the pair metadata only survives a step if the agent loop hands
+            # it back. Emitting empty strings keeps paired GRPO's contract check happy
+            # on environment-only blocks (`add_joint_certified_bonus` then sees zero
+            # complete relations and adds no bonus). Omitting them crashed the paired
+            # run at the first environment block.
+            extra_fields={
+                "pair_id": "",
+                "side": "",
+                "intervention_type": "",
+            },
         )
 
 
