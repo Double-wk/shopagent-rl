@@ -8,8 +8,12 @@ the layout verl saves for the SFT adapter and the GRPO v2b export.
 
 Usage:
   python scripts/export_lora_adapter.py \
-      --ckpt /overlay/.../global_step_200/actor \
-      --out  /overlay/.../checkpoint_step_200/lora_adapter
+      --ckpt /workspace/artifacts/grpo_runs/<run>/global_step_200/actor \
+      --out  outputs/grpo/<run>/model/checkpoint_step_200/lora_adapter
+
+The raw FSDP checkpoint under artifacts/ is pruned (trainer.max_actor_ckpt_to_keep)
+and never committed; the 70MB adapter this writes under outputs/ is the artifact
+that reproduces the run, so export before the checkpoint rotates out.
 """
 from __future__ import annotations
 
