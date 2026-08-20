@@ -1,1 +1,18 @@
 https://developer.amd.com.cn/radeon/instances/u-19240-5203ed44/lab/tree/mihomo
+
+https://ai.t1qq.com/keys
+
+
+然后安装 Node.js 22：
+
+apt-get update
+apt-get install -y ca-certificates curl gnupg
+
+
+curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+
+
+apt-get install -y nodejs
+
+
+

@@ -19,3 +19,20 @@ Connection closed by invalid user root 10.232.20.0 port 15862 [preauth]
 User root not allowed because account is locked
 Connection closed by invalid user root 10.232.20.0 port 49424 [preauth]
 Accepted publickey for root from 10.232.20.0 port 49477 ssh2: ED25519 SHA256:bY0BfdipAvSNd+diyecurF6W7bJmToLwbkDCfkGAi8M
+Received disconnect from 10.232.20.0 port 49477:11: disconnected by user
+Disconnected from user root 10.232.20.0 port 49477
+Accepted publickey for root from 10.232.20.0 port 5636 ssh2: ED25519 SHA256:bY0BfdipAvSNd+diyecurF6W7bJmToLwbkDCfkGAi8M
+Connection closed by 10.232.20.0 port 40265 [preauth]
+Connection closed by 10.232.20.0 port 40300 [preauth]
+Connection closed by 10.232.20.0 port 20338 [preauth]
+Connection closed by 10.232.20.0 port 52093 [preauth]
+Accepted publickey for root from 10.232.20.0 port 42473 ssh2: ED25519 SHA256:bY0BfdipAvSNd+diyecurF6W7bJmToLwbkDCfkGAi8M
+Connection closed by 10.232.20.0 port 35020 [preauth]
+Connection closed by 10.232.20.0 port 48204 [preauth]
+Accepted publickey for root from 10.232.20.0 port 6274 ssh2: ED25519 SHA256:Fteb3ZtlFgSnLRVPKN/YZjQFi+814h7+kipiVCMqjzE
+Accepted publickey for root from 10.232.20.0 port 5487 ssh2: ED25519 SHA256:Fteb3ZtlFgSnLRVPKN/YZjQFi+814h7+kipiVCMqjzE
+Received disconnect from 10.232.20.0 port 5487:11: disconnected by user
+Disconnected from user root 10.232.20.0 port 5487
+Received disconnect from 10.232.20.0 port 42473:11: disconnected by user
+Disconnected from user root 10.232.20.0 port 42473
+Accepted publickey for root from 10.232.20.0 port 21569 ssh2: ED25519 SHA256:bY0BfdipAvSNd+diyecurF6W7bJmToLwbkDCfkGAi8M

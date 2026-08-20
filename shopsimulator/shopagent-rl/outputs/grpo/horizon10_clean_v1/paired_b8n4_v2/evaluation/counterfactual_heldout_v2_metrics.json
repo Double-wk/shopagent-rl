@@ -1,0 +1,58 @@
+{
+  "tag": "GRPO_HORIZON10_CLEAN_V1_PAIRED_B8N4_V2_HELDOUT_V2",
+  "model": "/root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+  "adapter": "outputs/grpo/horizon10_clean_v1/paired_b8n4_v2/model/checkpoint_step_100/lora_adapter",
+  "pairs": "data/counterfactual/heldout_atomic_pairs_v2.jsonl",
+  "n_pairs": 534,
+  "original_action_accuracy": 1.0,
+  "counterfactual_action_accuracy": 0.0899,
+  "counterfactual_action_accuracy_lenient": 0.103,
+  "paired_robust_accuracy": 0.0899,
+  "causal_success_certification_rate": 0.0899,
+  "shortcut_success_rate": 0.9101,
+  "commit_persistence_error": 0.8933,
+  "by_intervention_type": {
+    "option_swap": {
+      "n_pairs": 150,
+      "original_action_accuracy": 1.0,
+      "counterfactual_action_accuracy": 0.0067,
+      "counterfactual_action_accuracy_lenient": 0.0067,
+      "paired_robust_accuracy": 0.0067,
+      "commit_persistence_error": 0.9933,
+      "orig_action_types": {
+        "click": 150
+      },
+      "cf_action_types": {
+        "click": 150
+      },
+      "same_action_both_sides": 0.9933,
+      "causal_success_certification_rate": 0.0067,
+      "shortcut_success_rate": 0.9933
+    },
+    "price_above_budget": {
+      "n_pairs": 384,
+      "original_action_accuracy": 1.0,
+      "counterfactual_action_accuracy": 0.1224,
+      "counterfactual_action_accuracy_lenient": 0.1406,
+      "paired_robust_accuracy": 0.1224,
+      "commit_persistence_error": 0.8542,
+      "orig_action_types": {
+        "click": 384
+      },
+      "cf_action_types": {
+        "click": 377,
+        "search": 7
+      },
+      "same_action_both_sides": 0.8542,
+      "causal_success_certification_rate": 0.1224,
+      "shortcut_success_rate": 0.8776
+    }
+  },
+  "by_price_upper_source": {
+    "canonical_from_target_price": {
+      "n_pairs": 534,
+      "counterfactual_action_accuracy": 0.0899,
+      "commit_persistence_error": 0.8933
+    }
+  }
+}

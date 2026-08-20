@@ -4,7 +4,7 @@
   "enableClaudePluginIntegration": false,
   "skipClaudeOnboarding": false,
   "commonConfigConfirmed": true,
-  "currentProviderClaude": "justwoker",
+  "currentProviderClaude": "glm",
   "currentProviderCodex": "agentrouter",
   "visibleApps": {
     "claude": true,
@@ -19,10 +19,10 @@
     "autoPromptDecided": true,
     "manualHiddenInstalledNotices": {},
     "lastDetectedInstalled": {
-      "hermes": false,
+      "openclaw": false,
       "gemini": false,
       "opencode": true,
-      "openclaw": false
+      "hermes": false
     }
   },
   "launchOnStartup": false,

@@ -1,0 +1,12 @@
+shopsim vLLM env ready: PY=/workspace/miniconda3/envs/shopsim/bin/python  PYTHONPATH=/workspace/shopsimulator/shopagent-rl:/tmp/amdsmi_link:/tmp/functorch_shim:
+  remember: guard your LLM() call in  if __name__ == '__main__':
+[cf-eval GRPO_HORIZON10_CLEAN_V1_PAIRED_B8N4_V2_HELDOUT_V2] 534 pairs (1068 prompts) | adapter=/workspace/shopsimulator/shopagent-rl/outputs/grpo/horizon10_clean_v1/paired_b8n4_v2/model/checkpoint_step_100/lora_adapter
+INFO 08-20 10:51:28 [utils.py:223] non-default args: {'trust_remote_code': True, 'dtype': 'bfloat16', 'max_model_len': 10240, 'gpu_memory_utilization': 0.35, 'disable_log_stats': True, 'enforce_eager': True, 'enable_lora': True, 'max_lora_rank': 64, 'max_cpu_loras': 4, 'model': '/root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1'}
+The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+INFO 08-20 10:51:28 [model.py:529] Resolved architecture: Qwen3ForCausalLM
+INFO 08-20 10:51:28 [model.py:1549] Using max model len 10240
+INFO 08-20 10:51:28 [scheduler.py:224] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 08-20 10:51:28 [vllm.py:689] Asynchronous scheduling is enabled.
+WARNING 08-20 10:51:28 [vllm.py:727] Enforce eager set, overriding optimization level to -O0
+INFO 08-20 10:51:28 [vllm.py:845] Cudagraph is disabled under eager mode
