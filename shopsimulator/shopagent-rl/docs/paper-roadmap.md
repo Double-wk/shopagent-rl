@@ -13,7 +13,9 @@
 2. Paired-C1-hard 已给出强动机证据：Final-200 strict 40%，但 price counterfactual accuracy 约为 0%。
 3. 程序生成的 atomic intervention pair 可以在不依赖 LLM 自评的情况下认证相关/无关约束变化。
 4. 自然格式的 paired corrective SFT 能显著恢复价格敏感性；它是 feasibility 证据，不是最终 RL 方法胜出证据。
-5. Paired GRPO 的训练闭环已实现，但当前 smoke 尚未证明它优于 matched Independent CF-GRPO。
+5. Clean-init Independent 与离散 `explicit_relation` 的 10-step smoke 均已跑通；后者在 4 个
+   counterfactual block 中均成功匹配 `2 relations / 8 rollout pairs`，但 relation success 为 0，
+   尚未证明它优于 matched Independent CF-GRPO。
 
 最后一点必须写进限制与当前状态，不能用“方法已提出”替代“方法已验证”。
 
@@ -42,20 +44,28 @@
 - `relation_correct`：由 verifier 对两侧 intent 联合判定；
 - `side_correct`：两侧各自相对 `expected_action_intents` 的结果。
 
-训练中保留 `R_cert` 作为单侧约束正确性，新增 `R_pair` 作为关系正确性；评测同时报告两者，
-避免模型通过“两侧一起错”或“永远 Search”取得虚假收益。
+训练中保留 `R_cert` 作为单侧约束正确性，评测同时报告关系正确性与单侧正确性，避免模型通过
+“两侧一起错”或“永远 Search”取得虚假收益。但离散 `R_pair` 不再作为论文主方法的充分定义。
 
 2026-08-20 已补上默认关闭的第一版 `explicit_relation` 路径：数据 builder 生成有序
 `expected_relation`，rollout 记录规范化 `predicted_intent` / `side_correct`，trainer
 在匹配两侧后记录 `relation_correct` 并单独加入关系 bonus。CPU 单元测试已覆盖关系
-命中、关系失败和 environment-only block；尚未做 GPU smoke，也没有改变默认训练配置。
+命中、关系失败和 environment-only block。clean-init GPU smoke 已完成：Independent 与
+`explicit_relation` 均训练到 10/10 并写出 checkpoint；期间修复了 `relation_correct`
+必须保持为 `numpy.ndarray` 的 trainer 协议问题。
 
 方法上仍有可辨识性风险：当前 price、option、nuisance 数据的关系标签分别固定为
 `(COMMIT, SEARCH_ALTERNATIVE)`、`(COMMIT, SELECT_TARGET_OPTION)`、`(COMMIT, COMMIT)`。
-因此显式 `R_pair` 与“两侧粗粒度 intent 都正确”高度重合。正式论文不能仅凭增加
-relation verifier 就宣称方法创新成立；H2 必须由 matched Independent 对照证明联合
-优化的额外收益，并最好增加同一 intent 下仍需区分具体目标 option 的测试，或把贡献
-重点放在 paired sampling/credit assignment。
+因此显式 `R_pair` 与“两侧粗粒度 intent 都正确”高度重合，本质上仍可能只是 conjunctive
+bonus。正式论文将把它降级为 matched baseline，不再把它作为最终方法创新。
+
+主方法候选升级为直接优化策略响应量：对 decision-changing intervention，约束两个竞争
+intent 的 log-odds preference 按认证方向翻转；对 decision-preserving intervention，约束
+intent distribution 保持稳定，并保留 per-side correctness anchor。核心表述是：
+
+> **Flip when it matters; preserve when it does not.**
+
+这需要在 actor/trainer 中取得 canonical intent 的 policy score，而不是只在 rollout 后加入标量 bonus。
 
 ## 3.1 新诊断：初始化与联合奖励的稀疏性错配
 
@@ -133,7 +143,7 @@ heldout 和 certified SFT 任务后，仍有约 15,462 个可用 task。对未�
 nuisance pairs，300 个互异 task/product。正式 GRPO 输入为
 `data/grpo_certified_paper_v1_800_pairblocked.parquet`：400 environment rows 加 200 个完整 pair
 （100/60/40），同样与 final test 和历史 SFT/GRPO/counterfactual artifacts 按 task/product 互斥。
-这些数据已通过协议测试，但尚未启动 GPU smoke。
+这些数据已通过协议测试；clean-init Independent 和 `explicit_relation` GPU smoke 已完成。
 
 ## 4. 下一轮实验顺序
 
@@ -147,12 +157,14 @@ malformed action 的固定样例做单元测试。所有测试通过前不启动
 先分别在 certified-init 与 clean-init 两个起点上做短 smoke；同一数据、顺序、seed、rollout 和 token budget，比较：
 
 - Independent：`R_task + R_cert`；
-- Paired-joint：加入显式 `R_pair`；
+- Conjunctive baseline：加入离散 `explicit_relation` bonus；
+- Preference relation：decision-changing pair 做 preference flip，decision-preserving pair 做 preserve；
 - Paired-residual：只修复失败侧，保留单侧优势。
 
-通过条件：在每个初始化内，paired PRA 相对 Independent 不低于 2pt；original action accuracy
+通过条件：在每个初始化内，preference-relation PRA 相对 Independent 不低于 2pt；original action accuracy
 不下降超过 2pt；nuisance invariance 不下降；所有 pair block 都能匹配，environment-only block
-不产生关系奖励。clean-init joint-only 若复现 100%/低 CF，应归档为稀疏奖励失败对照，不再调权重救它。
+不产生关系奖励。2026-08-20 的 clean smoke 已确认 pair matching 闭环，但 counterfactual block 的
+离散 relation success 全为 0；它被归档为稀疏 conjunctive reward 的 bootstrap failure，不再作为主方法调权重。
 
 在 Gate B 之前增加 provenance gate：SFT-certified 与 GRPO-certified 的 task、product、pair
 交集必须为 0；heldout 交集也必须为 0。旧的 168/200 重叠输入只能用于 retention ablation。
