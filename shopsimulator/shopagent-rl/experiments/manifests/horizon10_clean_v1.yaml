@@ -92,7 +92,7 @@ grpo:
       tuned_long_step_throughput_tokens_per_second: 431.45994951195905
       tuned_actor_peak_allocated_gb: 6.4125776290893555
   paired:
-    status: smoke_passed_ready_for_formal
+    status: formal_running
     attempted: 2026-08-19T19:09Z
     failed_at_global_step: 3
     cause: >-
@@ -121,6 +121,15 @@ grpo:
         environment-only block at global_step 3 completed with zero relations
         instead of raising the previous metadata error. Checkpoint saving and
         LoRA export also completed successfully.
+    formal_run:
+      started: 2026-08-20T05:48Z
+      total_steps: 200
+      checkpoint_root: /overlay/shopagent_rl_artifacts/grpo_runs/horizon10_clean_v1_paired
+      log: run/horizon10_clean_v1_grpo_paired.log
+      save_frequency: 10
+      persistent_adapter_milestones: [50, 100, 150, 200]
+      persistent_adapter_root: outputs/grpo/horizon10_clean_v1/paired/model
+      export_watcher: scripts/watch_grpo_adapter_exports.sh
 
 # The 2026-08-19 instance restart destroyed /overlay (ephemeral container disk).
 # Everything under /workspace survived. Recorded here because it changes what
