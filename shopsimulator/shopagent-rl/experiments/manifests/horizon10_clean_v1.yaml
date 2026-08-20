@@ -259,7 +259,7 @@ historical_controls:
   v5_explicit_clean: explicit_format_shortcut_ablation_only
 
 paper_protocol:
-  status: data_and_verifier_ready_training_not_started
+  status: clean_independent_and_conjunctive_smokes_complete_preference_objective_pending
   final_test:
     split: final-atomic-test-v1
     data: data/counterfactual/final_atomic_test_v1.jsonl
@@ -289,4 +289,28 @@ paper_protocol:
     launcher: scripts/run_paper_grpo_smoke.sh
     methods: [independent, explicit_relation, residual]
     total_steps_smoke: 10
-    training_started: false
+    training_started: true
+    smoke_results_2026_08_20:
+      independent:
+        completed_steps: 10
+        checkpoint: /overlay/shopagent_rl_artifacts/grpo_runs/paper_v1_smoke_clean_independent/global_step_10
+        final_score_mean: 0.828125
+        final_score_range: [0.0, 1.0]
+        final_pg_loss: 0.0963896419852972
+        final_response_clip_ratio: 0.0
+      explicit_relation_conjunctive_baseline:
+        completed_steps: 10
+        checkpoint: /overlay/shopagent_rl_artifacts/grpo_runs/paper_v1_smoke_clean_explicit_relation/global_step_10
+        counterfactual_blocks_with_complete_matching: 4
+        complete_relations_per_counterfactual_block: 2
+        matched_rollouts_per_counterfactual_block: 8
+        relation_success_rate: 0.0
+        final_score_mean: 0.574999988079071
+        final_score_range: [0.0, 1.0]
+        final_pg_loss: 0.19397166911239694
+        final_response_clip_ratio: 0.0
+      conclusion: >-
+        The pair pipeline and actor update close correctly, but the discrete
+        relation bonus is a sparse conjunctive baseline and emits no positive
+        relation signal from clean initialization. Implement preference-level
+        flip/preserve optimization before formal training.

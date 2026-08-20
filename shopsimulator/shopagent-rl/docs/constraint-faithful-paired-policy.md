@@ -37,11 +37,11 @@
 因此，本文不把“会不会买到一个看起来合适的商品”作为唯一问题，而是问：
 
 \[
-\text{Relevant change}\Rightarrow\text{appropriate policy change}
+\text{Decision-changing intervention}\Rightarrow\text{appropriate policy change}
 \]
 
 \[
-\text{Irrelevant change}\Rightarrow\text{policy invariance}
+\text{Decision-preserving intervention}\Rightarrow\text{policy invariance}
 \]
 
 这将研究对象从单个状态上的动作正确性，提升为一对状态之间的策略关系。
@@ -83,7 +83,8 @@
 
 > **对只改变一个决定性约束的配对状态进行程序认证，并直接训练策略满足两侧行为关系。**
 
-本文的贡献不是简单增加反事实样本，而是把 paired policy relation 作为优化目标。
+本文的贡献不是简单增加反事实样本，而是把 interactive agent 的 intervention-conditioned policy
+response 作为优化目标；不争夺一般性的“首次 counterfactual consistency”表述。
 
 ## 4. 当前项目的实证起点
 
@@ -130,7 +131,8 @@ Independent GRPO 与 Paired GRPO。完整协议和数据哈希记录在
 
 - **RQ1 / H1**：Outcome RL 可以提升 strict success，却不提升甚至降低 relevant paired robustness。
 - **RQ2 / H2**：在数据、verifier、token budget 和初始化完全匹配时，显式 pair-relation objective 优于独立 CF reward。
-- **RQ3 / H3**：模型能对 price、option 等 relevant intervention 正确改变，同时对 nuisance intervention 保持动作意图不变。
+- **RQ3 / H3**：模型能对 verifier-certified decision-changing intervention 正确改变，同时对
+  decision-preserving intervention 保持动作意图不变。
 - **RQ4 / H4**：收益可泛化到未见任务、商品、类别、约束组合和至少一种未见约束类型。
 
 ## 6. 问题形式化
@@ -147,13 +149,14 @@ x' = I_j(x),\qquad \Delta(x,x')=c_j.
 a^*=V(x),\qquad a'^*=V(x').
 \]
 
-Relevant pair 还带有认证关系 `R*_j`。例如：
+Decision-changing pair 还带有认证关系 `R*_j`。例如：
 
 - 价格从预算内变为超预算：`(COMMIT, SEARCH_ALTERNATIVE)`；
 - 目标规格从 M 变为 L：`(SELECT_M, SELECT_L)`；
 - 当前选择从目标规格变为其他规格：`(COMMIT, SELECT_TARGET_OPTION)`。
 
-对于 irrelevant intervention，期望动作意图保持不变。
+对于 decision-preserving intervention，verifier 必须认证 `V(x)=V(x')`，并确认 feasible set、
+商品身份和决定性约束没有变化；不能仅凭“品牌/包装看起来无关”的人工直觉定义。
 
 本文使用 **intervention-faithful / constraint-faithful**，不把受控行为关系夸大为识别模型内部因果机制。
 
@@ -178,9 +181,9 @@ Relevant pair 还带有认证关系 `R*_j`。例如：
 
 v4 证明自然双侧 paired SFT 可恢复 price sensitivity，但不是最终方法贡献；下一步必须比较 relation-level GRPO。
 
-### 7.3 Paired GRPO
+### 7.3 Policy-Response Relation Optimization
 
-同一 pair 的两侧 rollout 联合计算：
+当前离散实现同一 pair 的两侧 rollout 联合计算：
 
 \[
 R=R_{task}+\lambda_{cert}R_{cert}+\lambda_{pair}R_{pair}.
@@ -202,8 +205,34 @@ Irrelevant intervention：
 R_{pair}^{irr}=\mathbb 1[intent(a)=intent(a')].
 \]
 
-`R_cert` 防止两侧一起错或“永远 Search”；`R_pair` 则直接优化两个世界之间的关系。实现应比较规范化动作意图，
-而不是比较动态 `click[...]` 字符串。
+`R_cert` 防止两侧一起错或“永远 Search”。但是当 `expected_relation` 恰好等于两侧 verifier
+标签的合取时，`R_pair` 只是“两个单侧都正确再加 bonus”，不能充分区别于普通 counterfactual
+augmentation。这一路径保留为 **conjunctive relation baseline**。
+
+论文主方法改为直接约束策略 preference。令原状态与干预状态的两个竞争 intent 为
+`z_o,z_c`，定义 interventional preference margin：
+
+\[
+M_\theta(x,x')=
+\log\frac{\pi_\theta(z_o|x)}{\pi_\theta(z_c|x)}-
+\log\frac{\pi_\theta(z_o|x')}{\pi_\theta(z_c|x')}.
+\]
+
+对 decision-changing intervention 使用带 margin 的 flip loss：
+
+\[
+\mathcal L_{flip}=-\log\sigma((M_\theta-m)/\tau).
+\]
+
+对 decision-preserving intervention，在 canonical intent distribution 上使用对称 preserve loss，
+首选 `D_JS(\pi^{intent}(\cdot|x),\pi^{intent}(\cdot|x'))`。完整目标为：
+
+\[
+\mathcal L=\mathcal L_{task}+\lambda_{anchor}\mathcal L_{side}
++\lambda_{flip}\mathcal L_{flip}+\lambda_{preserve}\mathcal L_{preserve}.
+\]
+
+技术核心由此统一为 **Flip when it matters, preserve when it does not**。
 
 **实现状态（2026-08-20）**：历史 `joint_bonus`、`relational_advantage` 和
 `relational_residual` 原型实际使用的是“两侧 certified action reward 的联合/残差”，
@@ -212,10 +241,12 @@ R_{pair}^{irr}=\mathbb 1[intent(a)=intent(a')].
 `predicted_intent`，按 `expected_relation` 计算 `R_pair`，同时保留 per-side `R_cert`，
 避免把“两个侧面都答对”与“关系目标本身成立”混为一谈。
 
-当前代码已加入默认关闭的 `explicit_relation` 实验模式：counterfactual rollout
+当前代码已加入默认关闭的 `explicit_relation` baseline：counterfactual rollout
 输出 `predicted_intent`，pair 数据携带有序 `expected_relation`，训练器在 pair
 匹配后记录 `relation_correct`，并将关系奖励与单侧 certified reward 分开。该模式
-只有在 provenance-disjoint 数据和 matched smoke 通过后，才可用于正式主实验。
+已在 provenance-disjoint 数据上完成 clean-init 10-step smoke。4 个 counterfactual block 均成功匹配
+`2 relations / 8 rollout pairs`，但 relation success 全为 0，显示离散 conjunctive bonus 无法从
+clean init bootstrap；因此它不再承担主方法主张。preference flip/preserve 仍待修改 actor/trainer 接口实现。
 
 ## 8. 评测指标与协议
 
@@ -284,9 +315,10 @@ Stage 2 曾完成过单 seed、200 step 的正式运行（Final-200 strict 35%�
 单 seed 历史记录，不能与后续重训结果混合；论文的 matched comparison 仍需从 clean SFT
 重新训练并导出可复现 adapter。
 
-### Stage 3：Paired GRPO——论文主实验（尚未通过）
+### Stage 3：Policy-Response Relation Optimization——论文主实验（尚未通过）
 
-在 Stage 2 完全匹配的设置中加入 `R_pair`，目标是同时提升 strict success、relevant PRA，并保持 nuisance invariance。
+在 Stage 2 完全匹配的设置中加入 preference flip/preserve objective，目标是同时提升 strict success、
+decision-changing PRA，并保持 decision-preserving invariance。离散 `R_pair` 只作 conjunctive baseline。
 
 当前证据不足以支持该主张：
 
@@ -294,8 +326,10 @@ Stage 2 曾完成过单 seed、200 step 的正式运行（Final-200 strict 35%�
   residual v2 为 75.84%，未超过对照。
 - 从 clean SFT 开始的 b8n4 large-batch paired trial 虽跑到 100 steps，但 heldout PRA 仅 8.99%，
   应作为失败的 joint-bonus 工程/配方试验，不进入主表。
-- 因此 Stage 3 当前状态是“工程闭环成立，方法效果未证实”，下一轮必须先修正
-  intent-level relation certificate，再做 clean-init 的 matched smoke。
+- 2026-08-20 的 provenance-disjoint clean smoke 中，Independent 与 `explicit_relation` 均完成 10 steps；
+  pair matching 正常，但所有 matched relation bonus 为 0。
+- 因此 Stage 3 当前状态是“工程闭环成立，离散关系奖励确认存在 bootstrap failure，主方法效果未证实”；
+  下一轮必须实现 policy-score-level flip/preserve objective。
 
 ### Stage 4：泛化与机制分析
 
@@ -325,10 +359,9 @@ Stage 2 曾完成过单 seed、200 step 的正式运行（Final-200 strict 35%�
 1. 冻结 evaluator、natural heldout split、verifier budget 对齐和 pair 数据 hash；任何方法调参不得改动这四项。
 2. 在 `counterfactual_grading.py` 中补齐 `action -> intent` 规范化和 `expected_relation` verifier，
    用 CPU 单元测试覆盖 price、option、nuisance、lenient search 和 malformed action。
-3. 从 clean SFT adapter 做 10-step matched smoke：Independent、joint relation、asymmetric residual；
-   只允许 `R_pair` 分支不同，先确认 schema、pair matching、reward/advantage 日志完整。
-4. Smoke 闸门：paired PRA 不得低于 Independent 超过 2 个百分点，original action accuracy 不得下降超过 2 个百分点；
-   否则停止扩展训练，先重做 relation utility。
+3. clean-init Independent 与 conjunctive `explicit_relation` smoke 已完成，作为训练闭环和稀疏奖励基线归档。
+4. 实现 canonical intent scoring、preference flip 与 decision-preserving JS loss，再做严格 matched smoke；
+   若 PRA 低于 Independent 或 original accuracy 明显下降，停止扩展训练并检查 intent projection/credit assignment。
 5. 通过 smoke 后再跑 200-step、batch 4、3 seeds；每个 checkpoint 立即导出到 `outputs/`，并记录
    Final-200 strict、Price/Option CF、nuisance invariance、PRA 和 paired bootstrap CI。
 6. 只有 H2 在 matched 多 seed 上通过，才做 one-sided、no-nuisance、structured-format、constraint-type holdout；
@@ -339,8 +372,8 @@ Stage 2 曾完成过单 seed、200 step 的正式运行（Final-200 strict 35%�
 1. Shopping agents are usually evaluated by whether they successfully purchase the target product.
 2. We show that high task success can coexist with severe constraint blindness: an RL agent reaches 40% strict success while achieving 0% accuracy under minimal price interventions.
 3. This reveals a gap between outcome success and constraint-faithful decision making.
-4. We construct programmatically certified atomic intervention pairs that change exactly one decision-relevant or irrelevant factor.
-5. We introduce paired intervention optimization, which explicitly trains the policy to change appropriately under relevant interventions while remaining invariant to irrelevant perturbations.
+4. We construct programmatically certified atomic interventions labeled as decision-changing or decision-preserving.
+5. We optimize policy response relations directly: flip intent preferences when the certified decision changes and preserve them when it does not.
 6. We evaluate agents jointly by normal shopping success and paired constraint fidelity, including generalization to unseen constraints, products, and models.
 
 最终贡献压缩为三点：问题发现、程序认证的原子 pair 与 relation-level policy optimization、以及补足 task success 的 sensitivity/invariance/PRA 评测。

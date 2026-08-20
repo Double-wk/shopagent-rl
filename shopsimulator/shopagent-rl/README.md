@@ -79,8 +79,10 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 核心动机证据是 GRPO Paired-C1-hard 的 **Final-200 strict 40% / Price-CF 0%**。当前下一步不是继续堆叠
 普通 outcome reward，而是使用已冻结的 `final-atomic-test-v1` 和严格 provenance-disjoint 的
 `paper-v1` 800 行 pair-blocked 数据，再从 clean/certified 两种初始化完成
-`Independent`、`explicit_relation` 和 `residual` 的严格 matched smoke。数据与 verifier 已通过协议测试，
-尚未启动 GPU 训练。
+clean-init `Independent` 与 `explicit_relation` 的严格 10-step matched smoke 已完成并写出 checkpoint；
+pair matching 正常，但离散 `explicit_relation` 在所有 counterfactual block 上 relation success 为 0，
+确认了 conjunctive reward 的 bootstrap failure。下一步主方法改为 policy-score-level 的
+preference flip / preserve objective；`explicit_relation` 保留为 matched baseline。
 
 `Constraint Ledger → Residual Risk → Active Verification` 对应后续独立研究 **Verify Before You Buy**，
 不并入当前论文的方法主线。旧的 [`docs/constraint-causal-experiment-plan.md`](docs/constraint-causal-experiment-plan.md)
