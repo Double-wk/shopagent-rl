@@ -255,12 +255,17 @@ def compute_advantage(
                     "explicit relation reward requires relation, side, predicted-intent, "
                     "and expected-relation metadata"
                 )
-            data.non_tensor_batch["relation_correct"] = relation_correct_flags(
-                relation_ids,
-                sides,
-                predicted_intents,
-                expected_relations,
-                data.non_tensor_batch.get("session_id"),
+            # DataProto requires every non-tensor batch field to remain a
+            # numpy array; the verifier helper returns a plain Python list.
+            data.non_tensor_batch["relation_correct"] = np.asarray(
+                relation_correct_flags(
+                    relation_ids,
+                    sides,
+                    predicted_intents,
+                    expected_relations,
+                    data.non_tensor_batch.get("session_id"),
+                ),
+                dtype=bool,
             )
             paired_rewards, paired_stats = add_explicit_relation_bonus(
                 data.batch["token_level_rewards"],
