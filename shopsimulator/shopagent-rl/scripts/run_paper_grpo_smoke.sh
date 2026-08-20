@@ -13,7 +13,8 @@ case "$METHOD" in
   explicit_relation) PAIRED_OBJECTIVE=True; RELATION_MODE=explicit_relation ;;
   residual) PAIRED_OBJECTIVE=True; RELATION_MODE=relational_residual ;;
   legacy_joint) PAIRED_OBJECTIVE=True; RELATION_MODE=joint_bonus ;;
-  *) echo "METHOD must be independent, explicit_relation, residual, or legacy_joint" >&2; exit 2 ;;
+  preference_margin) PAIRED_OBJECTIVE=True; RELATION_MODE=preference_margin ;;
+  *) echo "METHOD must be independent, explicit_relation, residual, legacy_joint, or preference_margin" >&2; exit 2 ;;
 esac
 
 INIT="${INIT:-clean}"
