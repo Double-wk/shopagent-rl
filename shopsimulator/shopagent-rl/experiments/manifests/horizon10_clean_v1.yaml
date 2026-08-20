@@ -58,17 +58,28 @@ grpo:
   gpu_memory_utilization: 0.35
   max_num_batched_tokens: 16384
   matched_difference: algorithm.paired_intervention.enabled
-  independent_output: /overlay/shopagent_rl_grpo_outputs/grpo/horizon10_clean_v1_independent
-  paired_output: /overlay/shopagent_rl_grpo_outputs/grpo/horizon10_clean_v1_paired
+  # Paths moved off /overlay on 2026-08-20; see artifact_loss below.
+  independent_output: /workspace/artifacts/grpo_runs/horizon10_clean_v1_independent
+  paired_output: /workspace/artifacts/grpo_runs/horizon10_clean_v1_paired
   independent:
-    status: running
+    status: completed_but_weights_lost
     started: 2026-08-19T14:12:28Z
+    finished: 2026-08-19T18:22Z
     smoke_status: passed
     smoke_global_step: 1
     smoke_reward_min: 0.0
     smoke_reward_max: 1.0
     smoke_pg_loss: 0.015317745506763458
     smoke_response_clip_ratio: 0.0
+    evaluation:
+      final200_official_metrics: outputs/grpo/horizon10_clean_v1/independent/evaluation/final200_t10x512_official_metrics.json
+      counterfactual_metrics: outputs/grpo/horizon10_clean_v1/independent/evaluation/counterfactual_heldout_v2_metrics.json
+      final200_strict_success: 0.35
+      final200_completed_rate: 0.73
+      price_counterfactual_paired_robust: 0.5729
+      option_counterfactual_paired_robust: 0.0867
+      overall_paired_robust: 0.4363
+      seeds: 1
     tuning:
       baseline_micro_batch: 1
       rejected_ppo_logprob_micro_batch: 2
@@ -79,7 +90,38 @@ grpo:
       tuned_long_step_throughput_tokens_per_second: 431.45994951195905
       tuned_actor_peak_allocated_gb: 6.4125776290893555
   paired:
-    status: pending
+    status: failed_to_start
+    attempted: 2026-08-19T19:09Z
+    failed_at_global_step: 3
+    cause: >-
+      ShopsimAgentLoop's environment branch returned no pair metadata, and
+      RayPPOTrainer._get_gen_batch pops those columns out of the driver batch
+      before rollout, so compute_advantage raised on the first environment-only
+      block. Counterfactual blocks (steps 1-2) had run correctly.
+    fix: experiment/grpo/shopsim_agent_loop.py emits empty pair metadata for
+      environment rollouts; covered by tests/test_paired_reward.py and
+      tests/test_shopsim_agent_loop.py.
+
+# The 2026-08-19 instance restart destroyed /overlay (ephemeral container disk).
+# Everything under /workspace survived. Recorded here because it changes what
+# can still be reproduced without retraining.
+artifact_loss:
+  date: 2026-08-19
+  lost:
+    - horizon10_clean_v1_independent export_step_200/lora_adapter
+    - horizon10_clean_v1_independent global_step_10..200 FSDP checkpoints
+    - vllm gfx1100 source build, conda env site-packages, HF hub cache
+  survived:
+    - outputs/sft/v6_horizon10_clean_from_base (clean SFT adapter, both arms init from it)
+    - all Final-200 and heldout-v2 evaluation reports
+  consequence: >-
+    The Independent Final-200 strict 0.35 and heldout-v2 numbers stand as a
+    single-seed record but cannot be extended. Paired GRPO does not depend on
+    the lost adapter (it initializes from the clean SFT adapter), so it can run
+    first. Independent must be retrained before the paper's matched comparison:
+    the 3-seed Final-200 protocol, the nuisance invariance column, and the
+    success-vs-PRA checkpoint trajectory all require the weights, and numbers
+    from a retrained adapter must not be mixed with the 2026-08-19 run.
 
 historical_controls:
   v4_corrective: feasibility_and_shortcut_correction_only
