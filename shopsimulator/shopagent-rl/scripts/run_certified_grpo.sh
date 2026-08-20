@@ -31,9 +31,11 @@ export MAX_PROMPT_LENGTH="${MAX_PROMPT_LENGTH:-2048}"
 export SHOPSIM_REWARD_BUDGET_MODE="${SHOPSIM_REWARD_BUDGET_MODE:-hard}"
 export SHOPSIM_CERTIFIED_REWARD_WEIGHT="${SHOPSIM_CERTIFIED_REWARD_WEIGHT:-1.0}"
 export SHOPSIM_CF_LENIENT_REWARD="${SHOPSIM_CF_LENIENT_REWARD:-0.5}"
+export RELATION_MODE="${RELATION_MODE:-joint_bonus}"
 
 exec bash "$ROOT/scripts/run_grpo.sh" \
   trainer.balance_batch=False \
   algorithm.paired_intervention.enabled="$PAIRED_OBJECTIVE" \
+  algorithm.paired_intervention.mode="$RELATION_MODE" \
   algorithm.paired_intervention.weight="${PAIRED_REWARD_WEIGHT:-1.0}" \
   "$@"

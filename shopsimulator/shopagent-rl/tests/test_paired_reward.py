@@ -10,7 +10,11 @@ import unittest
 
 import torch
 
-from experiment.grpo.paired_reward import add_joint_certified_bonus
+from experiment.grpo.paired_reward import (
+    add_joint_certified_bonus,
+    add_relational_advantage,
+    add_relational_residual_advantage,
+)
 
 
 def _rewards(scores: list[float]) -> tuple[torch.Tensor, torch.Tensor]:
@@ -35,6 +39,65 @@ class EnvironmentBlockTests(unittest.TestCase):
         self.assertEqual(stats["complete_relations"], 0)
         self.assertEqual(stats["matched_rollouts"], 0)
         self.assertEqual(stats["mean_joint_bonus"], 0.0)
+
+    def test_relational_advantage_penalizes_original_only_success(self) -> None:
+        rewards, mask = _rewards([1.0, 0.0])
+        advantages = torch.zeros_like(rewards)
+        result, stats = add_relational_advantage(
+            advantages,
+            mask,
+            rewards,
+            ["p:price_above_budget", "p:price_above_budget"],
+            ["original", "counterfactual"],
+            ["r0", "r0"],
+        )
+
+        self.assertEqual(stats["matched_rollouts"], 1)
+        self.assertEqual(stats["negative_relations"], 1)
+        self.assertLess(float(result[0, -1]), 0.0)
+        self.assertLess(float(result[1, -1]), 0.0)
+
+    def test_relational_advantage_is_inert_without_a_complete_pair(self) -> None:
+        rewards, mask = _rewards([1.0, 0.0])
+        advantages = torch.ones_like(rewards)
+        result, stats = add_relational_advantage(
+            advantages, mask, rewards, ["p", ""], ["original", ""], ["r0", "r0"]
+        )
+
+        torch.testing.assert_close(result, advantages)
+        self.assertEqual(stats["matched_rollouts"], 0)
+
+    def test_relational_residual_only_penalizes_failing_side(self) -> None:
+        rewards, mask = _rewards([1.0, 0.0])
+        advantages = torch.zeros_like(rewards)
+        result, stats = add_relational_residual_advantage(
+            advantages,
+            mask,
+            rewards,
+            ["p", "p"],
+            ["original", "counterfactual"],
+            ["r0", "r0"],
+        )
+
+        self.assertEqual(float(result[0, -1]), 0.0)
+        self.assertEqual(float(result[1, -1]), -1.0)
+        self.assertEqual(stats["counterfactual_failures"], 1)
+
+    def test_relational_residual_uses_small_joint_success_bonus(self) -> None:
+        rewards, mask = _rewards([1.0, 1.0])
+        advantages = torch.zeros_like(rewards)
+        result, stats = add_relational_residual_advantage(
+            advantages,
+            mask,
+            rewards,
+            ["p", "p"],
+            ["original", "counterfactual"],
+            ["r0", "r0"],
+        )
+
+        self.assertEqual(float(result[0, -1]), 0.25)
+        self.assertEqual(float(result[1, -1]), 0.25)
+        self.assertEqual(stats["joint_successes"], 1)
 
     def test_mixed_block_only_credits_the_complete_pair(self) -> None:
         """Environment rows in the same batch must not absorb pair bonus."""

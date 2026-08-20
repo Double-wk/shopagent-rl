@@ -1,0 +1,57 @@
+{
+  "tag": "RELGRPO_V2_RESIDUAL_SMOKE_STEP10_HELDOUT_V2",
+  "model": "/root/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-Base/snapshots/ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+  "adapter": "outputs/grpo/constraint_faithful_relgrpo_v1/residual_v2_smoke_step_10/lora_adapter",
+  "pairs": "data/counterfactual/heldout_atomic_pairs_v2.jsonl",
+  "n_pairs": 534,
+  "original_action_accuracy": 0.8614,
+  "counterfactual_action_accuracy": 0.882,
+  "counterfactual_action_accuracy_lenient": 0.882,
+  "paired_robust_accuracy": 0.7584,
+  "causal_success_certification_rate": 0.8804,
+  "shortcut_success_rate": 0.1196,
+  "commit_persistence_error": 0.0824,
+  "by_intervention_type": {
+    "option_swap": {
+      "n_pairs": 150,
+      "original_action_accuracy": 0.8733,
+      "counterfactual_action_accuracy": 0.7667,
+      "counterfactual_action_accuracy_lenient": 0.7667,
+      "paired_robust_accuracy": 0.6733,
+      "commit_persistence_error": 0.12,
+      "orig_action_types": {
+        "click": 150
+      },
+      "cf_action_types": {
+        "click": 150
+      },
+      "same_action_both_sides": 0.1333,
+      "causal_success_certification_rate": 0.771,
+      "shortcut_success_rate": 0.229
+    },
+    "price_above_budget": {
+      "n_pairs": 384,
+      "original_action_accuracy": 0.8568,
+      "counterfactual_action_accuracy": 0.9271,
+      "counterfactual_action_accuracy_lenient": 0.9271,
+      "paired_robust_accuracy": 0.7917,
+      "commit_persistence_error": 0.0677,
+      "orig_action_types": {
+        "click": 384
+      },
+      "cf_action_types": {
+        "click": 384
+      },
+      "same_action_both_sides": 0.1927,
+      "causal_success_certification_rate": 0.924,
+      "shortcut_success_rate": 0.076
+    }
+  },
+  "by_price_upper_source": {
+    "canonical_from_target_price": {
+      "n_pairs": 534,
+      "counterfactual_action_accuracy": 0.882,
+      "commit_persistence_error": 0.0824
+    }
+  }
+}

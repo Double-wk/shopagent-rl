@@ -95,7 +95,13 @@ algorithm:
   # method enables this while keeping data/order/sampling otherwise identical.
   paired_intervention:
     enabled: False
+    # joint_bonus is the legacy ablation; relational_advantage is the first
+    # symmetric prototype; relational_residual repairs only the failing side.
+    mode: joint_bonus
     weight: 1.0
+    success_bonus: 0.25
+    failure_penalty: 1.0
+    joint_failure_penalty: 0.5
 
 trainer:
   total_epochs: 1

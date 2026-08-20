@@ -235,7 +235,8 @@ def compute_advantage(
         grpo_calculation_mask = data.batch["response_mask"]
 
         paired_config = config.get("paired_intervention", {}) if config is not None else {}
-        if paired_config.get("enabled", False):
+        paired_mode = str(paired_config.get("mode", "joint_bonus"))
+        if paired_config.get("enabled", False) and paired_mode == "joint_bonus":
             from experiment.grpo.paired_reward import add_joint_certified_bonus
 
             relation_ids = data.non_tensor_batch.get(
@@ -269,6 +270,67 @@ def compute_advantage(
             index=data.non_tensor_batch["uid"],
             norm_adv_by_std_in_grpo=norm_adv_by_std_in_grpo,
         )
+        if paired_config.get("enabled", False) and paired_mode == "relational_advantage":
+            from experiment.grpo.paired_reward import add_relational_advantage
+
+            relation_ids = data.non_tensor_batch.get(
+                "relation_id", data.non_tensor_batch.get("pair_id")
+            )
+            sides = data.non_tensor_batch.get("side")
+            if relation_ids is None or sides is None:
+                raise ValueError("relational advantage requires relation_id/pair_id and side metadata")
+            advantages, relation_stats = add_relational_advantage(
+                advantages,
+                grpo_calculation_mask,
+                data.batch["token_level_rewards"],
+                relation_ids,
+                sides,
+                data.non_tensor_batch.get("session_id"),
+                weight=float(paired_config.get("weight", 1.0)),
+            )
+            returns = advantages
+            print(
+                "[RelationalAdvantage] "
+                f"relations={relation_stats['complete_relations']} "
+                f"matched={relation_stats['matched_rollouts']} "
+                f"positive={relation_stats['positive_relations']} "
+                f"negative={relation_stats['negative_relations']} "
+                f"mean_utility={relation_stats['mean_relation_utility']:.4f}",
+                flush=True,
+            )
+        elif paired_config.get("enabled", False) and paired_mode == "relational_residual":
+            from experiment.grpo.paired_reward import add_relational_residual_advantage
+
+            relation_ids = data.non_tensor_batch.get(
+                "relation_id", data.non_tensor_batch.get("pair_id")
+            )
+            sides = data.non_tensor_batch.get("side")
+            if relation_ids is None or sides is None:
+                raise ValueError("relational residual requires relation_id/pair_id and side metadata")
+            advantages, relation_stats = add_relational_residual_advantage(
+                advantages,
+                grpo_calculation_mask,
+                data.batch["token_level_rewards"],
+                relation_ids,
+                sides,
+                data.non_tensor_batch.get("session_id"),
+                weight=float(paired_config.get("weight", 1.0)),
+                success_bonus=float(paired_config.get("success_bonus", 0.25)),
+                failure_penalty=float(paired_config.get("failure_penalty", 1.0)),
+                joint_failure_penalty=float(paired_config.get("joint_failure_penalty", 0.5)),
+            )
+            returns = advantages
+            print(
+                "[RelationalResidual] "
+                f"relations={relation_stats['complete_relations']} "
+                f"matched={relation_stats['matched_rollouts']} "
+                f"joint_success={relation_stats['joint_successes']} "
+                f"original_fail={relation_stats['original_failures']} "
+                f"counterfactual_fail={relation_stats['counterfactual_failures']} "
+                f"joint_fail={relation_stats['joint_failures']} "
+                f"mean_side_residual={relation_stats['mean_side_residual']:.4f}",
+                flush=True,
+            )
         data.batch["advantages"] = advantages
         data.batch["returns"] = returns
     else:
