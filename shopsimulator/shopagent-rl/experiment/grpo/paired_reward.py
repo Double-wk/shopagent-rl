@@ -193,6 +193,134 @@ def add_joint_certified_bonus(
     return result, stats
 
 
+def prepare_preference_margin_metadata(
+    relation_ids: Sequence[Any],
+    sides: Sequence[Any],
+    expected_relations: Sequence[Any],
+    rollout_ids: Sequence[Any] | None = None,
+) -> dict[str, Any]:
+    """Extract paired metadata for preference margin computation.
+
+    This function groups rollouts by relation_id and returns metadata needed
+    to compute preference margin losses. It's meant to be called before
+    computing log_probs, so the intent-to-intent mapping can be prepared.
+
+    Args:
+        relation_ids: Relation identifiers for each rollout
+        sides: Side identifiers ('original' or 'counterfactual')
+        expected_relations: Expected relation for each pair
+        rollout_ids: Optional rollout IDs to match pairs
+
+    Returns:
+        Dict with paired indices grouped by relation, including:
+        - 'pairs': List of (original_idx, counterfactual_idx) tuples
+        - 'decision_changing': List of bool indicating if relation is decision-changing
+        - 'intents_original': List of canonical intents for original side
+        - 'intents_cf': List of canonical intents for counterfactual side
+    """
+    grouped = _matched_pairs(relation_ids, sides, rollout_ids)
+
+    pairs = []
+    decision_changing = []
+    intents_original = []
+    intents_cf = []
+
+    for relation_id, by_side in grouped.items():
+        original = by_side.get("original", {})
+        counterfactual = by_side.get("counterfactual", {})
+
+        for rollout_id in sorted(set(original) & set(counterfactual)):
+            oi = original[rollout_id]
+            ci = counterfactual[rollout_id]
+
+            # Extract expected relation for this pair
+            expected = _relation_value(expected_relations[oi]) or _relation_value(expected_relations[ci])
+
+            if not expected or len(expected) < 2:
+                continue  # Skip incomplete relations
+
+            # Extract canonical intents from expected_relation
+            # Expected format: ['COMMIT', 'SEARCH_ALTERNATIVE'] for decision-changing
+            #                      or ['COMMIT', 'COMMIT'] for decision-preserving
+            intent_o = expected[0] if len(expected) > 0 else None
+            intent_cf = expected[1] if len(expected) > 1 else None
+
+            if not intent_o or not intent_cf:
+                continue
+
+            pairs.append((oi, ci))
+            decision_changing.append(intent_o != intent_cf)
+            intents_original.append(intent_o)
+            intents_cf.append(intent_cf)
+
+    return {
+        "pairs": pairs,
+        "decision_changing": decision_changing,
+        "intents_original": intents_original,
+        "intents_cf": intents_cf,
+    }
+
+
+def add_preference_margin_loss(
+    advantages: torch.Tensor,
+    response_mask: torch.Tensor,
+    paired_metadata: dict[str, Any],
+    log_probs_original: torch.Tensor | None = None,
+    log_probs_cf: torch.Tensor | None = None,
+    *,
+    flip_weight: float = 1.0,
+    preserve_weight: float = 1.0,
+    margin_threshold: float = 0.0,
+    temperature: float = 1.0,
+) -> tuple[torch.Tensor, dict[str, float | int]]:
+    """Add preference margin loss to advantages for paired optimization.
+
+    This is a stub implementation that will be extended once we have
+    log_probs for canonical intents. For now, it returns the advantages
+    unchanged with a note that full implementation requires log_probs.
+
+    Args:
+        advantages: Current advantage tensor
+        response_mask: Response mask for valid tokens
+        paired_metadata: Metadata from prepare_preference_margin_metadata
+        log_probs_original: Log probs for canonical intents in original (future)
+        log_probs_cf: Log probs for canonical intents in counterfactual (future)
+        flip_weight: Weight for flip loss
+        preserve_weight: Weight for preserve loss
+        margin_threshold: Minimum margin for flip loss
+        temperature: Temperature for flip loss
+
+    Returns:
+        Tuple of (modified_advantages, stats_dict)
+    """
+    pairs = paired_metadata.get("pairs", [])
+    decision_changing = paired_metadata.get("decision_changing", [])
+    intents_original = paired_metadata.get("intents_original", [])
+    intents_cf = paired_metadata.get("intents_cf", [])
+
+    n_pairs = len(pairs)
+    n_changing = sum(decision_changing)
+    n_preserving = n_pairs - n_changing
+
+    stats = {
+        "complete_relations": n_pairs,
+        "decision_changing_pairs": n_changing,
+        "decision_preserving_pairs": n_preserving,
+    }
+
+    if log_probs_original is None or log_probs_cf is None:
+        # Stub: return advantages unchanged
+        stats["status"] = "stub_log_probs_not_provided"
+        return advantages.clone(), stats
+
+    # Full implementation would:
+    # 1. For each pair, compute preference margin
+    # 2. Apply flip_loss or preserve_loss
+    # 3. Add the loss signal to advantages
+    stats["status"] = "full_implementation_pending"
+    return advantages.clone(), stats
+
+
 def add_relational_advantage(
     advantages: torch.Tensor,
     response_mask: torch.Tensor,
