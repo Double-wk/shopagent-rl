@@ -17,9 +17,9 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
-BASE = "/workspace/artifacts/qwen3_1.7b_base_imend"   # symlinked snapshot + fixed generation_config
-ADAPTER = "/workspace/artifacts/grpo_runs/paired_c1hard_200_direct/export_step_200/lora_adapter"
-OUT = "/workspace/artifacts/qwen3_1.7b_paired_c1hard_merged"
+BASE = "/overlay/shopagent_rl_artifacts/qwen3_1.7b_base_imend"   # symlinked snapshot + fixed generation_config
+ADAPTER = "/overlay/shopagent_rl_artifacts/grpo_runs/paired_c1hard_200_direct/export_step_200/lora_adapter"
+OUT = "/overlay/shopagent_rl_artifacts/qwen3_1.7b_paired_c1hard_merged"
 
 
 def main() -> None:

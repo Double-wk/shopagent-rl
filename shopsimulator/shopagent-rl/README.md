@@ -56,13 +56,15 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 | Constraint-causal Gate 2（历史记录） | **已通过**：Paired SFT v2 的 natural option-swap paired robust `73.1%`（49/67），Final-200 strict `25%`（50/200）；价格反事实 paired robust 仍为 `0%`。 |
 | GRPO smoke | 已完成 1 step：reward/pg_loss 非零，checkpoint 写入 overlay |
 | GRPO 正式训练 | env16 固定配方 `TRAIN_BATCH=4 / ROLLOUT_N=4 / PPO_MINI_BATCH=4` 已完成 **200 steps**；最终可恢复 checkpoint 为 `outputs/grpo/v1/model/checkpoint_step_200/` |
-| GRPO v2b | `TRAIN_BATCH=4 / ROLLOUT_N=8 / env32` 已完成 **200 steps**；导出 adapter 为 `/overlay/shopagent_rl_grpo_outputs/grpo/v2/export_step_200/lora_adapter/` |
-| GRPO Paired-C1-hard | SFT v2 paired 起训 + hard 预算惩罚（b4/n4/lr1e-5）已完成 **200 steps**；Final-200 strict **40%**（80/200，历史最好），adapter 在 `/overlay/shopagent_rl_grpo_outputs/grpo/paired_c1hard_200_direct/export_step_200/lora_adapter/` |
+| GRPO v2b | `TRAIN_BATCH=4 / ROLLOUT_N=8 / env32` 已完成 **200 steps**；导出 adapter 曾在 `/overlay/.../grpo/v2/export_step_200/lora_adapter/`，已随 2026-08-19 的 `/overlay` 丢失 |
+| GRPO Paired-C1-hard | SFT v2 paired 起训 + hard 预算惩罚（b4/n4/lr1e-5）已完成 **200 steps**；Final-200 strict **40%**（80/200，历史最好）。adapter 曾在 `/overlay/.../grpo/paired_c1hard_200_direct/export_step_200/lora_adapter/`，已随 2026-08-19 的 `/overlay` 丢失，只保留评测报告 |
 | Certified SFT v3 | heldout-v2 option cf **82%**，price cf **0%**；summary 恢复诊断为 price cf **100% / original 32.55%**，判定为输入格式捷径，结果作失败消融保留 |
 | Corrective SFT v4 | **已完成**：自然格式 price cf **78.65%**，paired robust **73.70%**，Final-200 strict **31.5%** |
 | Explicit-Clean SFT v5 | **已完成失败消融**：自然 price cf **0.26%**；显式预算测试 price cf **100%**；不进入后续 RL |
 | Horizon10 clean SFT | **已完成并完成正式评测**：Final-200 strict **24.5%**（49/200），完成率 52.5%；heldout-v2 价格反事实 paired robust **0%**；adapter 为 `outputs/sft/v6_horizon10_clean_from_base/model/training_output/lora_adapter` |
-| Matched Independent/Paired GRPO | **Independent 正式训练中**：200 steps，step 1 smoke 已通过。48GB GPU 实测后固定 `GPU_MEM_UTIL=0.35 / max_num_batched_tokens=16384 / micro_batch=1`；长 batch 吞吐由 346 提升到 431 tokens/s。Paired 待 Independent 训练与评测完成后启动，两组只允许 `R_pair` 开关不同 |
+| Matched Independent CF-GRPO | **已完成 200 steps 并完成正式评测**：Final-200 strict **35%**（完成率 73%，选对商品率 39.5%），heldout-v2 整体 PRA **43.63%**、price PRA **57.29%**、option PRA **8.67%**、原状态动作准确率 **91.39%**。48GB GPU 实测后固定 `GPU_MEM_UTIL=0.35 / max_num_batched_tokens=16384 / micro_batch=1`；长 batch 吞吐由 346 提升到 431 tokens/s。⚠️ adapter 与全部中间 checkpoint 已随 `/overlay` 丢失，只剩单 seed 评测报告，正式主表前必须重训 |
+| Matched Paired GRPO | **未跑通**：2026-08-19 在 global_step 3 失败——environment 分支没有回传 pair 元数据，而 `_get_gen_batch` 会把这些列从 driver batch 里 pop 掉，因此 environment-only block 进入 `compute_advantage` 时报 `relation_id/pair_id and side metadata`。已修（`experiment/grpo/shopsim_agent_loop.py`），由 `tests/test_paired_reward.py` 覆盖。Paired 从 clean SFT adapter 起训，不依赖 Independent 的权重，可先跑 |
+| 产物落盘策略（2026-08-20） | 按**是否影响复现**分层，不按体积：可复现产物（导出的 LoRA adapter、评测报告、metrics、manifest）入 `outputs/`，git 跟踪、权重以 `.gz` 分卷；体积大且只用于续训的原始 FSDP checkpoint 与优化器状态入 `/overlay/shopagent_rl_artifacts/`（约 3T 临时盘，重启即空，丢了只是重跑一次，不丢结果）。唯一路径来源是 [`scripts/paths.sh`](scripts/paths.sh)。**硬性操作要求：checkpoint 一落盘就用 [`scripts/export_lora_adapter.py`](scripts/export_lora_adapter.py) 导到 `outputs/`，不要等训练结束** —— 2026-08-19 丢 adapter 正是因为它当时只存在 `/overlay` |
 | 训练期 reward | `budget_mode="strict"` 已补回原始 ShopSimulator 乘法奖励，并由 `tests/test_reward_modes.py` 覆盖 |
 | OOM 根因 | 旧版 vLLM/ROCm sleep 没有稳定归还物理 VRAM，整卡占用逐 step 增长；fused PPO backward 又为冻结 LM head 无效申请 593.5MiB 梯度。两处均已修复，不需要改变训练参数 |
 
@@ -84,7 +86,11 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 [`docs/trajectory-horizon-and-long-horizon.md`](docs/trajectory-horizon-and-long-horizon.md)。
 
 最终 FSDP checkpoint 与可移植的 LoRA adapter 已归入
-[`outputs/grpo/v1/model/checkpoint_step_200/`](outputs/grpo/v1/model/checkpoint_step_200/)；中间 checkpoint 仍保留在 `/overlay`。
+[`outputs/grpo/v1/model/checkpoint_step_200/`](outputs/grpo/v1/model/checkpoint_step_200/)——这是唯一活下来的
+GRPO adapter，因为它入了 git。其余 GRPO 产物当时只存在 `/overlay`，2026-08-19 实例重启后全部消失。
+原始 checkpoint 现在仍然写在 `/overlay/shopagent_rl_artifacts/grpo_runs/`（大盘、临时、不入库），
+但可复现的 adapter 必须用 [`scripts/export_lora_adapter.py`](scripts/export_lora_adapter.py)
+及时导到 `outputs/` 才算保住。
 
 ## 评测指标口径
 
@@ -133,7 +139,7 @@ docs/                     GRPO 配方与工程说明
 `shopagent-rl/` 目录执行一次：
 
 ```bash
-/overlay/miniconda3/envs/shopsim/bin/python -m pip install --no-deps -e .
+/workspace/miniconda3/envs/shopsim/bin/python -m pip install --no-deps -e .
 ```
 
 之后无论当前工作目录是什么，`import verl` 都会解析到 `shopagent-rl/verl/`。运行脚本仍设置 `PYTHONPATH`，但那是为了让 Ray worker
@@ -189,23 +195,28 @@ python scripts/build_grpo_data.py
 
 # 5. 1 step smoke
 FOREGROUND=1 TOTAL_STEPS=1 SAVE_FREQ=1 \
-OUTPUT_DIR=/overlay/shopagent_rl_grpo_outputs/grpo_smoke \
+OUTPUT_DIR=/overlay/shopagent_rl_artifacts/grpo_runs/grpo_smoke \
 bash scripts/run_grpo.sh
 
 # 6. 第一阶段：50 steps 行为诊断（4 task/step，约 200 个 task draw）
-RUN_NAME=grpo_diagnostic OUTPUT_DIR=/overlay/shopagent_rl_grpo_outputs/grpo_diagnostic \
+RUN_NAME=grpo_diagnostic OUTPUT_DIR=/overlay/shopagent_rl_artifacts/grpo_runs/grpo_diagnostic \
 TOTAL_STEPS=50 bash scripts/run_grpo.sh
 
 # 7. 完整覆盖：约 250 steps（1000 task / TRAIN_BATCH=4）
-RUN_NAME=grpo_full OUTPUT_DIR=/overlay/shopagent_rl_grpo_outputs/grpo_full \
+RUN_NAME=grpo_full OUTPUT_DIR=/overlay/shopagent_rl_artifacts/grpo_runs/grpo_full \
 TOTAL_STEPS=250 bash scripts/run_grpo.sh
 
 # 查看后台训练
 tail -f run/grpo_full.log
 
-# 8. Final-200 评测（将 --adapter 替换为训练完成的 adapter 路径）
+# 7b. checkpoint 一落盘就导出 adapter 到 outputs/：/overlay 是临时盘，重启即空
+python scripts/export_lora_adapter.py \
+  --ckpt /overlay/shopagent_rl_artifacts/grpo_runs/grpo_full/global_step_250/actor \
+  --out  outputs/grpo/<run>/model/checkpoint_step_250/lora_adapter
+
+# 8. Final-200 评测（将 --adapter 替换为上一步导出的 adapter 路径）
 bash scripts/run_eval.sh --tag GRPO --out outputs/eval_grpo.jsonl \
-  --adapter /overlay/shopagent_rl_grpo_outputs/grpo_full/<adapter-path>
+  --adapter outputs/grpo/<run>/model/checkpoint_step_250/lora_adapter
 
 # 9. SFT 基线评测（已有结果时可跳过）
 bash scripts/run_eval.sh --tag SFT --out outputs/eval_sft.jsonl \

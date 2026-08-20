@@ -98,6 +98,17 @@ if (( TRAIN_BATCH * ROLLOUT_N > SHOP_ENV_MAX_NUM )); then
     exit 2
 fi
 mkdir -p "$OUTPUT_DIR"
+# /overlay is the container's ephemeral disk: it is recreated empty after every
+# instance restart, which is exactly how the horizon10-clean-v1 Independent
+# adapter was lost on 2026-08-19. Checkpoints belong there (they are bulk), but
+# the exported adapter does not.
+case "$OUTPUT_DIR" in
+    /overlay/*)
+        echo "[run_grpo] checkpoints -> $OUTPUT_DIR (EPHEMERAL disk)"
+        echo "[run_grpo] export the adapter into outputs/ as soon as a checkpoint lands:"
+        echo "[run_grpo]   python scripts/export_lora_adapter.py --ckpt $OUTPUT_DIR/global_step_N/actor --out outputs/grpo/<run>/..."
+        ;;
+esac
 export HYDRA_FULL_ERROR=1   # 训练期若再死,拿完整 stack
 export SHOPSIM_TURN_MAX_TOKENS="$TURN_MAX_TOKENS"
 export SHOPSIM_OBS_MAX_CHARS="$OBS_MAX_CHARS"

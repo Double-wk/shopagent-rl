@@ -58,9 +58,11 @@ grpo:
   gpu_memory_utilization: 0.35
   max_num_batched_tokens: 16384
   matched_difference: algorithm.paired_intervention.enabled
-  # Paths moved off /overlay on 2026-08-20; see artifact_loss below.
-  independent_output: /workspace/artifacts/grpo_runs/horizon10_clean_v1_independent
-  paired_output: /workspace/artifacts/grpo_runs/horizon10_clean_v1_paired
+  # Raw checkpoints live on /overlay (large, ephemeral, rerun-recoverable).
+  # Exported adapters and all evaluation output live under outputs/ (git-tracked).
+  independent_output: /overlay/shopagent_rl_artifacts/grpo_runs/horizon10_clean_v1_independent
+  paired_output: /overlay/shopagent_rl_artifacts/grpo_runs/horizon10_clean_v1_paired
+  adapter_export_root: outputs/grpo/horizon10_clean_v1
   independent:
     status: completed_but_weights_lost
     started: 2026-08-19T14:12:28Z
@@ -122,6 +124,15 @@ artifact_loss:
     the 3-seed Final-200 protocol, the nuisance invariance column, and the
     success-vs-PRA checkpoint trajectory all require the weights, and numbers
     from a retrained adapter must not be mixed with the 2026-08-19 run.
+  policy: >-
+    Adopted 2026-08-20 and enforced by tests/test_experiment_protocol.py. Split
+    by reproducibility, not size. Raw FSDP checkpoints and optimizer shards stay
+    on /overlay (large, ephemeral, recoverable by rerunning). Exported LoRA
+    adapters, evaluation reports, metrics and this manifest live under outputs/
+    and are committed. The operational requirement is timing: export each
+    checkpoint to outputs/ as it lands rather than at the end of the run, since
+    /overlay is wiped on instance restart. Using /overlay for checkpoints was
+    never the mistake; keeping the only copy of a finished adapter there was.
 
 historical_controls:
   v4_corrective: feasibility_and_shortcut_correction_only

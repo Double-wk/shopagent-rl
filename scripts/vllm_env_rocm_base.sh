@@ -13,7 +13,7 @@
 # DO NOT `pip install` vLLM deps without --no-deps — it clobbers ROCm torch.
 set -u
 
-PY=/overlay/miniconda3/envs/shopsim/bin/python
+PY=/workspace/miniconda3/envs/shopsim/bin/python
 
 # 1. amdsmi (system binding) -> PYTHONPATH so vLLM's rocm platform plugin finds it.
 #    Without this the engine dies in DeviceConfig: "Device string must not be empty".

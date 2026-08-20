@@ -6,8 +6,12 @@
 # Multi-GB conda install — fully rebuildable on the new server; too large for git.
 miniconda3/
 
-# vLLM ROCm source — rebuilt per machine (not present in this tree; lives under /overlay).
+# vLLM ROCm source — gfx1100-specific build, rebuilt per machine via
+# scripts/build_vllm_rocm.sh. Large and reproducible from source, so it lives on
+# the ephemeral /overlay disk per the artifact policy; a restart costs a recompile,
+# not a result. Listed here in case anyone checks a copy out under the workspace.
 vllm-rocm-src/
+triton-kernels-src/
 
 # Experiment CHECKPOINTS only: 3 x final.pt = 22.7G, and GitHub hard-rejects any
 # single file over 100MB (LFS free quota is 1G, so that is no help either).
@@ -35,6 +39,7 @@ shopsimulator/shop_A/experiment/**/*.safetensors
 # GitHub hard-rejects this 134 MiB generated evaluation dataset.
 # Committed as items_eval_train.json.gz (19 MiB); restored by scripts/restore_large_artifacts.sh.
 shopsimulator/ShopSimulator/shop_env/data/items_eval_train.json
+shopsimulator/ShopSimulator/shop_env/data/items_eval_train.json.part*
 
 # 155 MiB deepseek teacher trajectory — too big for a single git blob (>100MB).
 # Backed up as trajectories_raw.jsonl.gz (15 MiB, tracked). Raw kept local only;
@@ -61,15 +66,23 @@ shopsimulator/ShopSimulator/shop_env/shop_env/shop_agent.log
 
 # mid-training checkpoints exceed GitHub 100MB limit; export final adapters instead
 shopsimulator/shopagent-rl/outputs/sft/v2_paired/model/training_output/checkpoint-*/
+# Local raw split copies are redundant with the tracked gzip volumes restored by
+# scripts/restore_large_artifacts.sh.
+shopsimulator/shopagent-rl/outputs/sft/*/model/training_output/lora_adapter/adapter_model.safetensors.part*
+# Editable-package metadata is generated locally and is not part of the source.
+shopsimulator/shopagent-rl/archive/shop_a_verl.egg-info/
 .git-amd/
 
-# === Bulk resumable trainer state (2026-08-20) ===
-# GRPO raw FSDP checkpoints and optimizer shards. Persistent (this is /workspace,
-# not the ephemeral container disk that ate /overlay on 2026-08-19) but never
-# committed: each one carries the full 1.7B base weights. The reproduction path
-# is outputs/grpo/<run>/, where scripts/export_lora_adapter.py writes the 70MB
-# LoRA adapter that IS committed as .gz split volumes.
-artifacts/
+# === Artifact policy (2026-08-20) ===
+# Split by REPRODUCIBILITY, not size. Large, rerun-recoverable trainer state
+# (raw FSDP checkpoints, optimizer shards) lives on /overlay — the container's
+# ~3T ephemeral disk, outside this repo entirely. What IS committed is the 70MB
+# exported LoRA adapter under outputs/grpo/<run>/ (as .gz split volumes), written
+# by scripts/export_lora_adapter.py; export promptly, because /overlay is wiped
+# on instance restart. This rule exists because on 2026-08-19 a restart destroyed
+# a finished 200-step adapter that had only ever lived on /overlay.
+# Anchored so it cannot swallow a project subdirectory named artifacts/.
+/artifacts/
 
 # regenerable caches deleted 2026-08-16 (npm downloads on demand; jupyter re-creates)
 cc-switch/.npm/

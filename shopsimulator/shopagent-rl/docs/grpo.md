@@ -29,7 +29,7 @@
 | precision | actor / rollout 均 BF16 | actor `model_dtype=bf16`，避免单卡先 FP32 物化基座 |
 | vLLM memory | `GPU_MEM_UTIL=0.25` | 0.20 无法为 `max_model_len=10240` 建立最小 KV cache |
 | dataloader workers | 0 | 1000 行数据无需 fork；避免 Ray/FSDP 下默认 8 workers 造成宿主内存峰值 |
-| output | `/overlay/shopagent_rl_grpo_outputs/grpo` | 避免项目盘写满 |
+| output | `/overlay/shopagent_rl_artifacts/grpo_runs`（`scripts/paths.sh`） | 大盘、临时（重启即空）、不入库；只放续训状态。可复现的 adapter 必须及时导出到 `outputs/` |
 
 `TRAIN_BATCH=4` 时，50 steps 只消费约 200 个 task row，适合作为行为诊断；要让
 1000 行 GRPO prompt 池完成约一遍覆盖，使用 `TOTAL_STEPS=250`。`ROLLOUT_N=4`
@@ -80,15 +80,19 @@ backward 发生 HIP OOM。诊断显示 Actor 的 PyTorch allocator 约占 5.9 Gi
 vLLM/ROCm sleep 后未归还的物理显存，而不是模型或 batch 随 step 变大。
 
 原始固定环境是 vLLM `0.16.0+rocm721`（上游基线
-`89a77b10846fd96273cce78d86d2556ea582d26e`）。当前机器已应用修复并重编译为
-`0.16.1.dev1+gd12b7df63`；新机器仍应从下述原始基线按补丁复现。该基线早于上游 ROCm
+`89a77b10846fd96273cce78d86d2556ea582d26e`）。2026-08-20 已从该基线应用修复，
+编译出的 gfx1100 wheel 保存为
+`shopsimulator/envs_config/vllm_wheels/vllm-0.16.0+rocm721-cp312-cp312-linux_x86_64.whl`。
+同配置机器直接安装该 wheel；其他配置仍应从下述原始基线按补丁复现。该基线早于上游 ROCm
 sleep 修复 `10a1018c127ac34ad0f255ae9fffdc452d0cf4d7`：旧实现执行
 `hipMemUnmap` / `hipMemRelease` 后仍保留虚拟地址，物理 VRAM 可能不回到
 空闲池。项目将最小回移保存为
 [`patches/vllm-0.16.0-rocm-sleep-release.patch`](../patches/vllm-0.16.0-rocm-sleep-release.patch)，
-不要依赖机器上 `/overlay/vllm-rocm-src` 的未记录状态。
+不要依赖机器上 `$VLLM_SRC` 的未记录状态。
 
-在固定 vLLM 源码基线上应用并重新编译：
+已保存的 wheel 包含该补丁，并通过真实 Qwen 推理及连续三次 sleep/wake 回归；
+sleep 后残留稳定在约 3.71 GiB。只有 wheel 的 Python、Torch、ROCm 或 GPU
+架构不匹配时，才需要在固定源码基线上重新编译：
 
 ```bash
 VLLM_SRC=/overlay/vllm-rocm-src
@@ -99,7 +103,7 @@ git -C "$VLLM_SRC" apply \
 
 cd "$VLLM_SRC"
 export TRITON_KERNELS_SRC_DIR=/overlay/triton-kernels-src/python/triton_kernels
-MAX_JOBS=8 /overlay/miniconda3/envs/shopsim/bin/pip install \
+MAX_JOBS=8 /workspace/miniconda3/envs/shopsim/bin/pip install \
   --no-build-isolation --no-deps -e .
 ```
 
@@ -145,8 +149,12 @@ source shopsimulator/shopagent-rl/scripts/vllm_env_shopA.sh
 
 Hydra 自动生成的 `outputs/YYYY-MM-DD/HH-MM-SS/` 只保存最终展开的配置和主日志，
 不能用于续训。可续训状态由 `trainer.default_local_dir` 指定；当前为
-`/overlay/shopagent_rl_grpo_outputs/grpo/global_step_*`，包含模型、优化器、随机数
-和调度器状态。换电脑时除了 Git 仓库，还必须单独复制所需的完整 checkpoint；
+`/overlay/shopagent_rl_artifacts/grpo_runs/<run>/global_step_*`，包含模型、优化器、随机数
+和调度器状态。这份状态体积大、只用于续训，因此放在容器的大临时盘上；**它随实例重启一起消失**，
+所以每个 checkpoint 一落盘就要用 `scripts/export_lora_adapter.py` 把 adapter 导到 `outputs/`
+（git 跟踪，`.gz` 分卷入库）。2026-08-19 的教训正是这一条：horizon10-clean-v1 Independent
+训完 200 步、adapter 只存在 `/overlay`，重启后 adapter 与全部中间 checkpoint 一起消失，只剩评测报告。
+换电脑时除了 Git 仓库，还必须单独复制所需的完整 checkpoint；
 PID 文件仅供审计，在新机器上不能复用。
 
 当前 40→50 显存修复验收结束后，使用

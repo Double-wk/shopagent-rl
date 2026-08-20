@@ -9,7 +9,7 @@
 #   bash scripts/run_eval.sh --tag SFT --out outputs/eval_sft.jsonl \
 #       --adapter outputs/sft/v1/model/training_output/lora_adapter
 #   bash scripts/run_eval.sh --tag GRPO --out outputs/eval_grpo.jsonl \
-#       --adapter /workspace/artifacts/grpo_runs/<run>/global_step_50/actor
+#       --adapter /overlay/shopagent_rl_artifacts/grpo_runs/<run>/global_step_50/actor
 set -euo pipefail
 
 # shopagent-rl root regardless of where this is invoked from

@@ -12,7 +12,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."      # -> shopagent-rl/
 
-ADAPTER=/workspace/artifacts/grpo_runs/paired_c1hard_200_direct/export_step_200/lora_adapter
+ADAPTER=/overlay/shopagent_rl_artifacts/grpo_runs/paired_c1hard_200_direct/export_step_200/lora_adapter
 if [ ! -d "$ADAPTER" ]; then
     echo "ERROR: adapter not found: $ADAPTER" >&2
     echo "       training not finished yet, or checkpoint layout changed" >&2

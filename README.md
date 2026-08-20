@@ -266,7 +266,7 @@ conda config --show-sources
 
 ### shopsimulator（shopsim 环境）
 
-依赖以 `shopsimulator/shopagent-rl/requirements.txt` 为准（275 行全部 `==` 钉死）。从零建环境的完整步骤见 [`shopsimulator/shopagent-rl/docs/amd-gpu-quickstart.md`](shopsimulator/shopagent-rl/docs/amd-gpu-quickstart.md)，要点顺序：conda 建 `shopsim` 环境 + 本地 ROCm wheel 装 torch 栈 → `bash scripts/build_vllm_rocm.sh shopsim` 源码编译 vLLM → `pip install --no-deps -r requirements.txt` → `pip install --no-deps -e shopsimulator/shopagent-rl`（editable 的 `shop-a-verl`）→ `bash scripts/restore_large_artifacts.sh` 还原压缩入库的 adapter / 商品库 / BM25 索引。
+依赖以 `shopsimulator/shopagent-rl/requirements.txt` 为准（275 行全部 `==` 钉死）。从零建环境的完整步骤见 [`shopsimulator/shopagent-rl/docs/amd-gpu-quickstart.md`](shopsimulator/shopagent-rl/docs/amd-gpu-quickstart.md)，要点顺序：conda 建 `shopsim` 环境 + 本地 ROCm wheel 装 torch 栈 → 同配置 gfx1100 机器直接安装 `shopsimulator/envs_config/vllm_wheels/` 中的已验证 vLLM wheel（不同配置才运行 `scripts/build_vllm_rocm.sh`）→ `pip install --no-deps -r requirements.txt` → `pip install --no-deps -e shopsimulator/shopagent-rl`（editable 的 `shop-a-verl`）→ `bash scripts/restore_large_artifacts.sh` 还原压缩入库的 adapter / 商品库 / BM25 索引。
 
 ### 当前版本（GPU 栈）
 
@@ -277,13 +277,13 @@ conda config --show-sources
 | python | 3.12.13 |
 | torch / torchvision / torchaudio | 2.9.1+rocm7.2.1 / 0.24.0+rocm7.2.1 / 2.9.0+rocm7.2.1（本地 whl，在 `/` 根目录） |
 | triton | 3.5.1+rocm7.2.1.gita272dfa8 |
-| vllm | 0.16.0，源码编译，commit `89a77b108`（源码 `/overlay/vllm-rocm-src`，脚本 `scripts/build_vllm_rocm.sh`） |
+| vllm | 0.16.0，commit `89a77b108` + ROCm sleep 修复；已编译 wheel 位于 `shopsimulator/envs_config/vllm_wheels/`，源码编译脚本为 `scripts/build_vllm_rocm.sh` |
 | transformers / huggingface_hub | 4.57.6 / 0.36.2 |
 | numpy / pandas / pyarrow / sympy / matplotlib | 2.5.1 / 3.0.5 / 25.0.0 / 1.14.0 / 3.11.1 |
 | py-cpuinfo | 9.0.0（`from vllm import LLM` 需要，锁文件里没有，单独装） |
 | pytest | 最新（测试用，锁文件里没有） |
 
-> 锁文件里的 `vllm==0.16.1.dev0` 一行不用管：vLLM 由源码编译提供，装出来是 `0.16.0`（commit `89a77b108` 正好落在 `v0.16.0` tag 上，setuptools-scm 因此不加 `.dev` 后缀）。代码以 commit 为准。
+> 锁文件里的 `vllm==0.16.1.dev0` 一行不用管：项目使用的是固定 commit `89a77b108` 构建出的 `0.16.0+rocm721` wheel。同配置机器直接以 `--no-deps` 安装仓库 wheel；不同 Python、Torch、ROCm 或 GPU 架构必须重新编译。
 
 ### 环境布局（`/overlay/miniconda3/envs/`）
 
@@ -299,7 +299,7 @@ conda config --show-sources
 
 ```bash
 source /workspace/scripts/vllm_env_rocm_base.sh
-PY=/overlay/miniconda3/envs/shopsim/bin/python
+PY=/workspace/miniconda3/envs/shopsim/bin/python
 
 "$PY" -c "import torch,vllm,transformers; \
   print(torch.__version__, torch.cuda.is_available(), vllm.__version__)"

@@ -9,7 +9,7 @@ set -euo pipefail
 ROOT=/workspace/shopsimulator/shopagent-rl
 VERSION_DIR="$ROOT/outputs/grpo/c1_hard"
 RUN_NAME=grpo_c1hard_200_b4n8_env32
-OVERLAY_DIR=/workspace/artifacts/grpo_runs/c1_hard/full_200_b4_n8_env32
+OVERLAY_DIR=/overlay/shopagent_rl_artifacts/grpo_runs/c1_hard/full_200_b4_n8_env32
 
 mkdir -p "$VERSION_DIR/config" "$VERSION_DIR/logs" "$VERSION_DIR/model" "$VERSION_DIR/evaluation" "$OVERLAY_DIR"
 cp "$ROOT/configs/grpo.yaml" "$VERSION_DIR/config/grpo_c1hard_200_b4n8_env32_base.yaml"

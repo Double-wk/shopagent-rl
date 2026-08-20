@@ -19,7 +19,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."      # -> shopagent-rl/
 source scripts/vllm_env_shopA.sh   # ONE-env: shopsim python + ROCm shims (sets PY)
 
-MODEL=/workspace/artifacts/qwen3_1.7b_paired_c1hard_merged
+MODEL=/overlay/shopagent_rl_artifacts/qwen3_1.7b_paired_c1hard_merged
 if [ ! -f "$MODEL/model.safetensors" ]; then
     echo "ERROR: merged model not found: $MODEL" >&2
     echo "       run scripts/merge_paired_c1hard.py first" >&2

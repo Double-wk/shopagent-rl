@@ -15,7 +15,7 @@ esac
 
 export TRAIN_FILES="${TRAIN_FILES:-$ROOT/data/grpo_certified_explicit_paired.parquet}"
 export SFT_ADAPTER="${SFT_ADAPTER:-$ROOT/outputs/sft/v5_certified_explicit_clean/model/training_output/lora_adapter}"
-export OUTPUT_DIR="${OUTPUT_DIR:-/workspace/artifacts/grpo_runs/certified_explicit_$METHOD}"
+export OUTPUT_DIR="${OUTPUT_DIR:-/overlay/shopagent_rl_artifacts/grpo_runs/certified_explicit_$METHOD}"
 export RUN_NAME="${RUN_NAME:-certified_explicit_grpo_$METHOD}"
 export DATA_SHUFFLE=False
 export MAX_PROMPT_LENGTH="${MAX_PROMPT_LENGTH:-2048}"

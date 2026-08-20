@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Build the pinned ROCm vLLM checkout into a named conda environment.
-CONDA_ROOT="${CONDA_ROOT:-/overlay/miniconda3}"
+CONDA_ROOT="${CONDA_ROOT:-/workspace/miniconda3}"
 CONDA_ENV="${1:-shopsim}"
 VLLM_SRC="${VLLM_SRC:-/overlay/vllm-rocm-src}"
 ROCM_PATH="${ROCM_PATH:-/opt/rocm-7.2.1}"

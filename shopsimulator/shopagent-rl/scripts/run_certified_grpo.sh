@@ -19,7 +19,7 @@ esac
 
 export TRAIN_FILES="${TRAIN_FILES:-$ROOT/data/grpo_certified_natural_800_pairblocked.parquet}"
 export SFT_ADAPTER="${SFT_ADAPTER:-$ROOT/outputs/sft/v4_certified_corrective/model/training_output/lora_adapter}"
-export OUTPUT_DIR="${OUTPUT_DIR:-/workspace/artifacts/grpo_runs/certified_natural_$METHOD}"
+export OUTPUT_DIR="${OUTPUT_DIR:-/overlay/shopagent_rl_artifacts/grpo_runs/certified_natural_$METHOD}"
 export RUN_NAME="${RUN_NAME:-certified_natural_grpo_$METHOD}"
 export TOTAL_STEPS="${TOTAL_STEPS:-200}"
 export TRAIN_BATCH="${TRAIN_BATCH:-4}"

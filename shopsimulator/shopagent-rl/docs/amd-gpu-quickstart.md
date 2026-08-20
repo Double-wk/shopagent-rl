@@ -84,6 +84,18 @@ cd /workspace/shopsimulator/shopagent-rl
 source scripts/vllm_env_shopA.sh
 ```
 
+若机器仍为 Linux x86_64、CPython 3.12、gfx1100、ROCm 7.2.1 和 Torch
+2.9.1，可直接安装仓库内已应用 sleep 修复的 wheel，无需重新编译：
+
+```bash
+"$PY" -m pip install --no-deps \
+  /workspace/shopsimulator/envs_config/vllm_wheels/triton_kernels-1.0.0-py3-none-any.whl \
+  /workspace/shopsimulator/envs_config/vllm_wheels/vllm-0.16.0+rocm721-cp312-cp312-linux_x86_64.whl
+```
+
+任一版本或 GPU 架构不同时，按根目录 `服务器迁移指南.md` 从固定 commit
+重新编译，不要安装这个 gfx1100 wheel。
+
 安装项目内固定的 veRL 源码包：
 
 ```bash
@@ -129,13 +141,16 @@ bash scripts/run_eval.sh --tag SFT --out outputs/eval_sft.jsonl \
 
 ```bash
 RUN_NAME=grpo_diagnostic \
-OUTPUT_DIR=/overlay/shopagent_rl_grpo_outputs/grpo_diagnostic \
+OUTPUT_DIR=/overlay/shopagent_rl_artifacts/grpo_runs/grpo_diagnostic \
 TOTAL_STEPS=50 \
 GPU_MEM_UTIL=0.25 \
 bash scripts/run_grpo.sh
 ```
 
-日志写入 `run/<RUN_NAME>.log`，大 checkpoint 应写到实例的大盘（示例为 `/overlay/...`），不要写满代码所在的小系统盘。
+日志写入 `run/<RUN_NAME>.log`，大 checkpoint 写到实例的大盘 `/overlay/shopagent_rl_artifacts/`，
+不要写满代码所在的系统盘。注意 `/overlay` 是容器的临时盘，**重启即空**：2026-08-19 的重启就带走了
+一个刚训完 200 步、还没导出的 GRPO adapter。所以每个 checkpoint 一落盘就用
+`scripts/export_lora_adapter.py` 把 adapter 导到 `outputs/`，那才是入库并可复现的一份。
 
 如果复现当前 Certified corrective 路线，先运行 SFT，再运行串行评测门；同一张卡上
 不要同时启动 vLLM 评测、SFT 和 GRPO：

@@ -78,9 +78,69 @@ class ExperimentProtocolTests(unittest.TestCase):
         )
         self.assertEqual(manifest["status"], "in_progress")
         self.assertEqual(manifest["sft"]["status"], "completed")
-        self.assertEqual(manifest["grpo"]["independent"]["status"], "running")
-        self.assertEqual(manifest["grpo"]["paired"]["status"], "pending")
+        self.assertEqual(
+            manifest["grpo"]["independent"]["status"], "completed_but_weights_lost"
+        )
+        self.assertEqual(manifest["grpo"]["paired"]["status"], "failed_to_start")
         self.assertTrue(manifest["grpo"]["independent"]["smoke_status"] == "passed")
+
+    def test_manifest_records_the_overlay_artifact_loss(self) -> None:
+        """The single-seed Independent result must not be silently extendable.
+
+        Its adapter died with /overlay on 2026-08-19, so a rerun produces a
+        different model; mixing its seeds with the recorded 0.35 would be wrong.
+        """
+        manifest = yaml.safe_load(
+            (ROOT / "experiments/manifests/horizon10_clean_v1.yaml").read_text()
+        )
+        loss = manifest["artifact_loss"]
+        self.assertEqual(manifest["grpo"]["independent"]["evaluation"]["seeds"], 1)
+        self.assertTrue(any("export_step_200" in item for item in loss["lost"]))
+        self.assertTrue(
+            any("v6_horizon10_clean_from_base" in item for item in loss["survived"])
+        )
+
+    def test_artifact_policy_splits_by_reproducibility(self) -> None:
+        """Bulk checkpoints may sit on ephemeral /overlay; results may not.
+
+        The 2026-08-19 loss was not caused by using /overlay for checkpoints —
+        it was caused by the exported adapter living there too. Raw FSDP state is
+        recoverable by rerunning; an adapter whose eval numbers are already
+        published is not.
+        """
+        config = (ROOT / "configs/grpo.yaml").read_text()
+        self.assertIn(
+            "default_local_dir: /overlay/shopagent_rl_artifacts/grpo_runs", config
+        )
+
+        manifest = yaml.safe_load(
+            (ROOT / "experiments/manifests/horizon10_clean_v1.yaml").read_text()
+        )
+        grpo = manifest["grpo"]
+        for key in ("independent_output", "paired_output"):
+            self.assertTrue(grpo[key].startswith("/overlay/"), key)
+        # Anything the paper cites must be a repo-relative path under outputs/.
+        self.assertTrue(grpo["adapter_export_root"].startswith("outputs/"))
+        for key, value in grpo["independent"]["evaluation"].items():
+            if isinstance(value, str):
+                self.assertTrue(value.startswith("outputs/"), f"{key}={value}")
+        for key, value in manifest["sft"]["evaluation"].items():
+            if isinstance(value, str):
+                self.assertTrue(value.startswith("outputs/"), f"{key}={value}")
+
+    def test_paths_module_is_the_only_interpreter_source(self) -> None:
+        """No script may hardcode an interpreter that a machine move invalidates."""
+        paths = (ROOT / "scripts/paths.sh").read_text()
+        self.assertIn("SHOPAGENT_PY:-/workspace/miniconda3/envs/shopsim/bin/python", paths)
+        self.assertIn("SHOPAGENT_ARTIFACT_ROOT:-/overlay/", paths)
+
+        for script in sorted((ROOT / "scripts").glob("*.sh")):
+            if script.name == "paths.sh":
+                continue
+            body = script.read_text()
+            self.assertNotIn(
+                "PY=/overlay/miniconda3", body, f"{script.name} hardcodes a dead interpreter"
+            )
 
     def test_clean_sft_evaluation_entrypoint_is_serial_and_pinned(self) -> None:
         script = (ROOT / "scripts/eval_horizon10_clean_sft.sh").read_text()

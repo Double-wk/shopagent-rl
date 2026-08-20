@@ -8,12 +8,14 @@ the layout verl saves for the SFT adapter and the GRPO v2b export.
 
 Usage:
   python scripts/export_lora_adapter.py \
-      --ckpt /workspace/artifacts/grpo_runs/<run>/global_step_200/actor \
+      --ckpt /overlay/shopagent_rl_artifacts/grpo_runs/<run>/global_step_200/actor \
       --out  outputs/grpo/<run>/model/checkpoint_step_200/lora_adapter
 
-The raw FSDP checkpoint under artifacts/ is pruned (trainer.max_actor_ckpt_to_keep)
-and never committed; the 70MB adapter this writes under outputs/ is the artifact
-that reproduces the run, so export before the checkpoint rotates out.
+The raw FSDP checkpoint under /overlay sits on the container's EPHEMERAL disk and
+disappears on instance restart; the 70MB adapter this writes under outputs/ is
+git-tracked and is what actually reproduces the run. Run this as soon as a
+checkpoint appears, not at the end of training — on 2026-08-19 a restart wiped
+/overlay and destroyed a finished 200-step adapter that had never been exported.
 """
 from __future__ import annotations
 
