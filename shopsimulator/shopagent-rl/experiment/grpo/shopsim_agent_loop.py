@@ -443,6 +443,10 @@ class ShopsimAgentLoop(AgentLoopBase):
                 "pair_id": "",
                 "side": "",
                 "intervention_type": "",
+                # Keep the environment and certified-counterfactual output
+                # schemas identical before DataProto.concat across workers.
+                "counterfactual_grade": {},
+                "response_preview": "",
             },
         )
 

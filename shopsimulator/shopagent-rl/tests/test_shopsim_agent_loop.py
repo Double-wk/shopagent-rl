@@ -62,6 +62,8 @@ class ShopsimAgentLoopTests(IsolatedAsyncioTestCase):
         for key in ("pair_id", "side", "intervention_type"):
             self.assertIn(key, output.extra_fields)
             self.assertEqual(output.extra_fields[key], "")
+        self.assertEqual(output.extra_fields["counterfactual_grade"], {})
+        self.assertEqual(output.extra_fields["response_preview"], "")
 
 
 if __name__ == "__main__":

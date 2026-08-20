@@ -150,7 +150,7 @@ grpo:
       conclusion: passed_with_low_cpu_headroom
     large_batch_formal_run:
       started: 2026-08-20T06:07Z
-      status: running
+      status: failed_step_8_schema_mismatch
       total_steps: 100
       env_pool: 32
       train_batch: 8
@@ -162,6 +162,16 @@ grpo:
       persistent_adapter_milestones: [20, 40, 60, 80, 100]
       persistent_adapter_root: outputs/grpo/horizon10_clean_v1/paired_b8n4/model
       export_watcher: scripts/watch_grpo_adapter_exports.sh
+      failed_at_global_step: 8
+      failure: >-
+        DataProto.concat raised because counterfactual outputs included
+        response_preview/counterfactual_grade while environment outputs omitted
+        those extra_fields. No checkpoint was written because save_frequency was
+        10; the run is discarded and will be restarted from clean SFT.
+      fix: >-
+        Environment rollouts now emit empty counterfactual_grade and
+        response_preview fields so every worker returns the same extra_fields
+        schema.
 
 # The 2026-08-19 instance restart destroyed /overlay (ephemeral container disk).
 # Everything under /workspace survived. Recorded here because it changes what
