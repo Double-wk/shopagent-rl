@@ -18,8 +18,8 @@ source scripts/vllm_env_shopA.sh   # ONE-env: sets PY
 OUT=outputs/price_blindness
 mkdir -p "$OUT"
 
-C1HARD=/overlay/shopagent_rl_grpo_outputs/grpo/c1_hard/full_200_b4_n8_env32/checkpoint_step_200/lora_adapter
-V2B=/overlay/shopagent_rl_grpo_outputs/grpo/v2/export_step_200/lora_adapter
+C1HARD=/workspace/artifacts/grpo_runs/c1_hard/full_200_b4_n8_env32/checkpoint_step_200/lora_adapter
+V2B=/workspace/artifacts/grpo_runs/v2/export_step_200/lora_adapter
 SFT=outputs/sft/v1/model/training_output/lora_adapter
 
 echo "=== [D3] hard-zero trigger audit (CPU) ==="

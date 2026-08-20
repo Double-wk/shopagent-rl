@@ -24,6 +24,6 @@ run() {  # run <tag> <outfile> [adapter]
 run Base       "$OUT/cf_base_v1.jsonl"
 run SFT        "$OUT/cf_sft_v1.jsonl"          outputs/sft/v1/model/training_output/lora_adapter
 run GRPO_v1    "$OUT/cf_grpo_v1_s200.jsonl"    outputs/grpo/v1/model/checkpoint_step_200/lora_adapter
-run GRPO_v2b   "$OUT/cf_grpo_v2b_s200.jsonl"   /overlay/shopagent_rl_grpo_outputs/grpo/v2/export_step_200/lora_adapter
+run GRPO_v2b   "$OUT/cf_grpo_v2b_s200.jsonl"   /workspace/artifacts/grpo_runs/v2/export_step_200/lora_adapter
 
 echo "=== all counterfactual evals complete ==="

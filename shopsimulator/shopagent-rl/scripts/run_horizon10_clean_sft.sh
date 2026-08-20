@@ -3,7 +3,9 @@
 set -euo pipefail
 
 ROOT=/workspace/shopsimulator/shopagent-rl
-PY=/overlay/miniconda3/envs/shopsim/bin/python
+source "$ROOT/scripts/paths.sh"
+PY="$SHOPAGENT_PY"
+shopagent_require_py
 CONFIG="$ROOT/configs/sft_horizon10_clean_v1.yaml"
 DATA="$ROOT/data/sft_train_horizon10.jsonl"
 OUTPUT="$ROOT/outputs/sft/v6_horizon10_clean_from_base/model/training_output"

@@ -10,16 +10,16 @@ holds the GPU. Output is a self-contained model dir: merged weights + tokenizer
 files + generation_config with eos=[<|im_end|>, <|endoftext|>].
 
 Usage:
-  /overlay/miniconda3/envs/shopsim/bin/python scripts/merge_paired_c1hard.py
+  /workspace/miniconda3/envs/shopsim/bin/python scripts/merge_paired_c1hard.py
 """
 from __future__ import annotations
 
 import shutil
 from pathlib import Path
 
-BASE = "/overlay/qwen3_1.7b_base_imend"   # symlinked snapshot + fixed generation_config
-ADAPTER = "/overlay/shopagent_rl_grpo_outputs/grpo/paired_c1hard_200_direct/export_step_200/lora_adapter"
-OUT = "/overlay/qwen3_1.7b_paired_c1hard_merged"
+BASE = "/workspace/artifacts/qwen3_1.7b_base_imend"   # symlinked snapshot + fixed generation_config
+ADAPTER = "/workspace/artifacts/grpo_runs/paired_c1hard_200_direct/export_step_200/lora_adapter"
+OUT = "/workspace/artifacts/qwen3_1.7b_paired_c1hard_merged"
 
 
 def main() -> None:

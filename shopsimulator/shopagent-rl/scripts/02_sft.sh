@@ -3,7 +3,9 @@
 # train the Qwen3-1.7B-Base LoRA adapter.
 # Uses the validated data/sft_train.jsonl already produced by the data pipeline.
 set -euo pipefail
-PY=/overlay/miniconda3/envs/shopsim/bin/python
+source /workspace/shopsimulator/shopagent-rl/scripts/paths.sh
+PY="$SHOPAGENT_PY"
+shopagent_require_py
 cd /workspace/shopsimulator/shopagent-rl
 "$PY" -m experiment.teacher.validate --max_keep 3793
 exec "$PY" -m experiment.sft.train --config configs/sft.yaml

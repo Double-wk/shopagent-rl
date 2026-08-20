@@ -63,6 +63,14 @@ shopsimulator/ShopSimulator/shop_env/shop_env/shop_agent.log
 shopsimulator/shopagent-rl/outputs/sft/v2_paired/model/training_output/checkpoint-*/
 .git-amd/
 
+# === Bulk resumable trainer state (2026-08-20) ===
+# GRPO raw FSDP checkpoints and optimizer shards. Persistent (this is /workspace,
+# not the ephemeral container disk that ate /overlay on 2026-08-19) but never
+# committed: each one carries the full 1.7B base weights. The reproduction path
+# is outputs/grpo/<run>/, where scripts/export_lora_adapter.py writes the 70MB
+# LoRA adapter that IS committed as .gz split volumes.
+artifacts/
+
 # regenerable caches deleted 2026-08-16 (npm downloads on demand; jupyter re-creates)
 cc-switch/.npm/
 /.ipynb_checkpoints/

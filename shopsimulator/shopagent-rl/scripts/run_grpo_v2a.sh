@@ -8,7 +8,7 @@ set -euo pipefail
 
 ROOT=/workspace/shopsimulator/shopagent-rl
 VERSION_DIR="$ROOT/outputs/grpo/v2"
-OVERLAY_DIR=/overlay/shopagent_rl_grpo_outputs/grpo/v2/diagnostic_50
+OVERLAY_DIR=/workspace/artifacts/grpo_runs/v2/diagnostic_50
 
 mkdir -p "$VERSION_DIR/config" "$VERSION_DIR/logs" "$VERSION_DIR/model" "$VERSION_DIR/evaluation" "$OVERLAY_DIR"
 cp "$ROOT/configs/grpo.yaml" "$VERSION_DIR/config/grpo_base.yaml"

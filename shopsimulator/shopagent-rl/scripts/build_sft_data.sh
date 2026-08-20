@@ -24,7 +24,9 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."   # scripts/.. -> shopagent-rl/
-PY=/overlay/miniconda3/envs/shopsim/bin/python
+source /workspace/shopsimulator/shopagent-rl/scripts/paths.sh
+PY="$SHOPAGENT_PY"
+shopagent_require_py
 
 RAW=data/trajectories_raw/gpt-5.6-terra/trajectories_raw.jsonl
 TRAINONLY_DIR=data/trajectories_raw/gpt-5.6-terra_trainonly

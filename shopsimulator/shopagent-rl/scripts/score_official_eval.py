@@ -1,7 +1,7 @@
 """Score official-harness outputs with the official get_score.py semantics.
 
 Usage:
-  /overlay/miniconda3/envs/shopsim/bin/python scripts/score_official_eval.py \
+  /workspace/miniconda3/envs/shopsim/bin/python scripts/score_official_eval.py \
       <output_dir_with_task_jsons> [more_dirs...]
 
 Reuses ShopSimulator/get_score.py::calculate_metrics verbatim so numbers are

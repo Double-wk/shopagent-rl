@@ -5,7 +5,7 @@ set -euo pipefail
 
 ROOT=/workspace/shopsimulator/shopagent-rl
 CURRENT_PID_FILE="$ROOT/run/grpo_env16_0812_rocmfix_resume40.pid"
-CHECKPOINT=/overlay/shopagent_rl_grpo_outputs/grpo/global_step_50
+CHECKPOINT=/workspace/artifacts/grpo_runs/global_step_50
 
 if [ ! -s "$CURRENT_PID_FILE" ]; then
     echo "missing current PID file: $CURRENT_PID_FILE" >&2

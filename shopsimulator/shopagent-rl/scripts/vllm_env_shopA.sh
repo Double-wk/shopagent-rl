@@ -12,7 +12,8 @@
 # DO NOT `pip install` vLLM deps without --no-deps — it clobbers ROCm torch.
 set -u
 
-PY=/overlay/miniconda3/envs/shopsim/bin/python
+source /workspace/shopsimulator/shopagent-rl/scripts/paths.sh
+PY="$SHOPAGENT_PY"
 
 # 1. amdsmi (system binding) -> PYTHONPATH so vLLM's rocm platform plugin finds it.
 mkdir -p /tmp/amdsmi_link
