@@ -240,6 +240,10 @@ class ShopsimAgentLoop(AgentLoopBase):
                 "pair_id": pair_id,
                 "side": side_name,
                 "intervention_type": intervention_type,
+                "expected_relation": self._string_list(kwargs.get("expected_relation")),
+                "predicted_intent": str(grade.get("predicted_intent") or ""),
+                "side_correct": bool(grade.get("side_correct", grade.get("correct_strict", False))),
+                "relation_correct": False,
                 "counterfactual_grade": grade,
                 "response_preview": " ".join(text.split())[:180],
             },
@@ -443,6 +447,10 @@ class ShopsimAgentLoop(AgentLoopBase):
                 "pair_id": "",
                 "side": "",
                 "intervention_type": "",
+                "expected_relation": [],
+                "predicted_intent": "",
+                "side_correct": False,
+                "relation_correct": False,
                 # Keep the environment and certified-counterfactual output
                 # schemas identical before DataProto.concat across workers.
                 "counterfactual_grade": {},

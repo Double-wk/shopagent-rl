@@ -96,7 +96,8 @@ algorithm:
   paired_intervention:
     enabled: False
     # joint_bonus is the legacy ablation; relational_advantage is the first
-    # symmetric prototype; relational_residual repairs only the failing side.
+    # symmetric prototype; relational_residual repairs only the failing side;
+    # explicit_relation uses normalized intents and expected_relation metadata.
     mode: joint_bonus
     weight: 1.0
     success_bonus: 0.25

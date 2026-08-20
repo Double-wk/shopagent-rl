@@ -11,6 +11,7 @@ import unittest
 import torch
 
 from experiment.grpo.paired_reward import (
+    add_explicit_relation_bonus,
     add_joint_certified_bonus,
     add_relational_advantage,
     add_relational_residual_advantage,
@@ -27,6 +28,37 @@ def _rewards(scores: list[float]) -> tuple[torch.Tensor, torch.Tensor]:
 
 
 class EnvironmentBlockTests(unittest.TestCase):
+    def test_explicit_relation_rewards_ordered_intents(self) -> None:
+        rewards, mask = _rewards([1.0, 0.0, 1.0, 1.0])
+        result, stats = add_explicit_relation_bonus(
+            rewards,
+            mask,
+            ["price", "price", "nuisance", "nuisance"],
+            ["original", "counterfactual", "original", "counterfactual"],
+            ["COMMIT", "SEARCH_ALTERNATIVE", "COMMIT", "SEARCH_ALTERNATIVE"],
+            [
+                ["COMMIT", "SEARCH_ALTERNATIVE"],
+                ["COMMIT", "SEARCH_ALTERNATIVE"],
+                ["COMMIT", "COMMIT"],
+                ["COMMIT", "COMMIT"],
+            ],
+            ["r0", "r0", "r0", "r0"],
+        )
+
+        self.assertEqual(stats["matched_rollouts"], 2)
+        self.assertEqual(stats["relation_successes"], 1)
+        self.assertAlmostEqual(float(result[0, -1]), 2.0)
+        self.assertAlmostEqual(float(result[1, -1]), 1.0)
+        torch.testing.assert_close(result[2:], rewards[2:])
+
+    def test_explicit_relation_is_inert_for_environment_rows(self) -> None:
+        rewards, mask = _rewards([0.5, 0.0])
+        result, stats = add_explicit_relation_bonus(
+            rewards, mask, ["", ""], ["", ""], ["", ""], [[], []], ["r0", "r0"]
+        )
+        torch.testing.assert_close(result, rewards)
+        self.assertEqual(stats["matched_rollouts"], 0)
+
     def test_environment_only_block_adds_no_bonus(self) -> None:
         """Empty pair metadata must be inert, not fatal."""
         rewards, mask = _rewards([0.55, 0.0, 1.0, 0.0])

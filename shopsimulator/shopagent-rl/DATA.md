@@ -1,6 +1,6 @@
 # shopagent-rl 数据划分与现状（单一事实源）
 
-> 最后更新：2026-08-17。本文是 shopagent-rl **数据集合的唯一事实源**——
+> 最后更新：2026-08-21。本文是 shopagent-rl **数据集合的唯一事实源**——
 > SFT / GRPO / Ablation / EVAL 及 constraint-causal 数据的来源、规模、生成方式、互斥关系与当前状态全在这里。
 > README 里的旧「数据采集策略/数据划分」数字已过期，以本文为准。
 
@@ -145,7 +145,7 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
 | 脚本 | 作用 |
 |---|---|
 | `sample_sft_targets.py` | 全 train 随机采 SFT 目标（排除 eval+grpo），seed 42 |
-| `sample_grpo_targets.py` | 全 train 随机采 GRPO 目标（排除 **SFT**+eval），seed 42 |
+| `sample_grpo_targets.py` | 全 train 随机采普通 environment GRPO 目标（排除 **SFT**+eval），seed 42；这条互斥规则不自动覆盖 certified counterfactual pair |
 | `sample_ablation_targets.py` | 全 train 随机采 Ablation 目标（排除 **SFT+GRPO**+eval），seed 42 |
 | `build_sft_data.sh` | raw jsonl → train-range 过滤 + validate → `sft_train.jsonl` |
 | `build_grpo_data.py` | grpo_prompts + system_prompt → `data/grpo_train.parquet` |
@@ -160,6 +160,31 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
 | `grpo_certified_natural_pairblocked.parquet` | 可再生的 7,500 行候选池/构造中间产物；不是正式训练输入，不入 Git |
 | `grpo_certified_natural_800_pairblocked.parquet` | 当前 matched GRPO 输入；400 environment + 200 pairs×2 = 800 行，正好覆盖 200 steps；采样前按 3,000 字符过滤整对超长 CF prompt，当前最大 1,894 tokens，不触发 2,048-token 训练过滤 |
 
+### 论文冻结协议（paper-v1）
+
+旧的 `heldout_atomic_pairs_v2.jsonl` 已降级为 development probe。新的冻结测试集为
+`data/counterfactual/final_atomic_test_v1.jsonl`：300 pairs（150 price、75 option、75 nuisance），
+task/product 均与所有历史 SFT、GRPO、counterfactual artifacts 互斥，且禁止用于方法或 checkpoint 选择。
+其任务清单、商品源 hash 和输出 hash 记录在 `final_atomic_test_v1.summary.json`。
+
+正式 matched smoke 使用 `data/grpo_certified_paper_v1_800_pairblocked.parquet`：400 environment rows
+和 200 个完整 counterfactual pairs（100 price、60 option、40 nuisance）。构建脚本为
+`scripts/prepare_paper_grpo_v1.py`，协议校验在 `tests/test_paper_grpo_data.py`；运行入口为
+`scripts/run_paper_grpo_smoke.sh`。该数据已生成并通过审计，但截至 2026-08-21 尚未开始训练。
+
+### Certified pair 的额外 provenance 约束
+
+普通 environment row 与 SFT task 互斥，但当前 certified counterfactual rows 来自独立的
+`train_atomic_pairs_v1` / `train_natural_option_swap_v1` / `train_constraint_causal_v2` 文件，
+不会自动读取 SFT 排除集。实际审计结果：当前 800-row 输入的 200 个 unique pair 中，
+**168 个 pair** 已出现在 v4 `sft_certified_corrective_train.jsonl`；按 task 计为 **182/195**。
+heldout-v2 与 SFT、GRPO 均 task-disjoint，故 heldout 分数没有直接泄漏，但 v4-init smoke
+不能解释为“GRPO 首次学会关系”。
+
+论文主实验必须重新生成 provenance-disjoint certified pair：SFT-certified、GRPO-certified
+和 heldout 三者按 task/product（至少 task）互斥。当前重叠文件保留为 seen-pair retention
+ablation，不进入 relation acquisition 的 headline 主表。
+
 ---
 
 ## 五、与旧版的差异（这次修了什么）
@@ -167,7 +192,7 @@ EVAL 在 `eval` 区，SFT/GRPO/Ablation 在 `train` 区——**两个区天然�
 | 集合 | 旧版（错） | 新版（对） |
 |---|---|---|
 | **SFT 覆盖** | 只覆盖 train 前 15%（1459–4824），偏斜；~2600 条 | 全 train `[1459,23421)` 随机 5000 目标，3793 strict |
-| **GRPO 排除集** | 按旧 SFT(2613，污染 v1) 排除生成 | 按现 SFT(5000) 重采，来源干净 |
+| **普通 GRPO 排除集** | 按旧 SFT(2613，污染 v1) 排除生成 | 按现 SFT(5000) 重采，environment task 来源干净；certified pair 另有 provenance 审计 |
 | **Ablation** | 顺序 `[1459,1959]`，**与 SFT 重叠 109** | 随机 500，与 SFT/GRPO/eval 全互斥 |
 | **config 数字** | grpo 2000 / ablation 3000 / 采集 10000（都是计划值，过期） | 全部对齐实际：grpo 1000 / ablation 500 / 采集 5000（3793 strict） |
 

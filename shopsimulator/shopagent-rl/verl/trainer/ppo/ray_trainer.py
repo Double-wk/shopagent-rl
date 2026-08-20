@@ -236,7 +236,52 @@ def compute_advantage(
 
         paired_config = config.get("paired_intervention", {}) if config is not None else {}
         paired_mode = str(paired_config.get("mode", "joint_bonus"))
-        if paired_config.get("enabled", False) and paired_mode == "joint_bonus":
+        if paired_config.get("enabled", False) and paired_mode == "explicit_relation":
+            from experiment.grpo.paired_reward import (
+                add_explicit_relation_bonus,
+                relation_correct_flags,
+            )
+
+            relation_ids = data.non_tensor_batch.get(
+                "relation_id", data.non_tensor_batch.get("pair_id")
+            )
+            sides = data.non_tensor_batch.get("side")
+            predicted_intents = data.non_tensor_batch.get("predicted_intent")
+            expected_relations = data.non_tensor_batch.get("expected_relation")
+            if any(value is None for value in (
+                relation_ids, sides, predicted_intents, expected_relations
+            )):
+                raise ValueError(
+                    "explicit relation reward requires relation, side, predicted-intent, "
+                    "and expected-relation metadata"
+                )
+            data.non_tensor_batch["relation_correct"] = relation_correct_flags(
+                relation_ids,
+                sides,
+                predicted_intents,
+                expected_relations,
+                data.non_tensor_batch.get("session_id"),
+            )
+            paired_rewards, paired_stats = add_explicit_relation_bonus(
+                data.batch["token_level_rewards"],
+                grpo_calculation_mask,
+                relation_ids,
+                sides,
+                predicted_intents,
+                expected_relations,
+                data.non_tensor_batch.get("session_id"),
+                weight=float(paired_config.get("weight", 1.0)),
+            )
+            data.batch["token_level_rewards"] = paired_rewards
+            print(
+                "[ExplicitRelation] "
+                f"relations={paired_stats['complete_relations']} "
+                f"matched={paired_stats['matched_rollouts']} "
+                f"relation_rate={paired_stats['relation_success_rate']:.4f} "
+                f"mean_bonus={paired_stats['mean_relation_bonus']:.4f}",
+                flush=True,
+            )
+        elif paired_config.get("enabled", False) and paired_mode == "joint_bonus":
             from experiment.grpo.paired_reward import add_joint_certified_bonus
 
             relation_ids = data.non_tensor_batch.get(

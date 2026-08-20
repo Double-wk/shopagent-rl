@@ -7,6 +7,104 @@ from typing import Any, Sequence
 import torch
 
 
+def _relation_value(value: Any) -> tuple[str, ...]:
+    """Normalize a serialized ordered intent relation."""
+    if value is None:
+        return ()
+    if isinstance(value, str):
+        return (value,)
+    return tuple(str(item) for item in value)
+
+
+def relation_correct_flags(
+    relation_ids: Sequence[Any],
+    sides: Sequence[Any],
+    predicted_intents: Sequence[Any],
+    expected_relations: Sequence[Any],
+    rollout_ids: Sequence[Any] | None = None,
+) -> list[bool]:
+    """Return per-row relation correctness after pair matching."""
+    size = len(relation_ids)
+    if any(len(field) != size for field in (sides, predicted_intents, expected_relations)):
+        raise ValueError("relation metadata lengths must match")
+    if rollout_ids is not None and len(rollout_ids) != size:
+        raise ValueError("rollout metadata length does not match relation metadata")
+    flags = [False] * size
+    grouped = _matched_pairs(relation_ids, sides, rollout_ids)
+    for by_side in grouped.values():
+        original, counterfactual = by_side.get("original", {}), by_side.get("counterfactual", {})
+        for rollout_id in set(original) & set(counterfactual):
+            oi, ci = original[rollout_id], counterfactual[rollout_id]
+            expected = _relation_value(expected_relations[oi]) or _relation_value(expected_relations[ci])
+            predicted = (_relation_value(predicted_intents[oi])[:1] +
+                         _relation_value(predicted_intents[ci])[:1])
+            ok = bool(expected) and predicted == expected
+            flags[oi] = flags[ci] = ok
+    return flags
+
+
+def add_explicit_relation_bonus(
+    token_level_rewards: torch.Tensor,
+    response_mask: torch.Tensor,
+    relation_ids: Sequence[Any],
+    sides: Sequence[Any],
+    predicted_intents: Sequence[Any],
+    expected_relations: Sequence[Any],
+    rollout_ids: Sequence[Any] | None = None,
+    *,
+    weight: float = 1.0,
+) -> tuple[torch.Tensor, dict[str, float | int]]:
+    """Add a bonus for the certified ordered intent relation.
+
+    ``R_cert`` remains in ``token_level_rewards`` and is computed from exact
+    allowed actions. This function adds the separate relation-level signal
+    ``R_pair`` from the two normalized intents, so the two objectives can be
+    logged and ablated independently.
+    """
+    if token_level_rewards.ndim != 2 or response_mask.shape != token_level_rewards.shape:
+        raise ValueError("reward and response-mask tensors must have the same 2-D shape")
+    batch_size = token_level_rewards.shape[0]
+    fields = (relation_ids, sides, predicted_intents, expected_relations)
+    if any(len(field) != batch_size for field in fields):
+        raise ValueError("relation metadata length does not match reward batch")
+    if rollout_ids is not None and len(rollout_ids) != batch_size:
+        raise ValueError("rollout metadata length does not match reward batch")
+    if weight < 0:
+        raise ValueError("relation reward weight must be non-negative")
+
+    grouped = _matched_pairs(relation_ids, sides, rollout_ids)
+    flags = relation_correct_flags(
+        relation_ids, sides, predicted_intents, expected_relations, rollout_ids
+    )
+    result = token_level_rewards.clone()
+    matched = correct = 0
+    bonus_total = 0.0
+    for by_side in grouped.values():
+        original, counterfactual = by_side.get("original", {}), by_side.get("counterfactual", {})
+        for rollout_id in sorted(set(original) & set(counterfactual)):
+            oi, ci = original[rollout_id], counterfactual[rollout_id]
+            ok = flags[oi] and flags[ci]
+            matched += 1
+            correct += int(ok)
+            if ok and weight:
+                bonus = float(weight)
+                bonus_total += bonus
+                for row_index in (oi, ci):
+                    valid = torch.nonzero(response_mask[row_index] > 0, as_tuple=False).flatten()
+                    if len(valid):
+                        result[row_index, int(valid[-1])] += bonus
+    return result, {
+        "complete_relations": sum(
+            bool(by_side.get("original")) and bool(by_side.get("counterfactual"))
+            for by_side in grouped.values()
+        ),
+        "matched_rollouts": matched,
+        "relation_successes": correct,
+        "relation_success_rate": correct / matched if matched else 0.0,
+        "mean_relation_bonus": bonus_total / matched if matched else 0.0,
+    }
+
+
 def _matched_pairs(
     relation_ids: Sequence[Any],
     sides: Sequence[Any],

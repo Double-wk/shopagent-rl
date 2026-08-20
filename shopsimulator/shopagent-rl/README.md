@@ -4,8 +4,9 @@ ShopSimulator 中文购物 Agent 的完整后训练工程：环境适配、teach
 
 ## 当前状态
 
-> 最后同步：2026-08-19。当前维护文档以本节、[`DATA.md`](DATA.md) 和
-> [`docs/constraint-faithful-paired-policy.md`](docs/constraint-faithful-paired-policy.md)
+> 最后同步：2026-08-20。当前维护文档以本节、[`DATA.md`](DATA.md)、
+> [`docs/constraint-faithful-paired-policy.md`](docs/constraint-faithful-paired-policy.md) 和
+> [`docs/paper-roadmap.md`](docs/paper-roadmap.md)
 > 为准；`archive/` 与 checkpoint/adapter 内的 README 是历史快照，不随当前实验改写。
 
 Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的 Final-200 评测均已完成（历史可比协议为 10 步、每轮 512 token）；这只是评测协议，不是 SFT 数据或后续研究的固定 horizon。step20 结果仅作历史归档对照。v5 已完成训练，但只作为显式预算格式捷径的失败消融保留，未继续 Final-200/GRPO。当前已评测的自然格式 SFT 最好是 **v4：price counterfactual 78.65%，Final-200 strict 31.5%**；历史最高 Final-200 仍是 **GRPO Paired-C1-hard：strict 40%**。正式主线已经切换为 `horizon10-clean-v1`：从固定 base revision 直接训练 3,624 条普通 strict-success 轨迹，再从同一个 clean adapter 启动 matched Independent/Paired GRPO；v4 只保留为 feasibility/corrective ablation。
@@ -63,7 +64,7 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 | Explicit-Clean SFT v5 | **已完成失败消融**：自然 price cf **0.26%**；显式预算测试 price cf **100%**；不进入后续 RL |
 | Horizon10 clean SFT | **已完成并完成正式评测**：Final-200 strict **24.5%**（49/200），完成率 52.5%；heldout-v2 价格反事实 paired robust **0%**；adapter 为 `outputs/sft/v6_horizon10_clean_from_base/model/training_output/lora_adapter` |
 | Matched Independent CF-GRPO | **已完成 200 steps 并完成正式评测**：Final-200 strict **35%**（完成率 73%，选对商品率 39.5%），heldout-v2 整体 PRA **43.63%**、price PRA **57.29%**、option PRA **8.67%**、原状态动作准确率 **91.39%**。48GB GPU 实测后固定 `GPU_MEM_UTIL=0.35 / max_num_batched_tokens=16384 / micro_batch=1`；长 batch 吞吐由 346 提升到 431 tokens/s。⚠️ adapter 与全部中间 checkpoint 已随 `/overlay` 丢失，只剩单 seed 评测报告，正式主表前必须重训 |
-| Matched Paired GRPO | **未跑通**：2026-08-19 在 global_step 3 失败——environment 分支没有回传 pair 元数据，而 `_get_gen_batch` 会把这些列从 driver batch 里 pop 掉，因此 environment-only block 进入 `compute_advantage` 时报 `relation_id/pair_id and side metadata`。已修（`experiment/grpo/shopsim_agent_loop.py`），由 `tests/test_paired_reward.py` 覆盖。Paired 从 clean SFT adapter 起训，不依赖 Independent 的权重，可先跑 |
+| Matched Paired GRPO | **工程已跑通，但当前配方失败**：pair metadata 与 output schema 问题均已修复；clean SFT 起点的 b8n4 joint-bonus trial 已完成 100 steps，heldout-v2 original accuracy **100%**，但 counterfactual accuracy / PRA 只有 **8.99%**，表现为坚持原动作。该结果只作为失败配方记录，不进入论文主表；下一步先实现 intent-level relation verifier，再做 clean-init matched smoke。 |
 | RelGRPO v1/v2 smoke（2026-08-20） | **工程闭环已跑通**：同一 v4 SFT、pair-blocked 800 行数据、10 steps 的 matched smoke。Independent PRA **76.97%**；v1 symmetric relational **74.34%**；v2 asymmetric residual **75.84%**。v2 已修正 v1 对正确侧的过度惩罚，但仍未超过 Independent，不能据此宣称方法胜出。adapter、heldout JSONL/metrics 和比较说明保存在 [`outputs/grpo/constraint_faithful_relgrpo_v1/`](outputs/grpo/constraint_faithful_relgrpo_v1/)。 |
 | 产物落盘策略（2026-08-20） | 按**是否影响复现**分层，不按体积：可复现产物（导出的 LoRA adapter、评测报告、metrics、manifest）入 `outputs/`，git 跟踪、权重以 `.gz` 分卷；体积大且只用于续训的原始 FSDP checkpoint 与优化器状态入 `/overlay/shopagent_rl_artifacts/`（约 3T 临时盘，重启即空，丢了只是重跑一次，不丢结果）。唯一路径来源是 [`scripts/paths.sh`](scripts/paths.sh)。**硬性操作要求：checkpoint 一落盘就用 [`scripts/export_lora_adapter.py`](scripts/export_lora_adapter.py) 导到 `outputs/`，不要等训练结束** —— 2026-08-19 丢 adapter 正是因为它当时只存在 `/overlay` |
 | 训练期 reward | `budget_mode="strict"` 已补回原始 ShopSimulator 乘法奖励，并由 `tests/test_reward_modes.py` 覆盖 |
@@ -76,8 +77,10 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 方法、评测协议和后续实验顺序见 [`docs/constraint-faithful-paired-policy.md`](docs/constraint-faithful-paired-policy.md)。
 
 核心动机证据是 GRPO Paired-C1-hard 的 **Final-200 strict 40% / Price-CF 0%**。当前下一步不是继续堆叠
-普通 outcome reward，而是先冻结从 base 直接训练的 `horizon10-clean-v1` adapter，再从同一个 clean adapter
-和同一份 800 行 pair-blocked 数据出发，完成 `CF-GRPO w/o Pair` 与 `Paired GRPO` 的严格 matched comparison。
+普通 outcome reward，而是使用已冻结的 `final-atomic-test-v1` 和严格 provenance-disjoint 的
+`paper-v1` 800 行 pair-blocked 数据，再从 clean/certified 两种初始化完成
+`Independent`、`explicit_relation` 和 `residual` 的严格 matched smoke。数据与 verifier 已通过协议测试，
+尚未启动 GPU 训练。
 
 `Constraint Ledger → Residual Risk → Active Verification` 对应后续独立研究 **Verify Before You Buy**，
 不并入当前论文的方法主线。旧的 [`docs/constraint-causal-experiment-plan.md`](docs/constraint-causal-experiment-plan.md)

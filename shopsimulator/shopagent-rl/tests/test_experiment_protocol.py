@@ -81,7 +81,7 @@ class ExperimentProtocolTests(unittest.TestCase):
         self.assertEqual(
             manifest["grpo"]["independent"]["status"], "completed_but_weights_lost"
         )
-        self.assertEqual(manifest["grpo"]["paired"]["status"], "failed_to_start")
+        self.assertEqual(manifest["grpo"]["paired"]["status"], "completed_negative")
         self.assertTrue(manifest["grpo"]["independent"]["smoke_status"] == "passed")
 
     def test_manifest_records_the_overlay_artifact_loss(self) -> None:

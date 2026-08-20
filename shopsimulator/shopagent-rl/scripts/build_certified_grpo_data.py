@@ -23,6 +23,17 @@ def load_jsonl(path: Path) -> list[dict]:
         return [json.loads(line) for line in handle if line.strip()]
 
 
+def _expected_relation(pair: dict) -> list[str]:
+    """Return the ordered intent relation encoded by a certified pair."""
+    original = pair.get("original") or {}
+    counterfactual = pair.get("counterfactual") or {}
+    values = [
+        *(original.get("expected_action_intents") or []),
+        *(counterfactual.get("expected_action_intents") or []),
+    ]
+    return [str(value) for value in values[:2]]
+
+
 def load_excluded_task_ids(paths: list[Path]) -> set[int]:
     excluded: set[int] = set()
     for path in paths:
@@ -70,6 +81,7 @@ def environment_row(task_id: int, system_prompt: str) -> dict:
         "intervention_type": "",
         "side": "",
         "expected_action_intents": [],
+        "expected_relation": [],
         "allowed_actions": [],
     }
 
@@ -90,6 +102,7 @@ def counterfactual_row(pair: dict, side: str, system_prompt: str) -> dict:
         "intervention_type": str(pair["intervention_type"]),
         "side": side,
         "expected_action_intents": [str(value) for value in state["expected_action_intents"]],
+        "expected_relation": [str(value) for value in pair.get("expected_relation", _expected_relation(pair))],
         "allowed_actions": [str(value) for value in state["allowed_actions"]],
     }
 
@@ -106,6 +119,7 @@ def build_rows(
     price_pairs: int,
     option_pairs: int,
     nuisance_pairs: int,
+    option_intervention_type: str = "option_goal_swap_natural",
     seed: int,
     explicit_price_budget: bool = False,
     excluded_tasks: set[int] | None = None,
@@ -132,7 +146,7 @@ def build_rows(
             system_prompt, max_counterfactual_prompt_chars,
         ),
         select_pairs(
-            natural_pairs, "option_goal_swap_natural", option_pairs, rng, excluded_tasks,
+            natural_pairs, option_intervention_type, option_pairs, rng, excluded_tasks,
             system_prompt, max_counterfactual_prompt_chars,
         ),
         select_pairs(
@@ -189,6 +203,7 @@ def main() -> None:
                         help="number of distinct environment tasks; -1 keeps all")
     parser.add_argument("--price-pairs", type=int, default=1000)
     parser.add_argument("--option-pairs", type=int, default=500)
+    parser.add_argument("--option-intervention-type", default="option_goal_swap_natural")
     parser.add_argument("--nuisance-pairs", type=int, default=250)
     parser.add_argument("--seed", type=int, default=20260817)
     parser.add_argument("--explicit-price-budget", action="store_true")
@@ -223,6 +238,7 @@ def main() -> None:
         price_pairs=args.price_pairs,
         option_pairs=args.option_pairs,
         nuisance_pairs=args.nuisance_pairs,
+        option_intervention_type=args.option_intervention_type,
         seed=args.seed,
         explicit_price_budget=args.explicit_price_budget,
         excluded_tasks=excluded_tasks,
@@ -240,6 +256,7 @@ def main() -> None:
         ("intervention_type", pa.string()),
         ("side", pa.string()),
         ("expected_action_intents", pa.list_(pa.string())),
+        ("expected_relation", pa.list_(pa.string())),
         ("allowed_actions", pa.list_(pa.string())),
     ])
     args.out.parent.mkdir(parents=True, exist_ok=True)

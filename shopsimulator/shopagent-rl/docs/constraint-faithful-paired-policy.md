@@ -205,6 +205,18 @@ R_{pair}^{irr}=\mathbb 1[intent(a)=intent(a')].
 `R_cert` 防止两侧一起错或“永远 Search”；`R_pair` 则直接优化两个世界之间的关系。实现应比较规范化动作意图，
 而不是比较动态 `click[...]` 字符串。
 
+**实现状态（2026-08-20）**：历史 `joint_bonus`、`relational_advantage` 和
+`relational_residual` 原型实际使用的是“两侧 certified action reward 的联合/残差”，
+没有把 `expected_relation` 作为独立的 intent-level verifier 输入，因此不能直接当作
+最终方法实现。当前代码已补上默认关闭的 `explicit_relation` 路径：显式记录
+`predicted_intent`，按 `expected_relation` 计算 `R_pair`，同时保留 per-side `R_cert`，
+避免把“两个侧面都答对”与“关系目标本身成立”混为一谈。
+
+当前代码已加入默认关闭的 `explicit_relation` 实验模式：counterfactual rollout
+输出 `predicted_intent`，pair 数据携带有序 `expected_relation`，训练器在 pair
+匹配后记录 `relation_correct`，并将关系奖励与单侧 certified reward 分开。该模式
+只有在 provenance-disjoint 数据和 matched smoke 通过后，才可用于正式主实验。
+
 ## 8. 评测指标与协议
 
 主表只突出四类指标：
@@ -267,9 +279,23 @@ rollout 在计算 joint reward 时仍可一一匹配。数据构造阶段先按 
 counterfactual prompt，再从候选池补足各类别配额；当前文件最大 prompt 为 1,894 tokens，800 行
 均能通过训练端的 2,048-token 检查，不会因静默过滤而拆散 pair。
 
-### Stage 3：Paired GRPO——论文主实验
+Stage 2 曾完成过单 seed、200 step 的正式运行（Final-200 strict 35%，整体 PRA 43.63%），
+但 adapter 和中间 checkpoint 只存在临时 `/overlay`，实例重启后丢失。因此该数字只能作为
+单 seed 历史记录，不能与后续重训结果混合；论文的 matched comparison 仍需从 clean SFT
+重新训练并导出可复现 adapter。
+
+### Stage 3：Paired GRPO——论文主实验（尚未通过）
 
 在 Stage 2 完全匹配的设置中加入 `R_pair`，目标是同时提升 strict success、relevant PRA，并保持 nuisance invariance。
+
+当前证据不足以支持该主张：
+
+- v1/v2 RelGRPO 只有 10-step smoke，且从 v4 corrective SFT 初始化；Independent PRA 为 76.97%，
+  residual v2 为 75.84%，未超过对照。
+- 从 clean SFT 开始的 b8n4 large-batch paired trial 虽跑到 100 steps，但 heldout PRA 仅 8.99%，
+  应作为失败的 joint-bonus 工程/配方试验，不进入主表。
+- 因此 Stage 3 当前状态是“工程闭环成立，方法效果未证实”，下一轮必须先修正
+  intent-level relation certificate，再做 clean-init 的 matched smoke。
 
 ### Stage 4：泛化与机制分析
 
@@ -296,14 +322,17 @@ counterfactual prompt，再从候选池补足各类别配额；当前文件最�
 
 ## 13. 近期执行清单
 
-1. 完成并冻结 `horizon10-clean-v1` SFT，记录 base revision、3,624 条数据 hash 和训练配置。
-2. 审计自然预算文本与 verifier budget 一致性。
-3. 扩充 train-only relevant/nuisance pair，并稳定保留 `pair_id`。
-4. 实现 pair-aware batch/sampler 和动作意图规范化。
-5. 从 clean adapter 先跑 `CF-GRPO w/o Pair`，再跑完全匹配的 `Paired GRPO`。
-6. 用 3 个 seed 评测 Final-200、Price CF、Option CF、Invariance 和 PRA。
-7. 完成 one-sided、structured-format、no-nuisance、no-pair 消融。
-8. 最后做 constraint holdout、模型尺度和外部环境泛化。
+1. 冻结 evaluator、natural heldout split、verifier budget 对齐和 pair 数据 hash；任何方法调参不得改动这四项。
+2. 在 `counterfactual_grading.py` 中补齐 `action -> intent` 规范化和 `expected_relation` verifier，
+   用 CPU 单元测试覆盖 price、option、nuisance、lenient search 和 malformed action。
+3. 从 clean SFT adapter 做 10-step matched smoke：Independent、joint relation、asymmetric residual；
+   只允许 `R_pair` 分支不同，先确认 schema、pair matching、reward/advantage 日志完整。
+4. Smoke 闸门：paired PRA 不得低于 Independent 超过 2 个百分点，original action accuracy 不得下降超过 2 个百分点；
+   否则停止扩展训练，先重做 relation utility。
+5. 通过 smoke 后再跑 200-step、batch 4、3 seeds；每个 checkpoint 立即导出到 `outputs/`，并记录
+   Final-200 strict、Price/Option CF、nuisance invariance、PRA 和 paired bootstrap CI。
+6. 只有 H2 在 matched 多 seed 上通过，才做 one-sided、no-nuisance、structured-format、constraint-type holdout；
+   long-horizon、额外模型和外部环境放到最后。
 
 ## 14. 论文六句话故事
 

@@ -1,0 +1,29 @@
+# Every artifact below predates final-atomic-test-v1 and may have influenced
+# training, reward design, checkpoint selection, or development evaluation.
+data/sft_certified_corrective_train.jsonl
+data/sft_certified_explicit_clean.jsonl
+data/sft_certified_train.jsonl
+data/sft_paired_train.jsonl
+data/sft_train.jsonl
+data/sft_train_certified_corrective_mix.jsonl
+data/sft_train_certified_explicit_clean_mix.jsonl
+data/sft_train_certified_mix.jsonl
+data/sft_train_horizon10.jsonl
+data/sft_train_paired_mix.jsonl
+data/grpo_certified_explicit_paired.parquet
+data/grpo_certified_natural_800_pairblocked.parquet
+data/grpo_certified_natural_pairblocked.parquet
+data/grpo_certified_natural_train.parquet
+data/grpo_certified_train.parquet
+data/grpo_train.parquet
+data/counterfactual/explicit_budget_dev_v1.jsonl
+data/counterfactual/explicit_budget_test_v1.jsonl
+data/counterfactual/final200_atomic_pairs_v1.jsonl
+data/counterfactual/final200_constraint_causal_v2.jsonl
+data/counterfactual/heldout_atomic_pairs_v2.jsonl
+data/counterfactual/natural_option_swap_v1.jsonl
+data/counterfactual/train_atomic_pairs_v1.jsonl
+data/counterfactual/train_constraint_causal_v2.jsonl
+data/counterfactual/train_natural_option_swap_v1.jsonl
+data/ablation_tasks_500.json
+outputs/sft/v1/evaluation/eval_sft3793_f200_t10x512_0810_1612.jsonl

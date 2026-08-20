@@ -58,6 +58,31 @@ grpo:
   gpu_memory_utilization: 0.35
   max_num_batched_tokens: 16384
   matched_difference: algorithm.paired_intervention.enabled
+  provenance_audit:
+    current_certified_sft_pairs: 3622
+    current_grpo_pairs: 200
+    overlapping_pairs: 168
+    overlapping_grpo_tasks: 182
+    grpo_unique_tasks: 195
+    heldout_task_overlap_with_sft: 0
+    heldout_task_overlap_with_grpo: 0
+    status: needs_disjoint_grpo_rebuild
+    interpretation: >-
+      The heldout evaluation remains task-disjoint, but the v4-init smoke is
+      not a clean test of relation acquisition because most GRPO pairs were
+      already present in corrective SFT. Keep the current file for retention
+      ablation only; rebuild a task/product-disjoint GRPO pair file for the
+      paper's matched main comparison.
+  evaluation_split_status:
+    heldout_atomic_pairs_v2: development_probe
+    reason: >-
+      Used repeatedly for model diagnosis, reward decisions and checkpoint
+      comparisons across v3-v5, clean SFT, Independent, Paired and RelGRPO.
+    final_test: not_yet_frozen
+    required_action: >-
+      Generate final-atomic-test-v1 from previously unused tasks, include
+      price/option/nuisance pairs, freeze its task list and hash, and prohibit
+      method or checkpoint selection on that split.
   # Raw checkpoints live on /overlay (large, ephemeral, rerun-recoverable).
   # Exported adapters and all evaluation output live under outputs/ (git-tracked).
   independent_output: /overlay/shopagent_rl_artifacts/grpo_runs/horizon10_clean_v1_independent
@@ -92,7 +117,7 @@ grpo:
       tuned_long_step_throughput_tokens_per_second: 431.45994951195905
       tuned_actor_peak_allocated_gb: 6.4125776290893555
   paired:
-    status: formal_b8n4_running
+    status: completed_negative
     attempted: 2026-08-19T19:09Z
     failed_at_global_step: 3
     cause: >-
@@ -174,7 +199,7 @@ grpo:
         schema.
     large_batch_formal_run_v2:
       started: 2026-08-20T06:43Z
-      status: running
+      status: completed_negative
       total_steps: 100
       env_pool: 32
       train_batch: 8
@@ -185,6 +210,19 @@ grpo:
       save_frequency: 10
       persistent_adapter_milestones: [10, 20, 40, 60, 80, 100]
       persistent_adapter_root: outputs/grpo/horizon10_clean_v1/paired_b8n4_v2/model
+      finished: 2026-08-20T10:26Z
+      completed_steps: 100
+      evaluation:
+        counterfactual_metrics: outputs/grpo/horizon10_clean_v1/paired_b8n4_v2/evaluation/counterfactual_heldout_v2_metrics.json
+        original_action_accuracy: 1.0
+        counterfactual_action_accuracy: 0.0899
+        paired_robust_accuracy: 0.0899
+        status: failed_behavioral_trial
+      conclusion: >-
+        The legacy joint-bonus large-batch trial completed but collapsed on the
+        heldout relation: it preserved the original action and failed almost all
+        counterfactual sides. Keep as a negative engineering/recipe ablation;
+        do not use it as evidence for the paired method claim.
 
 # The 2026-08-19 instance restart destroyed /overlay (ephemeral container disk).
 # Everything under /workspace survived. Recorded here because it changes what
@@ -219,3 +257,36 @@ artifact_loss:
 historical_controls:
   v4_corrective: feasibility_and_shortcut_correction_only
   v5_explicit_clean: explicit_format_shortcut_ablation_only
+
+paper_protocol:
+  status: data_and_verifier_ready_training_not_started
+  final_test:
+    split: final-atomic-test-v1
+    data: data/counterfactual/final_atomic_test_v1.jsonl
+    summary: data/counterfactual/final_atomic_test_v1.summary.json
+    rows: 300
+    composition:
+      price_above_budget: 150
+      option_swap: 75
+      nuisance_display_note: 75
+    sha256: e0c3947c083b89582ad819a4678b2d2eee64aedca9da0ffd4f0a3a05169fdac7
+    task_product_disjoint_from_predating_artifacts: true
+    sealed: true
+    may_be_used_for_method_selection: false
+  grpo:
+    data: data/grpo_certified_paper_v1_800_pairblocked.parquet
+    summary: data/grpo_certified_paper_v1_800_pairblocked.summary.json
+    rows: 800
+    composition:
+      environment: 400
+      counterfactual: 400
+      price_pairs: 100
+      option_pairs: 60
+      nuisance_pairs: 40
+    sha256: 532f71e0c43ff0603beaf130fdeed48ddeb382e2604ce80eb37f753291e534a4
+    task_product_disjoint_from_final_test: true
+    task_product_disjoint_from_predating_artifacts: true
+    launcher: scripts/run_paper_grpo_smoke.sh
+    methods: [independent, explicit_relation, residual]
+    total_steps_smoke: 10
+    training_started: false

@@ -70,6 +70,10 @@ class CertifiedDataTests(unittest.TestCase):
         self.assertEqual(len(rows), 3)
         cf_rows = [row for row in rows if row["sample_mode"] == "counterfactual"]
         self.assertEqual({row["side"] for row in cf_rows}, {"original", "counterfactual"})
+        self.assertEqual(
+            {tuple(row["expected_relation"]) for row in cf_rows},
+            {("COMMIT", "SEARCH_ALTERNATIVE")},
+        )
         self.assertTrue(all("任务约束摘要" not in row["prompt"][-1]["content"] for row in cf_rows))
         self.assertEqual(len({row["extra_info"]["index"] for row in rows}), 3)
 
