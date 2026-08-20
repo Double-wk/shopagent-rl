@@ -381,6 +381,59 @@ def compute_advantage(
                 f"mean_side_residual={relation_stats['mean_side_residual']:.4f}",
                 flush=True,
             )
+        elif paired_config.get("enabled", False) and paired_mode == "preference_margin":
+            from experiment.grpo.paired_reward import (
+                prepare_preference_margin_metadata,
+            )
+            from experiment.grpo.preference_margin import (
+                compute_relation_losses,
+            )
+
+            relation_ids = data.non_tensor_batch.get(
+                "relation_id", data.non_tensor_batch.get("pair_id")
+            )
+            sides = data.non_tensor_batch.get("side")
+            expected_relations = data.non_tensor_batch.get("expected_relation")
+
+            if any(value is None for value in (
+                relation_ids, sides, expected_relations
+            )):
+                raise ValueError(
+                    "preference margin requires relation_id/pair_id, side, and expected_relation metadata"
+                )
+
+            # Prepare paired metadata for preference margin computation
+            paired_metadata = prepare_preference_margin_metadata(
+                relation_ids,
+                sides,
+                expected_relations,
+                data.non_tensor_batch.get("session_id"),
+            )
+
+            # TODO: Compute log_probs for canonical intents
+            # For now, use stub implementation that doesn't modify advantages
+            # Full implementation requires:
+            # 1. Get log_probs for canonical intents from model
+            # 2. For each pair, compute preference margin and losses
+            # 3. Add relation loss signal to advantages
+
+            stats = {
+                "complete_relations": len(paired_metadata.get("pairs", [])),
+                "decision_changing_pairs": sum(paired_metadata.get("decision_changing", [])),
+                "decision_preserving_pairs": len(paired_metadata.get("pairs", [])) - sum(paired_metadata.get("decision_changing", [])),
+                "status": "stub_implementation",
+            }
+
+            print(
+                "[PreferenceMargin] "
+                f"relations={stats['complete_relations']} "
+                f"decision_changing={stats['decision_changing_pairs']} "
+                f"decision_preserving={stats['decision_preserving_pairs']} "
+                f"status={stats['status']}",
+                flush=True,
+            )
+
+            data.non_tensor_batch["preference_margin_stats"] = stats
         data.batch["advantages"] = advantages
         data.batch["returns"] = returns
     else:
