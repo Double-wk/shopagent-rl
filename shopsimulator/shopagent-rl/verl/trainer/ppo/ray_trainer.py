@@ -434,7 +434,8 @@ def compute_advantage(
                 flush=True,
             )
 
-            data.non_tensor_batch["preference_margin_stats"] = pm_stats
+            # Don't add stats to non_tensor_batch to avoid protocol requirements
+            # The stats are already logged above
         data.batch["advantages"] = advantages
         data.batch["returns"] = returns
     else:

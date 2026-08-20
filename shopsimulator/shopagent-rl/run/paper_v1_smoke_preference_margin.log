@@ -1,0 +1,4 @@
+ShopSim GRPO detached — PID 1168185 (PPID=1)
+  log : tail -f /workspace/shopsimulator/shopagent-rl/run/paper_v1_smoke_clean_preference_margin.log
+  pid : /workspace/shopsimulator/shopagent-rl/run/paper_v1_smoke_clean_preference_margin.pid
+  stop: kill $(cat /workspace/shopsimulator/shopagent-rl/run/paper_v1_smoke_clean_preference_margin.pid)

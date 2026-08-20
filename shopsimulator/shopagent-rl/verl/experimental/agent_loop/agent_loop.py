@@ -972,7 +972,9 @@ class AgentLoopWorker:
         non_tensor_batch = {
             "__num_turns__": np.array([input.num_turns for input in inputs], dtype=np.int32),
         }
-        if self.reward_loop_worker_handles is None and input_non_tensor_batch:
+        # Always preserve input_non_tensor_batch if provided, regardless of reward_loop_worker_handles.
+        # This ensures metadata like relation_id, side, expected_relation are passed through.
+        if input_non_tensor_batch:
             non_tensor_batch.update(input_non_tensor_batch)
 
         # add reward_extra_info to non_tensor_batch
@@ -1003,7 +1005,46 @@ class AgentLoopWorker:
             temp_arr[:] = [input.extra_fields.get(key) for input in inputs]
             extra_fields[key] = temp_arr
 
-        non_tensor_batch.update(extra_fields)
+        # Update non_tensor_batch with extra_fields, but don't overwrite existing
+        # metadata with empty values. This preserves original dataset metadata
+        # (relation_id, side, expected_relation, etc.) for paired modes.
+        for key, values in extra_fields.items():
+            if key not in non_tensor_batch:
+                # Key doesn't exist, add it
+                non_tensor_batch[key] = values
+            else:
+                # Key exists, only update if the new values are non-empty
+                # For each position, update if the new value is non-empty
+                existing = non_tensor_batch[key]
+                if isinstance(existing, np.ndarray) and isinstance(values, np.ndarray):
+                    # Element-wise update: only overwrite if new value is non-empty
+                    updated = np.empty_like(existing)
+                    for i in range(len(existing)):
+                        old_val = existing[i]
+                        new_val = values[i]
+                        # Don't overwrite with empty strings, empty lists, or False
+                        is_empty = False
+                        # Check for empty string (avoid numpy array comparison)
+                        if isinstance(new_val, str) and new_val == "":
+                            is_empty = True
+                        elif new_val is False:
+                            is_empty = True
+                        elif isinstance(new_val, list) and len(new_val) == 0:
+                            is_empty = True
+                        elif isinstance(new_val, np.ndarray):
+                            # Check if array is empty or contains only empty strings
+                            if new_val.size == 0:
+                                is_empty = True
+                            elif new_val.size == 1 and new_val[0] == "":
+                                is_empty = True
+                        if is_empty:
+                            updated[i] = old_val
+                        else:
+                            updated[i] = new_val
+                    non_tensor_batch[key] = updated
+                else:
+                    # Fallback: use new values
+                    non_tensor_batch[key] = values
 
         # Only include reward_extra_keys in meta_info if rm_scores is in batch
         # This avoids conflicts when reward_tensor is merged later in ray_trainer.py

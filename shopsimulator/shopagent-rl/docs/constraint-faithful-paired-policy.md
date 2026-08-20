@@ -1,6 +1,6 @@
 # Beyond Task Success：购物 Agent 的约束忠实配对策略优化
 
-> 当前论文主线（2026-08-19）
+> 当前论文主线（2026-08-20）
 > 暂定标题：**Beyond Task Success: Certified Paired Intervention Learning for Shopping Agents**
 > 暂定方法名：**Constraint-Faithful Paired Policy Optimization**
 
@@ -246,7 +246,11 @@ M_\theta(x,x')=
 匹配后记录 `relation_correct`，并将关系奖励与单侧 certified reward 分开。该模式
 已在 provenance-disjoint 数据上完成 clean-init 10-step smoke。4 个 counterfactual block 均成功匹配
 `2 relations / 8 rollout pairs`，但 relation success 全为 0，显示离散 conjunctive bonus 无法从
-clean init bootstrap；因此它不再承担主方法主张。preference flip/preserve 仍待修改 actor/trainer 接口实现。
+clean init bootstrap；因此它不再承担主方法主张。当前 `preference_margin` 已有数学原型、CPU
+测试、配置和 trainer 分支，但实现仍使用 `predicted_intent` 生成简化 logits proxy，且不会修改
+advantages；它还没有读取 actor 的真实 canonical-intent log-probabilities，也没有将 relation
+loss 接入可反传的 policy-gradient 路径。因此 preference flip/preserve 是论文主方法方向，
+但尚未完成有效训练实现或实证验证。
 
 ## 8. 评测指标与协议
 
@@ -297,7 +301,7 @@ GRPO Paired-C1-hard 建立了 **40% strict / 0% Price-CF** 的解耦证据。
 （price CF 78.65%、price PRA 73.70%、Final-200 strict 31.5%）仅作为 feasibility 记录。
 超过 10 步的 169 条母集轨迹保留作后续 long-horizon 扩展，详见 [`trajectory-horizon-and-long-horizon.md`](trajectory-horizon-and-long-horizon.md)。
 
-### Stage 2：Matched independent CF-GRPO——下一步优先
+### Stage 2：Matched independent CF-GRPO——基线与重训准备
 
 从同一 clean SFT adapter 起训，使用 `R_task + R_cert`，但不使用 `R_pair`。它测试普通 RL 是否改变
 基础购物 SFT 的 constraint fidelity，并作为完整方法的严格 matched baseline。
@@ -315,7 +319,7 @@ Stage 2 曾完成过单 seed、200 step 的正式运行（Final-200 strict 35%�
 单 seed 历史记录，不能与后续重训结果混合；论文的 matched comparison 仍需从 clean SFT
 重新训练并导出可复现 adapter。
 
-### Stage 3：Policy-Response Relation Optimization——论文主实验（尚未通过）
+### Stage 3：Policy-Response Relation Optimization——论文主实验（实现尚未完成）
 
 在 Stage 2 完全匹配的设置中加入 preference flip/preserve objective，目标是同时提升 strict success、
 decision-changing PRA，并保持 decision-preserving invariance。离散 `R_pair` 只作 conjunctive baseline。
@@ -328,8 +332,11 @@ decision-changing PRA，并保持 decision-preserving invariance。离散 `R_pai
   应作为失败的 joint-bonus 工程/配方试验，不进入主表。
 - 2026-08-20 的 provenance-disjoint clean smoke 中，Independent 与 `explicit_relation` 均完成 10 steps；
   pair matching 正常，但所有 matched relation bonus 为 0。
-- 因此 Stage 3 当前状态是“工程闭环成立，离散关系奖励确认存在 bootstrap failure，主方法效果未证实”；
-  下一轮必须实现 policy-score-level flip/preserve objective。
+- 当前 `preference_margin` smoke 入口只验证 metadata、数学原型和日志路径；由于使用预测 intent
+  proxy 且不回写 advantages，它不能证明 policy relation 被优化。
+- 因此 Stage 3 当前状态是“baseline 工程闭环成立，conjunctive reward 存在 bootstrap failure，
+  policy-score-level 主方法尚未接通，效果未证实”。下一步必须实现真实 canonical-intent scoring、
+  可反传的 flip/preserve objective 和 gradient smoke，再进行 matched 比较。
 
 ### Stage 4：泛化与机制分析
 
@@ -360,7 +367,8 @@ decision-changing PRA，并保持 decision-preserving invariance。离散 `R_pai
 2. 在 `counterfactual_grading.py` 中补齐 `action -> intent` 规范化和 `expected_relation` verifier，
    用 CPU 单元测试覆盖 price、option、nuisance、lenient search 和 malformed action。
 3. clean-init Independent 与 conjunctive `explicit_relation` smoke 已完成，作为训练闭环和稀疏奖励基线归档。
-4. 实现 canonical intent scoring、preference flip 与 decision-preserving JS loss，再做严格 matched smoke；
+4. 实现真实 canonical intent scoring、可反传的 preference flip 与 decision-preserving JS loss，
+   保留 per-side correctness anchor，再做严格 matched smoke；
    若 PRA 低于 Independent 或 original accuracy 明显下降，停止扩展训练并检查 intent projection/credit assignment。
 5. 通过 smoke 后再跑 200-step、batch 4、3 seeds；每个 checkpoint 立即导出到 `outputs/`，并记录
    Final-200 strict、Price/Option CF、nuisance invariance、PRA 和 paired bootstrap CI。

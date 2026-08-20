@@ -16,6 +16,9 @@
 5. Clean-init Independent 与离散 `explicit_relation` 的 10-step smoke 均已跑通；后者在 4 个
    counterfactual block 中均成功匹配 `2 relations / 8 rollout pairs`，但 relation success 为 0，
    尚未证明它优于 matched Independent CF-GRPO。
+6. 论文主方法已经确定为 policy-score-level 的 **preference flip / preserve**，但当前代码仍处于
+   proxy 阶段：数学原型、intent 映射、配置和 smoke 入口已存在；真实 actor log-probability
+   投影与可反传的 relation loss 尚未完成，因此不能把当前 `preference_margin` 日志当作训练效果。
 
 最后一点必须写进限制与当前状态，不能用“方法已提出”替代“方法已验证”。
 
@@ -59,13 +62,16 @@
 因此显式 `R_pair` 与“两侧粗粒度 intent 都正确”高度重合，本质上仍可能只是 conjunctive
 bonus。正式论文将把它降级为 matched baseline，不再把它作为最终方法创新。
 
-主方法候选升级为直接优化策略响应量：对 decision-changing intervention，约束两个竞争
+主方法固定为直接优化策略响应量：对 decision-changing intervention，约束两个竞争
 intent 的 log-odds preference 按认证方向翻转；对 decision-preserving intervention，约束
 intent distribution 保持稳定，并保留 per-side correctness anchor。核心表述是：
 
 > **Flip when it matters; preserve when it does not.**
 
-这需要在 actor/trainer 中取得 canonical intent 的 policy score，而不是只在 rollout 后加入标量 bonus。
+这需要在 actor/trainer 中取得 canonical intent 的 policy score，并将 flip/preserve loss 接入
+有效的 actor 梯度路径，而不是只在 rollout 后加入标量 bonus。当前实现中的
+`add_preference_margin_loss()` 仍用 `predicted_intent` 生成固定 logits proxy，且返回原始
+advantages；它用于接口验证和诊断，不是最终优化器。
 
 ## 3.1 新诊断：初始化与联合奖励的稀疏性错配
 
@@ -150,7 +156,8 @@ nuisance pairs，300 个互异 task/product。正式 GRPO 输入为
 ### Gate A：离线实现验收
 
 不占 GPU。补齐 intent parser 和 relation verifier，并用 price、option、nuisance、lenient search、
-malformed action 的固定样例做单元测试。所有测试通过前不启动正式训练。
+malformed action 的固定样例做单元测试；随后实现 canonical-intent policy scoring、可反传的
+flip/preserve loss 和 side-correctness anchor。所有接口与梯度检查通过前不启动正式训练。
 
 ### Gate B：matched smoke（先隔离初始化，再比较关系目标）
 
@@ -165,6 +172,10 @@ malformed action 的固定样例做单元测试。所有测试通过前不启动
 不下降超过 2pt；nuisance invariance 不下降；所有 pair block 都能匹配，environment-only block
 不产生关系奖励。2026-08-20 的 clean smoke 已确认 pair matching 闭环，但 counterfactual block 的
 离散 relation success 全为 0；它被归档为稀疏 conjunctive reward 的 bootstrap failure，不再作为主方法调权重。
+
+在真实 preference-margin smoke 之前，必须先确认 relation loss 对 actor 参数有非零梯度，且
+flip/preserve 两类 pair 都能改变对应 token/action 的 policy score；仅有
+`avg_flip_loss`/`avg_preserve_loss` 日志不构成实现验收。
 
 在 Gate B 之前增加 provenance gate：SFT-certified 与 GRPO-certified 的 task、product、pair
 交集必须为 0；heldout 交集也必须为 0。旧的 168/200 重叠输入只能用于 retention ablation。

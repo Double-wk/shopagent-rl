@@ -19,10 +19,10 @@
     "autoPromptDecided": true,
     "manualHiddenInstalledNotices": {},
     "lastDetectedInstalled": {
-      "openclaw": false,
       "gemini": false,
+      "hermes": false,
       "opencode": true,
-      "hermes": false
+      "openclaw": false
     }
   },
   "launchOnStartup": false,

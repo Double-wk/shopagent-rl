@@ -64,7 +64,7 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 | Explicit-Clean SFT v5 | **已完成失败消融**：自然 price cf **0.26%**；显式预算测试 price cf **100%**；不进入后续 RL |
 | Horizon10 clean SFT | **已完成并完成正式评测**：Final-200 strict **24.5%**（49/200），完成率 52.5%；heldout-v2 价格反事实 paired robust **0%**；adapter 为 `outputs/sft/v6_horizon10_clean_from_base/model/training_output/lora_adapter` |
 | Matched Independent CF-GRPO | **已完成 200 steps 并完成正式评测**：Final-200 strict **35%**（完成率 73%，选对商品率 39.5%），heldout-v2 整体 PRA **43.63%**、price PRA **57.29%**、option PRA **8.67%**、原状态动作准确率 **91.39%**。48GB GPU 实测后固定 `GPU_MEM_UTIL=0.35 / max_num_batched_tokens=16384 / micro_batch=1`；长 batch 吞吐由 346 提升到 431 tokens/s。⚠️ adapter 与全部中间 checkpoint 已随 `/overlay` 丢失，只剩单 seed 评测报告，正式主表前必须重训 |
-| Matched Paired GRPO | **工程已跑通，但当前配方失败**：pair metadata 与 output schema 问题均已修复；clean SFT 起点的 b8n4 joint-bonus trial 已完成 100 steps，heldout-v2 original accuracy **100%**，但 counterfactual accuracy / PRA 只有 **8.99%**，表现为坚持原动作。该结果只作为失败配方记录，不进入论文主表；下一步先实现 intent-level relation verifier，再做 clean-init matched smoke。 |
+| Matched Paired GRPO | **主方法尚未完成验证**：pair metadata 与 output schema 问题均已修复；clean SFT 起点的 b8n4 joint-bonus trial 已完成 100 steps，heldout-v2 original accuracy **100%**，但 counterfactual accuracy / PRA 只有 **8.99%**，表现为坚持原动作。该结果只作为 conjunctive/joint-bonus 失败配方记录，不进入论文主表；`explicit_relation` 只作 matched baseline，下一步实现真正的 policy-score-level preference flip/preserve。 |
 | RelGRPO v1/v2 smoke（2026-08-20） | **工程闭环已跑通**：同一 v4 SFT、pair-blocked 800 行数据、10 steps 的 matched smoke。Independent PRA **76.97%**；v1 symmetric relational **74.34%**；v2 asymmetric residual **75.84%**。v2 已修正 v1 对正确侧的过度惩罚，但仍未超过 Independent，不能据此宣称方法胜出。adapter、heldout JSONL/metrics 和比较说明保存在 [`outputs/grpo/constraint_faithful_relgrpo_v1/`](outputs/grpo/constraint_faithful_relgrpo_v1/)。 |
 | 产物落盘策略（2026-08-20） | 按**是否影响复现**分层，不按体积：可复现产物（导出的 LoRA adapter、评测报告、metrics、manifest）入 `outputs/`，git 跟踪、权重以 `.gz` 分卷；体积大且只用于续训的原始 FSDP checkpoint 与优化器状态入 `/overlay/shopagent_rl_artifacts/`（约 3T 临时盘，重启即空，丢了只是重跑一次，不丢结果）。唯一路径来源是 [`scripts/paths.sh`](scripts/paths.sh)。**硬性操作要求：checkpoint 一落盘就用 [`scripts/export_lora_adapter.py`](scripts/export_lora_adapter.py) 导到 `outputs/`，不要等训练结束** —— 2026-08-19 丢 adapter 正是因为它当时只存在 `/overlay` |
 | 训练期 reward | `budget_mode="strict"` 已补回原始 ShopSimulator 乘法奖励，并由 `tests/test_reward_modes.py` 覆盖 |
@@ -81,8 +81,17 @@ Base、SFT v1-v4、GRPO v1、GRPO v2b、GRPO C1-hard 与 GRPO Paired-C1-hard 的
 `paper-v1` 800 行 pair-blocked 数据，再从 clean/certified 两种初始化完成
 clean-init `Independent` 与 `explicit_relation` 的严格 10-step matched smoke 已完成并写出 checkpoint；
 pair matching 正常，但离散 `explicit_relation` 在所有 counterfactual block 上 relation success 为 0，
-确认了 conjunctive reward 的 bootstrap failure。下一步主方法改为 policy-score-level 的
-preference flip / preserve objective；`explicit_relation` 保留为 matched baseline。
+确认了 conjunctive reward 的 bootstrap failure。论文主方法固定为 policy-score-level 的
+preference flip / preserve objective：decision-changing intervention 要求 canonical intent
+preference 按认证方向翻转，decision-preserving intervention 要求 intent distribution 保持稳定；
+`explicit_relation` 只保留为 matched conjunctive baseline。
+
+当前代码状态必须区分清楚：`experiment/grpo/preference_margin.py` 已实现 margin/flip/preserve
+数学原型和 CPU 测试，训练入口也已有 `preference_margin` 模式，但现有
+`add_preference_margin_loss()` 仍使用 `predicted_intent` 构造简化 proxy，并返回未修改的
+advantages，尚未读取 actor 的真实 canonical-intent log-probabilities，也尚未形成有效的
+policy-gradient 更新。因此该方法目前是“设计与接口已落地，真实训练尚未接通”，不能把 smoke
+入口或日志统计写成方法效果。
 
 `Constraint Ledger → Residual Risk → Active Verification` 对应后续独立研究 **Verify Before You Buy**，
 不并入当前论文的方法主线。旧的 [`docs/constraint-causal-experiment-plan.md`](docs/constraint-causal-experiment-plan.md)
