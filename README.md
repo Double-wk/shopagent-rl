@@ -251,11 +251,12 @@ conda config --show-sources
 rm -f /overlay/miniconda3/.condarc
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
-conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
 conda config --set show_channel_urls yes
 conda config --set channel_priority flexible
 conda config --show-sources
 ```
+
+不要添加 `https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r`：清华镜像的该旧路径已经返回 404，可能导致 `conda create` 或 `conda install` 中途失败。迁移脚本若通过管道记录日志，应先执行 `set -o pipefail`，否则管道最后一个命令成功会掩盖 Conda 的失败退出码。
 
 这会覆盖该 Conda 安装现有的频道配置；如有项目依赖特定私有源，请先备份 `.condarc` 并合并所需频道。
 
