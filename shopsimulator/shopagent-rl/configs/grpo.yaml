@@ -116,14 +116,14 @@ trainer:
   test_freq: -1
   save_freq: ???                    # CLI (per run)
   # Raw FSDP checkpoints: large (full 1.7B base weights each) and only needed to
-  # resume, so they live on /overlay — the container's ~3T ephemeral disk. Losing
+  # resume, so they live outside Git under the persistent ShopSim cache. Losing
   # them costs a rerun, not a result. What must NOT live here is the exported
   # adapter: on 2026-08-19 an instance restart wiped /overlay and destroyed the
   # horizon10-clean-v1 Independent adapter, leaving only its eval report.
   # Export to outputs/ (git-tracked) as soon as a checkpoint appears — see
   # scripts/export_lora_adapter.py. Overridable via SHOPAGENT_ARTIFACT_ROOT.
-  default_local_dir: /overlay/shopagent_rl_artifacts/grpo_runs
-  # No retention cap: the ephemeral disk has room for all 20 saves, and keeping
+  default_local_dir: /root/.cache/huggingface/shopsim/artifacts/grpo_runs
+  # No retention cap: the artifact volume has room for all 20 saves, and keeping
   # them preserves the success-vs-PRA checkpoint trajectory that Stage 4 needs.
   max_actor_ckpt_to_keep: null
   n_gpus_per_node: ???              # CLI

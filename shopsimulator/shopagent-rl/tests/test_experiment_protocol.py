@@ -13,7 +13,10 @@ ROOT = Path(__file__).resolve().parents[1]
 class ExperimentProtocolTests(unittest.TestCase):
     def test_horizon10_clean_sft_starts_from_base(self) -> None:
         config = yaml.safe_load((ROOT / "configs/sft_horizon10_clean_v1.yaml").read_text())
-        self.assertEqual(config["data"]["train_file"], str(ROOT / "data/sft_train_horizon10.jsonl"))
+        self.assertEqual(
+            Path(config["data"]["train_file"]).resolve(),
+            (ROOT / "data/sft_train_horizon10.jsonl").resolve(),
+        )
         self.assertNotIn("init_adapter", config["model"])
         self.assertEqual(config["model"]["revision"], "ea980cb0a6c2ae4b936e82123acc929f1cec04c1")
         self.assertIn("v6_horizon10_clean_from_base", config["output_dir"])
@@ -110,7 +113,7 @@ class ExperimentProtocolTests(unittest.TestCase):
         """
         config = (ROOT / "configs/grpo.yaml").read_text()
         self.assertIn(
-            "default_local_dir: /overlay/shopagent_rl_artifacts/grpo_runs", config
+            "default_local_dir: /root/.cache/huggingface/shopsim/artifacts/grpo_runs", config
         )
 
         manifest = yaml.safe_load(
@@ -132,7 +135,10 @@ class ExperimentProtocolTests(unittest.TestCase):
         """No script may hardcode an interpreter that a machine move invalidates."""
         paths = (ROOT / "scripts/paths.sh").read_text()
         self.assertIn("SHOPAGENT_PY:-/workspace/miniconda3/envs/shopsim/bin/python", paths)
-        self.assertIn("SHOPAGENT_ARTIFACT_ROOT:-/overlay/", paths)
+        self.assertIn(
+            "SHOPAGENT_ARTIFACT_ROOT:-/root/.cache/huggingface/shopsim/artifacts",
+            paths,
+        )
 
         for script in sorted((ROOT / "scripts").glob("*.sh")):
             if script.name == "paths.sh":
