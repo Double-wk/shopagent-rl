@@ -9,9 +9,16 @@ micro-batch. This module does three things and nothing else:
 
 Design notes that are easy to get wrong:
 
-* A pair contributes only when *both* sides are present in the same
+* A pair contributes only when *both* sides are reachable from the same
   micro-batch. A half-pair carries no relational signal, so it is counted in
   ``dropped_incomplete`` and skipped rather than silently treated as a singleton.
+  "Reachable" is deliberately weaker than "both rows present": an ``original``
+  row carrying ``partner_state_text`` completes its own pair. That is what the
+  trainer attaches (``_maybe_attach_partner_states``), and it is why PPO's
+  micro-batch size can stay at 1 -- forcing the two rows into one micro-batch
+  would multiply PPO's own memory by ``2 * rollout.n``. Since the relation loss
+  reads only the state (the row's prompt), which is identical across all ``n``
+  rollouts of a side, carrying it is equivalent to co-locating the rows.
 * ``expected_relation`` is the pair-level ``[z_original, z_counterfactual]``.
   Decision-changing is exactly ``z_o != z_c``; there is no separate label to
   trust, and deriving it removes a class of metadata inconsistency.
@@ -74,11 +81,16 @@ def group_pairs(rows: Sequence[dict[str, Any]]) -> tuple[list[dict[str, Any]], d
     """Group flat rows into complete pairs.
 
     Each row needs ``pair_id``, ``side``, ``state_text`` and ``expected_relation``.
+    An ``original`` row may additionally carry ``partner_state_text`` (plus
+    ``partner_expected_action_intents``), in which case it completes its own pair
+    without the counterfactual row being in this micro-batch.
+
     Returns (pairs, counters). Every returned pair has both sides and a
     two-element expected relation, so downstream code needs no further guards.
     """
     counters = {"rows": len(rows), "dropped_no_pair_id": 0, "dropped_bad_side": 0,
-                "dropped_incomplete": 0, "dropped_bad_relation": 0}
+                "dropped_incomplete": 0, "dropped_bad_relation": 0,
+                "pairs_from_partner_state": 0}
     by_pair: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
 
     for row in rows:
@@ -93,6 +105,21 @@ def group_pairs(rows: Sequence[dict[str, Any]]) -> tuple[list[dict[str, Any]], d
         # Last write wins: a repeated (pair_id, side) is a sampling artifact, and
         # taking one of them keeps the pair usable instead of dropping it.
         by_pair[pair_id][side] = row
+
+        partner_state = _as_str(row.get("partner_state_text"))
+        if side == ORIGINAL and partner_state and COUNTERFACTUAL not in by_pair[pair_id]:
+            # Synthesize the far side from what this row carries. Only the fields
+            # the loss actually reads are needed: the state to score, and the
+            # anchor targets for that state. A real counterfactual row, if one
+            # also lands in this micro-batch, is preferred -- hence the guard and
+            # the ordering (a real row seen later overwrites this).
+            by_pair[pair_id][COUNTERFACTUAL] = {
+                "pair_id": pair_id,
+                "side": COUNTERFACTUAL,
+                "state_text": partner_state,
+                "expected_action_intents": row.get("partner_expected_action_intents"),
+                "_synthesized": True,
+            }
 
     pairs: list[dict[str, Any]] = []
     for pair_id, sides in by_pair.items():
@@ -114,6 +141,12 @@ def group_pairs(rows: Sequence[dict[str, Any]]) -> tuple[list[dict[str, Any]], d
         })
 
     counters["pairs"] = len(pairs)
+    # Counted after assembly, not when synthesizing: a real counterfactual row
+    # arriving later overwrites the synthesized side, and this stat should say how
+    # many pairs actually *relied* on the carried state.
+    counters["pairs_from_partner_state"] = sum(
+        1 for p in pairs if p[COUNTERFACTUAL].get("_synthesized")
+    )
     counters["decision_changing"] = sum(p["is_decision_changing"] for p in pairs)
     counters["decision_preserving"] = counters["pairs"] - counters["decision_changing"]
     return pairs, counters

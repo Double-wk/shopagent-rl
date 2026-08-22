@@ -18,6 +18,14 @@ The wrapper reads ``pair_id`` / ``side`` / ``state_text`` / ``expected_relation`
 ``data.select(...)``, which returns a new TensorDict, so those columns are still
 present on the object handed to the wrapper.
 
+It also reads the optional ``partner_state_text`` /
+``partner_expected_action_intents`` columns that ``RayPPOTrainer``
+attaches. Without them a pair would need both rows in the same micro-batch, which
+at ``ppo_micro_batch_size_per_gpu=1`` never happens; with them each ``original``
+row completes its own pair and PPO's micro-batching stays exactly as configured.
+Verified on the real path (``to_tensordict`` -> ``left_right_2_no_padding`` ->
+``prepare_micro_batches``): 8 micro-batches of size 1, 4 complete pairs.
+
 Note on cost: scoring ~20-30 candidates over a ~1.2k-token prompt with grad
 enabled needs gradient checkpointing to fit on one 48 GiB device (12.6 GiB with,
 >48 GiB without). ``require_gradient_checkpointing`` defaults to True and fails
@@ -38,6 +46,15 @@ _ROW_FIELDS = (
     "expected_relation",
     "expected_action_intents",
     "intervention_type",
+)
+
+# Attached by RayPPOTrainer._maybe_attach_partner_states so an `original` row can
+# complete its own pair. Optional on purpose: absent means "fall back to needing
+# both rows in this micro-batch", which is what the unit tests and any caller
+# without the trainer hook rely on.
+_OPTIONAL_ROW_FIELDS = (
+    "partner_state_text",
+    "partner_expected_action_intents",
 )
 
 
@@ -61,12 +78,25 @@ def extract_pair_rows(data: Any) -> list[dict[str, Any]]:
     if any(len(col) != size for col in columns.values()):
         return []
 
+    present_optional = []
+    for field in _OPTIONAL_ROW_FIELDS:
+        if field not in data.keys():
+            continue
+        value = tu.get(data, field)
+        value = list(value) if not isinstance(value, list) else value
+        # A length mismatch means the column is not row-aligned; dropping it
+        # degrades to the co-located path instead of pairing rows wrongly.
+        if len(value) == size:
+            columns[field] = value
+            present_optional.append(field)
+
+    fields = _ROW_FIELDS + tuple(present_optional)
     rows = []
     for i in range(size):
         # An empty pair_id marks an environment row: no pair, no relation signal.
         if not str(columns["pair_id"][i] or ""):
             continue
-        rows.append({field: columns[field][i] for field in _ROW_FIELDS})
+        rows.append({field: columns[field][i] for field in fields})
     return rows
 
 

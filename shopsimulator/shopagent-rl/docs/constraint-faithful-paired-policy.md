@@ -246,11 +246,59 @@ M_\theta(x,x')=
 匹配后记录 `relation_correct`，并将关系奖励与单侧 certified reward 分开。该模式
 已在 provenance-disjoint 数据上完成 clean-init 10-step smoke。4 个 counterfactual block 均成功匹配
 `2 relations / 8 rollout pairs`，但 relation success 全为 0，显示离散 conjunctive bonus 无法从
-clean init bootstrap；因此它不再承担主方法主张。当前 `preference_margin` 已有数学原型、CPU
-测试、配置和 trainer 分支，但实现仍使用 `predicted_intent` 生成简化 logits proxy，且不会修改
-advantages；它还没有读取 actor 的真实 canonical-intent log-probabilities，也没有将 relation
-loss 接入可反传的 policy-gradient 路径。因此 preference flip/preserve 是论文主方法方向，
-但尚未完成有效训练实现或实证验证。
+clean init bootstrap；因此它不再承担主方法主张。
+
+`preference_margin` 现已完成可反传实现（Gate A 通过，未做实证训练验证）。
+
+**打分基础。** canonical intent 的分布来自**受限动作集上的归一化**：解析状态里渲染的
+`可点击的按钮` 列表得到合法动作，对每个 `click[...]` 候选做一次批量前向打分，在这个集合上
+`log_softmax`，再按 canonical intent 用 `logsumexp` 聚合。不用固定短语打分（`INTENT_PHRASES`
+存在前缀包含缺陷），也不用 `allowed_actions` 列。实测 400/400 CF 行都能解析出合法集，每个
+`(intervention_type, side)` 的期望 intent 都可达，200/200 pair 的两个被比较 intent 在两侧都合法，
+因此 margin 从不为 ±inf。某 intent 在该状态无合法动作时返回 `-inf`（“不可用”，不是“不偏好”），
+调用方必须丢弃而不是当成低概率。
+
+**接入位置。** relation loss 是 loss 而不是 advantage 重整，所以 advantage 阶段现在按设计什么都不做
+（原先的 `add_preference_margin_loss` 打印看似合理的 flip/preserve 数值却返回 `advantages.clone()`，
+且位于任何前向之外，不可能可导；该函数已标注 SUPERSEDED）。真正的项在 actor 侧：
+`ActorRolloutRefWorker._maybe_wrap_relation_loss` 只在 `mode=preference_margin` 时包装
+`ppo_loss`，其余模式（含 Independent baseline）拿到的 `loss_fn` 与包装前逐字节相同，这正是
+Gate B 的前提。pair 元数据（`pair_id`/`side`/`state_text`/`expected_relation`/
+`expected_action_intents`）经 agent loop 的 `extra_fields` 带到 micro-batch；`force_group_size=2×rollout.n`
+保证同一 pair 的两侧落在同一个 micro-batch（pairblocked parquet 中两侧相邻，rollout 展开是
+interleaved，故两侧相距恰好 `rollout.n`）。
+
+**correctness anchor。** margin 是“差之差”，单靠它可以通过让某一侧的**错误** intent 变得不那么错来
+满足；因此每侧另加 `-log P(expected intent | state)` 锚定。
+
+**Gate A 梯度验收**（`scratch/verify_gate_a_gradients.py`，真实 Qwen3-1.7B + 真实 pair 行）：
+四项 gating 全部通过。
+
+| 项 | 结果 |
+| --- | --- |
+| A 梯度非零 | PASS，`grad_norm=4.49e+02` |
+| B flip 方向 | PASS，`cos(-∇L, +∇M) = +0.965`（flip-only），加 anchor 后 `+0.196` 仍同向 |
+| C preserve 方向 | PASS，`cos(-∇L, -∇JS) = +1.000`（preserve-only） |
+| D baseline 隔离 | PASS，无 pair 行时 wrapper 返回同一个 loss 对象，不产生梯度，不写 `relation/*` |
+
+方向用**方向导数**判定而非有限步：在 `grad_norm≈4e2` 下即使 `lr=1e-4` 也已远离一阶邻域，
+观测到的 margin 变化由曲率主导（首次用有限步测得 margin 反向下降，即此原因）。
+
+**已量测的权重张力（未改默认值）。** 在 clean init 上 anchor≈7.32 而 preserve JS≈0.0075；
+`anchor_weight ≥ 0.03` 时合成梯度**反向**推高 JS（1.0 时 `cos=-0.34`），仅在 `≤ 0.01` 才降 JS。
+默认仍保留 `1.0`：clean init 下 `P(COMMIT)≈2.6%`，两侧都答错，保持一个错误分布没有价值——
+先修 intent，anchor 收敛后 JS 自然接手。若 Gate B 的 Irrelevant Invariance 不改善，此处优先调整。
+flip 不受影响。
+
+**结构性注意。** decision-preserving pair 的 `intent_original == intent_cf`，故
+`M = (a-a) - (b-b) ≡ 0` 与分布无关；`margin_mean` 因此只对 decision-changing pair 求平均，
+否则会被结构零稀释、看起来像 flip 项没在动。preserve 侧要看 JS，不能看 M。
+
+**Provenance。** paper-v1 GRPO 的 600 个 task 与实际初始化 adapter 的 SFT 数据
+（`sft_train_horizon10.jsonl`，3624 task）交集为 0，与三个 certified SFT 集交集同为 0；
+`pair_environment_task_overlap`、`final_test_task_overlap`、`final_test_product_overlap` 均为 0。
+
+尚未做的是实证训练验证（Gate B matched smoke 及之后）。
 
 ## 8. 评测指标与协议
 

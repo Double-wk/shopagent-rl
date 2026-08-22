@@ -71,6 +71,25 @@ class TestExtractPairRows:
         del td["state_text"]
         assert extract_pair_rows(td) == []
 
+    def test_partner_columns_are_carried_when_present(self):
+        rows = _pair_rows()
+        td = _batch(rows)
+        td["partner_state_text"] = NonTensorStack.from_list(
+            [NonTensorData("far side"), NonTensorData("")]
+        )
+        td["partner_expected_action_intents"] = NonTensorStack.from_list(
+            [NonTensorData(["SEARCH_ALTERNATIVE"]), NonTensorData([])]
+        )
+        out = extract_pair_rows(td)
+        assert out[0]["partner_state_text"] == "far side"
+        assert out[0]["partner_expected_action_intents"] == ["SEARCH_ALTERNATIVE"]
+
+    def test_partner_columns_are_optional(self):
+        """Absent partner columns degrade to the co-located path, not an error."""
+        out = extract_pair_rows(_batch(_pair_rows()))
+        assert len(out) == 2
+        assert "partner_state_text" not in out[0]
+
 
 class _Wrapped:
     """Module wrapper mimicking FSDP's attribute nesting."""
@@ -194,12 +213,16 @@ class TestConfigGating:
         sentinel = object()
         assert stub._maybe_wrap_relation_loss(sentinel, None) is sentinel
 
-    def test_group_size_is_two_times_rollout_n(self):
-        stub = self._worker_stub(True, "preference_margin")
-        stub._maybe_set_relation_group_size()
-        assert stub._relation_force_group_size == 8
+    def test_micro_batching_is_left_untouched(self):
+        """The worker must not reach into PPO's micro-batch split.
 
-    def test_group_size_unset_for_other_modes(self):
-        stub = self._worker_stub(True, "joint_bonus")
-        stub._maybe_set_relation_group_size()
+        An earlier version set `force_group_size = 2 * rollout.n` to co-locate
+        pair sides. That multiplies PPO's micro-batch by 8 on a
+        `ppo_micro_batch_size_per_gpu=1` chosen to fit 48 GiB, and changes
+        gradient-accumulation granularity for the paired arm only -- which would
+        break the "baseline unchanged" comparison. Pairs are completed by the
+        trainer attaching `partner_state_text` instead.
+        """
+        stub = self._worker_stub(True, "preference_margin")
+        assert not hasattr(stub, "_maybe_set_relation_group_size")
         assert getattr(stub, "_relation_force_group_size", None) is None

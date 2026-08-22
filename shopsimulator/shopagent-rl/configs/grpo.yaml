@@ -114,6 +114,18 @@ algorithm:
     #   anchor_weight    : per-side -log P(expected intent). Without it a pair can
     #                      satisfy the margin by getting the *wrong* intent less
     #                      wrong on one side; the anchor removes that solution.
+    #                      MEASURED at clean init (scratch/verify_gate_a_gradients.py):
+    #                      anchor=7.32 vs preserve JS=0.0075, so at anchor_weight
+    #                      >= 0.03 the combined gradient *opposes* JS on
+    #                      decision-preserving pairs (cos -0.34 at 1.0) and the
+    #                      preserve term is effectively inert; it descends JS only
+    #                      at <= 0.01. Left at 1.0 deliberately: at clean init the
+    #                      policy has P(COMMIT) ~ 2.6%, so both sides are wrong and
+    #                      preserving a wrong distribution buys nothing -- fix the
+    #                      intent first, and JS takes over as the anchor converges.
+    #                      Revisit if Gate B shows invariance failing to improve.
+    #                      Flip is unaffected: cos(-grad L, +grad M) stays positive
+    #                      (+0.97 flip-only, +0.20 with the anchor).
     #   relation_coeff   : scale of the whole relation term against the PPO loss.
     #                      Defaults to `weight` so a single knob still works.
     #   margin_threshold : m in the flip loss; 0.0 means "any correct ordering".

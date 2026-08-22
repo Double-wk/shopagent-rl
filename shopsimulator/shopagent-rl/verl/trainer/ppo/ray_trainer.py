@@ -1485,11 +1485,78 @@ class RayPPOTrainer:
         old_log_prob = DataProto.from_tensordict(old_log_prob)
         return old_log_prob, old_log_prob_mfu
 
+    def _maybe_attach_partner_states(self, batch: DataProto) -> None:
+        """Resolve pairs here, where the whole batch is visible, not in the actor.
+
+        The relation loss needs both sides of a pair. Doing that inside the actor
+        would require both rows to land in the same micro-batch, which with
+        `ppo_micro_batch_size_per_gpu=1` never happens -- and forcing it (via
+        `force_group_size = 2 * rollout.n`) would multiply PPO's micro-batch by 8,
+        blowing up VRAM on a setting that exists precisely to contain it *and*
+        changing PPO's gradient-accumulation granularity for the paired arm only.
+
+        Instead: the relation loss reads only `state_text`, which is the row's
+        prompt and is therefore identical across all `n` rollouts of a side. So a
+        single row can carry its partner's state, and every micro-batch can
+        evaluate whole pairs on its own no matter how the split falls. PPO's
+        micro-batching is left exactly as configured.
+
+        Adds two columns: `partner_state_text` and `partner_expected_action_intents`
+        (empty for rows with no resolvable partner). Only the `original` side gets a
+        partner, so each pair contributes exactly once per micro-batch it appears in.
+        """
+        paired_config = self.config.algorithm.get("paired_intervention", {})
+        if not paired_config.get("enabled", False):
+            return
+        if str(paired_config.get("mode", "")) != "preference_margin":
+            return
+
+        ntb = batch.non_tensor_batch
+        pair_ids = ntb.get("relation_id", ntb.get("pair_id"))
+        sides = ntb.get("side")
+        states = ntb.get("state_text")
+        expected = ntb.get("expected_action_intents")
+        if any(value is None for value in (pair_ids, sides, states, expected)):
+            return
+
+        # First counterfactual row per pair; all n rollouts of that side share the
+        # same prompt, so any one of them carries the state the pair needs.
+        cf_state: dict[str, str] = {}
+        cf_expected: dict[str, Any] = {}
+        for pid, side, state, exp in zip(pair_ids, sides, states, expected):
+            key = str(pid or "")
+            if not key or str(side) != "counterfactual" or key in cf_state:
+                continue
+            cf_state[key] = str(state or "")
+            cf_expected[key] = exp
+
+        partner_states = []
+        partner_expected = []
+        matched = 0
+        for pid, side in zip(pair_ids, sides):
+            key = str(pid or "")
+            if key and str(side) == "original" and key in cf_state:
+                partner_states.append(cf_state[key])
+                partner_expected.append(cf_expected[key])
+                matched += 1
+            else:
+                partner_states.append("")
+                partner_expected.append([])
+
+        ntb["partner_state_text"] = np.array(partner_states, dtype=object)
+        ntb["partner_expected_action_intents"] = np.array(partner_expected, dtype=object)
+        print(
+            f"[PreferenceMargin] attached partner states: {matched} original rows "
+            f"matched to {len(cf_state)} counterfactual pair(s) in batch",
+            flush=True,
+        )
+
     def _update_actor(self, batch: DataProto) -> DataProto:
         rollout_config = self.config.actor_rollout_ref.rollout
         batch.meta_info["multi_turn"] = rollout_config.multi_turn.enable
         # TODO: Make "temperature" single source of truth from generation.
         batch.meta_info["temperature"] = rollout_config.temperature
+        self._maybe_attach_partner_states(batch)
         # update actor
         batch_td = batch.to_tensordict()
         # step 2: convert from padding to no-padding

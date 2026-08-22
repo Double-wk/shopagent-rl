@@ -88,6 +88,55 @@ class TestGroupPairs:
         pairs, c = group_pairs(rows)
         assert c["pairs"] == 1 and pairs[0]["intent_cf"] == "SEARCH_ALTERNATIVE"
 
+    def test_original_row_with_partner_state_completes_its_own_pair(self):
+        """The whole point of the trainer's partner attachment.
+
+        With `ppo_micro_batch_size_per_gpu=1` the counterfactual row is never in
+        the same micro-batch, so the pair must be completable from one row.
+        """
+        row = _flip_pair()[0]
+        row["partner_state_text"] = _state(["back to search", "buy now"])
+        row["partner_expected_action_intents"] = ["SEARCH_ALTERNATIVE"]
+        pairs, c = group_pairs([row])
+        assert c["pairs"] == 1 and c["pairs_from_partner_state"] == 1
+        assert c["dropped_incomplete"] == 0
+        assert pairs[0]["is_decision_changing"] is True
+        cf = pairs[0]["counterfactual"]
+        assert cf["state_text"] == row["partner_state_text"]
+        assert cf["expected_action_intents"] == ["SEARCH_ALTERNATIVE"]
+
+    def test_empty_partner_state_does_not_fabricate_a_pair(self):
+        row = _flip_pair()[0]
+        row["partner_state_text"] = ""
+        pairs, c = group_pairs([row])
+        assert pairs == [] and c["dropped_incomplete"] == 1
+        assert c["pairs_from_partner_state"] == 0
+
+    def test_counterfactual_row_carrying_partner_state_is_ignored(self):
+        """Only `original` rows complete pairs, so a pair is counted once."""
+        row = _flip_pair()[1]
+        row["partner_state_text"] = _state(["buy now"])
+        pairs, c = group_pairs([row])
+        assert pairs == [] and c["dropped_incomplete"] == 1
+
+    def test_real_counterfactual_row_wins_over_carried_state(self):
+        rows = _flip_pair()
+        rows[0]["partner_state_text"] = _state(["carried"])
+        pairs, c = group_pairs(rows)
+        assert c["pairs"] == 1 and c["pairs_from_partner_state"] == 0
+        assert pairs[0]["counterfactual"] is rows[1]
+
+    def test_partner_state_pair_is_not_double_counted(self):
+        """All n rollouts of a side share one pair_id, hence one pair."""
+        rows = []
+        for _ in range(4):
+            row = dict(_flip_pair()[0])
+            row["partner_state_text"] = _state(["back to search"])
+            row["partner_expected_action_intents"] = ["SEARCH_ALTERNATIVE"]
+            rows.append(row)
+        _, c = group_pairs(rows)
+        assert c["rows"] == 4 and c["pairs"] == 1
+
     def test_two_pairs_are_kept_separate(self):
         pairs, c = group_pairs(_flip_pair("a") + _preserve_pair("b"))
         assert c["pairs"] == 2
