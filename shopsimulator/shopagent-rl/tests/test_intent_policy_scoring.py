@@ -123,6 +123,69 @@ class TestScoreActions:
         assert torch.allclose(short_alone[0], with_long[0], atol=1e-5)
 
 
+class StubFusedModel(StubModel):
+    """Mimics veRL's `use_fused_kernels=True` forward.
+
+    That patch (verl/models/transformers/dense_common.py) replaces the model's
+    forward with one returning `CausalLMOutputForPPO(log_probs=..., entropy=...)`
+    and *no* `.logits`, so reading `.logits` raises. `log_probs[t]` holds
+    log P(input_ids[t+1] | prefix) -- already reduced over the vocab.
+    """
+
+    def __call__(self, input_ids, attention_mask=None, logits_to_keep=0, return_dict=None):
+        if not return_dict:
+            raise NotImplementedError("forward_with_torch_backend has to return_dict")
+        n, t = input_ids.shape
+        logits = torch.zeros(n, t, self.vocab)
+        for tid in self.boost:
+            logits[:, :, tid] = 3.0
+        logits = logits + self.weight.view(1, 1, -1)
+        lp = torch.log_softmax(logits.float(), dim=-1)
+        rolled = torch.roll(input_ids, shifts=-1, dims=-1)
+        log_probs = lp.gather(-1, rolled.unsqueeze(-1)).squeeze(-1)
+        return type("Out", (), {"log_probs": log_probs, "entropy": None})()
+
+
+class TestFusedKernelPath:
+    """`use_fused_kernels=True` leaves no `.logits` to read.
+
+    Verified equivalent on the real Qwen3-1.7B against a real pair state: max abs
+    difference 2.4e-07 between this branch and the windowed-logits branch.
+    """
+
+    def _both(self, actions=("click[buy now]", "click[红色]")):
+        state = _state(["buy now", "红色"])
+        plain = score_actions(StubModel(), StubTokenizer(), state, list(actions))
+        fused = score_actions(StubFusedModel(), StubTokenizer(), state, list(actions))
+        return plain, fused
+
+    def test_fused_path_matches_logits_path(self):
+        plain, fused = self._both()
+        assert torch.allclose(plain, fused, atol=1e-5)
+
+    def test_fused_path_is_finite_and_correctly_shaped(self):
+        _, fused = self._both()
+        assert fused.shape == (2,) and torch.isfinite(fused).all()
+
+    def test_fused_path_carries_gradient(self):
+        model = StubFusedModel()
+        out = score_actions(model, StubTokenizer(), _state(["buy now"]), ["click[buy now]"])
+        out.sum().backward()
+        assert model.weight.grad is not None and model.weight.grad.abs().sum() > 0
+
+    def test_fused_intent_log_probs_match(self):
+        state = _state(["buy now", "back to search"])
+        lp_plain, i1 = intent_log_probs(StubModel(), StubTokenizer(), state)
+        lp_fused, i2 = intent_log_probs(StubFusedModel(), StubTokenizer(), state)
+        assert i1["scorable"] and i2["scorable"]
+        finite = torch.isfinite(lp_plain) & torch.isfinite(lp_fused)
+        assert torch.allclose(lp_plain[finite], lp_fused[finite], atol=1e-5)
+
+    def test_no_scorable_actions_still_returns_zeros(self):
+        out = score_actions(StubFusedModel(), StubTokenizer(), "state", [])
+        assert out.shape == (0,)
+
+
 class TestIntentLogProbs:
     def test_shape_matches_canonical_intents(self):
         lp, info = intent_log_probs(StubModel(), StubTokenizer(),

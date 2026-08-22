@@ -34,9 +34,21 @@ actor_rollout_ref:
     lora_alpha: 64
     # Gradient checkpointing is inherited from veRL and already enabled.  The
     # actor still peaks during long-response updates on the shared 48G card, so
-    # offload saved activations to host RAM between recomputation segments.
-    # This changes neither rollouts nor optimizer/GRPO hyperparameters.
-    enable_activation_offload: True
+    # offloading saved activations to host RAM is tempting -- but it is OFF, and
+    # must stay off for any run compared against a paired arm.
+    #
+    # Reason: veRL does not layer offloading on top of transformers'
+    # checkpointing, it *replaces* it (the two are incompatible), and its handler
+    # advances a per-layer commit counter indexed into a layer_window_map sized for
+    # exactly one forward pass per step.  The preference_margin relation loss
+    # issues extra forwards to re-score the legal action set, so the counter runs
+    # past the end -- KeyError: 27 on 28-layer Qwen3-1.7B, exactly one pass of
+    # overflow.  ActorRolloutRefWorker._maybe_wrap_relation_loss now refuses to
+    # start in that combination rather than dying mid-step.
+    #
+    # Setting it per-arm would unmatch the comparison, so it is off for all of
+    # them.  Checkpointing alone is enough: 12.75 GiB for the scoring pass.
+    enable_activation_offload: False
     # Fuse LM-head projection with token log-probability/entropy computation.
     # Avoid materializing the full [tokens, vocab] logits tensor for long
     # responses; this is mathematically equivalent and only changes the kernel.

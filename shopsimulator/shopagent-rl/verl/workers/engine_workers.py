@@ -524,6 +524,26 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
 
         from experiment.grpo.relation_loss_hook import make_relation_loss_fn
 
+        # Activation offloading is fundamentally incompatible with this objective.
+        # Its handler advances a per-layer commit counter indexed into a
+        # `layer_window_map` sized for exactly one forward pass per step
+        # (verl/utils/activation_offload.py: synchronize_on_group_commit_forward).
+        # The relation loss issues extra forwards to re-score the legal action set,
+        # so the counter runs off the end -- observed as `KeyError: 27` on a
+        # 28-layer Qwen3-1.7B, i.e. exactly one pass of overflow. Fail at init
+        # rather than several minutes into the first pair-carrying step.
+        if getattr(model_config, "enable_activation_offload", False):
+            raise ValueError(
+                "preference_margin is incompatible with "
+                "actor_rollout_ref.model.enable_activation_offload=True: the "
+                "offload handler assumes one forward pass per step, and the "
+                "relation loss adds more, overrunning its layer window map "
+                "(KeyError on a layer index). Set enable_activation_offload=False; "
+                "gradient checkpointing alone is enough (measured 12.75 GiB for "
+                "the scoring pass). Set it for every arm of a comparison, not just "
+                "this one, so the arms stay matched."
+            )
+
         wrapped = make_relation_loss_fn(
             loss_fn,
             # Resolved lazily: the engine wraps (and may re-wrap) the module after

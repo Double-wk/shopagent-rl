@@ -314,7 +314,43 @@ flip 不受影响。
 （`sft_train_horizon10.jsonl`，3624 task）交集为 0，与三个 certified SFT 集交集同为 0；
 `pair_environment_task_overlap`、`final_test_task_overlap`、`final_test_product_overlap` 均为 0。
 
-尚未做的是实证训练验证（Gate B matched smoke 及之后）。
+**Gate B matched smoke（10 步，clean init，TRAIN_BATCH=4 / ROLLOUT_N=4）。**
+paired arm 跑完 10 步无报错，峰值 25.4 GiB / 48 GiB。relation loss 确实在动：
+`accumulation_scale=0.125`（恰为 1/8，归一化生效）、`pairs_from_partner_state` 与 `pairs_used`
+一致（每步 8 个 pair 行、2 个 distinct pair），preserve-only 步 `margin_mean=0`，
+decision-changing 步 `margin_mean=+0.170 / +0.117`、`flip_rate=0.31 / 0.375`。
+baseline arm 全程 0 条 `relation/*`、0 条 `PreferenceMargin` 打印，wrapper 从未介入。
+
+pair 只落在 step 3–6：parquet 的 block 结构是 `E×8, P×16, E×16, …`，`TRAIN_BATCH=4`
+下 step 1–2 取到 environment、step 3–6 取到那 16 行 pair block、step 7–10 又是 environment。
+这是 pairblocked 设计的必然结果，不是缺陷；400/400 的总量在长 run 上会摊平。
+
+**过程中修掉的三个真实阻塞（都不是靠放宽判据绕过的）。**
+
+1. *checkpointing 探测位置错误。* `gradient_checkpointing_enable()` 从不在顶层 module 上置位，
+   而是置在拥有被 checkpoint 的块的子模块上（`Qwen3ForCausalLM` 是内层 `Qwen3Model` 及其
+   decoder layer）。原先只查顶层属性，于是**正确配置的模型被判为未开启**。改用 transformers
+   自己的递归判据 `is_gradient_checkpointing`，并对不转发该属性的 wrapper 回退到走 `modules()`。
+   在真实 Qwen3-1.7B 与 PEFT 包装下都已验证。
+2. *activation offload 与本目标不兼容。* veRL 不是在 transformers checkpointing 之上叠加 offload，
+   而是**替换**掉它（两者不兼容），并用一个按层推进的 commit 计数器索引
+   `layer_window_map`，其大小恰好是"每 step 一次前向"。relation loss 会额外发起前向，计数器越界——
+   28 层模型上表现为 `KeyError: 27`，正好溢出一整趟。已改为 `enable_activation_offload: False`，
+   且对**所有** arm 生效（只关 paired arm 会破坏对照），并在
+   `_maybe_wrap_relation_loss` 里加了 init 期硬失败，避免几分钟后才炸。关掉后 PPO 自身峰值 18.9 GiB，
+   容得下。
+3. *`use_fused_kernels=True` 下没有 `.logits`。* 该 patch 把 forward 换成融合 LM-head 投影、
+   返回 `CausalLMOutputForPPO(log_probs=…, entropy=…)` 的版本，读 `.logits` 直接抛错。
+   其 `log_probs[t] = log P(input_ids[t+1] | prefix)` 恰好就是本文 scoring 需要的逐 token 量，
+   故直接取用；在真实模型与真实 pair state 上与原 windowed-logits 路径最大绝对差 `2.4e-07`。
+   代价是该 forward 忽略 `logits_to_keep`，显存 10.12 GiB vs 4.96 GiB——都放得下，
+   走这一支是为了在实际配置下**正确**，不是为了省。
+
+**checkpoint 复用陷阱。** `resume_mode: auto` 会自动接上同名 output dir 里的
+`latest_checkpointed_iteration.txt`。第一次 baseline 是在 offload 开启下跑的，改配置后重跑时它
+静默地从 `global_step_10` 续到了 step 11——对照就不成立了。该目录已移到
+`*_offload_on_invalid`，baseline 在新配置下从头重跑。比较两个 arm 前务必确认日志里是
+`Training from scratch` 而不是 `Resuming from …`。
 
 ## 8. 评测指标与协议
 

@@ -144,20 +144,42 @@ def score_actions(
     # would need -- which does not survive a backward pass on one GPU.
     keep = total - len(state_ids) + 1
     try:
-        logits = model(input_ids=input_ids, attention_mask=attn, logits_to_keep=keep).logits
-        offset = total - logits.shape[1]
+        output = model(input_ids=input_ids, attention_mask=attn,
+                       logits_to_keep=keep, return_dict=True)
     except TypeError:
-        # Models/stubs without the argument still work, just less frugally.
-        logits = model(input_ids=input_ids, attention_mask=attn).logits
-        offset = total - logits.shape[1]
+        # Models/stubs without those arguments still work, just less frugally.
+        output = model(input_ids=input_ids, attention_mask=attn)
 
-    # Predict position t from logits at t-1.
+    # Predict position t from the distribution at t-1.
     shifted_mask = score_mask[:, 1:]
     targets = input_ids[:, 1:]
+    rows, cols = shifted_mask.nonzero(as_tuple=True)
+
+    # `use_fused_kernels=True` replaces the model's forward with one that fuses the
+    # LM-head projection into the log-prob computation and returns
+    # CausalLMOutputForPPO(log_probs=..., entropy=...) -- there is no `.logits` to
+    # read (verl/models/transformers/dense_common.py). Its `log_probs[t]` is
+    # log P(input_ids[t+1] | prefix), which is exactly the per-token quantity the
+    # gather below would produce, so use it directly. Verified against the plain
+    # path on the real model and a real pair state: max abs diff 2.4e-07.
+    #
+    # It is not the cheaper path here, though: that forward ignores
+    # `logits_to_keep` and computes log-probs for every position, measured 10.12
+    # GiB against 4.96 GiB for the windowed logits path. Both fit; taking this
+    # branch is about correctness under the configured model, not frugality.
+    fused_log_probs = getattr(output, "log_probs", None)
+    if fused_log_probs is not None:
+        if rows.numel() == 0:
+            return torch.zeros(n, device=fused_log_probs.device, dtype=torch.float32)
+        tok_lp = fused_log_probs[rows, cols].float()
+        out = torch.zeros(n, device=tok_lp.device, dtype=tok_lp.dtype)
+        return out.index_add(0, rows, tok_lp)
+
+    logits = output.logits
+    offset = total - logits.shape[1]
     # Gather only the scored positions before the softmax. Running log_softmax
     # over the whole (n, seq_len, vocab) block would allocate several GiB for a
     # 150k vocab while all but a few dozen positions are masked out anyway.
-    rows, cols = shifted_mask.nonzero(as_tuple=True)
     if rows.numel() == 0:
         return torch.zeros(n, device=logits.device, dtype=torch.float32)
     # `cols` indexes the shifted (t-1) axis of the full sequence; shift it into
