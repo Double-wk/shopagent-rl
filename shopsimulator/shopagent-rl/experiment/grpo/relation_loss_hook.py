@@ -100,6 +100,24 @@ def extract_pair_rows(data: Any) -> list[dict[str, Any]]:
     return rows
 
 
+def _pair_rows_in_mini_batch(data: Any) -> int:
+    """Pair-carrying rows in the whole mini-batch, for accumulation scaling.
+
+    Set by ``TrainingWorker.train_batch``. Returns 0 when absent, which the caller
+    reads as "do not rescale" -- correct for a single-micro-batch caller such as a
+    unit test, and the honest fallback rather than a guessed denominator.
+    """
+    if "relation_pair_rows" not in data.keys():
+        return 0
+    value = tu.get(data, "relation_pair_rows", default=0)
+    if isinstance(value, (list, tuple)):
+        value = value[0] if value else 0
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return 0
+
+
 def _module_supports_checkpointing(module: Any) -> bool:
     inner = getattr(module, "_fsdp_wrapped_module", module)
     return bool(getattr(inner, "gradient_checkpointing", False)) and bool(
@@ -159,8 +177,25 @@ def make_relation_loss_fn(
             device=loss.device,
         )
 
-        if stats.get("pairs_used", 0) > 0:
-            loss = loss + relation_coeff * relation_loss.to(loss.dtype)
+        pairs_used = stats.get("pairs_used", 0)
+        if pairs_used > 0:
+            # `relation_loss` is a mean over this micro-batch's pairs, but the
+            # engine sums micro-batch losses without dividing by their count. Left
+            # alone, the relation term's effective weight would be the number of
+            # pair-carrying micro-batches -- 8 at rollout.n=4 -- and would silently
+            # change with rollout.n or ppo_micro_batch_size. Rescaling by
+            # pairs_used / pair_rows_in_mini_batch makes the accumulated sum the
+            # mini-batch mean, so relation_coeff means what it says.
+            mini_batch_pair_rows = _pair_rows_in_mini_batch(data)
+            # Rows, not pairs: `n` rollouts of a side dedup to one pair but are
+            # accumulated once each, so the numerator must be row-counted too or the
+            # two sides of the ratio would not be in the same units.
+            rows_used = int(stats.get("pair_rows_used", 0))
+            scale = 1.0
+            if mini_batch_pair_rows > 0 and rows_used > 0:
+                scale = rows_used / float(mini_batch_pair_rows)
+            metrics["relation/accumulation_scale"] = float(scale)
+            loss = loss + relation_coeff * scale * relation_loss.to(loss.dtype)
 
         for key, value in stats.items():
             if isinstance(value, (int, float)):

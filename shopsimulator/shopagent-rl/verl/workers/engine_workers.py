@@ -298,6 +298,17 @@ class TrainingWorker(Worker, DistProfilerExtension):
                     update_lr_scheduler=batch_idx == total_num_iterations - 1,
                     disable_auto_offload=True,
                 )
+                # Micro-batch losses are summed with no 1/N, and PPO self-normalizes
+                # by token count. A per-micro-batch *mean* over pairs would not: the
+                # relation term would be multiplied by however many micro-batches
+                # happen to hold a pair, i.e. it would move with rollout.n and
+                # micro-batch size. Pass the mini-batch's pair-row count so the hook
+                # can rescale each contribution into a mini-batch mean, keeping
+                # relation_coeff's meaning independent of batching.
+                if "partner_state_text" in mini_batch_td.keys():
+                    partner_states = tu.get(mini_batch_td, "partner_state_text")
+                    n_pair_rows = sum(1 for s in partner_states if str(s or ""))
+                    tu.assign_non_tensor(mini_batch_td, relation_pair_rows=n_pair_rows)
                 actor_output = self.train_batch(mini_batch_td)
                 output_lst.append(actor_output)
 

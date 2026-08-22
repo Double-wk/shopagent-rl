@@ -1,11 +1,13 @@
 """Tests for the actor-side relation loss hook and its config gating."""
 from __future__ import annotations
 
+import pytest
 import torch
 from omegaconf import OmegaConf
 from tensordict import TensorDict
 from tensordict.tensorclass import NonTensorData, NonTensorStack
 
+import verl.utils.tensordict_utils as tu
 from experiment.grpo.relation_loss_hook import extract_pair_rows, make_relation_loss_fn
 from tests.test_intent_policy_scoring import StubModel, StubTokenizer, _state
 
@@ -102,6 +104,115 @@ class _Wrapped:
 
     def __call__(self, **kwargs):
         return self._fsdp_wrapped_module(**kwargs)
+
+
+def _partner_rows(pair_id="p1", rollout_n=4):
+    """Rows as they look after the trainer attaches partner state."""
+    rel = ["COMMIT", "SEARCH_ALTERNATIVE"]
+    state_o = _state(["buy now", "back to search"])
+    state_c = _state(["back to search", "buy now"])
+    rows = []
+    for side in ("original", "counterfactual"):
+        for _ in range(rollout_n):
+            rows.append({
+                "pair_id": pair_id, "side": side,
+                "state_text": state_o if side == "original" else state_c,
+                "expected_relation": rel,
+                "expected_action_intents": (
+                    ["COMMIT"] if side == "original" else ["SEARCH_ALTERNATIVE"]),
+                "intervention_type": "price_above_budget",
+                "partner_state_text": state_c if side == "original" else "",
+                "partner_expected_action_intents": (
+                    ["SEARCH_ALTERNATIVE"] if side == "original" else []),
+            })
+    return rows
+
+
+def _partner_batch(rows, mini_batch_pair_rows):
+    n = len(rows)
+    td = TensorDict({}, batch_size=[n])
+    td["response_mask"] = torch.ones(n, 4, dtype=torch.long)
+    fields = _FIELDS + ("partner_state_text", "partner_expected_action_intents")
+    for field in fields:
+        td[field] = NonTensorStack.from_list([NonTensorData(r.get(field)) for r in rows])
+    tu.assign_non_tensor(td, relation_pair_rows=mini_batch_pair_rows)
+    return td
+
+
+class TestAccumulationScaling:
+    """The engine sums micro-batch losses with no 1/N.
+
+    Without rescaling, the relation term's weight would be the number of
+    pair-carrying micro-batches -- 8 at rollout.n=4 -- so `relation_coeff` would
+    silently change meaning whenever rollout.n or ppo_micro_batch_size changed.
+    """
+
+    def _fn(self, coeff=1.0):
+        model = StubModel()
+        return model, make_relation_loss_fn(
+            lambda model_output=None, data=None, dp_group=None: (
+                torch.zeros((), requires_grad=True), {}),
+            lambda: model, StubTokenizer(), relation_coeff=coeff,
+            require_gradient_checkpointing=False)
+
+    def _summed_over_singles(self, fn, rows, pair_rows):
+        total = torch.zeros(())
+        for row in rows:
+            loss, _ = fn(None, _partner_batch([row], pair_rows))
+            total = total + loss.detach()
+        return float(total)
+
+    @pytest.mark.parametrize("rollout_n", [1, 2, 4])
+    def test_sum_over_micro_batches_equals_single_micro_batch(self, rollout_n):
+        _, fn = self._fn()
+        rows = _partner_rows(rollout_n=rollout_n)
+        pair_rows = sum(1 for r in rows if r["partner_state_text"])
+        whole, _ = fn(None, _partner_batch(rows, pair_rows))
+        summed = self._summed_over_singles(fn, rows, pair_rows)
+        assert float(whole.detach()) == pytest.approx(summed, abs=1e-4)
+
+    def test_value_is_invariant_to_rollout_n(self):
+        """The whole point: relation_coeff must not move with rollout.n."""
+        _, fn = self._fn()
+        values = []
+        for rollout_n in (1, 2, 4, 8):
+            rows = _partner_rows(rollout_n=rollout_n)
+            pair_rows = sum(1 for r in rows if r["partner_state_text"])
+            values.append(self._summed_over_singles(fn, rows, pair_rows))
+        assert max(values) - min(values) < 1e-4
+
+    def test_value_is_invariant_to_pair_count(self):
+        _, fn = self._fn()
+        one = _partner_rows("p1")
+        two = _partner_rows("p1") + _partner_rows("p2")
+        a = self._summed_over_singles(fn, one, sum(1 for r in one if r["partner_state_text"]))
+        b = self._summed_over_singles(fn, two, sum(1 for r in two if r["partner_state_text"]))
+        assert a == pytest.approx(b, abs=1e-4)
+
+    def test_scale_is_reported(self):
+        _, fn = self._fn()
+        rows = _partner_rows(rollout_n=4)
+        _, metrics = fn(None, _partner_batch(rows[:1], 4))
+        assert metrics["relation/accumulation_scale"] == pytest.approx(0.25)
+
+    def test_absent_denominator_does_not_rescale(self):
+        """A caller without the trainer hook keeps the unscaled mean."""
+        model = StubModel()
+        fn = make_relation_loss_fn(
+            lambda model_output=None, data=None, dp_group=None: (
+                torch.zeros((), requires_grad=True), {}),
+            lambda: model, StubTokenizer(), require_gradient_checkpointing=False)
+        _, metrics = fn(None, _batch(_pair_rows()))
+        assert metrics["relation/accumulation_scale"] == pytest.approx(1.0)
+
+    def test_coeff_still_scales_linearly(self):
+        rows = _partner_rows(rollout_n=4)
+        pair_rows = sum(1 for r in rows if r["partner_state_text"])
+        _, fn1 = self._fn(coeff=1.0)
+        _, fn3 = self._fn(coeff=3.0)
+        a = self._summed_over_singles(fn1, rows, pair_rows)
+        b = self._summed_over_singles(fn3, rows, pair_rows)
+        assert b == pytest.approx(3.0 * a, rel=1e-4)
 
 
 class TestMakeRelationLossFn:

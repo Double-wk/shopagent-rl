@@ -264,9 +264,25 @@ clean init bootstrap；因此它不再承担主方法主张。
 `ActorRolloutRefWorker._maybe_wrap_relation_loss` 只在 `mode=preference_margin` 时包装
 `ppo_loss`，其余模式（含 Independent baseline）拿到的 `loss_fn` 与包装前逐字节相同，这正是
 Gate B 的前提。pair 元数据（`pair_id`/`side`/`state_text`/`expected_relation`/
-`expected_action_intents`）经 agent loop 的 `extra_fields` 带到 micro-batch；`force_group_size=2×rollout.n`
-保证同一 pair 的两侧落在同一个 micro-batch（pairblocked parquet 中两侧相邻，rollout 展开是
-interleaved，故两侧相距恰好 `rollout.n`）。
+`expected_action_intents`）经 agent loop 的 `extra_fields` 带到 micro-batch。
+
+**pair 如何在 micro-batch 内闭合。** relation loss 需要两侧，但
+`ppo_micro_batch_size_per_gpu=1`（为 48 GiB 显存刻意设定）下两侧永不同批。曾用
+`force_group_size=2×rollout.n` 强行合并，实测把 16 个 size-1 micro-batch 压成 2 个 size-8：
+PPO 自身显存 ×8，且**只对 paired arm** 改变梯度累积粒度，直接破坏“baseline 不变”的对照前提。
+现改为：`RayPPOTrainer._maybe_attach_partner_states` 在 trainer 侧（能看到整个 batch）把对侧
+state 作为 `partner_state_text` 挂到每个 `original` 行上。因为 relation loss 只读 state（即该行
+prompt），而同一侧的 `n` 个 rollout 共享同一 prompt，携带与共批完全等价。PPO 的 micro-batching
+保持原样。真实路径已验证（`to_tensordict` → `left_right_2_no_padding` →
+`prepare_micro_batches`）：8 个 size-1 micro-batch，其中 4 个各自闭合成完整 pair。
+
+**累积归一化。** engine 对 micro-batch loss 直接求和（无 `1/N`），PPO 项自身按 token 数归一，
+relation 项不会。若不处理，其有效权重等于“携带 pair 的 micro-batch 个数”（`rollout.n=4` 时为 8），
+会随 `rollout.n`、`ppo_micro_batch_size` 静默漂移。故 `TrainingWorker.train_batch` 传入 mini-batch
+的 pair 行数，hook 按 `pair_rows_used / mini_batch_pair_rows` 重标定，使累积和恰为 mini-batch 均值。
+分子必须按**行**计数：同一侧 `n` 个 rollout 去重成 1 个 pair 却被累积 `n` 次，用 `pairs_used`
+会与分母单位不一致。已验证 `rollout.n ∈ {1,2,4,8}` 与 pair 数 ∈ {1,2} 下取值恒定，
+`relation_coeff` 线性生效。
 
 **correctness anchor。** margin 是“差之差”，单靠它可以通过让某一侧的**错误** intent 变得不那么错来
 满足；因此每侧另加 `-log P(expected intent | state)` 锚定。

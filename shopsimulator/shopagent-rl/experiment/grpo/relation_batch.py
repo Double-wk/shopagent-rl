@@ -92,6 +92,10 @@ def group_pairs(rows: Sequence[dict[str, Any]]) -> tuple[list[dict[str, Any]], d
                 "dropped_incomplete": 0, "dropped_bad_relation": 0,
                 "pairs_from_partner_state": 0}
     by_pair: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
+    # How many rows carried this pair. All `n` rollouts of a side share one state,
+    # so they dedup to one pair -- but the loss is accumulated per *row* upstream,
+    # so the caller needs the row count to scale correctly.
+    partner_rows: dict[str, int] = defaultdict(int)
 
     for row in rows:
         pair_id = _as_str(row.get("pair_id"))
@@ -107,6 +111,8 @@ def group_pairs(rows: Sequence[dict[str, Any]]) -> tuple[list[dict[str, Any]], d
         by_pair[pair_id][side] = row
 
         partner_state = _as_str(row.get("partner_state_text"))
+        if side == ORIGINAL and partner_state:
+            partner_rows[pair_id] += 1
         if side == ORIGINAL and partner_state and COUNTERFACTUAL not in by_pair[pair_id]:
             # Synthesize the far side from what this row carries. Only the fields
             # the loss actually reads are needed: the state to score, and the
@@ -138,6 +144,7 @@ def group_pairs(rows: Sequence[dict[str, Any]]) -> tuple[list[dict[str, Any]], d
             "intent_cf": relation[1],
             "is_decision_changing": relation[0] != relation[1],
             "intervention_type": _as_str(sides[ORIGINAL].get("intervention_type")),
+            "partner_row_count": partner_rows.get(pair_id, 0),
         })
 
     counters["pairs"] = len(pairs)
@@ -202,6 +209,7 @@ def compute_batch_relation_loss(
     flip_margins: list[float] = []
     per_type: dict[str, list[float]] = defaultdict(list)
     unscorable = 0
+    pair_rows_used = 0
 
     for pair in pairs:
         lp_o, info_o = intent_log_probs(model, tokenizer, pair[ORIGINAL]["state_text"], device=device)
@@ -232,6 +240,7 @@ def compute_batch_relation_loss(
         a_loss = (anchor_loss(lp_o, _as_list(pair[ORIGINAL].get("expected_action_intents")))
                   + anchor_loss(lp_c, _as_list(pair[COUNTERFACTUAL].get("expected_action_intents"))))
         totals.append(result["loss"] + anchor_weight * a_loss)
+        pair_rows_used += int(pair.get("partner_row_count", 0))
         anchors.append(a_loss.detach())
         if pair["is_decision_changing"]:
             # Only decision-changing pairs have a meaningful margin. For a
@@ -248,10 +257,14 @@ def compute_batch_relation_loss(
 
     stats["dropped_unscorable"] = unscorable
     stats["pairs_used"] = len(totals)
+    # Rows behind those pairs. The caller accumulates per micro-batch, so this --
+    # not pairs_used -- is the numerator for turning the sum into a mini-batch mean.
+    stats["pair_rows_used"] = pair_rows_used
 
     if not totals:
         # Keep the dtype/device contract without fabricating a grad path.
         zero = torch.zeros((), device=device) if device is not None else torch.zeros(())
+        stats["pair_rows_used"] = 0
         stats.update({"relation_loss": 0.0, "margin_mean": 0.0, "flip_rate": 0.0})
         return zero, stats
 
