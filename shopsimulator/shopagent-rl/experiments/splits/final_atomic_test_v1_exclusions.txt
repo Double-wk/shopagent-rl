@@ -12,7 +12,11 @@ data/sft_train_horizon10.jsonl
 data/sft_train_paired_mix.jsonl
 data/grpo_certified_explicit_paired.parquet
 data/grpo_certified_natural_800_pairblocked.parquet
-data/grpo_certified_natural_pairblocked.parquet
+# Removed 2026-08-22: data/grpo_certified_natural_pairblocked.parquet was listed
+# but exists nowhere on disk or in git history (the auto-commit squashes history,
+# so a rename cannot be confirmed).  It is a stale name for the 800_ artifact
+# above, which is present and still excluded, so no task IDs are lost.  Kept as a
+# comment rather than deleted so the contamination audit stays legible.
 data/grpo_certified_natural_train.parquet
 data/grpo_certified_train.parquet
 data/grpo_train.parquet

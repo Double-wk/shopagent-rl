@@ -47,3 +47,4 @@ Accepted publickey for root from 10.232.20.0 port 34844 ssh2: ED25519 SHA256:Fte
 Accepted publickey for root from 10.232.20.0 port 58785 ssh2: ED25519 SHA256:Fteb3ZtlFgSnLRVPKN/YZjQFi+814h7+kipiVCMqjzE
 Received disconnect from 10.232.20.0 port 58785:11: disconnected by user
 Disconnected from user root 10.232.20.0 port 58785
+Accepted publickey for root from 10.232.20.0 port 55613 ssh2: ED25519 SHA256:Fteb3ZtlFgSnLRVPKN/YZjQFi+814h7+kipiVCMqjzE

@@ -1,0 +1,29 @@
+{
+  "counterfactual_rows": 400,
+  "environment_rows": 400,
+  "environment_tasks": "data/paper_grpo_environment_tasks_v2.json",
+  "environment_tasks_sha256": "4ffcdf42e21f05d48f77625598ecb94402c4f30407cfca7159c123ac0397716c",
+  "excluded_tasks_union": 6542,
+  "final_test": "data/counterfactual/final_atomic_test_v2_heldout.jsonl",
+  "final_test_product_overlap": 0,
+  "final_test_sha256": "473a34cfa6bbcbfdc9371a49fb186a4567c967746c8c78f5f725881cf19ae4b1",
+  "final_test_task_overlap": 0,
+  "max_prompt_tokens": 2025,
+  "pair_count": 200,
+  "pair_environment_task_overlap": 0,
+  "pairs": "data/counterfactual/paper_grpo_pairs_v2.jsonl",
+  "pairs_by_intervention": {
+    "nuisance_display_note": 40,
+    "option_swap": 60,
+    "price_above_budget": 100
+  },
+  "pairs_sha256": "d7f0f701a954377708eec6937ec7349e077305de8c2d58bafbb5d96038187920",
+  "parquet": "data/grpo_certified_paper_v2_800_pairblocked.parquet",
+  "parquet_sha256": "a1a0455f40ed4a4289e9c69b7c3cf764d91e98c0c9f46b1d7b616de9d53c502b",
+  "prompt_token_limit": 2048,
+  "rows": 800,
+  "schema_version": "shopsim-paper-grpo-v1",
+  "seed": 20260821,
+  "unique_environment_tasks": 400,
+  "unique_pair_tasks": 200
+}

@@ -1,16 +1,38 @@
 """Build validated, atomic pre-purchase counterfactuals from ShopSimulator data.
 
-The first version deliberately supports only interventions backed by executable,
-structured state in ShopSimulator:
+Every mechanism is backed by executable, structured state.  They are split into
+a *training* family and a *held-out* family so that generalization to an unseen
+intervention mechanism can be measured rather than assumed.
+
+Training mechanisms (the goal option is already selected; the question is
+whether to commit):
 
 * ``option_swap``: keep product, instruction, price and available actions fixed,
   but change the selected option from the goal option to a same-price alternative.
 * ``price_above_budget``: keep everything else fixed and move the selected
   product price just above the realized goal budget.
 
-Free-text attributes and ``is_available`` are intentionally excluded.  Product
-attributes are not typed, while the upstream engine currently exposes option
-values without enforcing the raw ``is_available`` flag.
+Held-out mechanisms.  Both share one frame -- an affordable sibling option is
+selected and the goal option is still reachable, so the pre-intervention
+decision is ``SELECT_TARGET_OPTION`` -- and differ only in how the intervention
+blocks the goal option:
+
+* ``option_unavailable``: the goal option goes out of stock.  An availability
+  constraint, a *constraint type* absent from training.
+* ``option_price_over_budget``: the goal option's own listed price breaks the
+  budget while the displayed ``当前价格`` is unchanged.  A budget constraint on a
+  *new surface*: the violation must be attributed to one option instead of read
+  off a scalar.
+
+Verification differs per mechanism and is recorded in ``intervention.verified_by``.
+``option_price_over_budget`` is backed by the structured per-option price the
+engine itself keys on (``option_to_price``).  ``option_unavailable`` is verified
+against *action legality* -- the goal option leaves ``可点击的按钮`` -- because the
+upstream engine exposes ``is_available`` without enforcing it in reward.
+
+Free-text product attributes remain excluded: they are untyped, and the reward
+matches them fuzzily against title, bullets and description, so "provably
+unsatisfiable" cannot be established from the data.
 """
 from __future__ import annotations
 
@@ -27,6 +49,14 @@ from typing import Any, Iterable, Iterator
 
 SCHEMA_VERSION = "shopsim-atomic-constraint-pairs-v1"
 NAV_ACTIONS = ["back to search", "< prev", "description", "features", "reviews", "buy now"]
+
+# The generalization split.  Training data may only contain TRAIN_MECHANISMS;
+# HELD_OUT_MECHANISMS exist solely in the frozen test set, so accuracy on them
+# measures transfer to an unseen intervention mechanism.  ``nuisance_display_note``
+# is built downstream (scripts/build_constraint_causal_v2.py) from v1 pairs and
+# is a decision-preserving control, so it belongs to the training family.
+TRAIN_MECHANISMS = frozenset({"price_above_budget", "option_swap", "nuisance_display_note"})
+HELD_OUT_MECHANISMS = frozenset({"option_unavailable", "option_price_over_budget"})
 
 
 def normalize_option(value: Any) -> str:
@@ -101,17 +131,39 @@ def _render_observation(
     product: dict[str, Any],
     selected: dict[str, str],
     current_price: float,
+    price_overrides: dict[str, float] | None = None,
+    unavailable: Iterable[str] = (),
 ) -> str:
-    """Render a compact commitment-point state without fabricating page content."""
+    """Render a compact commitment-point state without fabricating page content.
+
+    ``price_overrides`` and ``unavailable`` are keyed by normalized option value
+    and express structured interventions on the option list itself.  Per-option
+    prices are shown whenever the product carries them, so the presence of a
+    price annotation is a property of the product and never a marker of which
+    mechanism produced the state.  An unavailable option is still listed -- the
+    page shows it as out of stock -- but leaves ``可点击的按钮``, which is what
+    makes clicking it an illegal action.
+    """
+    overrides = {normalize_option(k): v for k, v in (price_overrides or {}).items()}
+    blocked = {normalize_option(value) for value in unavailable}
     lines = [
         f"Instruction: {instruction}",
         f"商品: {product.get('title', '')}",
     ]
     clickables = list(NAV_ACTIONS)
     for group, entries in (product.get("customization_options") or {}).items():
-        values = [str(entry.get("value", "")) for entry in entries or []]
-        lines.append(f"{group}: " + " | ".join(values))
-        clickables.extend(values)
+        rendered = []
+        for entry in entries or []:
+            value = str(entry.get("value", ""))
+            key = normalize_option(value)
+            price = overrides.get(key, _price(entry.get("price")))
+            label = value if price is None else f"{value}(￥{price:g})"
+            if key in blocked:
+                rendered.append(f"{label}[缺货]")
+            else:
+                rendered.append(label)
+                clickables.append(value)
+        lines.append(f"{group}: " + " | ".join(rendered))
     selected_text = "; ".join(f"{key}={value}" for key, value in selected.items())
     lines.extend(
         [
@@ -308,6 +360,141 @@ def build_pairs(
             }
         )
         stats["pairs_price_above_budget"] += 1
+
+        # ---- Held-out mechanisms -------------------------------------------
+        # Both need a *sibling* option that is affordable, so that the frame is
+        # "a cheap sibling is selected, the goal option is still reachable" and
+        # the pre-intervention decision is SELECT_TARGET_OPTION rather than
+        # COMMIT.  That keeps each intervention atomic: only the goal option's
+        # availability (M3) or its own listed price (M4) changes.
+        target_entry_price = _price(target.get("price"))
+        siblings = sorted(
+            (
+                entry
+                for entry in entries
+                if normalize_option(entry.get("value", "")) != normalize_option(target_value)
+                and entry.get("is_available", True)
+                and _price(entry.get("price")) is not None
+                and float(entry["price"]) <= price_upper
+            ),
+            key=lambda entry: (_price(entry.get("price")), normalize_option(entry.get("value", ""))),
+        )
+        if not siblings or target_entry_price is None:
+            if not siblings:
+                stats["skipped_no_affordable_sibling"] += 1
+            else:
+                stats["skipped_target_option_unpriced"] += 1
+            continue
+
+        sibling = siblings[0]
+        sibling_value = str(sibling.get("value", ""))
+        sibling_price = float(sibling["price"])
+        sibling_selected = {group: sibling_value}
+        # The goal option is not selected yet, so the goal option reward is not
+        # yet earned: the constraint-faithful action is to select it.
+        held_out_base = {
+            "selected_options": sibling_selected,
+            "current_price": sibling_price,
+            "expected_action_intents": ["SELECT_TARGET_OPTION"],
+            "allowed_actions": [f"click[{target_value}]"],
+        }
+        held_out_base["observation"] = _render_observation(
+            instruction=instruction,
+            product=product,
+            selected=sibling_selected,
+            current_price=sibling_price,
+        )
+        held_out_shared = {**shared, "original": held_out_base}
+        held_out_shared["product"] = {**shared["product"], "sibling_option": sibling_value}
+
+        # M3 option_unavailable: the goal option goes out of stock.  Verified by
+        # action legality -- it is no longer in 可点击的按钮 -- rather than by
+        # reward, since the engine does not enforce is_available.
+        counterfactual = {
+            "selected_options": sibling_selected,
+            "current_price": sibling_price,
+            "expected_action_intents": ["SEARCH_ALTERNATIVE"],
+            "allowed_actions": ["click[back to search]", "click[< prev]"],
+        }
+        counterfactual["observation"] = _render_observation(
+            instruction=instruction,
+            product=product,
+            selected=sibling_selected,
+            current_price=sibling_price,
+            unavailable=[target_value],
+        )
+        pairs.append(
+            {
+                **held_out_shared,
+                "pair_id": f"{task_id}:option_unavailable",
+                "intervention_type": "option_unavailable",
+                "intervention": {
+                    "field": f"customization_options.{group}.{target_value}.is_available",
+                    "from": True,
+                    "to": False,
+                    "verified_by": "action_legality",
+                    "validity_checks": {
+                        "same_product": True,
+                        "same_instruction": True,
+                        "same_selected_option": True,
+                        "same_current_price": True,
+                        "target_clickable_before": True,
+                        "target_not_clickable_after": True,
+                    },
+                },
+                "counterfactual": counterfactual,
+            }
+        )
+        stats["pairs_option_unavailable"] += 1
+
+        # M4 option_price_over_budget: the goal option's own listed price breaks
+        # the budget.  The displayed 当前价格 still shows the affordable sibling,
+        # so the violation cannot be read off the scalar -- it has to be
+        # attributed to one option.  Verified against the structured per-option
+        # price the page itself resolves and displays
+        # (web_agent_text_env.py:525-529, option_to_price).  Note this is a
+        # display-and-data guarantee, not a reward one: engine `done()` scores
+        # with the base ASIN price (web_agent_text_env.py:590), so the option
+        # premium never reaches r_price.  That upstream gap is precisely why the
+        # budget constraint is under-supervised by reward alone.
+        blown_price = round(price_upper + max(1.0, round(price_upper * 0.05, 2)), 2)
+        counterfactual = {
+            "selected_options": sibling_selected,
+            "current_price": sibling_price,
+            "expected_action_intents": ["SEARCH_ALTERNATIVE"],
+            "allowed_actions": ["click[back to search]", "click[< prev]"],
+        }
+        counterfactual["observation"] = _render_observation(
+            instruction=instruction,
+            product=product,
+            selected=sibling_selected,
+            current_price=sibling_price,
+            price_overrides={target_value: blown_price},
+        )
+        pairs.append(
+            {
+                **held_out_shared,
+                "pair_id": f"{task_id}:option_price_over_budget",
+                "intervention_type": "option_price_over_budget",
+                "intervention": {
+                    "field": f"customization_options.{group}.{target_value}.price",
+                    "from": target_entry_price,
+                    "to": blown_price,
+                    "verified_by": "structured_option_price",
+                    "validity_checks": {
+                        "same_product": True,
+                        "same_instruction": True,
+                        "same_selected_option": True,
+                        "same_current_price": True,
+                        "target_option_affordable_before": target_entry_price <= price_upper,
+                        "target_option_over_budget_after": blown_price > price_upper,
+                        "sibling_still_affordable": sibling_price <= price_upper,
+                    },
+                },
+                "counterfactual": counterfactual,
+            }
+        )
+        stats["pairs_option_price_over_budget"] += 1
 
     stats["pairs_total"] = len(pairs)
     stats["tasks_with_pairs"] = len({pair["task_id"] for pair in pairs})

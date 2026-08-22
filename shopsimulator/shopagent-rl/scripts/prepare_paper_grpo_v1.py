@@ -20,7 +20,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from experiment.constraint_causal_pairs import build_v2_pairs  # noqa: E402
-from experiment.counterfactual_pairs import build_pairs, dump_jsonl  # noqa: E402
+from experiment.counterfactual_pairs import (  # noqa: E402
+    HELD_OUT_MECHANISMS,
+    TRAIN_MECHANISMS,
+    build_pairs,
+    dump_jsonl,
+)
 from scripts.build_certified_grpo_data import build_rows  # noqa: E402
 from scripts.freeze_final_atomic_test import _excluded_tasks, _round_robin_by_category  # noqa: E402
 
@@ -104,6 +109,18 @@ def main() -> None:
         "option_swap": 60,
         "nuisance_display_note": 40,
     }
+    # The held-out-mechanism claim rests on training never seeing them.  Assert
+    # it here instead of relying on this dict staying correct by accident.
+    leaked = sorted(set(requested) & HELD_OUT_MECHANISMS)
+    if leaked:
+        raise SystemExit(
+            f"held-out mechanisms must not appear in training data: {leaked}. "
+            "They are reserved for the frozen test set "
+            "(scripts/freeze_final_atomic_test.py)."
+        )
+    unknown = sorted(set(requested) - TRAIN_MECHANISMS)
+    if unknown:
+        raise SystemExit(f"unknown training mechanisms: {unknown}")
     pair_records: list[dict] = []
     pair_tasks: set[int] = set()
     for offset, (intervention_type, count) in enumerate(requested.items()):

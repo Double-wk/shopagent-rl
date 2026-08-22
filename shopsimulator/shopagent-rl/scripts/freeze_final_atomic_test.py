@@ -25,7 +25,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from experiment.constraint_causal_pairs import build_v2_pairs  # noqa: E402
-from experiment.counterfactual_pairs import build_pairs, dump_jsonl  # noqa: E402
+from experiment.counterfactual_pairs import (  # noqa: E402
+    HELD_OUT_MECHANISMS,
+    TRAIN_MECHANISMS,
+    build_pairs,
+    dump_jsonl,
+)
 
 
 def _json_records(path: Path) -> Iterable[dict]:
@@ -38,7 +43,19 @@ def _json_records(path: Path) -> Iterable[dict]:
 
 
 def _excluded_tasks(path: Path) -> set[int]:
-    """Read task IDs, pair JSONL, SFT JSONL, or split-summary JSON."""
+    """Read task IDs, pair JSONL, SFT JSONL, or split-summary JSON.
+
+    A missing artifact is a hard error: silently returning an empty set would
+    under-exclude and quietly weaken the contamination guarantee that the frozen
+    test set rests on.  Retire an artifact by commenting it out of the exclusion
+    list with a reason, not by deleting the file.
+    """
+    if not path.exists():
+        raise SystemExit(
+            f"exclusion artifact missing: {path}\n"
+            "Refusing to build a split that under-excludes. If this artifact is "
+            "genuinely retired, comment it out of the exclusion list with a reason."
+        )
     if path.suffix == ".parquet":
         table = pq.read_table(path, columns=["task_id"])
         return {int(v.as_py()) for v in table.column("task_id") if v.as_py() is not None}
@@ -120,6 +137,14 @@ def main() -> None:
     ap.add_argument("--price", type=int, default=150)
     ap.add_argument("--option", type=int, default=75)
     ap.add_argument("--nuisance", type=int, default=75)
+    # Held-out mechanisms.  Training data (scripts/prepare_paper_grpo_v1.py)
+    # draws only price_above_budget / option_swap / nuisance_display_note, so
+    # accuracy on these two measures generalization to an intervention
+    # mechanism never seen during training -- not in-distribution recall.
+    ap.add_argument("--option-unavailable", type=int, default=75,
+                    help="held-out: unseen constraint type (availability)")
+    ap.add_argument("--option-price-over-budget", type=int, default=75,
+                    help="held-out: seen constraint (budget) on an unseen surface")
     ap.add_argument("--seed", type=int, default=20260820)
     args = ap.parse_args()
 
@@ -159,7 +184,10 @@ def main() -> None:
         "price_above_budget": args.price,
         "option_swap": args.option,
         "nuisance_display_note": args.nuisance,
+        "option_unavailable": args.option_unavailable,
+        "option_price_over_budget": args.option_price_over_budget,
     }
+    requested = {name: n for name, n in requested.items() if n > 0}
     chosen: list[dict] = []
     chosen_tasks: set[int] = set()
     selected_by_type: Counter[str] = Counter()
@@ -196,6 +224,19 @@ def main() -> None:
         "candidate_tasks": len(candidates),
         "requested_by_intervention": requested,
         "selected_by_intervention": dict(selected_by_type),
+        # The generalization split, recorded so a reader can verify which
+        # mechanisms the training data was allowed to contain.  Asserted at
+        # build time in scripts/prepare_paper_grpo_v1.py.
+        "train_mechanisms": sorted(TRAIN_MECHANISMS),
+        "held_out_mechanisms": sorted(HELD_OUT_MECHANISMS),
+        "verified_by_mechanism": {
+            name: next(
+                (str((p.get("intervention") or {}).get("verified_by", "reward_and_state"))
+                 for p in chosen if p["intervention_type"] == name),
+                "",
+            )
+            for name in sorted(requested)
+        },
         "rows": len(chosen),
         "unique_tasks": len(chosen_tasks),
         "unique_products": len(asins),
