@@ -16,3 +16,471 @@ apt-get install -y nodejs
 
 
 
+我觉得这版**方向是对的，而且比之前“约束感知 hard negative”更像一篇完整的方法论文**。尤其是你把研究问题压缩成：
+
+[
+\text{Relevant change}\Rightarrow\text{appropriate policy change}
+]
+
+[
+\text{Irrelevant change}\Rightarrow\text{policy invariance}
+]
+
+这个定义非常干净。再配合 **40% Final-200 strict / 0% Price-CF / 98.6% same-action**，论文的 motivation 已经很有冲击力。
+
+而且外部位置也基本站得住：ShopSimulator 本身已经是 ACL 2026 Long，主要解决购物环境、训练和整体任务成功问题；CARL 是 ACL 2026 Findings，确实已经直接做 constraint-aware RL，所以你现在避开“我们首次让 Agent 关注约束”，转而强调 **intervention-conditioned policy relation**，这个判断是正确的。([ACL Anthology][1])
+
+但我现在最担心一个问题。
+
+## 你现在的 `R_pair` 还不够像真正的新方法
+
+你现在定义：
+
+[
+R_{\text{cert}}
+===============
+
+\frac12
+\left(
+\mathbf 1[a=V(x)]
++
+\mathbf 1[a'=V(x')]
+\right)
+]
+
+然后：
+
+[
+R_{\text{pair}}
+===============
+
+\mathbf 1[(intent(a),intent(a'))\in R_j^*]
+]
+
+假如一个 price pair 的 verifier 给出：
+
+[
+V(x)=COMMIT,\qquad V(x')=SEARCH
+]
+
+而 `expected_relation` 就是：
+
+[
+(COMMIT,SEARCH)
+]
+
+那么实际上：
+
+[
+R_{\text{pair}}
+===============
+
+\mathbf 1[a=COMMIT\land a'=SEARCH]
+]
+
+它本质上就是：
+
+> **两个单侧都答对时，再给一个 joint bonus。**
+
+于是审稿人很容易问：
+
+> Why is this a relation-level optimization method rather than ordinary counterfactual data augmentation with a conjunctive reward?
+
+这句话是目前整篇论文最大的风险。
+
+甚至你文档自己已经碰到了这个问题：历史的 joint bonus、relational residual 最后都没有真正跑赢 Independent，Stage 3 当前也明确写的是**“方法效果未证实”**。
+
+所以我的判断是：
+
+> **Problem formulation 已经够强，evaluation formulation 也够强；method formulation 现在还差半步。**
+
+---
+
+# 我建议把真正的方法升级成“策略变化量”优化
+
+不要只判断：
+
+> 两侧最终动作是不是都对。
+
+而应该直接优化：
+
+> **干预发生之后，策略对两个竞争动作的相对偏好有没有按照正确方向翻转。**
+
+例如原状态应该 Buy，price-CF 后应该 Search。
+
+定义两个 canonical intents：
+
+[
+z_o=COMMIT,\qquad z_c=SEARCH
+]
+
+原世界应该满足：
+
+[
+\pi_\theta(COMMIT|x)>
+\pi_\theta(SEARCH|x)
+]
+
+反事实世界应该满足：
+
+[
+\pi_\theta(SEARCH|x')>
+\pi_\theta(COMMIT|x')
+]
+
+那么直接定义一个 **Interventional Preference Margin**：
+
+[
+M_\theta(x,x')
+==============
+
+\underbrace{
+\log\frac{\pi_\theta(z_o|x)}
+{\pi_\theta(z_c|x)}
+}_{\text{original preference}}
+------------------------------
+
+\underbrace{
+\log\frac{\pi_\theta(z_o|x')}
+{\pi_\theta(z_c|x')}
+}_{\text{counterfactual preference}}
+]
+
+对于 relevant intervention，希望：
+
+[
+M_\theta(x,x') > m
+]
+
+然后：
+
+[
+\mathcal L_{\text{rel}}
+=======================
+
+-\log\sigma
+\left(
+\frac{M_\theta(x,x')-m}{\tau}
+\right)
+]
+
+这个东西和你现在的 joint reward 有本质区别。
+
+现在不是：
+
+> x 对 + x' 对 → +1。
+
+而是：
+
+> **同一组候选行为的相对 preference 必须随着约束改变而发生定向移动。**
+
+这才真正是：
+
+[
+\boxed{\text{Optimization over policy relations}}
+]
+
+而不是：
+
+[
+\boxed{\text{Optimization over two independently correct actions}}
+]
+
+这一个改变，我认为会让论文的新颖性明显上一个台阶。
+
+---
+
+## Irrelevant intervention 也正好可以对称处理
+
+Relevant pair 要 **change**。
+
+Irrelevant pair 要 **stay**。
+
+所以 nuisance intervention 可以直接约束 intent distribution：
+
+[
+\mathcal L_{\text{inv}}
+=======================
+
+D_{\mathrm{JS}}
+\left(
+\pi_\theta^{intent}(\cdot|x),
+\pi_\theta^{intent}(\cdot|x')
+\right)
+]
+
+于是整套方法非常漂亮：
+
+[
+\mathcal L
+==========
+
+\mathcal L_{\text{task}}
++
+\lambda_{\text{rel}}\mathcal L_{\text{rel}}
++
+\lambda_{\text{inv}}\mathcal L_{\text{inv}}
+]
+
+分别对应：
+
+* **Task correctness**：正常任务要做对；
+* **Relevant sensitivity**：决定性约束变化时，policy preference 要改变；
+* **Irrelevant invariance**：无关变化时，policy preference 要稳定。
+
+这时候你论文里的两句话：
+
+> Relevant change ⇒ appropriate policy change
+> Irrelevant change ⇒ policy invariance
+
+就不仅是 evaluation slogan，而是**直接对应两个训练项**。
+
+这一点非常重要。
+
+---
+
+# 这样论文主方法会比现在顺很多
+
+我甚至建议方法图直接画成三层：
+
+**① Certified Atomic Intervention**
+
+[
+(x,x',j,R_j^*)
+]
+
+↓
+
+**② Intent-level Policy Projection**
+
+把动态 `click[143]`、`search[...]`、`buy[...]` 映射为：
+
+[
+COMMIT,\ SEARCH,\ SELECT_OPTION,\ ASK,\ldots
+]
+
+↓
+
+**③ Relation Optimization**
+
+Relevant：
+
+[
+\textbf{Preference Flip}
+]
+
+Irrelevant：
+
+[
+\textbf{Preference Preserve}
+]
+
+再加：
+
+[
+\textbf{Per-side Correctness Anchor}
+]
+
+这样你的方法就真正有一个很容易记住的技术核心：
+
+> **Flip when it matters, preserve when it doesn't.**
+
+这句话我觉得甚至可以成为论文里的核心 slogan。
+
+---
+
+# 另外三个地方我建议你现在就改
+
+### 1. 不要让 40% / 0% 只来自一个 checkpoint
+
+目前它是一个非常好的 discovery。
+
+但如果论文 Introduction 写：
+
+> Outcome optimization induces constraint blindness.
+
+那至少需要证明这不是某一个 checkpoint 的偶然失败。
+
+最好最终做：
+
+| Model         | SFT | Vanilla GRPO | Strict | Price-CF |
+| ------------- | --: | -----------: | -----: | -------: |
+| Qwen-1.7B     |   ✓ |              |     xx |       xx |
+| Qwen-1.7B     |   ✓ |            ✓ |      ↑ |     ↓/≈0 |
+| another model |   ✓ |            ✓ |      ↑ |      low |
+
+更强的是画 checkpoint trajectory：
+
+横轴 training step，
+
+两条线：
+
+[
+TaskSuccess\uparrow
+]
+
+而：
+
+[
+PricePRA\rightarrow0
+]
+
+如果真的出现这种分叉，这张图会比你现在任何复杂消融都更有论文价值。
+
+---
+
+### 2. nuisance intervention 要非常谨慎
+
+这个地方审稿人会攻击：
+
+> 你凭什么说这个因素 irrelevant？
+
+例如：
+
+* 品牌
+* 包装
+* seller
+* delivery
+
+很多情况下并不真正 irrelevant。
+
+所以不要依赖人的直觉定义 nuisance。
+
+最好定义成：
+
+> **Verifier-certified decision-preserving interventions**
+
+即：
+
+[
+V(x)=V(x')
+]
+
+并且满足 feasible set / product / decisive constraints 都不变。
+
+甚至名称可以不叫 irrelevant attribute，而叫：
+
+> **decision-preserving intervention**
+
+对应 relevant：
+
+> **decision-changing intervention**
+
+这会严谨很多：
+
+[
+V(x)\ne V(x')
+\Rightarrow
+\text{policy switch}
+]
+
+[
+V(x)=V(x')
+\Rightarrow
+\text{policy preserve}
+]
+
+这个形式甚至比“relevant/irrelevant”更漂亮。
+
+---
+
+### 3. 不要把 counterfactual 当主要 novelty 单词
+
+现在 counterfactual / invariance 本身已经不是空白。
+
+例如已有工作已经用 counterfactual invariance 来处理 reward model 的 spurious correlation；ICLR 2026 的 Double Counterfactual Consistency 也已经用 intervention/consistency 来评价和指导 LLM causal reasoning。([arXiv][2])
+
+所以论文千万不要写：
+
+> We are the first to optimize counterfactual consistency...
+
+这个很危险。
+
+你的真正独特组合应该始终是：
+
+> **programmatically certified atomic interventions + decision-changing/preserving policy relations + shopping-agent policy optimization**
+
+也就是说，不争“counterfactual”这个词。
+
+争：
+
+> **constraint-conditioned behavioral response of interactive agents**。
+
+---
+
+# 我现在给这篇论文的评分
+
+| 部分                                                 |                   我现在的判断 |
+| -------------------------------------------------- | -----------------------: |
+| Problem importance                                 |                 **9/10** |
+| Motivation / 40%-0% finding                        |                 **9/10** |
+| Story clarity                                      |                 **9/10** |
+| Evaluation design                                  |               **8.5/10** |
+| Current method novelty                             |               **6.5/10** |
+| 如果只做 `R_pair` joint bonus                          |                 **风险较大** |
+| 如果升级成 policy-relation / preference-shift objective |             **8–8.5/10** |
+| 当前 empirical evidence                              | **5/10**，因为 Stage 3 还没证明 |
+| Results 跑通后的整体潜力                                   |                  **很不错** |
+
+所以现在我不是建议换题。
+
+相反，我会说：
+
+> **不要再换主线了。**
+>
+> 当前最该做的，是把“paired”从**数据成对 + reward 成对**，升级成真正的**policy response 成对**。
+
+这样整篇文章的逻辑会变成：
+
+[
+\boxed{
+\text{Task Success}
+\not\Rightarrow
+\text{Constraint Faithfulness}
+}
+]
+
+↓
+
+发现普通 RL 学出了 constraint shortcut。
+
+↓
+
+构造 **Certified Atomic Intervention Pairs**。
+
+↓
+
+不再只监督两个世界各自做对，而直接约束：
+
+[
+\boxed{
+\Delta constraint
+\rightarrow
+\Delta policy
+}
+]
+
+↓
+
+Decision-changing intervention：
+
+[
+\boxed{\text{Flip}}
+]
+
+Decision-preserving intervention：
+
+[
+\boxed{\text{Preserve}}
+]
+
+↓
+
+同时保持普通购物成功率。
+
+我认为**这个版本才是你这条线最值得冲的最终形态**。它也比当前文档里的 `R_task + R_cert + R_pair` 更能回答审稿人最关键的问题：“为什么一定需要 paired optimization？”
+
+如果只允许我现在改一个地方，我就改这个，其他章节甚至可以先基本不动。
+
+[1]: https://aclanthology.org/2026.acl-long.1647/?utm_source=chatgpt.com "ShopSimulator: Evaluating and Exploring RL-Driven LLM Agent for Shopping Assistants - ACL Anthology"
+[2]: https://arxiv.org/abs/2501.09620?utm_source=chatgpt.com "Beyond Reward Hacking: Causal Rewards for Large Language Model Alignment"
