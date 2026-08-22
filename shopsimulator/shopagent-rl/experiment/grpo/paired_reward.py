@@ -272,11 +272,27 @@ def add_preference_margin_loss(
     margin_threshold: float = 0.0,
     temperature: float = 1.0,
 ) -> tuple[torch.Tensor, dict[str, float | int]]:
-    """Add preference margin loss to advantages for paired optimization.
+    """SUPERSEDED -- do not wire this into training. Kept for reference only.
 
-    This implementation uses a simplified approximation based on predicted_intents
-    rather than full model log probabilities. The full implementation would use
-    actual log probs from the model for canonical intents.
+    This function is not a preference-margin implementation and cannot become one
+    at this layer. Two independent reasons:
+
+    1. It returns ``advantages.clone()``. It never changes the optimization, while
+       printing flip/preserve/margin numbers that look like it does.
+    2. It runs at the advantage stage, outside any forward pass, so nothing it
+       computes is differentiable with respect to the policy. Even wired up
+       correctly here, no gradient could reach the model.
+
+    On top of that, its intent scores come from
+    ``compute_intent_logits_from_predictions``, which turns the discrete
+    ``predicted_intent`` string into hardcoded +-3.0 logits -- a relabeling of the
+    rollout's own output, not a measurement of the policy's preference.
+
+    The real term is a loss in the actor, where the module can re-score the legal
+    action set at both sides of a pair:
+    ``experiment/grpo/relation_loss_hook.make_relation_loss_fn``, attached by
+    ``ActorRolloutRefWorker._maybe_wrap_relation_loss`` and computed by
+    ``experiment/grpo/relation_batch.compute_batch_relation_loss``.
 
     Args:
         advantages: Current advantage tensor

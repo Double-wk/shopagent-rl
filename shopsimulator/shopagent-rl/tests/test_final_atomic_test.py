@@ -20,6 +20,22 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _gitignored_paths() -> set[str]:
+    """Repo-relative paths this project deliberately keeps out of Git.
+
+    Read straight from .gitignore rather than shelling out to `git check-ignore`
+    so the audit works in a source tree without a working Git binary.
+    """
+    ignore_file = ROOT / ".gitignore"
+    if not ignore_file.exists():
+        return set()
+    return {
+        stripped
+        for line in ignore_file.read_text(encoding="utf-8").splitlines()
+        if (stripped := line.strip()) and not stripped.startswith("#")
+    }
+
+
 def _task_ids(path: Path) -> set[int]:
     if path.suffix == ".parquet":
         table = pq.read_table(path, columns=["task_id"])
@@ -79,11 +95,27 @@ class FinalAtomicTestProtocolTests(unittest.TestCase):
         with gzip.open(products_path, "rt", encoding="utf-8") as handle:
             products = json.load(handle)
         final_products = {record["source"]["asin"] for record in self.records}
+
+        audited: list[str] = []
+        unauditable: list[str] = []
         for line in EXCLUSIONS.read_text(encoding="utf-8").splitlines():
             value = line.strip()
             if not value or value.startswith("#"):
                 continue
             path = ROOT / value
+            if not path.exists():
+                # Some predating artifacts are deliberately not committed (e.g. the
+                # full candidate pool behind the frozen 800-row set). Those cannot be
+                # audited from a fresh clone, but a *tracked* artifact going missing
+                # must still fail loudly, so only gitignored paths are tolerated.
+                self.assertIn(
+                    value,
+                    _gitignored_paths(),
+                    f"{value} is listed as a predating artifact but is neither present "
+                    f"nor gitignored, so provenance cannot be verified",
+                )
+                unauditable.append(value)
+                continue
             tasks = _task_ids(path)
             self.assertFalse(final_tasks & tasks, value)
             used_products = {
@@ -91,6 +123,15 @@ class FinalAtomicTestProtocolTests(unittest.TestCase):
                 for task_id in tasks if 0 <= task_id < len(products)
             }
             self.assertFalse(final_products & used_products, value)
+            audited.append(value)
+
+        # Guard against the audit quietly shrinking to nothing.
+        self.assertGreater(len(audited), len(unauditable), "too few artifacts audited")
+        if unauditable:
+            print(
+                f"\n[provenance] audited {len(audited)} artifacts; "
+                f"{len(unauditable)} not in this clone: {', '.join(unauditable)}"
+            )
 
 
 if __name__ == "__main__":

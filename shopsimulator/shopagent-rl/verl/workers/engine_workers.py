@@ -343,6 +343,17 @@ class TrainingWorker(Worker, DistProfilerExtension):
             if key not in data.keys():
                 tu.assign_non_tensor(data, **{key: val})
 
+        # Paired relation losses are defined on (original, counterfactual) pairs
+        # and vanish if the two sides land in different micro-batches. The rows
+        # are adjacent in the pairblocked parquet and rollout expansion is
+        # interleaved, so both sides of a pair sit exactly `rollout.n` rows apart
+        # and a group of `2 * rollout.n` consecutive rows always holds whole
+        # pairs. Only set when a relation objective asked for it, so the default
+        # path keeps force_group_size=1 and micro-batching is bit-identical.
+        relation_group_size = getattr(self, "_relation_force_group_size", None)
+        if relation_group_size and "force_group_size" not in data.keys():
+            tu.assign_non_tensor(data, force_group_size=int(relation_group_size))
+
         with (
             self.engine.train_mode(disable_auto_offload=disable_auto_offload),
             Timer(name="train_batch", logger=None) as timer,
@@ -491,6 +502,72 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
     def set_loss_fn(self, loss_fn):
         self.actor.set_loss_fn(loss_fn=loss_fn)
 
+    def _paired_config(self):
+        """The algorithm.paired_intervention block, or None when absent/disabled.
+
+        `self.config` here is `config.actor_rollout_ref`; the trainer mirrors the
+        algorithm block into that subtree when a paired objective is enabled.
+        """
+        algorithm = self.config.get("algorithm", None) if hasattr(self.config, "get") else None
+        if algorithm is None:
+            return None
+        paired = algorithm.get("paired_intervention", None)
+        if paired is None or not paired.get("enabled", False):
+            return None
+        return paired
+
+    def _maybe_wrap_relation_loss(self, loss_fn, model_config):
+        """Add the differentiable relation loss for `preference_margin` only."""
+        paired = self._paired_config()
+        if paired is None or str(paired.get("mode", "")) != "preference_margin":
+            return loss_fn
+
+        from experiment.grpo.relation_loss_hook import make_relation_loss_fn
+
+        wrapped = make_relation_loss_fn(
+            loss_fn,
+            # Resolved lazily: the engine wraps (and may re-wrap) the module after
+            # the loss function is installed.
+            module_getter=lambda: getattr(self.actor.engine, "module", None),
+            tokenizer=model_config.get_processor(),
+            flip_weight=float(paired.get("flip_weight", 1.0)),
+            preserve_weight=float(paired.get("preserve_weight", 1.0)),
+            anchor_weight=float(paired.get("anchor_weight", 1.0)),
+            margin_threshold=float(paired.get("margin_threshold", 0.0)),
+            temperature=float(paired.get("temperature", 1.0)),
+            relation_coeff=float(paired.get("relation_coeff", paired.get("weight", 1.0))),
+            require_gradient_checkpointing=bool(
+                paired.get("require_gradient_checkpointing", True)
+            ),
+        )
+        print(
+            "[PreferenceMargin] relation loss attached to actor loss_fn "
+            f"(flip={paired.get('flip_weight', 1.0)} "
+            f"preserve={paired.get('preserve_weight', 1.0)} "
+            f"anchor={paired.get('anchor_weight', 1.0)} "
+            f"coeff={paired.get('relation_coeff', paired.get('weight', 1.0))})",
+            flush=True,
+        )
+        return wrapped
+
+    def _maybe_set_relation_group_size(self):
+        """Keep both sides of a pair inside one micro-batch for relation modes."""
+        paired = self._paired_config()
+        if paired is None or str(paired.get("mode", "")) != "preference_margin":
+            return
+        rollout_n = int(self.config.rollout.get("n", 1) or 1)
+        # Read by TrainingWorker.train_batch, which owns the micro-batch split.
+        group_size = 2 * rollout_n
+        self._relation_force_group_size = group_size
+        actor = getattr(self, "actor", None)
+        if actor is not None:
+            actor._relation_force_group_size = group_size
+        print(
+            f"[PreferenceMargin] force_group_size={group_size} "
+            f"(2 x rollout.n={rollout_n}) so pair sides share a micro-batch",
+            flush=True,
+        )
+
     @register(dispatch_mode=Dispatch.ONE_TO_ALL)
     def to(self, device, model=True, optimizer=True, grad=True):
         """Manual control of load/offload"""
@@ -584,8 +661,13 @@ class ActorRolloutRefWorker(Worker, DistProfilerExtension):
                 self.loss_fn = partial(ppo_loss, config=actor_config)
             self.actor = TrainingWorker(config=actor_training_config)
             self.actor.reset()
+            # Wrap only for the preference-margin objective. Every other mode --
+            # including the Independent baseline -- keeps the loss_fn above
+            # untouched, so their optimization path is unchanged.
+            self.loss_fn = self._maybe_wrap_relation_loss(self.loss_fn, model_config)
             self.actor.set_loss_fn(self.loss_fn)
             self.set_dispatch_collect(mesh_name="actor", **self.actor.get_dispatch_collect())
+            self._maybe_set_relation_group_size()
 
         # 3. build rollout engine
         if "rollout" in self.role:

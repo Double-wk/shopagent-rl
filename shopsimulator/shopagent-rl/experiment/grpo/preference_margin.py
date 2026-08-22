@@ -16,6 +16,7 @@ For decision-preserving: encourage preference stability via JS divergence
 """
 from __future__ import annotations
 
+import math
 from typing import Any
 
 import torch
@@ -128,19 +129,25 @@ def preserve_loss(
         log_probs_cf: Log probs for canonical intents in counterfactual world
 
     Returns:
-        Scalar JS divergence loss
+        Scalar JS divergence loss, always >= 0 and 0 iff the two distributions match.
     """
-    p = F.softmax(log_probs_original, dim=-1)
-    q = F.softmax(log_probs_cf, dim=-1)
+    # log_softmax both normalizes (callers may pass unnormalized scores) and keeps
+    # the log-domain values finite even where their exp underflows to zero, so the
+    # p * (log p - log m) terms below stay well defined.
+    log_p = F.log_softmax(log_probs_original, dim=-1)
+    log_q = F.log_softmax(log_probs_cf, dim=-1)
+    p = log_p.exp()
+    q = log_q.exp()
 
-    # KL(P || Q) = Σ P(x) log(P(x) / Q(x))
-    kl_pq = F.kl_div(q, p, reduction="batchmean")
-    kl_qp = F.kl_div(p, q, reduction="batchmean")
+    # log M where M = (P + Q) / 2, via logaddexp to avoid underflow in the mixture.
+    log_m = torch.logaddexp(log_p, log_q) - math.log(2.0)
 
-    # JS(P, Q) = 0.5 * (KL(P || M) + KL(Q || M)) where M = (P + Q) / 2
-    m = (p + q) / 2
-    kl_pm = F.kl_div(m, p, reduction="batchmean")
-    kl_qm = F.kl_div(m, q, reduction="batchmean")
+    # JS(P, Q) = 0.5 * (KL(P || M) + KL(Q || M)); sum over intents, mean over batch.
+    # NOTE: do not route this through F.kl_div — it expects its *first* argument to
+    # already be in the log domain, and passing probabilities there makes the result
+    # go negative, which a JS divergence can never be.
+    kl_pm = (p * (log_p - log_m)).sum(dim=-1)
+    kl_qm = (q * (log_q - log_m)).sum(dim=-1)
     js = 0.5 * (kl_pm + kl_qm)
 
     return js.mean()

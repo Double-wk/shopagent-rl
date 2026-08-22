@@ -166,6 +166,30 @@ class ShopsimAgentLoop(AgentLoopBase):
             return [value]
         return [str(item) for item in value]
 
+    @staticmethod
+    def _last_user_content(raw_prompt: Any) -> str:
+        """Text of the last user message: the rendered state the model acts on.
+
+        The clickable-button list lives in this message, so it is what the
+        relation loss parses the legal action set out of. Returns "" rather than
+        raising, so a schema change upstream degrades to "no relation signal"
+        instead of killing the rollout.
+        """
+        if raw_prompt is None:
+            return ""
+        # Truthiness is ambiguous for numpy arrays, and parquet hands the prompt
+        # back as one, so test the length instead of the object.
+        messages = list(raw_prompt)
+        if not messages:
+            return ""
+        for message in reversed(messages):
+            if isinstance(message, dict) and message.get("role") == "user":
+                return str(message.get("content") or "")
+        last = messages[-1]
+        if isinstance(last, dict):
+            return str(last.get("content") or "")
+        return str(last)
+
     async def _run_counterfactual(
         self, raw_prompt: list[dict[str, Any]], sampling_params: dict[str, Any], **kwargs
     ) -> AgentLoopOutput:
@@ -241,6 +265,14 @@ class ShopsimAgentLoop(AgentLoopBase):
                 "side": side_name,
                 "intervention_type": intervention_type,
                 "expected_relation": self._string_list(kwargs.get("expected_relation")),
+                # The preference-margin relation loss re-scores the legal action
+                # set at this state, so it needs the rendered state text. Passing
+                # it through avoids decoding prompt_ids back to text in the actor,
+                # which would not round-trip exactly.
+                "state_text": self._last_user_content(raw_prompt),
+                "expected_action_intents": self._string_list(
+                    kwargs.get("expected_action_intents")
+                ),
                 "predicted_intent": str(grade.get("predicted_intent") or ""),
                 "side_correct": bool(grade.get("side_correct", grade.get("correct_strict", False))),
                 "relation_correct": False,
@@ -448,6 +480,10 @@ class ShopsimAgentLoop(AgentLoopBase):
                 "side": "",
                 "intervention_type": "",
                 "expected_relation": [],
+                # Same schema as the counterfactual branch; empty means "no
+                # relation loss contribution from this row".
+                "state_text": "",
+                "expected_action_intents": [],
                 "predicted_intent": "",
                 "side_correct": False,
                 "relation_correct": False,

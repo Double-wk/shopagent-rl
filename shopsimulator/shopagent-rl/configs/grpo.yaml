@@ -106,6 +106,29 @@ algorithm:
     success_bonus: 0.25
     failure_penalty: 1.0
     joint_failure_penalty: 0.5
+    # --- preference_margin only -------------------------------------------
+    # Read by the differentiable relation loss the actor attaches when
+    # mode=preference_margin. Ignored by every other mode.
+    #   flip_weight      : -log sigma((M - m)/tau) on decision-changing pairs
+    #   preserve_weight  : symmetric JS on decision-preserving pairs
+    #   anchor_weight    : per-side -log P(expected intent). Without it a pair can
+    #                      satisfy the margin by getting the *wrong* intent less
+    #                      wrong on one side; the anchor removes that solution.
+    #   relation_coeff   : scale of the whole relation term against the PPO loss.
+    #                      Defaults to `weight` so a single knob still works.
+    #   margin_threshold : m in the flip loss; 0.0 means "any correct ordering".
+    #   temperature      : tau; larger compresses the loss toward ln2.
+    #   require_gradient_checkpointing: scoring the legal action set with grad
+    #                      enabled measured 12.6 GiB with checkpointing and >48
+    #                      GiB without, so this fails fast instead of OOM-ing
+    #                      minutes into a step. Only disable on a larger device.
+    flip_weight: 1.0
+    preserve_weight: 1.0
+    anchor_weight: 1.0
+    relation_coeff: ${oc.select:algorithm.paired_intervention.weight,1.0}
+    margin_threshold: 0.0
+    temperature: 1.0
+    require_gradient_checkpointing: True
 
 trainer:
   total_epochs: 1

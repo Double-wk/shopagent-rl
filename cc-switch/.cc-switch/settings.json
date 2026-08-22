@@ -4,7 +4,7 @@
   "enableClaudePluginIntegration": false,
   "skipClaudeOnboarding": false,
   "commonConfigConfirmed": true,
-  "currentProviderClaude": "justwoker",
+  "currentProviderClaude": "sotamodel",
   "currentProviderCodex": "agentrouter",
   "visibleApps": {
     "claude": true,
@@ -19,10 +19,10 @@
     "autoPromptDecided": true,
     "manualHiddenInstalledNotices": {},
     "lastDetectedInstalled": {
-      "gemini": false,
-      "hermes": false,
       "opencode": true,
-      "openclaw": false
+      "gemini": false,
+      "openclaw": false,
+      "hermes": false
     }
   },
   "launchOnStartup": false,

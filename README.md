@@ -12,7 +12,7 @@
 | `scripts/` | 工作区基础设施：`vllm_env_rocm_base.sh`（GPU 环境入口）、`build_vllm_rocm.sh`（vLLM 源码编译）、`restore_large_artifacts.sh`（大权重还原）、`vllm_smoke.py`、functorch shim |
 | `mihomo/` | mihomo 二进制、配置和运行日志 |
 | `cc-switch/` | cc-switch CLI、包装脚本及项目独立配置（本机同时是 `$HOME`） |
-| `/overlay/miniconda3` | Conda 安装与环境（大容量盘，不进 Git） |
+| `/workspace/miniconda3` | Conda 安装与 `shopsim` 环境（不进 Git，见 `.gitignore`） |
 
 > `opd/`（ctv-opd 研究线）已于 2026-08-16 从本仓库移除；需要时从 `Double-wk/amd` 仓库历史找回。
 
@@ -206,13 +206,14 @@ curl --noproxy '*' -sS -X PUT \
 
 ## 阶段 3：安装 Miniconda（项目内）
 
-**目的：** 在仓库内创建独立的 Conda Python 环境，避免依赖系统 Python 或其他项目的环境。当前安装路径为 `/overlay/miniconda3`（大容量 overlay 盘；3 个 conda 环境共约 21G，不适合放 `/workspace`）。
+**目的：** 在仓库内创建独立的 Conda Python 环境，避免依赖系统 Python 或其他项目的环境。当前安装路径为 `/workspace/miniconda3`。
+
+> **为什么从 `/overlay` 改到 `/workspace`：** `/overlay` 是容器临时盘，**重启即空**。2026-08-19 的重启带走了整个 conda 环境和一个刚训完 200 步、还没导出的 GRPO adapter。`/workspace` 是独立挂载的持久盘（`/dev/nvme1n1`，100G），环境重启后还在。单个 `shopsim` 环境约 25G，装得下。
 
 ```bash
-# 安装到大容量 overlay 盘（conda 环境约 21G，别放 /workspace）
 wget --no-check-certificate \
   https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh -b -p /overlay/miniconda3
+bash Miniconda3-latest-Linux-x86_64.sh -b -p /workspace/miniconda3
 rm -f Miniconda3-latest-Linux-x86_64.sh
 ```
 
@@ -222,17 +223,19 @@ rm -f Miniconda3-latest-Linux-x86_64.sh
 加载 Conda：
 
 ```bash
-source /overlay/miniconda3/etc/profile.d/conda.sh
+source /workspace/miniconda3/etc/profile.d/conda.sh
 conda --version
 ```
 
-初始化 Bash 并在当前 shell 生效：
+初始化 Bash 并在当前 shell 生效（可选）：
 
 ```bash
-/overlay/miniconda3/bin/conda init bash
+/workspace/miniconda3/bin/conda init bash
 source ~/.bashrc
 conda --version
 ```
+
+`conda init` 会改 `~/.bashrc`。项目脚本（`scripts/paths.sh`、`scripts/vllm_env_rocm_base.sh`）用的是绝对解释器路径 `/workspace/miniconda3/envs/shopsim/bin/python`，不依赖 `conda activate`，所以这一步可以跳过。
 
 `conda init bash` 会修改 `~/.bashrc`，后续新开的 Bash 会自动加载 Conda。成功标志是终端提示符出现 `(base)`，且 `conda --version` 能输出版本号。
 
@@ -248,7 +251,7 @@ conda config --show-sources
 确认不再需要现有自定义配置后，重新写入镜像配置：
 
 ```bash
-rm -f /overlay/miniconda3/.condarc
+rm -f /workspace/miniconda3/.condarc
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
 conda config --set show_channel_urls yes
@@ -263,7 +266,7 @@ conda config --show-sources
 
 ## 阶段 3.5：AMD GPU 训练环境（ROCm 7.2.1）
 
-**目的：** 配置 AMD ROCm GPU 训练环境。本机单卡 gfx1100（RDNA3，48GB），ROCm 7.2.1（`/opt/rocm-7.2.1`），conda 在 `/overlay/miniconda3`。**shopsimulator 是本仓库主项目**，统一使用唯一环境 `shopsim`；旧的 `shopenv`/`rocm-base` 环境方案已废弃。
+**目的：** 配置 AMD ROCm GPU 训练环境。本机单卡 gfx1100（RDNA3，48GB），ROCm 7.2.1（`/opt/rocm-7.2.1`），conda 在 `/workspace/miniconda3`。**shopsimulator 是本仓库主项目**，统一使用唯一环境 `shopsim`；旧的 `shopenv`/`rocm-base` 环境方案已废弃。
 
 ### shopsimulator（shopsim 环境）
 
@@ -284,9 +287,16 @@ conda config --show-sources
 | py-cpuinfo | 9.0.0（`from vllm import LLM` 需要，锁文件里没有，单独装） |
 | pytest | 最新（测试用，锁文件里没有） |
 
-> 锁文件里的 `vllm==0.16.1.dev0` 一行不用管：项目使用的是固定 commit `89a77b108` 构建出的 `0.16.0+rocm721` wheel。同配置机器直接以 `--no-deps` 安装仓库 wheel；不同 Python、Torch、ROCm 或 GPU 架构必须重新编译。
+> ⚠️ **锁文件里的 `vllm==0.16.1.dev0`（第 260 行）必须先过滤掉，不能「装的时候忽略」。** PyPI 上没有这个版本，而 pip 是先解析完整个依赖列表再安装，所以这一行会让**其余 246 个包一个都装不进去**（2026-08-22 实测：报 `No matching distribution found for vllm==0.16.1.dev0`，`pip list` 停在 22 个包）。项目实际使用的是固定 commit `89a77b108` 构建出的 `0.16.0+rocm721` wheel，已在上一步单独安装。正确做法是过滤后安装，**不要修改仓库里的 `requirements.txt`**——它是 `pip freeze` 的 provenance 记录：
+>
+> ```bash
+> grep -v '^vllm==' shopsimulator/shopagent-rl/requirements.txt > /tmp/req_no_vllm.txt
+> "$PY" -m pip install --no-deps -r /tmp/req_no_vllm.txt
+> ```
+>
+> 同配置机器直接以 `--no-deps` 安装仓库 wheel；不同 Python、Torch、ROCm 或 GPU 架构必须重新编译。
 
-### 环境布局（`/overlay/miniconda3/envs/`）
+### 环境布局（`/workspace/miniconda3/envs/`）
 
 | 环境 | 用途 |
 | --- | --- |
@@ -452,7 +462,7 @@ chmod +x cc-switch/init-cc-switch.sh
 先列出服务商，确认实际 ID；再按 ID 切换：
 
 ```bash
-./cc-switch/init-cc-switch.sh provider switch -a claude agentrouter
+./cc-switch/init-cc-switch.sh provider switch -a claude sotamodel
 ./cc-switch/init-cc-switch.sh provider switch -a codex agentrouter
 ```
 

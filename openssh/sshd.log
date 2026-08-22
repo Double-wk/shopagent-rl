@@ -42,3 +42,8 @@ Accepted publickey for root from 10.232.20.0 port 4059 ssh2: ED25519 SHA256:Fteb
 Accepted publickey for root from 10.232.20.0 port 50557 ssh2: ED25519 SHA256:Fteb3ZtlFgSnLRVPKN/YZjQFi+814h7+kipiVCMqjzE
 Received disconnect from 10.232.20.0 port 4059:11: disconnected by user
 Disconnected from user root 10.232.20.0 port 4059
+Server listening on 0.0.0.0 port 22.
+Accepted publickey for root from 10.232.20.0 port 34844 ssh2: ED25519 SHA256:Fteb3ZtlFgSnLRVPKN/YZjQFi+814h7+kipiVCMqjzE
+Accepted publickey for root from 10.232.20.0 port 58785 ssh2: ED25519 SHA256:Fteb3ZtlFgSnLRVPKN/YZjQFi+814h7+kipiVCMqjzE
+Received disconnect from 10.232.20.0 port 58785:11: disconnected by user
+Disconnected from user root 10.232.20.0 port 58785

@@ -1,4 +1,6 @@
 """Tests for preference margin optimization logic."""
+import math
+
 import pytest
 import torch
 
@@ -132,13 +134,29 @@ class TestFlipLoss:
         assert loss_with_threshold > loss_no_threshold
 
     def test_flip_loss_temperature(self):
-        """Temperature controls softness."""
-        margin = torch.tensor([1.0])
-        loss_low_temp = flip_loss(margin, temperature=0.5)
-        loss_high_temp = flip_loss(margin, temperature=2.0)
+        """Temperature softens by compressing the loss toward the tau->inf limit.
 
-        # Higher temperature should soften the loss
-        assert loss_high_temp < loss_low_temp
+        loss = softplus(-(margin - m) / tau), so raising tau pulls the scaled
+        argument toward 0 and the loss toward softplus(0) = ln 2, whatever the
+        sign of the margin. It does NOT monotonically lower the loss: for an
+        already-satisfied (positive) margin a higher temperature gives a *larger*
+        loss, because the reward for being correct is being blunted.
+        """
+        ln2 = math.log(2.0)
+
+        # Satisfied margin: sharper (low tau) => closer to 0, softer => toward ln 2.
+        satisfied = torch.tensor([1.0])
+        assert flip_loss(satisfied, temperature=0.5) < flip_loss(satisfied, temperature=2.0)
+        assert flip_loss(satisfied, temperature=2.0) < ln2
+
+        # Violated margin: sharper => larger penalty, softer => decays toward ln 2.
+        violated = torch.tensor([-1.0])
+        assert flip_loss(violated, temperature=0.5) > flip_loss(violated, temperature=2.0)
+        assert flip_loss(violated, temperature=2.0) > ln2
+
+        # The shared limit: large tau drives either sign to ln 2.
+        for m in (satisfied, violated):
+            assert torch.isclose(flip_loss(m, temperature=1e4), torch.tensor(ln2), atol=1e-3)
 
 
 class TestPreserveLoss:

@@ -382,60 +382,49 @@ def compute_advantage(
                 flush=True,
             )
         elif paired_config.get("enabled", False) and paired_mode == "preference_margin":
-            from experiment.grpo.paired_reward import (
-                add_preference_margin_loss,
-                prepare_preference_margin_metadata,
-            )
-
+            # The preference-margin objective is a *loss*, not an advantage
+            # reshaping, so there is deliberately nothing to do at this stage.
+            #
+            # The former code here called `add_preference_margin_loss`, which
+            # built intent logits from the discrete `predicted_intent` string
+            # (hardcoded +-3.0 logits), printed flip/preserve/margin numbers, and
+            # then returned `advantages.clone()` -- i.e. it logged a plausible
+            # optimization that never happened, and could not have: advantages are
+            # computed outside any forward pass, so nothing here is
+            # differentiable w.r.t. the policy.
+            #
+            # The real term now lives in the actor, where the module is available
+            # to re-score the legal action set at both sides of a pair. See
+            # experiment/grpo/relation_loss_hook.py, wired in
+            # ActorRolloutRefWorker._maybe_wrap_relation_loss. Its metrics are
+            # reported under the `relation/` prefix; treat the absence of those
+            # keys as "the loss is not attached", not as "no pairs in batch".
+            #
+            # Metadata is still validated here so a data/rollout regression fails
+            # at the trainer boundary rather than silently yielding zero pairs in
+            # the actor.
             relation_ids = data.non_tensor_batch.get(
                 "relation_id", data.non_tensor_batch.get("pair_id")
             )
             sides = data.non_tensor_batch.get("side")
             expected_relations = data.non_tensor_batch.get("expected_relation")
-            predicted_intents = data.non_tensor_batch.get("predicted_intent")
+            state_texts = data.non_tensor_batch.get("state_text")
 
             if any(value is None for value in (
-                relation_ids, sides, expected_relations, predicted_intents
+                relation_ids, sides, expected_relations, state_texts
             )):
                 raise ValueError(
                     "preference margin requires relation_id/pair_id, side, "
-                    "expected_relation, and predicted_intent metadata"
+                    "expected_relation, and state_text metadata"
                 )
 
-            # Prepare paired metadata for preference margin computation
-            paired_metadata = prepare_preference_margin_metadata(
-                relation_ids,
-                sides,
-                expected_relations,
-                data.non_tensor_batch.get("session_id"),
-            )
-
-            # Compute preference margin loss (simplified proxy version)
-            advantages, pm_stats = add_preference_margin_loss(
-                advantages,
-                grpo_calculation_mask,
-                paired_metadata,
-                predicted_intents=predicted_intents,
-                flip_weight=float(paired_config.get("flip_weight", 1.0)),
-                preserve_weight=float(paired_config.get("preserve_weight", 1.0)),
-                margin_threshold=float(paired_config.get("margin_threshold", 0.0)),
-                temperature=float(paired_config.get("temperature", 1.0)),
-            )
-
+            n_pair_rows = sum(1 for value in relation_ids if str(value or ""))
             print(
-                f"[PreferenceMargin] "
-                f"relations={pm_stats['complete_relations']} "
-                f"decision_changing={pm_stats['decision_changing_pairs']} "
-                f"decision_preserving={pm_stats['decision_preserving_pairs']} "
-                f"avg_flip_loss={pm_stats.get('avg_flip_loss', 0):.4f} "
-                f"avg_preserve_loss={pm_stats.get('avg_preserve_loss', 0):.4f} "
-                f"avg_margin={pm_stats.get('avg_margin', 0):.4f} "
-                f"status={pm_stats.get('status', 'unknown')}",
+                "[PreferenceMargin] advantage stage is a no-op by design; "
+                f"pair_rows_in_batch={n_pair_rows} "
+                "relation loss is applied in the actor (see relation/* metrics)",
                 flush=True,
             )
-
-            # Don't add stats to non_tensor_batch to avoid protocol requirements
-            # The stats are already logged above
         data.batch["advantages"] = advantages
         data.batch["returns"] = returns
     else:
@@ -645,6 +634,17 @@ class RayPPOTrainer:
                     self.config.actor_rollout_ref.actor.optim.total_training_steps = total_training_steps
                 if OmegaConf.select(self.config, "critic.optim"):
                     self.config.critic.optim.total_training_steps = total_training_steps
+                # The actor worker is constructed with `config.actor_rollout_ref`
+                # only, but the differentiable relation loss lives in the actor and
+                # is configured under `algorithm.paired_intervention`. Mirror the
+                # block into the subtree the worker actually receives. Only done
+                # when a paired objective is enabled, so the baseline config that
+                # reaches the worker is unchanged.
+                paired = OmegaConf.select(self.config, "algorithm.paired_intervention")
+                if paired is not None and paired.get("enabled", False):
+                    self.config.actor_rollout_ref.algorithm = OmegaConf.create(
+                        {"paired_intervention": paired}
+                    )
         except Exception as e:
             print(f"Warning: Could not set total_training_steps in config. Structure missing? Error: {e}")
 
