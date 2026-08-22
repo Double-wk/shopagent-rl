@@ -1,0 +1,30 @@
+{
+  "baseline_rows": 3624,
+  "by_intent": {
+    "COMMIT": 240,
+    "SEARCH_ALTERNATIVE": 100,
+    "SELECT_TARGET_OPTION": 60
+  },
+  "by_intervention": {
+    "nuisance_display_note": 80,
+    "option_swap": 120,
+    "price_above_budget": 200
+  },
+  "by_side": {
+    "counterfactual": 200,
+    "original": 200
+  },
+  "held_out_mechanisms_excluded": [
+    "option_price_over_budget",
+    "option_unavailable"
+  ],
+  "mix_out": "data/sft_horizon10_cf_augmentation_mix_v2.jsonl",
+  "mix_rows": 4024,
+  "out": "/workspace/shopsimulator/shopagent-rl/data/sft_cf_augmentation_v2.jsonl",
+  "pairs_in": 200,
+  "pairs_path": "/workspace/shopsimulator/shopagent-rl/data/counterfactual/paper_grpo_pairs_v2.jsonl",
+  "records_out": 400,
+  "schema_version": "shopsim-cf-augmentation-v2",
+  "skipped": {},
+  "unique_tasks": 200
+}

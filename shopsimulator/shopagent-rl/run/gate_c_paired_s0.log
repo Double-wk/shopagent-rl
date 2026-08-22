@@ -1,0 +1,8 @@
+[gate_c] method=preference_margin init=clean seed=0 steps=200
+[gate_c] relation_coeff=0.002 (applied only when paired=True)
+[gate_c] data=/workspace/shopsimulator/shopagent-rl/data/grpo_certified_paper_v2_800_pairblocked.parquet sha256=a1a0455f40ed4a4289e9c69b7c3cf764d91e98c0c9f46b1d7b616de9d53c502b rows=800
+[gate_c] output=/root/.cache/huggingface/shopsim/artifacts/grpo_runs/paper_v2_gate_c_clean_preference_margin_s0
+ShopSim GRPO detached — PID 211957 (PPID=1)
+  log : tail -f /workspace/shopsimulator/shopagent-rl/run/paper_v2_gate_c_clean_preference_margin_s0.log
+  pid : /workspace/shopsimulator/shopagent-rl/run/paper_v2_gate_c_clean_preference_margin_s0.pid
+  stop: kill $(cat /workspace/shopsimulator/shopagent-rl/run/paper_v2_gate_c_clean_preference_margin_s0.pid)
