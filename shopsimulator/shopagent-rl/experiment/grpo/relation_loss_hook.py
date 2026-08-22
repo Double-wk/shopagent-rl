@@ -118,11 +118,75 @@ def _pair_rows_in_mini_batch(data: Any) -> int:
         return 0
 
 
+def _has_transformers_checkpointing(module: Any) -> bool:
+    """True when any submodule has transformers' checkpointing on.
+
+    Not a top-level attribute check: `gradient_checkpointing_enable()` sets the
+    flag on the submodules that own the checkpointed blocks (for
+    `Qwen3ForCausalLM` that is the inner `Qwen3Model` and its decoder layers),
+    never on the outer module. transformers exposes exactly this recursive test as
+    `is_gradient_checkpointing`; fall back to walking `modules()` for wrappers
+    that do not forward the property.
+    """
+    flag = getattr(module, "is_gradient_checkpointing", None)
+    if isinstance(flag, bool):
+        return flag
+    if getattr(module, "gradient_checkpointing", False):
+        return True
+    modules = getattr(module, "modules", None)
+    if not callable(modules):
+        return False
+    return any(getattr(m, "gradient_checkpointing", False) for m in modules())
+
+
+def _has_verl_offload_checkpointing(module: Any) -> bool:
+    """True when veRL's activation offloading is providing checkpointing instead.
+
+    With `enable_activation_offload=True`, veRL *disables* transformers'
+    checkpointing -- the two implementations are incompatible -- and substitutes
+    its own: `ActivationHandler.wrap_module_forward_method` replaces each layer's
+    `forward` with one that routes through `torch.utils.checkpoint` whenever
+    `module.training` (verl/utils/activation_offload.py). The transformers flag is
+    then False on a model that *is* checkpointed, so checking only that flag
+    rejects a correctly configured actor.
+
+    Detected via the handler in the wrapper's closure rather than the method name,
+    which `functools.wraps` copies from the original and so cannot distinguish.
+    """
+    modules = getattr(module, "modules", None)
+    if not callable(modules):
+        return False
+    for m in modules():
+        forward = getattr(m, "forward", None)
+        closure = getattr(getattr(forward, "__func__", forward), "__closure__", None)
+        if not closure:
+            continue
+        for cell in closure:
+            try:
+                value = cell.cell_contents
+            except ValueError:  # empty cell
+                continue
+            if getattr(value, "_enable_ckpt", False):
+                return True
+    return False
+
+
+def _has_checkpointing_flag(module: Any) -> bool:
+    """Either implementation counts -- both recompute activations per layer."""
+    return _has_transformers_checkpointing(module) or _has_verl_offload_checkpointing(module)
+
+
 def _module_supports_checkpointing(module: Any) -> bool:
+    """Checkpointing must be *on* and the module in train mode.
+
+    Both halves matter, and for both implementations: transformers gates the
+    checkpointed path on `self.training`, and veRL's handler opens with
+    `if not module.training: return forward_method(...)`. A module left in
+    `eval()` therefore silently runs without checkpointing and OOMs
+    (measured: 12.75 GiB with, >48 GiB without).
+    """
     inner = getattr(module, "_fsdp_wrapped_module", module)
-    return bool(getattr(inner, "gradient_checkpointing", False)) and bool(
-        getattr(inner, "training", False)
-    )
+    return _has_checkpointing_flag(inner) and bool(getattr(inner, "training", False))
 
 
 def make_relation_loss_fn(

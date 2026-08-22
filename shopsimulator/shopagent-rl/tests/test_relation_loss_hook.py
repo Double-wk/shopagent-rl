@@ -8,7 +8,14 @@ from tensordict import TensorDict
 from tensordict.tensorclass import NonTensorData, NonTensorStack
 
 import verl.utils.tensordict_utils as tu
-from experiment.grpo.relation_loss_hook import extract_pair_rows, make_relation_loss_fn
+from experiment.grpo.relation_loss_hook import (
+    _has_checkpointing_flag,
+    _has_transformers_checkpointing,
+    _has_verl_offload_checkpointing,
+    _module_supports_checkpointing,
+    extract_pair_rows,
+    make_relation_loss_fn,
+)
 from tests.test_intent_policy_scoring import StubModel, StubTokenizer, _state
 
 _FIELDS = ("pair_id", "side", "state_text", "expected_relation",
@@ -290,6 +297,127 @@ class TestMakeRelationLossFn:
         fn = make_relation_loss_fn(_base_loss, lambda: None, StubTokenizer())
         loss, _ = fn(model_output=None, data=_batch(_pair_rows()))
         assert loss.item() == 2.0
+
+
+class TestCheckpointingDetection:
+    """`gradient_checkpointing` is never set on the top-level module.
+
+    `gradient_checkpointing_enable()` sets it on the submodules owning the
+    checkpointed blocks -- for `Qwen3ForCausalLM`, the inner `Qwen3Model` and its
+    decoder layers. Verified on the real Qwen3-1.7B-Base: after enabling,
+    `getattr(model, "gradient_checkpointing")` is *absent* while
+    `model.model.gradient_checkpointing` is True. A top-level attribute check
+    therefore rejects a correctly configured model, which is what took down the
+    first Gate B paired run. These tests use the same nesting so a stub cannot
+    hide the regression.
+    """
+
+    def test_flag_on_submodule_is_detected(self):
+        inner = torch.nn.Linear(2, 2)
+        inner.gradient_checkpointing = True
+        outer = torch.nn.Sequential(inner)
+        assert _has_checkpointing_flag(outer) is True
+
+    def test_no_flag_anywhere_is_false(self):
+        assert _has_checkpointing_flag(torch.nn.Sequential(torch.nn.Linear(2, 2))) is False
+
+    def test_is_gradient_checkpointing_property_wins(self):
+        """transformers exposes the recursive test directly; prefer it."""
+        class HasProperty:
+            is_gradient_checkpointing = True
+        assert _has_checkpointing_flag(HasProperty()) is True
+
+    def test_property_false_is_respected_over_submodule_walk(self):
+        class SaysNo:
+            is_gradient_checkpointing = False
+            gradient_checkpointing = True
+        assert _has_checkpointing_flag(SaysNo()) is False
+
+    def test_plain_object_without_modules_is_false(self):
+        assert _has_checkpointing_flag(object()) is False
+
+    def test_submodule_flag_plus_eval_mode_still_fails_the_guard(self):
+        """Checkpointing is gated on `self.training`, so eval() means no saving."""
+        inner = torch.nn.Linear(2, 2)
+        inner.gradient_checkpointing = True
+        outer = torch.nn.Sequential(inner)
+        outer.eval()
+        assert _module_supports_checkpointing(outer) is False
+        outer.train()
+        assert _module_supports_checkpointing(outer) is True
+
+    def test_nested_flag_passes_the_full_guard_through_fsdp(self):
+        inner = torch.nn.Linear(2, 2)
+        inner.gradient_checkpointing = True
+        outer = torch.nn.Sequential(inner)
+        outer.train()
+        assert _module_supports_checkpointing(_Wrapped(outer)) is True
+
+
+class TestVerlOffloadCheckpointing:
+    """`enable_activation_offload=True` replaces transformers' checkpointing.
+
+    veRL disables the transformers implementation (the two are incompatible) and
+    wraps each layer's `forward` to route through `torch.utils.checkpoint` itself.
+    The transformers flag is then False on a model that *is* checkpointed --
+    which is what failed the second Gate B paired run. Built with the real
+    `ActivationHandler` so the detection is tested against the actual wrapper, not
+    a hand-made lookalike.
+    """
+
+    def _wrapped(self, enable_ckpt=True, n_layers=4):
+        from verl.utils.activation_offload import (
+            ActivationHandler,
+            FSDPParameterFilter,
+            get_activation_offload_context,
+        )
+        layers = torch.nn.ModuleList([torch.nn.Linear(4, 4) for _ in range(n_layers)])
+        model = torch.nn.Sequential(layers)
+        ctx, sync = get_activation_offload_context(n_layers - 1, n_layers, FSDPParameterFilter())
+        handler = ActivationHandler(ctx, sync, FSDPParameterFilter(), enable_ckpt=enable_ckpt)
+        for layer in layers:
+            handler.wrap_module_forward_method(layer)
+        return model
+
+    def test_offload_checkpointing_is_detected(self):
+        assert _has_verl_offload_checkpointing(self._wrapped()) is True
+
+    def test_transformers_flag_stays_false(self):
+        """The exact trap: a checkpointed model reporting False on the old check."""
+        model = self._wrapped()
+        assert _has_transformers_checkpointing(model) is False
+        assert _has_checkpointing_flag(model) is True
+
+    def test_offload_without_checkpointing_is_not_accepted(self):
+        assert _has_verl_offload_checkpointing(self._wrapped(enable_ckpt=False)) is False
+
+    def test_unwrapped_model_is_not_accepted(self):
+        assert _has_verl_offload_checkpointing(torch.nn.Sequential(torch.nn.Linear(4, 4))) is False
+
+    def test_full_guard_respects_train_mode(self):
+        """veRL's handler also short-circuits on `not module.training`."""
+        model = self._wrapped()
+        model.eval()
+        assert _module_supports_checkpointing(model) is False
+        model.train()
+        assert _module_supports_checkpointing(model) is True
+
+    def test_plain_object_is_not_accepted(self):
+        assert _has_verl_offload_checkpointing(object()) is False
+
+    def test_relation_loss_runs_under_offload_checkpointing(self):
+        """End to end: the guard must let the paired run proceed.
+
+        `StubModel` is not an `nn.Module`, so the wrapped layers are exposed via
+        an explicit `modules()` -- which is the only thing the detector walks.
+        """
+        model = StubModel()
+        wrapped = self._wrapped()
+        model.modules = wrapped.modules
+        model.training = True
+        fn = make_relation_loss_fn(_base_loss, lambda: model, StubTokenizer())
+        loss, metrics = fn(model_output=None, data=_batch(_pair_rows()))
+        assert metrics["relation/pairs_used"] == 1.0 and loss.item() > 2.0
 
 
 class TestConfigGating:
